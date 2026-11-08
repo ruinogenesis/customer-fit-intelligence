@@ -1,0 +1,31 @@
+# --- macOS ---
+.DS_Store
+
+# --- Secrets: never commit ---
+.env
+.env.*
+!.env.example
+*firebase-adminsdk*.json
+service-account*.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Node (dashboard, Firebase tools) ---
+node_modules/
+
+# --- Firebase ---
+.firebase/
+*-debug.log
