@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fitcore"
+dynamic = ["version"]
+description = "Shared feature and scoring logic for Customer Fit Intelligence"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+   [project.optional-dependencies]
+   dev = ["pytest>=8"]
+
+[tool.hatch.version]
+path = "src/fitcore/__init__.py"
+
+   [tool.pytest.ini_options]
+   testpaths = ["tests"]
