@@ -53,7 +53,7 @@ class OrderPlacedPayload(StrictSchema):
     restaurant_id = _id()
     basket_value = _count()
     fees = _count()
-    promised_eta = UtcDateTime(required=True)    # in OrderPlacedPayload
+    promised_eta = UtcDateTime(required=True)    
     promo_used = fields.Boolean(required=True, truthy={True}, falsy={False})
 
 
@@ -107,7 +107,7 @@ class RecommendationClickedPayload(StrictSchema):
 class SupportCasePayload(StrictSchema):
     case_id = _id()
     order_id = _id(required=False)
-    opened_at = UtcDateTime(required=True)       # in SupportCasePayload
+    opened_at = UtcDateTime(required=True)       
     refund_amount = _count()
     satisfaction = _score(1, 5, required=False)
 
@@ -157,7 +157,7 @@ class EnvelopeSchema(StrictSchema):
     event_id = fields.UUID(required=True)
     type = fields.String(required=True, validate=validate.OneOf(EVENT_TYPES))
     customer_id = _id()
-    occurred_at = UtcDateTime(required=True)     # in EnvelopeSchema
+    occurred_at = UtcDateTime(required=True)     
     schema_version = fields.Integer(
         required=True, strict=True, validate=validate.Equal(SCHEMA_VERSION)
     )
