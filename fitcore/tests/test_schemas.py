@@ -157,3 +157,7 @@ def test_load_event_checks_payload_against_its_own_type():
     with pytest.raises(ValidationError) as excinfo:
         load_event(raw)
     assert "payload" in excinfo.value.messages
+
+def test_payload_timestamps_are_converted_to_utc():
+    event = load_event(make_event("order_placed", VALID_PAYLOADS["order_placed"]))
+    assert event["payload"]["promised_eta"].isoformat() == "2026-11-08T13:05:00+00:00"

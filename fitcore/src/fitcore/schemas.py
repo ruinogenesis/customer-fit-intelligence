@@ -7,7 +7,6 @@ from marshmallow import (
     Schema,
     ValidationError,
     fields,
-    post_load,
     validate,
     validates_schema,
 )
@@ -40,6 +39,11 @@ class StrictSchema(Schema):
     class Meta:
         unknown = RAISE
 
+class UtcDateTime(fields.AwareDateTime):
+    """A timestamp that must carry a timezone; always returned in UTC."""
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        return super()._deserialize(value, attr, data, **kwargs).astimezone(UTC)
 
 # --- Payloads: one schema per event type ---
 
@@ -49,7 +53,7 @@ class OrderPlacedPayload(StrictSchema):
     restaurant_id = _id()
     basket_value = _count()
     fees = _count()
-    promised_eta = fields.AwareDateTime(required=True)
+    promised_eta = UtcDateTime(required=True)    # in OrderPlacedPayload
     promo_used = fields.Boolean(required=True, truthy={True}, falsy={False})
 
 
@@ -103,7 +107,7 @@ class RecommendationClickedPayload(StrictSchema):
 class SupportCasePayload(StrictSchema):
     case_id = _id()
     order_id = _id(required=False)
-    opened_at = fields.AwareDateTime(required=True)
+    opened_at = UtcDateTime(required=True)       # in SupportCasePayload
     refund_amount = _count()
     satisfaction = _score(1, 5, required=False)
 
@@ -153,16 +157,11 @@ class EnvelopeSchema(StrictSchema):
     event_id = fields.UUID(required=True)
     type = fields.String(required=True, validate=validate.OneOf(EVENT_TYPES))
     customer_id = _id()
-    occurred_at = fields.AwareDateTime(required=True)
+    occurred_at = UtcDateTime(required=True)     # in EnvelopeSchema
     schema_version = fields.Integer(
         required=True, strict=True, validate=validate.Equal(SCHEMA_VERSION)
     )
     payload = fields.Dict(required=True)
-
-    @post_load
-    def convert_to_utc(self, data, **kwargs):
-        data["occurred_at"] = data["occurred_at"].astimezone(UTC)
-        return data
 
 def load_event(raw):
     """Validate one raw event and return it with its payload validated.
