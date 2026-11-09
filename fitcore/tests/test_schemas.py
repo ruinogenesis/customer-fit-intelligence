@@ -3,6 +3,7 @@ from marshmallow import ValidationError
 
 from fitcore.schemas import EVENT_TYPES, PAYLOAD_SCHEMAS, EnvelopeSchema, load_event
 
+
 def valid_envelope():
     return {
         "event_id": "6f1c2a9e-3b4d-4c8e-9f10-2a3b4c5d6e7f",
