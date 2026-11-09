@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Shared feature and scoring logic for Customer Fit Intelligence"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["marshmallow>=4,<5"]
    [project.optional-dependencies]
    dev = ["pytest>=8", "ruff"]
 
@@ -17,3 +17,6 @@ path = "src/fitcore/__init__.py"
 
    [tool.pytest.ini_options]
    testpaths = ["tests"]
+
+[tool.ruff]
+src = ["src"]
