@@ -1,8 +1,7 @@
 import pytest
 from marshmallow import ValidationError
 
-from fitcore.schemas import EVENT_TYPES, PAYLOAD_SCHEMAS, EnvelopeSchema
-
+from fitcore.schemas import EVENT_TYPES, PAYLOAD_SCHEMAS, EnvelopeSchema, load_event
 
 def valid_envelope():
     return {
@@ -135,3 +134,25 @@ def test_session_without_checkout_is_allowed():
     raw = {**VALID_PAYLOADS["app_session"], "time_to_checkout_s": None}
     PAYLOAD_SCHEMAS["app_session"]().load(raw)
 
+def make_event(event_type, payload):
+    return {**valid_envelope(), "type": event_type, "payload": payload}
+
+
+@pytest.mark.parametrize("event_type", sorted(VALID_PAYLOADS))
+def test_load_event_accepts_every_valid_sample(event_type):
+    event = load_event(make_event(event_type, VALID_PAYLOADS[event_type]))
+    assert event["type"] == event_type
+
+
+def test_load_event_nests_payload_errors_under_payload():
+    raw = make_event("order_issue", {"order_id": "ord_001", "issue_type": "rude"})
+    with pytest.raises(ValidationError) as excinfo:
+        load_event(raw)
+    assert "issue_type" in excinfo.value.messages["payload"]
+
+
+def test_load_event_checks_payload_against_its_own_type():
+    raw = make_event("order_placed", VALID_PAYLOADS["order_delivered"])
+    with pytest.raises(ValidationError) as excinfo:
+        load_event(raw)
+    assert "payload" in excinfo.value.messages

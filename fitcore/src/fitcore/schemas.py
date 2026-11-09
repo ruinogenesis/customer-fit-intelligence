@@ -163,3 +163,17 @@ class EnvelopeSchema(StrictSchema):
     def convert_to_utc(self, data, **kwargs):
         data["occurred_at"] = data["occurred_at"].astimezone(UTC)
         return data
+
+def load_event(raw):
+    """Validate one raw event and return it with its payload validated.
+
+    Raises ValidationError. Envelope errors are keyed by field name;
+    payload errors are nested under "payload".
+    """
+    event = EnvelopeSchema().load(raw)
+    payload_schema = PAYLOAD_SCHEMAS[event["type"]]()
+    try:
+        event["payload"] = payload_schema.load(event["payload"])
+    except ValidationError as err:
+        raise ValidationError({"payload": err.messages}) from err
+    return event
