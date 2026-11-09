@@ -1,7 +1,7 @@
 import pytest
 from marshmallow import ValidationError
 
-from fitcore.schemas import EnvelopeSchema
+from fitcore.schemas import EVENT_TYPES, PAYLOAD_SCHEMAS, EnvelopeSchema
 
 
 def valid_envelope():
@@ -53,3 +53,85 @@ def test_unknown_field_is_rejected():
     with pytest.raises(ValidationError) as excinfo:
         EnvelopeSchema().load(raw)
     assert "colour" in excinfo.value.messages
+
+VALID_PAYLOADS = {
+    "order_placed": {
+        "order_id": "ord_001",
+        "restaurant_id": "rest_042",
+        "basket_value": 35000,
+        "fees": 4000,
+        "promised_eta": "2026-11-08T20:05:00+07:00",
+        "promo_used": False,
+    },
+    "order_delivered": {"order_id": "ord_001", "courier_id": "cour_007"},
+    "order_issue": {"order_id": "ord_001", "issue_type": "cold"},
+    "rating_submitted": {"order_id": "ord_001", "food": 4, "courier": 5},
+    "app_session": {
+        "session_id": "sess_123",
+        "time_to_checkout_s": 95,
+        "steps": 6,
+        "errors": 0,
+    },
+    "recommendation_shown": {"recommendation_id": "rec_9", "items": ["dish_1", "dish_2"]},
+    "recommendation_clicked": {
+        "recommendation_id": "rec_9",
+        "item_id": "dish_2",
+        "position": 1,
+    },
+    "support_case": {
+        "case_id": "case_5",
+        "order_id": "ord_001",
+        "opened_at": "2026-11-08T20:30:00+07:00",
+        "refund_amount": 8000,
+        "satisfaction": 4,
+    },
+    "survey_response": {"item_id": "love_miss_app", "value": 6},
+    "action_sent": {
+        "action_id": "act_1",
+        "rule_id": "service_recovery",
+        "arm": "treatment",
+        "channel": "push",
+    },
+    "action_outcome": {"action_id": "act_1", "result": "opened"},
+}
+
+
+def test_every_event_type_has_a_sample():
+    assert set(VALID_PAYLOADS) == set(EVENT_TYPES)
+
+
+@pytest.mark.parametrize("event_type", sorted(VALID_PAYLOADS))
+def test_valid_payload_loads(event_type):
+    PAYLOAD_SCHEMAS[event_type]().load(VALID_PAYLOADS[event_type])
+
+
+@pytest.mark.parametrize(
+    ("event_type", "changes", "bad_field"),
+    [
+        ("order_placed", {"basket_value": 350.0}, "basket_value"),  # not whole satang
+        ("order_placed", {"basket_value": -1}, "basket_value"),
+        ("order_issue", {"issue_type": "rude"}, "issue_type"),
+        ("rating_submitted", {"food": 6}, "food"),
+        ("survey_response", {"value": 0}, "value"),
+        ("action_sent", {"arm": "maybe"}, "arm"),
+        ("recommendation_shown", {"items": []}, "items"),
+        ("order_delivered", {"tip": 2000}, "tip"),  # unknown field
+    ],
+)
+def test_malformed_payload_is_rejected(event_type, changes, bad_field):
+    raw = {**VALID_PAYLOADS[event_type], **changes}
+    with pytest.raises(ValidationError) as excinfo:
+        PAYLOAD_SCHEMAS[event_type]().load(raw)
+    assert bad_field in excinfo.value.messages
+
+
+def test_rating_needs_at_least_one_score():
+    with pytest.raises(ValidationError) as excinfo:
+        PAYLOAD_SCHEMAS["rating_submitted"]().load({"order_id": "ord_001"})
+    assert "_schema" in excinfo.value.messages
+
+
+def test_session_without_checkout_is_allowed():
+    raw = {**VALID_PAYLOADS["app_session"], "time_to_checkout_s": None}
+    PAYLOAD_SCHEMAS["app_session"]().load(raw)
+
