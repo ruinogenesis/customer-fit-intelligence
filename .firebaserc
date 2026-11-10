@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "cfi-dev-th26",
+    "dev": "cfi-dev-th26",
+    "staging": "cfi-staging-th26",
+    "prod": "cfi-prod-th26"
+  }
+}

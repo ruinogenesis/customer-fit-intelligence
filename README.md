@@ -12,3 +12,11 @@ It does all the act automatically with measured actions.
 - `fitcore/`: shared python package
 - `functions/`: cloud functions
 - `notebooks/`: colab research
+
+## Local development
+
+Start the Firestore, Auth, Functions and Hosting emulators:
+
+    firebase emulators:start --project demo-cfi
+
+Emulator UI: http://127.0.0.1:4000
