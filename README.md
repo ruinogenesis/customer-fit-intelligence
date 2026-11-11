@@ -20,3 +20,7 @@ Start the Firestore, Auth, Functions and Hosting emulators:
     firebase emulators:start --project demo-cfi
 
 Emulator UI: http://127.0.0.1:4000
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, workflow and conventions.

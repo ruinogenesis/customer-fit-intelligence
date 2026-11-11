@@ -54,6 +54,7 @@ def test_unknown_field_is_rejected():
         EnvelopeSchema().load(raw)
     assert "colour" in excinfo.value.messages
 
+
 VALID_PAYLOADS = {
     "order_placed": {
         "order_id": "ord_001",
@@ -72,7 +73,10 @@ VALID_PAYLOADS = {
         "steps": 6,
         "errors": 0,
     },
-    "recommendation_shown": {"recommendation_id": "rec_9", "items": ["dish_1", "dish_2"]},
+    "recommendation_shown": {
+        "recommendation_id": "rec_9",
+        "items": ["dish_1", "dish_2"],
+    },
     "recommendation_clicked": {
         "recommendation_id": "rec_9",
         "item_id": "dish_2",
@@ -135,6 +139,7 @@ def test_session_without_checkout_is_allowed():
     raw = {**VALID_PAYLOADS["app_session"], "time_to_checkout_s": None}
     PAYLOAD_SCHEMAS["app_session"]().load(raw)
 
+
 def make_event(event_type, payload):
     return {**valid_envelope(), "type": event_type, "payload": payload}
 
@@ -157,6 +162,7 @@ def test_load_event_checks_payload_against_its_own_type():
     with pytest.raises(ValidationError) as excinfo:
         load_event(raw)
     assert "payload" in excinfo.value.messages
+
 
 def test_payload_timestamps_are_converted_to_utc():
     event = load_event(make_event("order_placed", VALID_PAYLOADS["order_placed"]))
