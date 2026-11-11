@@ -10,6 +10,7 @@ from fitcore.sim import (
     MASK_1,
     MASK_2,
     apply_kappa,
+    simulate_customers,
     true_latents,
 )
 
@@ -144,3 +145,76 @@ def test_gaps_must_be_finite() -> None:
     gaps[0, 0] = math.nan
     with pytest.raises(ValueError, match="finite"):
         true_latents(gaps)
+
+
+def test_population_rows_line_up() -> None:
+    pop = simulate_customers(500, seed=1)
+    assert len(pop.customer_ids) == 500
+    assert pop.gaps.shape == (500, 8)
+    assert set(pop.latents) == {"respect", "love", "convenience", "trust"}
+    for values in pop.latents.values():
+        assert values.shape == (500,)
+
+
+def test_customer_ids_are_unique_and_marked_as_simulated() -> None:
+    ids = simulate_customers(500, seed=1).customer_ids
+    assert len(set(ids)) == 500
+    assert ids[0] == "sim-000000"
+    assert ids[-1] == "sim-000499"
+
+
+def test_the_same_seed_gives_the_same_population() -> None:
+    a, b = simulate_customers(200, seed=7), simulate_customers(200, seed=7)
+    assert a.customer_ids == b.customer_ids
+    assert np.array_equal(a.gaps, b.gaps)
+    for key in a.latents:
+        assert np.array_equal(a.latents[key], b.latents[key])
+
+
+def test_a_different_seed_gives_different_gaps() -> None:
+    a, b = simulate_customers(200, seed=7), simulate_customers(200, seed=8)
+    assert not np.array_equal(a.gaps, b.gaps)
+
+
+def test_stored_latents_are_the_truth_applied_to_the_stored_gaps() -> None:
+    truth = replace(DEFAULT_TRUTH, b1=np.array([0.0, 0.0]))
+    pop = simulate_customers(300, seed=3, truth=truth)
+    assert pop.truth is truth
+    for key, values in true_latents(pop.gaps, truth).items():
+        assert np.array_equal(pop.latents[key], values)
+
+
+def test_gaps_are_one_typical_size_wide_in_their_own_units() -> None:
+    gaps = simulate_customers(20_000, seed=1).gaps
+    scale = DEFAULT_TRUTH.scale
+    assert np.allclose(gaps.std(axis=0), scale, rtol=0.05)
+    assert np.all(np.abs(gaps.mean(axis=0)) < 0.05 * scale)
+
+
+def test_true_latents_spread_without_piling_up_at_zero_or_one() -> None:
+    latents = simulate_customers(20_000, seed=1).latents
+    for values in latents.values():
+        assert 0.15 < values.std() < 0.3
+        assert np.quantile(values, 0.05) > 0.05
+        assert np.quantile(values, 0.95) < 0.95
+
+
+def test_population_arrays_are_read_only() -> None:
+    pop = simulate_customers(10, seed=1)
+    with pytest.raises(ValueError, match="read-only"):
+        pop.gaps[0, 0] = 1.0
+    with pytest.raises(ValueError, match="read-only"):
+        pop.latents["love"][0] = 1.0
+
+
+def test_columns_are_ready_for_a_table() -> None:
+    cols = simulate_customers(50, seed=1).columns()
+    latents = ["respect", "love", "convenience", "trust"]
+    assert list(cols) == ["customer_id", *INPUTS, *latents]
+    assert all(len(column) == 50 for column in cols.values())
+    assert cols["customer_id"][0] == "sim-000000"
+
+
+def test_n_must_be_at_least_one() -> None:
+    with pytest.raises(ValueError, match="at least 1"):
+        simulate_customers(0, seed=1)

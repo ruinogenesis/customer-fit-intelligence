@@ -11,7 +11,10 @@ Gaps arrive in their own units. They pass through the asymmetric transform
 per input, so the true weights are comparable across inputs.
 """
 
+from collections.abc import Mapping
 from dataclasses import dataclass
+from types import MappingProxyType
+from typing import Any
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -105,18 +108,18 @@ DEFAULT_TRUTH = TrueModel(
     scale=np.array([10.0, 30.0, 0.03, 0.1, 0.7, 0.7, 0.2, 1.0]),
     w1=np.array(
         [
-            [0.8, 0.0, 0.0, 1.0, 0.6, 0.7, 0.0, 0.0],  # respect
-            [0.0, 0.0, 0.0, 0.0, 0.0, 0.9, 0.7, 0.8],  # love
+            [0.3, 0.0, 0.0, 0.4, 0.25, 0.3, 0.0, 0.0],  # respect
+            [0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.3, 0.35],  # love
         ]
     ),
-    b1=np.array([0.5, 0.0]),
+    b1=np.array([1.0, 0.7]),
     w2=np.array(
         [
-            [2.0, 0.0, 0.5, 0.6, 0.8],  # convenience
+            [2.0, 0.0, 0.25, 0.3, 0.4],  # convenience
             [2.5, 2.5, 0.0, 0.0, 0.0],  # trust
         ]
     ),
-    b2=np.array([-1.0, -2.5]),
+    b2=np.array([-1.0, -2.7]),
 )
 
 
@@ -149,3 +152,58 @@ def true_latents(gaps: ArrayLike, truth: TrueModel = DEFAULT_TRUTH) -> dict[str,
         "convenience": layer2[:, 0],
         "trust": layer2[:, 1],
     }
+
+
+@dataclass(frozen=True, eq=False)
+class Population:
+    """Simulated customers: one snapshot of gaps each, with its true latents.
+
+    customer_ids, the rows of gaps (n x 8, own units) and each latent array
+    line up customer by customer. Arrays are read-only. seed and truth record
+    how the population was made, so the same population can be made again.
+    """
+
+    customer_ids: tuple[str, ...]
+    gaps: Array
+    latents: Mapping[str, Array]
+    seed: int
+    truth: TrueModel
+
+    def columns(self) -> dict[str, NDArray[Any]]:
+        """One column per field: customer_id, x1..x8, then the four latents.
+
+        Ready for pandas.DataFrame(...) or numpy.savez(...) in a notebook.
+        """
+        cols: dict[str, NDArray[Any]] = {"customer_id": np.array(self.customer_ids)}
+        for i, key in enumerate(INPUTS):
+            cols[key] = self.gaps[:, i]
+        cols.update(self.latents)
+        return cols
+
+
+def simulate_customers(
+    n: int, seed: int, truth: TrueModel = DEFAULT_TRUTH
+) -> Population:
+    """n customers, each with one snapshot of gaps and its true latents.
+
+    Each gap is drawn independently from a normal distribution centred on
+    zero and one typical size (truth.scale) wide, in the input's own units:
+    think of it as a customer's first order, judged against the population's
+    usual. The same n, seed and truth always give the same population.
+    Raises ValueError if n is below 1.
+    """
+    if n < 1:
+        raise ValueError(f"n must be at least 1, got {n}")
+    rng = np.random.default_rng(seed)
+    gaps = rng.normal(0.0, 1.0, size=(n, len(INPUTS))) * truth.scale
+    gaps.setflags(write=False)
+    latents = true_latents(gaps, truth)
+    for values in latents.values():
+        values.setflags(write=False)
+    return Population(
+        customer_ids=tuple(f"sim-{i:06d}" for i in range(n)),
+        gaps=gaps,
+        latents=MappingProxyType(latents),
+        seed=seed,
+        truth=truth,
+    )
