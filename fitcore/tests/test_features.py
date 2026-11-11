@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 from fitcore.features import (
@@ -95,3 +97,43 @@ def test_transform_does_not_change_its_argument() -> None:
     gaps = {"x1": -2.0}
     transform(gaps, KAPPAS)
     assert gaps == {"x1": -2.0}
+
+
+@pytest.mark.parametrize("bad", [math.nan, math.inf, -math.inf])
+def test_gap_rejects_values_that_are_not_finite(bad: float) -> None:
+    with pytest.raises(ValueError, match="finite"):
+        gap(bad, 1.0)
+    with pytest.raises(ValueError, match="finite"):
+        gap(1.0, bad)
+
+
+def test_input_gap_rejects_an_unknown_input() -> None:
+    with pytest.raises(ValueError, match="unknown input 'x9'"):
+        input_gap("x9", 1.0, 1.0)
+
+
+@pytest.mark.parametrize("bad", [0.5, 0.0, -1.0, math.nan, math.inf])
+def test_kappa_must_be_finite_and_at_least_one(bad: float) -> None:
+    with pytest.raises(ValueError, match="kappa"):
+        asymmetric(-1.0, kappa=bad)
+
+
+def test_kappa_is_checked_even_for_a_surplus() -> None:
+    with pytest.raises(ValueError, match="kappa"):
+        asymmetric(1.0, kappa=0.5)
+
+
+@pytest.mark.parametrize("bad", [math.nan, math.inf, -math.inf])
+def test_asymmetric_rejects_gaps_that_are_not_finite(bad: float) -> None:
+    with pytest.raises(ValueError, match="finite"):
+        asymmetric(bad, kappa=2.0)
+
+
+def test_transform_rejects_an_unknown_input() -> None:
+    with pytest.raises(ValueError, match="unknown input 'x9'"):
+        transform({"x9": 1.0}, {**KAPPAS, "x9": 2.0})
+
+
+def test_transform_needs_a_kappa_for_every_gap() -> None:
+    with pytest.raises(ValueError, match="no kappa for 'x5'"):
+        transform({"x5": -1.0}, {"x1": 2.0})
