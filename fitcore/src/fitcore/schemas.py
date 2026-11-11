@@ -1,6 +1,8 @@
 """Event schemas v1: the contract for every event that enters the system."""
 
-from datetime import UTC
+from collections.abc import Mapping
+from datetime import UTC, datetime
+from typing import Any
 
 from marshmallow import (
     RAISE,
@@ -14,22 +16,22 @@ from marshmallow import (
 SCHEMA_VERSION = 1
 
 
-def _id(required=True):
+def _id(required: bool = True) -> fields.String:
     return fields.String(required=required, validate=validate.Length(min=1))
 
 
-def _count():
+def _count() -> fields.Integer:
     """A whole number of 0 or more: money in satang, counts, positions."""
     return fields.Integer(required=True, strict=True, validate=validate.Range(min=0))
 
 
-def _score(low, high, required=True):
+def _score(low: int, high: int, required: bool = True) -> fields.Integer:
     return fields.Integer(
         required=required, strict=True, validate=validate.Range(min=low, max=high)
     )
 
 
-def _one_of(*choices):
+def _one_of(*choices: str) -> fields.String:
     return fields.String(required=True, validate=validate.OneOf(choices))
 
 
@@ -39,11 +41,19 @@ class StrictSchema(Schema):
     class Meta:
         unknown = RAISE
 
+
 class UtcDateTime(fields.AwareDateTime):
     """A timestamp that must carry a timezone; always returned in UTC."""
 
-    def _deserialize(self, value, attr, data, **kwargs):
+    def _deserialize(
+        self,
+        value: Any,
+        attr: str | None,
+        data: Mapping[str, Any] | None,
+        **kwargs: Any,
+    ) -> datetime:
         return super()._deserialize(value, attr, data, **kwargs).astimezone(UTC)
+
 
 # --- Payloads: one schema per event type ---
 
@@ -53,7 +63,7 @@ class OrderPlacedPayload(StrictSchema):
     restaurant_id = _id()
     basket_value = _count()
     fees = _count()
-    promised_eta = UtcDateTime(required=True)    
+    promised_eta = UtcDateTime(required=True)
     promo_used = fields.Boolean(required=True, truthy={True}, falsy={False})
 
 
@@ -75,7 +85,7 @@ class RatingSubmittedPayload(StrictSchema):
     overall = _score(1, 5, required=False)
 
     @validates_schema
-    def at_least_one_score(self, data, **kwargs):
+    def at_least_one_score(self, data: dict[str, Any], **kwargs: Any) -> None:
         if not any(name in data for name in ("food", "courier", "accuracy", "overall")):
             raise ValidationError("At least one score is required.")
 
@@ -107,7 +117,7 @@ class RecommendationClickedPayload(StrictSchema):
 class SupportCasePayload(StrictSchema):
     case_id = _id()
     order_id = _id(required=False)
-    opened_at = UtcDateTime(required=True)       
+    opened_at = UtcDateTime(required=True)
     refund_amount = _count()
     satisfaction = _score(1, 5, required=False)
 
@@ -157,19 +167,20 @@ class EnvelopeSchema(StrictSchema):
     event_id = fields.UUID(required=True)
     type = fields.String(required=True, validate=validate.OneOf(EVENT_TYPES))
     customer_id = _id()
-    occurred_at = UtcDateTime(required=True)     
+    occurred_at = UtcDateTime(required=True)
     schema_version = fields.Integer(
         required=True, strict=True, validate=validate.Equal(SCHEMA_VERSION)
     )
     payload = fields.Dict(required=True)
 
-def load_event(raw):
+
+def load_event(raw: Mapping[str, Any]) -> dict[str, Any]:
     """Validate one raw event and return it with its payload validated.
 
     Raises ValidationError. Envelope errors are keyed by field name;
     payload errors are nested under "payload".
     """
-    event = EnvelopeSchema().load(raw)
+    event: dict[str, Any] = EnvelopeSchema().load(raw)
     payload_schema = PAYLOAD_SCHEMAS[event["type"]]()
     try:
         event["payload"] = payload_schema.load(event["payload"])

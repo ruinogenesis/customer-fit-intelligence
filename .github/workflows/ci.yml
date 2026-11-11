@@ -68,5 +68,3 @@ jobs:
 
       - name: Fail if the round-trip test was skipped
         run: grep -q 'skipped="0"' /tmp/round-trip.xml
-        
-
