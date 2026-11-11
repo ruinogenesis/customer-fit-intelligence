@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["marshmallow>=4,<5"]
    [project.optional-dependencies]
-   dev = ["pytest>=8", "ruff"]
+   dev = ["pytest>=8", "ruff", "google-cloud-firestore>=2,<3"]
 
 [tool.hatch.version]
 path = "src/fitcore/__init__.py"
