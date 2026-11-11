@@ -1,5 +1,6 @@
 """Tests for fitcore.expectations: EWMA baselines with a cold-start prior."""
 
+import math
 from dataclasses import FrozenInstanceError
 from datetime import UTC, datetime, timedelta
 
@@ -91,3 +92,52 @@ def test_k_and_half_life_are_parameters() -> None:
     lapsed = Baseline(mean=10.0, weight=3.0, last_seen=T0)
     got = expected(lapsed, 30.0, T0 + 30 * DAY, half_life_days=30.0)
     assert got == pytest.approx(10.0 / 3 + 20.0)
+
+
+def test_out_of_order_event_counts_but_does_not_forget() -> None:
+    b = Baseline(mean=20.0, weight=3.0, last_seen=T0 + 90 * DAY)
+    b = update(b, 40.0, T0)
+    # no decay (3 -> 4), and last_seen stays at the later time
+    assert b.weight == pytest.approx(4.0)
+    assert b.mean == pytest.approx(26.0)
+    assert b.last_seen == T0 + 90 * DAY
+    assert expected(b, 30.0, T0) == pytest.approx(expected(b, 30.0, T0 + 90 * DAY))
+
+
+def test_empty_baseline_with_k_zero_returns_the_prior() -> None:
+    assert expected(Baseline(), 30.0, T0, k=0.0) == pytest.approx(30.0)
+
+
+def test_infinite_half_life_never_forgets() -> None:
+    b = Baseline(mean=10.0, weight=3.0, last_seen=T0)
+    got = expected(b, 30.0, T0 + 1000 * DAY, half_life_days=math.inf)
+    assert got == pytest.approx(20.0)
+
+
+@pytest.mark.parametrize("bad", [0.0, -1.0, math.nan])
+def test_half_life_must_be_positive(bad: float) -> None:
+    b = Baseline(mean=10.0, weight=1.0, last_seen=T0)
+    with pytest.raises(ValueError, match="half_life_days"):
+        update(b, 1.0, T0, half_life_days=bad)
+    with pytest.raises(ValueError, match="half_life_days"):
+        expected(b, 30.0, T0, half_life_days=bad)
+
+
+@pytest.mark.parametrize("bad", [-0.1, 1.1, math.nan])
+def test_alpha_must_be_between_zero_and_one(bad: float) -> None:
+    with pytest.raises(ValueError, match="alpha"):
+        update(Baseline(), 1.0, T0, alpha=bad)
+
+
+@pytest.mark.parametrize("bad", [-1.0, math.nan])
+def test_k_must_not_be_negative(bad: float) -> None:
+    with pytest.raises(ValueError, match="k must"):
+        expected(Baseline(), 30.0, T0, k=bad)
+
+
+def test_naive_datetime_is_rejected() -> None:
+    naive = datetime(2026, 1, 1)
+    with pytest.raises(ValueError, match="timezone-aware"):
+        update(Baseline(), 1.0, naive)
+    with pytest.raises(ValueError, match="timezone-aware"):
+        expected(Baseline(), 30.0, naive)
