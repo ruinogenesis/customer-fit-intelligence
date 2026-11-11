@@ -16,6 +16,7 @@ dev = [
     "ruff==0.17.4",  # keep equal to the ruff rev in .pre-commit-config.yaml
     "google-cloud-firestore>=2,<3",
 ]
+lab = ["ipykernel>=6", "pandas>=2", "matplotlib>=3.8"]
 
 [tool.hatch.version]
 path = "src/fitcore/__init__.py"

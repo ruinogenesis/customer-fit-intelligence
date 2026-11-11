@@ -29,3 +29,6 @@ node_modules/
 # --- Firebase ---
 .firebase/
 *-debug.log
+
+# Generated data: recreate it from the seed
+/data/
