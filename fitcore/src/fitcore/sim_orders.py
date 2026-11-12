@@ -79,7 +79,7 @@ PROMISE_LOW = 10.0
 INCIDENTS: Mapping[str, tuple[str, float]] = MappingProxyType(
     {
         "late": ("x1", 20.0),
-        "wrong_items": ("x4", -0.3),
+        "wrong_items": ("x4", -0.15),
         "rude_courier": ("x5", -2.0),
         "cold_food": ("x6", -1.5),
         "poor_support": ("x8", -1.5),
