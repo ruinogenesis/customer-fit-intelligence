@@ -1,16 +1,24 @@
 from dataclasses import FrozenInstanceError, replace
+from datetime import datetime, timedelta
+from types import MappingProxyType
 
 import numpy as np
 import pytest
 
-from fitcore.features import INPUTS
+from fitcore import expectations
+from fitcore.features import INPUTS, input_gap
+from fitcore.sim import true_latents
 from fitcore.sim_orders import (
+    DAYS,
     INCIDENTS,
     LATENESS_MEAN,
     MEASURES,
     PRIORS,
+    START,
+    Orders,
     ServiceProfile,
     draw_order,
+    simulate_orders,
     simulate_profiles,
 )
 
@@ -122,3 +130,152 @@ def test_measurements_stay_in_range() -> None:
 def test_n_must_be_at_least_one() -> None:
     with pytest.raises(ValueError, match="at least 1"):
         simulate_profiles(0, seed=1)
+
+
+def history(n: int = 30, seed: int = 1) -> tuple[tuple[ServiceProfile, ...], Orders]:
+    profiles = simulate_profiles(n, seed=seed)
+    return profiles, simulate_orders(profiles, seed=seed)
+
+
+def test_every_order_has_all_eight_gaps() -> None:
+    _, orders = history()
+    assert len(orders) > 0
+    assert orders.gaps.shape == (len(orders), 8)
+    assert np.all(np.isfinite(orders.gaps))
+
+
+def test_orders_run_in_time_order_inside_the_window() -> None:
+    _, orders = history()
+    end = START + timedelta(days=DAYS)
+    for i in range(len(orders)):
+        assert START <= orders.placed_at[i] < end
+        if orders.order_numbers[i] > 1:
+            assert orders.customer_ids[i - 1] == orders.customer_ids[i]
+            assert orders.order_numbers[i - 1] == orders.order_numbers[i] - 1
+            assert orders.placed_at[i - 1] < orders.placed_at[i]
+
+
+def test_a_first_order_is_judged_against_the_promise_and_the_priors() -> None:
+    profiles, orders = history()
+    promise = {p.customer_id: p.promise for p in profiles}
+    for i in range(len(orders)):
+        if orders.order_numbers[i] == 1:
+            assert orders.expected[i, 0] == promise[orders.customer_ids[i]]
+            assert orders.expected[i, 1:].tolist() == list(PRIORS.values())
+
+
+def test_x1_is_always_judged_against_the_promise() -> None:
+    profiles, orders = history()
+    promise = {p.customer_id: p.promise for p in profiles}
+    for i in range(len(orders)):
+        assert orders.expected[i, 0] == promise[orders.customer_ids[i]]
+
+
+def test_gaps_follow_fitcore_features() -> None:
+    _, orders = history(n=5)
+    for i in range(len(orders)):
+        for j, key in enumerate(INPUTS):
+            want = input_gap(key, orders.measured[i, j], orders.expected[i, j])
+            assert orders.gaps[i, j] == want
+
+
+def test_expectations_replay_with_fitcore_expectations() -> None:
+    _, orders = history(n=3)
+    for customer in set(orders.customer_ids):
+        rows = [i for i in range(len(orders)) if orders.customer_ids[i] == customer]
+        for j, key in enumerate(INPUTS[1:], start=1):
+            baseline = expectations.Baseline()
+            for i in rows:
+                at = orders.placed_at[i]
+                want = expectations.expected(baseline, PRIORS[key], at)
+                assert orders.expected[i, j] == pytest.approx(want)
+                baseline = expectations.update(baseline, orders.measured[i, j], at)
+
+
+def test_expectations_adapt_to_a_customers_usual() -> None:
+    profile = steady(simulate_profiles(1, seed=1)[0])
+    usual = dict(profile.usual)
+    usual["x2"] = 150.0  # a slow checkout, against a prior of 90 seconds
+    slow = replace(profile, usual=MappingProxyType(usual), days_between_orders=3.0)
+    x2 = simulate_orders([slow], seed=2).gaps[:, 1]
+    assert x2[0] < -40.0  # the first order feels slow
+    assert np.abs(x2[10:]).mean() < 0.5 * abs(x2[0])  # later, it is expected
+
+
+def test_incidents_show_up_as_shortfalls() -> None:
+    _, orders = history(n=100)
+    for i, incident in enumerate(orders.incidents):
+        if incident is not None:
+            key, _ = INCIDENTS[incident]
+            assert orders.gaps[i, INPUTS.index(key)] < 0.0
+
+
+def test_true_latents_come_from_the_gaps() -> None:
+    _, orders = history()
+    for key, values in true_latents(orders.gaps).items():
+        assert np.array_equal(orders.latents[key], values)
+
+
+def test_incident_orders_have_lower_respect() -> None:
+    _, orders = history(n=300)
+    respect = orders.latents["respect"]
+    hit = np.array([incident is not None for incident in orders.incidents])
+    assert respect[hit].mean() < respect[~hit].mean() - 0.1
+
+
+def test_customers_with_more_incidents_have_lower_respect() -> None:
+    profiles, orders = history(n=1_000)
+    ids = np.array(orders.customer_ids)
+    respect = orders.latents["respect"]
+    rates, means = [], []
+    for p in profiles:
+        mine = respect[ids == p.customer_id]
+        if len(mine) > 0:
+            rates.append(p.incident_rate)
+            means.append(mine.mean())
+    assert np.corrcoef(rates, means)[0, 1] < -0.1
+
+
+def test_a_customers_history_does_not_depend_on_the_others() -> None:
+    profiles = simulate_profiles(20, seed=1)
+    alone = simulate_orders(profiles[:1], seed=9)
+    together = simulate_orders(profiles, seed=9)
+    n = len(alone)
+    assert together.customer_ids[:n] == alone.customer_ids
+    assert np.array_equal(together.gaps[:n], alone.gaps)
+
+
+def test_the_same_seed_gives_the_same_orders() -> None:
+    profiles = simulate_profiles(10, seed=1)
+    a, b = simulate_orders(profiles, seed=3), simulate_orders(profiles, seed=3)
+    assert a.placed_at == b.placed_at
+    assert a.incidents == b.incidents
+    assert np.array_equal(a.measured, b.measured)
+
+
+def test_order_tables_are_read_only() -> None:
+    _, orders = history(n=2)
+    tables = (orders.measured, orders.expected, orders.gaps, orders.latents["love"])
+    for table in tables:
+        with pytest.raises(ValueError, match="read-only"):
+            table[0] = 0.0
+
+
+def test_order_columns_are_ready_for_a_table() -> None:
+    _, orders = history(n=3)
+    cols = orders.columns()
+    assert list(cols)[:4] == ["customer_id", "order_number", "placed_at", "incident"]
+    assert {"x1", "x1_measured", "x1_expected", "respect"} <= set(cols)
+    assert all(len(column) == len(orders) for column in cols.values())
+    assert set(cols["incident"]) <= {"none", *INCIDENTS}
+
+
+def test_days_must_be_positive() -> None:
+    with pytest.raises(ValueError, match="days"):
+        simulate_orders(simulate_profiles(1, seed=1), seed=1, days=0.0)
+
+
+def test_start_must_be_timezone_aware() -> None:
+    naive = datetime(2026, 1, 1)
+    with pytest.raises(ValueError, match="timezone-aware"):
+        simulate_orders(simulate_profiles(1, seed=1), seed=1, start=naive)

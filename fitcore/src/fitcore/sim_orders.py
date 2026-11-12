@@ -11,11 +11,18 @@ Incidents stay surprising, so a customer's incident rate is the trait that
 keeps them different from others once their expectations have adapted.
 """
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from types import MappingProxyType
+from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
+
+from fitcore import expectations
+from fitcore.features import INPUTS, input_gap
+from fitcore.sim import DEFAULT_TRUTH, Array, TrueModel, true_latents
 
 
 @dataclass(frozen=True)
@@ -159,3 +166,125 @@ def draw_order(
         for key, value in values.items()
     }
     return measured, incident
+
+
+# The simulated period: half a year from the start of 2026.
+START = datetime(2026, 1, 1, tzinfo=UTC)
+DAYS = 180.0
+
+
+@dataclass(frozen=True, eq=False)
+class Orders:
+    """Every simulated order, one row each: customer by customer, in time order.
+
+    For each order: who placed it, its number in that customer's history
+    (1 = first), when, and its incident (None if none). For each input
+    x1..x8: the raw measurement, what the customer expected just before the
+    order, and the gap between them. latents holds the true latents behind
+    each order's gaps. Arrays are read-only.
+    """
+
+    customer_ids: tuple[str, ...]
+    order_numbers: tuple[int, ...]
+    placed_at: tuple[datetime, ...]
+    incidents: tuple[str | None, ...]
+    measured: Array
+    expected: Array
+    gaps: Array
+    latents: Mapping[str, Array]
+
+    def __len__(self) -> int:
+        return len(self.customer_ids)
+
+    def columns(self) -> dict[str, NDArray[Any]]:
+        """One column per field, ready for pandas.DataFrame(...).
+
+        Gaps are named x1..x8; raw values and expectations x1_measured,
+        x1_expected and so on. An order without an incident shows "none".
+        """
+        cols: dict[str, NDArray[Any]] = {
+            "customer_id": np.array(self.customer_ids),
+            "order_number": np.array(self.order_numbers),
+            "placed_at": np.array(self.placed_at),
+            "incident": np.array([name or "none" for name in self.incidents]),
+        }
+        for i, key in enumerate(INPUTS):
+            cols[f"{key}_measured"] = self.measured[:, i]
+            cols[f"{key}_expected"] = self.expected[:, i]
+            cols[key] = self.gaps[:, i]
+        cols.update(self.latents)
+        return cols
+
+
+def _table(rows: list[list[float]]) -> Array:
+    """Rows of eight values as a read-only (n, 8) array, even when n is 0."""
+    table = np.array(rows, dtype=np.float64).reshape(-1, len(INPUTS))
+    table.setflags(write=False)
+    return table
+
+
+def simulate_orders(
+    profiles: Sequence[ServiceProfile],
+    seed: int,
+    start: datetime = START,
+    days: float = DAYS,
+    truth: TrueModel = DEFAULT_TRUTH,
+) -> Orders:
+    """Every profile's order history from start, for the given number of days.
+
+    Each customer orders at random times, on average every
+    days_between_orders days. For every order: draw its measurements;
+    compare each with what the customer expected just before it (x1 with
+    the promise, x2..x8 with their fitcore.expectations baseline, which
+    starts from PRIORS); then let the order update those baselines.
+
+    Each customer gets their own random stream, made from (seed, position),
+    so a customer's history does not depend on how many others are
+    simulated. Raises ValueError if days is not positive or start is naive.
+    """
+    if not days > 0:
+        raise ValueError(f"days must be positive, got {days}")
+    if start.tzinfo is None:
+        raise ValueError("start must be timezone-aware")
+    end = start + timedelta(days=days)
+    ids: list[str] = []
+    numbers: list[int] = []
+    times: list[datetime] = []
+    incidents: list[str | None] = []
+    measured: list[list[float]] = []
+    wanted: list[list[float]] = []
+    gaps: list[list[float]] = []
+    for position, profile in enumerate(profiles):
+        rng = np.random.default_rng([seed, position])
+        baselines = {key: expectations.Baseline() for key in PRIORS}
+        at = start + timedelta(days=rng.exponential(profile.days_between_orders))
+        number = 0
+        while at < end:
+            number += 1
+            values, incident = draw_order(profile, rng)
+            expect = {"x1": profile.promise}
+            for key, prior in PRIORS.items():
+                expect[key] = expectations.expected(baselines[key], prior, at)
+                baselines[key] = expectations.update(baselines[key], values[key], at)
+            ids.append(profile.customer_id)
+            numbers.append(number)
+            times.append(at)
+            incidents.append(incident)
+            measured.append([values[key] for key in INPUTS])
+            wanted.append([expect[key] for key in INPUTS])
+            gaps.append([input_gap(key, values[key], expect[key]) for key in INPUTS])
+            at += timedelta(days=rng.exponential(profile.days_between_orders))
+    gap_table = _table(gaps)
+    latents = true_latents(gap_table, truth)
+    for column in latents.values():
+        column.setflags(write=False)
+    return Orders(
+        customer_ids=tuple(ids),
+        order_numbers=tuple(numbers),
+        placed_at=tuple(times),
+        incidents=tuple(incidents),
+        measured=_table(measured),
+        expected=_table(wanted),
+        gaps=gap_table,
+        latents=MappingProxyType(latents),
+    )
