@@ -32,6 +32,8 @@ changing.
 Everything is float64, so the numpy forward pass can match it exactly.
 """
 
+from collections.abc import Sequence
+from copy import deepcopy
 from dataclasses import dataclass
 
 import numpy as np
@@ -42,7 +44,7 @@ from torch import Tensor, nn
 
 from fitcore.dataset import ANCHOR_BEHAVIOURS, ITEM_LATENTS, TrainingSet, gap_scale
 from fitcore.features import INPUTS
-from fitcore.model import MASK_1, MASK_2, MASK_3
+from fitcore.model import PATHS, THEORY_MASKS, Path, check_masks
 
 DTYPE = torch.float64
 
@@ -117,16 +119,29 @@ class FitNetwork(nn.Module):
     """Gaps (n x 8, own units) in; the five latents (n x 5) out.
 
     Columns follow fitcore.model.LATENTS: respect, love, convenience, trust,
-    fit. Each latent is a sigmoid, so it lies between 0 and 1. The outcome
-    heads (reorder, churn, NPS) read fit and are added in training.
+    fit. Each latent is a sigmoid, so it lies between 0 and 1. masks: one per
+    layer, the theory's by default. They may switch a path off, never add
+    one (fitcore.model.check_masks raises ValueError otherwise).
     """
 
-    def __init__(self, scale: ArrayLike) -> None:
+    def __init__(
+        self, scale: ArrayLike, masks: Sequence[ArrayLike] = THEORY_MASKS
+    ) -> None:
         super().__init__()
+        mask_1, mask_2, mask_3 = check_masks(masks)
         self.gaps = AsymmetricGaps(scale)
-        self.layer1 = PositiveMaskedLinear(MASK_1)
-        self.layer2 = PositiveMaskedLinear(MASK_2)
-        self.layer3 = PositiveMaskedLinear(MASK_3)
+        self.layer1 = PositiveMaskedLinear(mask_1)
+        self.layer2 = PositiveMaskedLinear(mask_2)
+        self.layer3 = PositiveMaskedLinear(mask_3)
+
+    @property
+    def layers(self) -> tuple[PositiveMaskedLinear, ...]:
+        """Layers 1, 2 and 3."""
+        return (self.layer1, self.layer2, self.layer3)
+
+    def masks(self) -> tuple[np.ndarray, ...]:
+        """The masks in use now, as numpy copies: 1 where a path is in use."""
+        return tuple(layer.mask.numpy().copy() for layer in self.layers)
 
     def forward(self, gaps: Tensor) -> Tensor:
         z = self.gaps(gaps)
@@ -268,23 +283,33 @@ class FitModel(nn.Module):
 
     scale: the gap scale (fitcore.dataset.gap_scale). behaviour_mean and
     behaviour_sd standardise the behaviours. All three come from the
-    training set and stay fixed; for_training_set fills them in.
+    training set and stay fixed; for_training_set fills them in. masks: as
+    for FitNetwork.
     """
 
     def __init__(
-        self, scale: ArrayLike, behaviour_mean: ArrayLike, behaviour_sd: ArrayLike
+        self,
+        scale: ArrayLike,
+        behaviour_mean: ArrayLike,
+        behaviour_sd: ArrayLike,
+        masks: Sequence[ArrayLike] = THEORY_MASKS,
     ) -> None:
         super().__init__()
-        self.network = FitNetwork(scale)
+        self.network = FitNetwork(scale, masks)
         self.heads = OutcomeHeads()
         self.anchors = Anchors(behaviour_mean, behaviour_sd)
 
     @classmethod
-    def for_training_set(cls, data: TrainingSet) -> "FitModel":
+    def for_training_set(
+        cls, data: TrainingSet, masks: Sequence[ArrayLike] = THEORY_MASKS
+    ) -> "FitModel":
         """A fresh model whose fixed numbers come from the training set."""
         behaviours = data.behaviours
         return cls(
-            gap_scale(data.gaps), behaviours.mean(axis=0), behaviours.std(axis=0)
+            gap_scale(data.gaps),
+            behaviours.mean(axis=0),
+            behaviours.std(axis=0),
+            masks,
         )
 
     def slopes(self) -> list[Tensor]:
@@ -466,3 +491,23 @@ def fit_model(
         if change <= tolerance * max(1.0, abs(losses[-1])):
             return TrainingResult(tuple(losses), converged=True)
     return TrainingResult(tuple(losses), converged=False)
+
+
+def without_path(model: FitModel, path: Path) -> FitModel:
+    """A copy of model with one path switched off, ready to retrain.
+
+    Everything else keeps its trained value, so retraining starts where the
+    model ended (a warm start) and needs fewer rounds than starting afresh.
+    From now on the path's weight is exactly 0 and gets no gradient. model
+    itself is not changed. Raises ValueError unless model uses path.
+    """
+    if path not in PATHS:
+        raise ValueError(f"the theory has no path {path.name}")
+    ablated = deepcopy(model)
+    layer = ablated.network.layers[path.layer - 1]
+    row, column = path.position()
+    if not bool(layer.mask[row, column] > 0.0):
+        raise ValueError(f"the model does not use {path.name}")
+    with torch.no_grad():
+        layer.mask[row, column] = 0.0
+    return ablated

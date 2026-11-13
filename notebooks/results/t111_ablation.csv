@@ -1,0 +1,541 @@
+seed,variant,measure,value
+2026,full model,reorder,0.338535
+2026,full model,churn,0.145112
+2026,full model,nps,1.78916
+2026,full model,items,5.93393
+2026,full model,behaviours,3.64668
+2026,full model,total,11.8534
+2026,respect <- x1,reorder,0.338694
+2026,respect <- x1,churn,0.1451
+2026,respect <- x1,nps,1.80177
+2026,respect <- x1,items,6.04309
+2026,respect <- x1,behaviours,3.97106
+2026,respect <- x1,total,12.2997
+2026,respect <- x4,reorder,0.343827
+2026,respect <- x4,churn,0.148548
+2026,respect <- x4,nps,1.81429
+2026,respect <- x4,items,6.06882
+2026,respect <- x4,behaviours,3.68027
+2026,respect <- x4,total,12.0558
+2026,respect <- x5,reorder,0.340761
+2026,respect <- x5,churn,0.146278
+2026,respect <- x5,nps,1.79838
+2026,respect <- x5,items,5.98799
+2026,respect <- x5,behaviours,3.72175
+2026,respect <- x5,total,11.9952
+2026,respect <- x6,reorder,0.33968
+2026,respect <- x6,churn,0.145776
+2026,respect <- x6,nps,1.79228
+2026,respect <- x6,items,6.01328
+2026,respect <- x6,behaviours,3.76731
+2026,respect <- x6,total,12.0583
+2026,love <- x6,reorder,0.339103
+2026,love <- x6,churn,0.145893
+2026,love <- x6,nps,1.7929
+2026,love <- x6,items,6.05184
+2026,love <- x6,behaviours,4.10873
+2026,love <- x6,total,12.4385
+2026,love <- x7,reorder,0.3399
+2026,love <- x7,churn,0.146046
+2026,love <- x7,nps,1.78926
+2026,love <- x7,items,5.98591
+2026,love <- x7,behaviours,3.84824
+2026,love <- x7,total,12.1094
+2026,love <- x8,reorder,0.341067
+2026,love <- x8,churn,0.146685
+2026,love <- x8,nps,1.80092
+2026,love <- x8,items,6.06707
+2026,love <- x8,behaviours,3.95133
+2026,love <- x8,total,12.3071
+2026,convenience <- respect,reorder,0.338751
+2026,convenience <- respect,churn,0.145183
+2026,convenience <- respect,nps,1.78903
+2026,convenience <- respect,items,5.96753
+2026,convenience <- respect,behaviours,3.6624
+2026,convenience <- respect,total,11.9029
+2026,convenience <- x1,reorder,0.338308
+2026,convenience <- x1,churn,0.144925
+2026,convenience <- x1,nps,1.79311
+2026,convenience <- x1,items,5.97476
+2026,convenience <- x1,behaviours,3.66786
+2026,convenience <- x1,total,11.919
+2026,convenience <- x2,reorder,0.339485
+2026,convenience <- x2,churn,0.146025
+2026,convenience <- x2,nps,1.79594
+2026,convenience <- x2,items,5.97483
+2026,convenience <- x2,behaviours,3.67981
+2026,convenience <- x2,total,11.9361
+2026,convenience <- x3,reorder,0.340197
+2026,convenience <- x3,churn,0.146818
+2026,convenience <- x3,nps,1.79766
+2026,convenience <- x3,items,6.03756
+2026,convenience <- x3,behaviours,3.79823
+2026,convenience <- x3,total,12.1205
+2026,trust <- respect,reorder,0.34129
+2026,trust <- respect,churn,0.145887
+2026,trust <- respect,nps,1.80345
+2026,trust <- respect,items,6.01307
+2026,trust <- respect,behaviours,3.85848
+2026,trust <- respect,total,12.1622
+2026,trust <- love,reorder,0.342506
+2026,trust <- love,churn,0.147849
+2026,trust <- love,nps,1.80023
+2026,trust <- love,items,6.00324
+2026,trust <- love,behaviours,3.77208
+2026,trust <- love,total,12.0659
+2026,fit <- convenience,reorder,0.341609
+2026,fit <- convenience,churn,0.148099
+2026,fit <- convenience,nps,1.82173
+2026,fit <- convenience,items,5.93985
+2026,fit <- convenience,behaviours,3.64962
+2026,fit <- convenience,total,11.9009
+2026,fit <- trust,reorder,0.348687
+2026,fit <- trust,churn,0.151211
+2026,fit <- trust,nps,1.8373
+2026,fit <- trust,items,5.94131
+2026,fit <- trust,behaviours,3.6472
+2026,fit <- trust,total,11.9257
+2026,kappa per input (vs one shared),reorder,0.338659
+2026,kappa per input (vs one shared),churn,0.145031
+2026,kappa per input (vs one shared),nps,1.78834
+2026,kappa per input (vs one shared),items,5.93632
+2026,kappa per input (vs one shared),behaviours,3.65381
+2026,kappa per input (vs one shared),total,11.8622
+2026,asymmetry (vs kappa = 1),reorder,0.339441
+2026,asymmetry (vs kappa = 1),churn,0.14588
+2026,asymmetry (vs kappa = 1),nps,1.79633
+2026,asymmetry (vs kappa = 1),items,5.94289
+2026,asymmetry (vs kappa = 1),behaviours,3.70052
+2026,asymmetry (vs kappa = 1),total,11.9251
+2027,full model,reorder,0.319665
+2027,full model,churn,0.13696
+2027,full model,nps,1.80805
+2027,full model,items,6.03409
+2027,full model,behaviours,3.73086
+2027,full model,total,12.0296
+2027,respect <- x1,reorder,0.320342
+2027,respect <- x1,churn,0.138877
+2027,respect <- x1,nps,1.82199
+2027,respect <- x1,items,6.12599
+2027,respect <- x1,behaviours,4.01716
+2027,respect <- x1,total,12.4244
+2027,respect <- x4,reorder,0.325347
+2027,respect <- x4,churn,0.141329
+2027,respect <- x4,nps,1.82752
+2027,respect <- x4,items,6.16499
+2027,respect <- x4,behaviours,3.7849
+2027,respect <- x4,total,12.2441
+2027,respect <- x5,reorder,0.320728
+2027,respect <- x5,churn,0.13749
+2027,respect <- x5,nps,1.81606
+2027,respect <- x5,items,6.09449
+2027,respect <- x5,behaviours,3.8122
+2027,respect <- x5,total,12.181
+2027,respect <- x6,reorder,0.320413
+2027,respect <- x6,churn,0.136837
+2027,respect <- x6,nps,1.8158
+2027,respect <- x6,items,6.09701
+2027,respect <- x6,behaviours,3.8013
+2027,respect <- x6,total,12.1714
+2027,love <- x6,reorder,0.32008
+2027,love <- x6,churn,0.136989
+2027,love <- x6,nps,1.81244
+2027,love <- x6,items,6.17386
+2027,love <- x6,behaviours,4.31082
+2027,love <- x6,total,12.7542
+2027,love <- x7,reorder,0.320548
+2027,love <- x7,churn,0.137542
+2027,love <- x7,nps,1.81177
+2027,love <- x7,items,6.07046
+2027,love <- x7,behaviours,3.82255
+2027,love <- x7,total,12.1629
+2027,love <- x8,reorder,0.322418
+2027,love <- x8,churn,0.139172
+2027,love <- x8,nps,1.81329
+2027,love <- x8,items,6.11929
+2027,love <- x8,behaviours,4.0206
+2027,love <- x8,total,12.4148
+2027,convenience <- respect,reorder,0.319398
+2027,convenience <- respect,churn,0.136569
+2027,convenience <- respect,nps,1.80866
+2027,convenience <- respect,items,6.06499
+2027,convenience <- respect,behaviours,3.75154
+2027,convenience <- respect,total,12.0812
+2027,convenience <- x1,reorder,0.320043
+2027,convenience <- x1,churn,0.137259
+2027,convenience <- x1,nps,1.80835
+2027,convenience <- x1,items,6.06735
+2027,convenience <- x1,behaviours,3.73599
+2027,convenience <- x1,total,12.069
+2027,convenience <- x2,reorder,0.320491
+2027,convenience <- x2,churn,0.137521
+2027,convenience <- x2,nps,1.81583
+2027,convenience <- x2,items,6.08063
+2027,convenience <- x2,behaviours,3.75898
+2027,convenience <- x2,total,12.1135
+2027,convenience <- x3,reorder,0.322465
+2027,convenience <- x3,churn,0.137996
+2027,convenience <- x3,nps,1.8062
+2027,convenience <- x3,items,6.08537
+2027,convenience <- x3,behaviours,3.83619
+2027,convenience <- x3,total,12.1882
+2027,trust <- respect,reorder,0.321394
+2027,trust <- respect,churn,0.138709
+2027,trust <- respect,nps,1.82891
+2027,trust <- respect,items,6.10052
+2027,trust <- respect,behaviours,3.85598
+2027,trust <- respect,total,12.2455
+2027,trust <- love,reorder,0.323482
+2027,trust <- love,churn,0.139609
+2027,trust <- love,nps,1.81946
+2027,trust <- love,items,6.12142
+2027,trust <- love,behaviours,3.80345
+2027,trust <- love,total,12.2074
+2027,fit <- convenience,reorder,0.324653
+2027,fit <- convenience,churn,0.140243
+2027,fit <- convenience,nps,1.82842
+2027,fit <- convenience,items,6.03869
+2027,fit <- convenience,behaviours,3.72866
+2027,fit <- convenience,total,12.0607
+2027,fit <- trust,reorder,0.328601
+2027,fit <- trust,churn,0.141969
+2027,fit <- trust,nps,1.85801
+2027,fit <- trust,items,6.03602
+2027,fit <- trust,behaviours,3.73098
+2027,fit <- trust,total,12.0956
+2027,kappa per input (vs one shared),reorder,0.319817
+2027,kappa per input (vs one shared),churn,0.136921
+2027,kappa per input (vs one shared),nps,1.8079
+2027,kappa per input (vs one shared),items,6.03795
+2027,kappa per input (vs one shared),behaviours,3.73861
+2027,kappa per input (vs one shared),total,12.0412
+2027,asymmetry (vs kappa = 1),reorder,0.321188
+2027,asymmetry (vs kappa = 1),churn,0.137545
+2027,asymmetry (vs kappa = 1),nps,1.8085
+2027,asymmetry (vs kappa = 1),items,6.04324
+2027,asymmetry (vs kappa = 1),behaviours,3.75134
+2027,asymmetry (vs kappa = 1),total,12.0618
+2028,full model,reorder,0.336243
+2028,full model,churn,0.151755
+2028,full model,nps,1.75041
+2028,full model,items,5.88372
+2028,full model,behaviours,3.79243
+2028,full model,total,11.9146
+2028,respect <- x1,reorder,0.336695
+2028,respect <- x1,churn,0.151678
+2028,respect <- x1,nps,1.75426
+2028,respect <- x1,items,5.95832
+2028,respect <- x1,behaviours,4.20173
+2028,respect <- x1,total,12.4027
+2028,respect <- x4,reorder,0.339022
+2028,respect <- x4,churn,0.153464
+2028,respect <- x4,nps,1.75195
+2028,respect <- x4,items,5.97107
+2028,respect <- x4,behaviours,3.84797
+2028,respect <- x4,total,12.0635
+2028,respect <- x5,reorder,0.339295
+2028,respect <- x5,churn,0.153533
+2028,respect <- x5,nps,1.76868
+2028,respect <- x5,items,5.94832
+2028,respect <- x5,behaviours,3.7938
+2028,respect <- x5,total,12.0036
+2028,respect <- x6,reorder,0.33688
+2028,respect <- x6,churn,0.152305
+2028,respect <- x6,nps,1.73645
+2028,respect <- x6,items,5.96137
+2028,respect <- x6,behaviours,3.92318
+2028,respect <- x6,total,12.1102
+2028,love <- x6,reorder,0.337473
+2028,love <- x6,churn,0.152585
+2028,love <- x6,nps,1.75205
+2028,love <- x6,items,6.02214
+2028,love <- x6,behaviours,4.3233
+2028,love <- x6,total,12.5875
+2028,love <- x7,reorder,0.337643
+2028,love <- x7,churn,0.152813
+2028,love <- x7,nps,1.75637
+2028,love <- x7,items,5.92857
+2028,love <- x7,behaviours,3.936
+2028,love <- x7,total,12.1114
+2028,love <- x8,reorder,0.338567
+2028,love <- x8,churn,0.153497
+2028,love <- x8,nps,1.77185
+2028,love <- x8,items,5.98121
+2028,love <- x8,behaviours,4.22454
+2028,love <- x8,total,12.4697
+2028,convenience <- respect,reorder,0.336199
+2028,convenience <- respect,churn,0.151523
+2028,convenience <- respect,nps,1.74838
+2028,convenience <- respect,items,5.90824
+2028,convenience <- respect,behaviours,3.80873
+2028,convenience <- respect,total,11.9531
+2028,convenience <- x1,reorder,0.336249
+2028,convenience <- x1,churn,0.151909
+2028,convenience <- x1,nps,1.75118
+2028,convenience <- x1,items,5.94076
+2028,convenience <- x1,behaviours,3.79722
+2028,convenience <- x1,total,11.9773
+2028,convenience <- x2,reorder,0.336979
+2028,convenience <- x2,churn,0.152515
+2028,convenience <- x2,nps,1.74165
+2028,convenience <- x2,items,5.97968
+2028,convenience <- x2,behaviours,3.80363
+2028,convenience <- x2,total,12.0145
+2028,convenience <- x3,reorder,0.339601
+2028,convenience <- x3,churn,0.153575
+2028,convenience <- x3,nps,1.77145
+2028,convenience <- x3,items,6.0066
+2028,convenience <- x3,behaviours,3.92111
+2028,convenience <- x3,total,12.1923
+2028,trust <- respect,reorder,0.337152
+2028,trust <- respect,churn,0.151797
+2028,trust <- respect,nps,1.7542
+2028,trust <- respect,items,5.94951
+2028,trust <- respect,behaviours,4.00964
+2028,trust <- respect,total,12.2023
+2028,trust <- love,reorder,0.341001
+2028,trust <- love,churn,0.155309
+2028,trust <- love,nps,1.7744
+2028,trust <- love,items,5.9567
+2028,trust <- love,behaviours,3.92445
+2028,trust <- love,total,12.1519
+2028,fit <- convenience,reorder,0.340044
+2028,fit <- convenience,churn,0.154062
+2028,fit <- convenience,nps,1.77193
+2028,fit <- convenience,items,5.88779
+2028,fit <- convenience,behaviours,3.78777
+2028,fit <- convenience,total,11.9416
+2028,fit <- trust,reorder,0.346312
+2028,fit <- trust,churn,0.158541
+2028,fit <- trust,nps,1.77843
+2028,fit <- trust,items,5.90544
+2028,fit <- trust,behaviours,3.79353
+2028,fit <- trust,total,11.9822
+2028,kappa per input (vs one shared),reorder,0.336413
+2028,kappa per input (vs one shared),churn,0.151803
+2028,kappa per input (vs one shared),nps,1.74938
+2028,kappa per input (vs one shared),items,5.87642
+2028,kappa per input (vs one shared),behaviours,3.80358
+2028,kappa per input (vs one shared),total,11.9176
+2028,asymmetry (vs kappa = 1),reorder,0.337241
+2028,asymmetry (vs kappa = 1),churn,0.152165
+2028,asymmetry (vs kappa = 1),nps,1.75161
+2028,asymmetry (vs kappa = 1),items,5.89809
+2028,asymmetry (vs kappa = 1),behaviours,3.81664
+2028,asymmetry (vs kappa = 1),total,11.9557
+2029,full model,reorder,0.320031
+2029,full model,churn,0.133638
+2029,full model,nps,1.87314
+2029,full model,items,5.80022
+2029,full model,behaviours,3.68902
+2029,full model,total,11.816
+2029,respect <- x1,reorder,0.320942
+2029,respect <- x1,churn,0.134429
+2029,respect <- x1,nps,1.86647
+2029,respect <- x1,items,5.9322
+2029,respect <- x1,behaviours,3.97897
+2029,respect <- x1,total,12.233
+2029,respect <- x4,reorder,0.322662
+2029,respect <- x4,churn,0.137781
+2029,respect <- x4,nps,1.90506
+2029,respect <- x4,items,5.87628
+2029,respect <- x4,behaviours,3.83121
+2029,respect <- x4,total,12.073
+2029,respect <- x5,reorder,0.321628
+2029,respect <- x5,churn,0.134726
+2029,respect <- x5,nps,1.89104
+2029,respect <- x5,items,5.85602
+2029,respect <- x5,behaviours,3.73921
+2029,respect <- x5,total,11.9426
+2029,respect <- x6,reorder,0.320854
+2029,respect <- x6,churn,0.13423
+2029,respect <- x6,nps,1.8756
+2029,respect <- x6,items,5.90721
+2029,respect <- x6,behaviours,3.83789
+2029,respect <- x6,total,12.0758
+2029,love <- x6,reorder,0.320218
+2029,love <- x6,churn,0.13364
+2029,love <- x6,nps,1.87972
+2029,love <- x6,items,5.95281
+2029,love <- x6,behaviours,4.1317
+2029,love <- x6,total,12.4181
+2029,love <- x7,reorder,0.321066
+2029,love <- x7,churn,0.134716
+2029,love <- x7,nps,1.87461
+2029,love <- x7,items,5.86247
+2029,love <- x7,behaviours,3.78408
+2029,love <- x7,total,11.9769
+2029,love <- x8,reorder,0.321581
+2029,love <- x8,churn,0.135071
+2029,love <- x8,nps,1.87984
+2029,love <- x8,items,5.87541
+2029,love <- x8,behaviours,4.06943
+2029,love <- x8,total,12.2813
+2029,convenience <- respect,reorder,0.319856
+2029,convenience <- respect,churn,0.133518
+2029,convenience <- respect,nps,1.8786
+2029,convenience <- respect,items,5.84111
+2029,convenience <- respect,behaviours,3.71316
+2029,convenience <- respect,total,11.8862
+2029,convenience <- x1,reorder,0.320206
+2029,convenience <- x1,churn,0.133989
+2029,convenience <- x1,nps,1.87247
+2029,convenience <- x1,items,5.82841
+2029,convenience <- x1,behaviours,3.71626
+2029,convenience <- x1,total,11.8713
+2029,convenience <- x2,reorder,0.32075
+2029,convenience <- x2,churn,0.134422
+2029,convenience <- x2,nps,1.87006
+2029,convenience <- x2,items,5.85815
+2029,convenience <- x2,behaviours,3.71341
+2029,convenience <- x2,total,11.8968
+2029,convenience <- x3,reorder,0.322456
+2029,convenience <- x3,churn,0.135038
+2029,convenience <- x3,nps,1.89666
+2029,convenience <- x3,items,5.89185
+2029,convenience <- x3,behaviours,3.87854
+2029,convenience <- x3,total,12.1245
+2029,trust <- respect,reorder,0.321926
+2029,trust <- respect,churn,0.135412
+2029,trust <- respect,nps,1.8854
+2029,trust <- respect,items,5.82218
+2029,trust <- respect,behaviours,3.85404
+2029,trust <- respect,total,12.019
+2029,trust <- love,reorder,0.323714
+2029,trust <- love,churn,0.136512
+2029,trust <- love,nps,1.88737
+2029,trust <- love,items,5.89773
+2029,trust <- love,behaviours,3.83606
+2029,trust <- love,total,12.0814
+2029,fit <- convenience,reorder,0.324977
+2029,fit <- convenience,churn,0.136949
+2029,fit <- convenience,nps,1.90018
+2029,fit <- convenience,items,5.80853
+2029,fit <- convenience,behaviours,3.69666
+2029,fit <- convenience,total,11.8673
+2029,fit <- trust,reorder,0.329145
+2029,fit <- trust,churn,0.140946
+2029,fit <- trust,nps,1.91459
+2029,fit <- trust,items,5.80235
+2029,fit <- trust,behaviours,3.69181
+2029,fit <- trust,total,11.8788
+2029,kappa per input (vs one shared),reorder,0.319979
+2029,kappa per input (vs one shared),churn,0.133758
+2029,kappa per input (vs one shared),nps,1.87247
+2029,kappa per input (vs one shared),items,5.8017
+2029,kappa per input (vs one shared),behaviours,3.69912
+2029,kappa per input (vs one shared),total,11.827
+2029,asymmetry (vs kappa = 1),reorder,0.320944
+2029,asymmetry (vs kappa = 1),churn,0.134133
+2029,asymmetry (vs kappa = 1),nps,1.87282
+2029,asymmetry (vs kappa = 1),items,5.79411
+2029,asymmetry (vs kappa = 1),behaviours,3.711
+2029,asymmetry (vs kappa = 1),total,11.833
+2030,full model,reorder,0.351364
+2030,full model,churn,0.146603
+2030,full model,nps,1.82996
+2030,full model,items,6.04506
+2030,full model,behaviours,3.5649
+2030,full model,total,11.9379
+2030,respect <- x1,reorder,0.351963
+2030,respect <- x1,churn,0.146364
+2030,respect <- x1,nps,1.84172
+2030,respect <- x1,items,6.2294
+2030,respect <- x1,behaviours,3.84263
+2030,respect <- x1,total,12.4121
+2030,respect <- x4,reorder,0.355781
+2030,respect <- x4,churn,0.149846
+2030,respect <- x4,nps,1.82636
+2030,respect <- x4,items,6.18561
+2030,respect <- x4,behaviours,3.76302
+2030,respect <- x4,total,12.2806
+2030,respect <- x5,reorder,0.353239
+2030,respect <- x5,churn,0.148213
+2030,respect <- x5,nps,1.83282
+2030,respect <- x5,items,6.08786
+2030,respect <- x5,behaviours,3.59706
+2030,respect <- x5,total,12.0192
+2030,respect <- x6,reorder,0.352883
+2030,respect <- x6,churn,0.147061
+2030,respect <- x6,nps,1.84581
+2030,respect <- x6,items,6.14099
+2030,respect <- x6,behaviours,3.74794
+2030,respect <- x6,total,12.2347
+2030,love <- x6,reorder,0.352067
+2030,love <- x6,churn,0.14676
+2030,love <- x6,nps,1.85224
+2030,love <- x6,items,6.16227
+2030,love <- x6,behaviours,4.10393
+2030,love <- x6,total,12.6173
+2030,love <- x7,reorder,0.352676
+2030,love <- x7,churn,0.14745
+2030,love <- x7,nps,1.82242
+2030,love <- x7,items,6.09909
+2030,love <- x7,behaviours,3.66723
+2030,love <- x7,total,12.0889
+2030,love <- x8,reorder,0.353319
+2030,love <- x8,churn,0.147883
+2030,love <- x8,nps,1.83525
+2030,love <- x8,items,6.10281
+2030,love <- x8,behaviours,3.89834
+2030,love <- x8,total,12.3376
+2030,convenience <- respect,reorder,0.351364
+2030,convenience <- respect,churn,0.146684
+2030,convenience <- respect,nps,1.82921
+2030,convenience <- respect,items,6.08797
+2030,convenience <- respect,behaviours,3.59985
+2030,convenience <- respect,total,12.0151
+2030,convenience <- x1,reorder,0.351791
+2030,convenience <- x1,churn,0.147023
+2030,convenience <- x1,nps,1.83219
+2030,convenience <- x1,items,6.04888
+2030,convenience <- x1,behaviours,3.59561
+2030,convenience <- x1,total,11.9755
+2030,convenience <- x2,reorder,0.352415
+2030,convenience <- x2,churn,0.147181
+2030,convenience <- x2,nps,1.84044
+2030,convenience <- x2,items,6.08138
+2030,convenience <- x2,behaviours,3.59897
+2030,convenience <- x2,total,12.0204
+2030,convenience <- x3,reorder,0.356459
+2030,convenience <- x3,churn,0.149721
+2030,convenience <- x3,nps,1.84286
+2030,convenience <- x3,items,6.13322
+2030,convenience <- x3,behaviours,3.72273
+2030,convenience <- x3,total,12.205
+2030,trust <- respect,reorder,0.35212
+2030,trust <- respect,churn,0.146606
+2030,trust <- respect,nps,1.84155
+2030,trust <- respect,items,6.13044
+2030,trust <- respect,behaviours,3.72607
+2030,trust <- respect,total,12.1968
+2030,trust <- love,reorder,0.35567
+2030,trust <- love,churn,0.149162
+2030,trust <- love,nps,1.84438
+2030,trust <- love,items,6.07566
+2030,trust <- love,behaviours,3.68356
+2030,trust <- love,total,12.1084
+2030,fit <- convenience,reorder,0.35815
+2030,fit <- convenience,churn,0.151013
+2030,fit <- convenience,nps,1.84937
+2030,fit <- convenience,items,6.04285
+2030,fit <- convenience,behaviours,3.572
+2030,fit <- convenience,total,11.9734
+2030,fit <- trust,reorder,0.358654
+2030,fit <- trust,churn,0.150214
+2030,fit <- trust,nps,1.87429
+2030,fit <- trust,items,6.04589
+2030,fit <- trust,behaviours,3.56585
+2030,fit <- trust,total,11.9949
+2030,kappa per input (vs one shared),reorder,0.351589
+2030,kappa per input (vs one shared),churn,0.146805
+2030,kappa per input (vs one shared),nps,1.82923
+2030,kappa per input (vs one shared),items,6.04954
+2030,kappa per input (vs one shared),behaviours,3.55926
+2030,kappa per input (vs one shared),total,11.9364
+2030,asymmetry (vs kappa = 1),reorder,0.352451
+2030,asymmetry (vs kappa = 1),churn,0.146954
+2030,asymmetry (vs kappa = 1),nps,1.83418
+2030,asymmetry (vs kappa = 1),items,6.06471
+2030,asymmetry (vs kappa = 1),behaviours,3.58782
+2030,asymmetry (vs kappa = 1),total,11.9861
