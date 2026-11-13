@@ -1,19 +1,35 @@
+import dataclasses
 import math
+from itertools import pairwise
 
 import numpy as np
 import pytest
 import torch
 import torch.nn.functional as F
 
+from fitcore.dataset import TrainingSet, from_simulation, gap_scale, split_by_customer
 from fitcore.features import asymmetric
 from fitcore.model import LATENTS
 from fitcore.sim import DEFAULT_TRUTH, TrueModel, simulate_customers, true_latents
+from fitcore.sim_behaviour import simulate_behaviour
+from fitcore.sim_orders import simulate_orders, simulate_profiles
 from fitcore.train import (
     DTYPE,
+    TERMS,
+    Anchors,
     AsymmetricGaps,
+    Batch,
+    FitModel,
     FitNetwork,
+    OutcomeHeads,
     PositiveMaskedLinear,
+    TrainingResult,
+    evaluate,
+    fit_model,
+    intercept_only_losses,
     inverse_softplus,
+    loss_terms,
+    ordinal_nll,
 )
 
 SCALE = np.asarray(DEFAULT_TRUTH.scale)
@@ -151,3 +167,174 @@ def test_a_starting_kappa_of_1_or_less_is_rejected() -> None:
 def test_inverse_softplus_undoes_softplus(y: float) -> None:
     value = torch.tensor(y, dtype=DTYPE)
     assert F.softplus(inverse_softplus(value)).item() == pytest.approx(y, rel=1e-12)
+
+
+# --- T109: heads, anchors, loss and training ---
+
+
+def _simulated(customers: int) -> TrainingSet:
+    orders = simulate_orders(simulate_profiles(customers, 2026), 2026)
+    return from_simulation(orders, simulate_behaviour(orders, 2026))
+
+
+@pytest.mark.parametrize("eta", [-20.0, -1.0, 0.0, 2.5, 30.0])
+def test_ordinal_chances_sum_to_1_and_follow_the_cuts(eta: float) -> None:
+    cuts = torch.tensor([-1.0, 0.0, 0.5, 2.0], dtype=DTYPE)
+    answers = torch.arange(5, dtype=DTYPE)
+    etas = torch.full((5,), eta, dtype=DTYPE)
+    chances = torch.exp(-ordinal_nll(etas, cuts, answers))
+    assert chances.sum().item() == pytest.approx(1.0, abs=1e-12)
+    # sigmoid(upper) - sigmoid(lower), written so that nothing cancels
+    upper, lower = 0.5 - eta, 0.0 - eta
+    want = math.exp(lower) * math.expm1(upper - lower)
+    want /= (1.0 + math.exp(upper)) * (1.0 + math.exp(lower))
+    assert chances[2].item() == pytest.approx(want, rel=1e-12)
+
+
+def test_ordinal_gradients_stay_finite_far_into_the_tails() -> None:
+    cuts = torch.tensor([-1.0, 0.0, 1.0], dtype=DTYPE)
+    eta = torch.tensor([-60.0, -60.0, 60.0, 60.0], dtype=DTYPE, requires_grad=True)
+    answers = torch.tensor([0.0, 3.0, 0.0, 3.0], dtype=DTYPE)
+    nll = ordinal_nll(eta, cuts, answers)
+    nll.sum().backward()
+    assert eta.grad is not None
+    assert bool(torch.all(torch.isfinite(nll)))
+    assert bool(torch.all(torch.isfinite(eta.grad)))
+
+
+def test_heads_point_the_way_theory_says_whatever_their_raw_values() -> None:
+    heads = OutcomeHeads()
+    with torch.no_grad():
+        heads.raw_slope.copy_(torch.tensor([-30.0, -5.0, 3.0], dtype=DTYPE))
+        heads.raw_steps.copy_(torch.linspace(-30.0, 4.0, 9, dtype=DTYPE))
+    assert bool(torch.all(heads.slope > 0.0))
+    assert bool(torch.all(torch.diff(heads.cuts) > 0.0))
+    reorder, churn, nps = heads(torch.tensor([0.2, 0.8], dtype=DTYPE))
+    assert reorder[1] > reorder[0]
+    assert churn[1] < churn[0]
+    assert nps[1] > nps[0]
+
+
+def test_item_thresholds_are_fixed_at_sevenths() -> None:
+    anchors = Anchors(np.zeros(6), np.ones(6))
+    want = torch.arange(1, 7, dtype=DTYPE) / 7.0
+    assert torch.equal(anchors.thresholds, want)
+    assert "thresholds" in dict(anchors.named_buffers())
+    assert "thresholds" not in dict(anchors.named_parameters())
+
+
+@pytest.mark.parametrize(
+    ("mean", "sd"),
+    [
+        (np.zeros(5), np.ones(5)),
+        (np.zeros(6), np.zeros(6)),
+        (np.zeros(6), -np.ones(6)),
+        (np.full(6, math.nan), np.ones(6)),
+    ],
+)
+def test_bad_behaviour_stats_are_rejected(mean: np.ndarray, sd: np.ndarray) -> None:
+    with pytest.raises(ValueError):
+        Anchors(mean, sd)
+
+
+@pytest.fixture(scope="module")
+def small() -> TrainingSet:
+    return _simulated(60)
+
+
+def test_the_gap_scale_comes_from_the_training_set(small: TrainingSet) -> None:
+    model = FitModel.for_training_set(small)
+    scale = model.network.gaps.scale.numpy()
+    np.testing.assert_allclose(scale, gap_scale(small.gaps), rtol=1e-15)
+    assert not np.allclose(scale, DEFAULT_TRUTH.scale)
+
+
+def test_a_term_averages_only_the_rows_whose_value_is_known(
+    small: TrainingSet,
+) -> None:
+    model = FitModel.for_training_set(small)
+    batch = Batch.from_training_set(small)
+    with torch.no_grad():
+        terms = loss_terms(model, batch)
+        reorder, _, _ = model.heads(model.network(batch.gaps)[:, -1])
+    known = ~torch.isnan(batch.reorder)
+    assert 0 < int(known.sum()) < len(small)
+    want = F.binary_cross_entropy_with_logits(reorder[known], batch.reorder[known])
+    assert terms["reorder"].item() == pytest.approx(want.item(), rel=1e-14)
+    assert tuple(terms) == TERMS
+
+
+def test_missing_answers_add_nothing(small: TrainingSet) -> None:
+    model = FitModel.for_training_set(small)
+    nothing = np.full(len(small), math.nan)
+    no_nps = dataclasses.replace(small, nps=nothing)
+    with torch.no_grad():
+        before = loss_terms(model, Batch.from_training_set(small))
+        after = loss_terms(model, Batch.from_training_set(no_nps))
+    assert after["nps"].item() == 0.0
+    for name in TERMS:
+        if name != "nps":
+            assert after[name].item() == before[name].item()
+
+
+def test_the_same_data_gives_exactly_the_same_model(small: TrainingSet) -> None:
+    models = [FitModel.for_training_set(small) for _ in range(2)]
+    results = [fit_model(model, small, rounds=3) for model in models]
+    assert results[0].losses == results[1].losses
+    first, second = (model.state_dict() for model in models)
+    for name, value in first.items():
+        assert torch.equal(value, second[name]), name
+
+
+@pytest.fixture(scope="module")
+def trained() -> tuple[FitModel, TrainingResult, TrainingSet, TrainingSet]:
+    train, test = split_by_customer(_simulated(300), 0.2, seed=2026)
+    model = FitModel.for_training_set(train)
+    return model, fit_model(model, train), train, test
+
+
+Trained = tuple[FitModel, TrainingResult, TrainingSet, TrainingSet]
+
+
+def test_training_converges_and_the_loss_never_rises(trained: Trained) -> None:
+    _, result, _, _ = trained
+    assert result.converged
+    losses = result.losses
+    assert all(b <= a + 1e-12 for a, b in pairwise(losses))
+    assert losses[-1] < losses[0]
+
+
+def test_every_head_beats_intercept_only_on_held_out_customers(
+    trained: Trained,
+) -> None:
+    model, _, train, test = trained
+    held_out = evaluate(model, test)
+    baseline = intercept_only_losses(train, test)
+    for head in ("reorder", "churn", "nps"):
+        assert held_out[head] < baseline[head], head
+
+
+def test_every_head_slope_is_clearly_above_zero(trained: Trained) -> None:
+    model, _, _, _ = trained
+    assert bool(torch.all(model.heads.slope > 1.0))
+
+
+def test_masks_signs_and_kappa_still_hold_after_training(trained: Trained) -> None:
+    model, _, _, _ = trained
+    for layer in _layers(model.network):
+        on_mask = layer.mask > 0.0
+        assert bool(torch.all(layer.weight[on_mask] > 0.0))
+        assert bool(torch.all(layer.weight[~on_mask] == 0.0))
+    assert bool(torch.all(model.network.gaps.kappa > 1.0))
+
+
+def test_recovered_latents_follow_the_truth_on_held_out_customers(
+    trained: Trained,
+) -> None:
+    model, _, _, test = trained
+    with torch.no_grad():
+        latents = model.network(torch.tensor(test.gaps, dtype=DTYPE)).numpy()
+    assert test.truth is not None
+    for column, name in enumerate(LATENTS):
+        r = np.corrcoef(latents[:, column], test.truth[:, column])[0, 1]
+        assert r > 0.9, name
