@@ -23,6 +23,14 @@ from numpy.typing import NDArray
 from fitcore import expectations
 from fitcore.features import INPUTS, input_gap
 from fitcore.sim import DEFAULT_TRUTH, Array, TrueModel, true_latents
+from fitcore.sim_outcomes import (
+    DEFAULT_OUTCOMES,
+    TrueOutcomes,
+    churn_chance,
+    fit,
+    nps_answer,
+    wait_factor,
+)
 
 
 @dataclass(frozen=True)
@@ -172,6 +180,10 @@ def draw_order(
 START = datetime(2026, 1, 1, tzinfo=UTC)
 DAYS = 180.0
 
+# The outcome labels look this far ahead from each order.
+REORDER_WINDOW = timedelta(days=14)
+CHURN_WINDOW = timedelta(days=30)
+
 
 @dataclass(frozen=True, eq=False)
 class Orders:
@@ -181,7 +193,13 @@ class Orders:
     (1 = first), when, and its incident (None if none). For each input
     x1..x8: the raw measurement, what the customer expected just before the
     order, and the gap between them. latents holds the true latents behind
-    each order's gaps. Arrays are read-only.
+    each order's gaps, and fit the true fit score. Arrays are read-only.
+
+    Outcomes: nps is the order's survey answer, 0 to 10 (None if not
+    surveyed); stopped is True on the order after which the customer quit.
+    The labels are read from the history, as BigQuery will: reorder_14d
+    (another order within 14 days) and churn_30d (no order in the next 30
+    days). A label is None when its window runs past the simulated period.
     """
 
     customer_ids: tuple[str, ...]
@@ -192,6 +210,11 @@ class Orders:
     expected: Array
     gaps: Array
     latents: Mapping[str, Array]
+    fit: Array
+    nps: tuple[int | None, ...]
+    stopped: tuple[bool, ...]
+    reorder_14d: tuple[bool | None, ...]
+    churn_30d: tuple[bool | None, ...]
 
     def __len__(self) -> int:
         return len(self.customer_ids)
@@ -200,7 +223,8 @@ class Orders:
         """One column per field, ready for pandas.DataFrame(...).
 
         Gaps are named x1..x8; raw values and expectations x1_measured,
-        x1_expected and so on. An order without an incident shows "none".
+        x1_expected and so on. An order without an incident shows "none";
+        an empty answer or label is None.
         """
         cols: dict[str, NDArray[Any]] = {
             "customer_id": np.array(self.customer_ids),
@@ -213,7 +237,32 @@ class Orders:
             cols[f"{key}_expected"] = self.expected[:, i]
             cols[key] = self.gaps[:, i]
         cols.update(self.latents)
+        cols["fit"] = self.fit
+        cols["nps"] = np.array(self.nps, dtype=object)
+        cols["stopped"] = np.array(self.stopped)
+        cols["reorder_14d"] = np.array(self.reorder_14d, dtype=object)
+        cols["churn_30d"] = np.array(self.churn_30d, dtype=object)
         return cols
+
+
+def _labels(
+    times: list[datetime], end: datetime, window: timedelta, *, if_quiet: bool
+) -> list[bool | None]:
+    """One label per order of one customer, read from their order times.
+
+    If the next order came within the window, the label is not if_quiet. If
+    the whole window passed with no order, it is if_quiet. If the window
+    runs past end before any next order, nobody can know yet: None.
+    """
+    labels: list[bool | None] = []
+    for at, after in zip(times, [*times[1:], None], strict=True):
+        if after is not None and after - at <= window:
+            labels.append(not if_quiet)
+        elif after is not None or at + window <= end:
+            labels.append(if_quiet)
+        else:
+            labels.append(None)
+    return labels
 
 
 def _table(rows: list[list[float]]) -> Array:
@@ -229,14 +278,17 @@ def simulate_orders(
     start: datetime = START,
     days: float = DAYS,
     truth: TrueModel = DEFAULT_TRUTH,
+    outcomes: TrueOutcomes = DEFAULT_OUTCOMES,
 ) -> Orders:
     """Every profile's order history from start, for the given number of days.
 
-    Each customer orders at random times, on average every
-    days_between_orders days. For every order: draw its measurements;
-    compare each with what the customer expected just before it (x1 with
-    the promise, x2..x8 with their fitcore.expectations baseline, which
-    starts from PRIORS); then let the order update those baselines.
+    For every order: draw its measurements; compare each with what the
+    customer expected just before it (x1 with the promise, x2..x8 with their
+    fitcore.expectations baseline, which starts from PRIORS); then let the
+    order update those baselines. The order's true fit then decides what
+    happens next (fitcore.sim_outcomes): maybe an NPS survey, maybe the
+    customer stops for good, and otherwise how long until the next order,
+    around days_between_orders.
 
     Each customer gets their own random stream, made from (seed, position),
     so a customer's history does not depend on how many others are
@@ -254,30 +306,50 @@ def simulate_orders(
     measured: list[list[float]] = []
     wanted: list[list[float]] = []
     gaps: list[list[float]] = []
+    scores: list[float] = []
+    answers: list[int | None] = []
+    stops: list[bool] = []
+    reorders: list[bool | None] = []
+    churns: list[bool | None] = []
     for position, profile in enumerate(profiles):
         rng = np.random.default_rng([seed, position])
         baselines = {key: expectations.Baseline() for key in PRIORS}
         at = start + timedelta(days=rng.exponential(profile.days_between_orders))
-        number = 0
+        mine: list[datetime] = []
         while at < end:
-            number += 1
             values, incident = draw_order(profile, rng)
             expect = {"x1": profile.promise}
             for key, prior in PRIORS.items():
                 expect[key] = expectations.expected(baselines[key], prior, at)
                 baselines[key] = expectations.update(baselines[key], values[key], at)
+            row = [input_gap(key, values[key], expect[key]) for key in INPUTS]
+            latent = true_latents([row], truth)
+            score = fit(latent["trust"][0], latent["convenience"][0], outcomes)
+            surveyed = rng.random() < outcomes.survey_rate
+            stopped = rng.random() < churn_chance(score, outcomes)
             ids.append(profile.customer_id)
-            numbers.append(number)
+            numbers.append(len(mine) + 1)
             times.append(at)
+            mine.append(at)
             incidents.append(incident)
             measured.append([values[key] for key in INPUTS])
             wanted.append([expect[key] for key in INPUTS])
-            gaps.append([input_gap(key, values[key], expect[key]) for key in INPUTS])
-            at += timedelta(days=rng.exponential(profile.days_between_orders))
+            gaps.append(row)
+            scores.append(score)
+            answers.append(nps_answer(score, rng, outcomes) if surveyed else None)
+            stops.append(stopped)
+            if stopped:
+                break
+            wait = profile.days_between_orders * wait_factor(score, outcomes)
+            at += timedelta(days=rng.exponential(wait))
+        reorders += _labels(mine, end, REORDER_WINDOW, if_quiet=False)
+        churns += _labels(mine, end, CHURN_WINDOW, if_quiet=True)
     gap_table = _table(gaps)
     latents = true_latents(gap_table, truth)
     for column in latents.values():
         column.setflags(write=False)
+    fit_column = np.array(scores, dtype=np.float64)
+    fit_column.setflags(write=False)
     return Orders(
         customer_ids=tuple(ids),
         order_numbers=tuple(numbers),
@@ -287,4 +359,9 @@ def simulate_orders(
         expected=_table(wanted),
         gaps=gap_table,
         latents=MappingProxyType(latents),
+        fit=fit_column,
+        nps=tuple(answers),
+        stopped=tuple(stops),
+        reorder_14d=tuple(reorders),
+        churn_30d=tuple(churns),
     )
