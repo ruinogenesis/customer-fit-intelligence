@@ -17,6 +17,8 @@ dev = [
     "google-cloud-firestore>=2,<3",
 ]
 lab = ["ipykernel>=6", "pandas>=2", "matplotlib>=3.8", "semopy>=2.3,<3"]
+# training only (Colab, the training job, CI); the API never installs it
+train = ["torch>=2.14,<3"]
 
 [tool.hatch.version]
 path = "src/fitcore/__init__.py"
@@ -36,3 +38,9 @@ disallow_untyped_defs = true
 check_untyped_defs = true
 warn_return_any = true
 warn_unused_ignores = true
+
+# pre-commit's mypy runs without torch (a CUDA build would be gigabytes), so
+# torch is treated as untyped there. The tests check the network instead.
+[[tool.mypy.overrides]]
+module = ["torch", "torch.*"]
+ignore_missing_imports = true
