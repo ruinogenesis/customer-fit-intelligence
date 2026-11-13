@@ -31,6 +31,7 @@ from fitcore.sim_outcomes import (
     nps_answer,
     wait_factor,
 )
+from fitcore.sim_survey import DEFAULT_ITEMS, QUESTIONS, TrueItems, item_answer
 
 
 @dataclass(frozen=True)
@@ -195,8 +196,11 @@ class Orders:
     order, and the gap between them. latents holds the true latents behind
     each order's gaps, and fit the true fit score. Arrays are read-only.
 
-    Outcomes: nps is the order's survey answer, 0 to 10 (None if not
-    surveyed); stopped is True on the order after which the customer quit.
+    Survey: survey_item is the one question asked after the order (None if
+    none), rotating through QUESTIONS, and survey_answer its answer: 0 to 10
+    for NPS, 1 to 7 for a latent's item. nps repeats the NPS answers alone.
+
+    Outcomes: stopped is True on the order after which the customer quit.
     The labels are read from the history, as BigQuery will: reorder_14d
     (another order within 14 days) and churn_30d (no order in the next 30
     days). A label is None when its window runs past the simulated period.
@@ -211,6 +215,8 @@ class Orders:
     gaps: Array
     latents: Mapping[str, Array]
     fit: Array
+    survey_items: tuple[str | None, ...]
+    survey_answers: tuple[int | None, ...]
     nps: tuple[int | None, ...]
     stopped: tuple[bool, ...]
     reorder_14d: tuple[bool | None, ...]
@@ -238,6 +244,8 @@ class Orders:
             cols[key] = self.gaps[:, i]
         cols.update(self.latents)
         cols["fit"] = self.fit
+        cols["survey_item"] = np.array(self.survey_items, dtype=object)
+        cols["survey_answer"] = np.array(self.survey_answers, dtype=object)
         cols["nps"] = np.array(self.nps, dtype=object)
         cols["stopped"] = np.array(self.stopped)
         cols["reorder_14d"] = np.array(self.reorder_14d, dtype=object)
@@ -279,6 +287,7 @@ def simulate_orders(
     days: float = DAYS,
     truth: TrueModel = DEFAULT_TRUTH,
     outcomes: TrueOutcomes = DEFAULT_OUTCOMES,
+    items: TrueItems = DEFAULT_ITEMS,
 ) -> Orders:
     """Every profile's order history from start, for the given number of days.
 
@@ -286,9 +295,13 @@ def simulate_orders(
     customer expected just before it (x1 with the promise, x2..x8 with their
     fitcore.expectations baseline, which starts from PRIORS); then let the
     order update those baselines. The order's true fit then decides what
-    happens next (fitcore.sim_outcomes): maybe an NPS survey, maybe the
+    happens next (fitcore.sim_outcomes): maybe a survey question, maybe the
     customer stops for good, and otherwise how long until the next order,
     around days_between_orders.
+
+    A surveyed order gets one question, the customer's next in the QUESTIONS
+    rotation, which starts at a different question for each customer: NPS is
+    answered from fit, a latent's item from that latent (fitcore.sim_survey).
 
     Each customer gets their own random stream, made from (seed, position),
     so a customer's history does not depend on how many others are
@@ -307,6 +320,7 @@ def simulate_orders(
     wanted: list[list[float]] = []
     gaps: list[list[float]] = []
     scores: list[float] = []
+    asked: list[str | None] = []
     answers: list[int | None] = []
     stops: list[bool] = []
     reorders: list[bool | None] = []
@@ -316,6 +330,7 @@ def simulate_orders(
         baselines = {key: expectations.Baseline() for key in PRIORS}
         at = start + timedelta(days=rng.exponential(profile.days_between_orders))
         mine: list[datetime] = []
+        surveys = 0
         while at < end:
             values, incident = draw_order(profile, rng)
             expect = {"x1": profile.promise}
@@ -325,8 +340,16 @@ def simulate_orders(
             row = [input_gap(key, values[key], expect[key]) for key in INPUTS]
             latent = true_latents([row], truth)
             score = fit(latent["trust"][0], latent["convenience"][0], outcomes)
-            surveyed = rng.random() < outcomes.survey_rate
+            question: str | None = None
+            answer: int | None = None
+            if rng.random() < outcomes.survey_rate:
+                question = QUESTIONS[(position + surveys) % len(QUESTIONS)]
+                surveys += 1
             stopped = rng.random() < churn_chance(score, outcomes)
+            if question == "nps":
+                answer = nps_answer(score, rng, outcomes)
+            elif question is not None:
+                answer = item_answer(latent[question][0], rng, items)
             ids.append(profile.customer_id)
             numbers.append(len(mine) + 1)
             times.append(at)
@@ -336,7 +359,8 @@ def simulate_orders(
             wanted.append([expect[key] for key in INPUTS])
             gaps.append(row)
             scores.append(score)
-            answers.append(nps_answer(score, rng, outcomes) if surveyed else None)
+            asked.append(question)
+            answers.append(answer)
             stops.append(stopped)
             if stopped:
                 break
@@ -360,7 +384,11 @@ def simulate_orders(
         gaps=gap_table,
         latents=MappingProxyType(latents),
         fit=fit_column,
-        nps=tuple(answers),
+        survey_items=tuple(asked),
+        survey_answers=tuple(answers),
+        nps=tuple(
+            a if q == "nps" else None for q, a in zip(asked, answers, strict=True)
+        ),
         stopped=tuple(stops),
         reorder_14d=tuple(reorders),
         churn_30d=tuple(churns),

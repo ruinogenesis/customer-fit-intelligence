@@ -24,6 +24,7 @@ from fitcore.sim_orders import (
     simulate_orders,
     simulate_profiles,
 )
+from fitcore.sim_survey import QUESTIONS
 
 
 def steady(profile: ServiceProfile) -> ServiceProfile:
@@ -303,13 +304,6 @@ def test_every_order_has_a_true_fit() -> None:
         assert orders.fit[i] == pytest.approx(sim_outcomes.fit(trust, convenience))
 
 
-def test_about_one_order_in_five_gets_an_nps_answer() -> None:
-    _, orders = history(n=500)
-    answered = [a for a in orders.nps if a is not None]
-    assert len(answered) / len(orders) == pytest.approx(0.2, abs=0.02)
-    assert set(answered) <= set(range(11))
-
-
 def test_a_customer_who_stops_places_no_more_orders() -> None:
     _, orders = history(n=300)
     assert any(orders.stopped)
@@ -366,3 +360,48 @@ def test_outcomes_are_in_the_table() -> None:
     assert {"fit", "nps", "stopped", "reorder_14d", "churn_30d"} <= set(cols)
     with pytest.raises(ValueError, match="read-only"):
         orders.fit[0] = 0.0
+
+
+def test_about_one_order_in_five_gets_one_survey_question() -> None:
+    _, orders = history(n=500)
+    asked = [q for q in orders.survey_items if q is not None]
+    assert len(asked) / len(orders) == pytest.approx(0.2, abs=0.02)
+    for question in QUESTIONS:
+        assert asked.count(question) / len(orders) == pytest.approx(0.04, abs=0.01)
+
+
+def test_no_customer_gets_the_same_question_twice_in_a_row() -> None:
+    _, orders = history(n=500)
+    last: dict[str, str] = {}
+    for customer, question in zip(
+        orders.customer_ids, orders.survey_items, strict=True
+    ):
+        if question is not None:
+            assert last.get(customer) != question
+            last[customer] = question
+
+
+def test_each_answer_fits_its_question() -> None:
+    _, orders = history(n=500)
+    rows = zip(orders.survey_items, orders.survey_answers, orders.nps, strict=True)
+    for question, answer, nps in rows:
+        if question is None:
+            assert answer is None and nps is None
+        elif question == "nps":
+            assert answer is not None and 0 <= answer <= 10 and nps == answer
+        else:
+            assert answer is not None and 1 <= answer <= 7 and nps is None
+
+
+def test_item_answers_follow_their_latent_with_realistic_noise() -> None:
+    _, orders = history(n=1_000)
+    for latent in QUESTIONS[1:]:
+        rows = [i for i, q in enumerate(orders.survey_items) if q == latent]
+        answers = [orders.survey_answers[i] for i in rows]
+        truth = orders.latents[latent][rows]
+        assert 0.45 < np.corrcoef(truth, answers)[0, 1] < 0.8
+
+
+def test_survey_columns_are_in_the_table() -> None:
+    _, orders = history(n=3)
+    assert {"survey_item", "survey_answer"} <= set(orders.columns())
