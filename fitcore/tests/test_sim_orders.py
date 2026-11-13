@@ -1,19 +1,22 @@
 from dataclasses import FrozenInstanceError, replace
 from datetime import datetime, timedelta
+from functools import cache
 from types import MappingProxyType
 
 import numpy as np
 import pytest
 
-from fitcore import expectations
+from fitcore import expectations, sim_outcomes
 from fitcore.features import INPUTS, input_gap
 from fitcore.sim import true_latents
 from fitcore.sim_orders import (
+    CHURN_WINDOW,
     DAYS,
     INCIDENTS,
     LATENESS_MEAN,
     MEASURES,
     PRIORS,
+    REORDER_WINDOW,
     START,
     Orders,
     ServiceProfile,
@@ -132,6 +135,7 @@ def test_n_must_be_at_least_one() -> None:
         simulate_profiles(0, seed=1)
 
 
+@cache
 def history(n: int = 30, seed: int = 1) -> tuple[tuple[ServiceProfile, ...], Orders]:
     profiles = simulate_profiles(n, seed=seed)
     return profiles, simulate_orders(profiles, seed=seed)
@@ -279,3 +283,86 @@ def test_start_must_be_timezone_aware() -> None:
     naive = datetime(2026, 1, 1)
     with pytest.raises(ValueError, match="timezone-aware"):
         simulate_orders(simulate_profiles(1, seed=1), seed=1, start=naive)
+
+
+def next_is_same_customer(orders: Orders, i: int) -> bool:
+    return i + 1 < len(orders) and orders.customer_ids[i + 1] == orders.customer_ids[i]
+
+
+def known_rate(labels: tuple[bool | None, ...], keep: np.ndarray) -> float:
+    known = [bool(x) for x, k in zip(labels, keep, strict=True) if k and x is not None]
+    return sum(known) / len(known)
+
+
+def test_every_order_has_a_true_fit() -> None:
+    _, orders = history()
+    assert orders.fit.shape == (len(orders),)
+    for i in range(len(orders)):
+        trust = orders.latents["trust"][i]
+        convenience = orders.latents["convenience"][i]
+        assert orders.fit[i] == pytest.approx(sim_outcomes.fit(trust, convenience))
+
+
+def test_about_one_order_in_five_gets_an_nps_answer() -> None:
+    _, orders = history(n=500)
+    answered = [a for a in orders.nps if a is not None]
+    assert len(answered) / len(orders) == pytest.approx(0.2, abs=0.02)
+    assert set(answered) <= set(range(11))
+
+
+def test_a_customer_who_stops_places_no_more_orders() -> None:
+    _, orders = history(n=300)
+    assert any(orders.stopped)
+    for i, stopped in enumerate(orders.stopped):
+        if stopped:
+            assert not next_is_same_customer(orders, i)
+
+
+def test_reorder_label_reads_the_history() -> None:
+    _, orders = history(n=200)
+    end = START + timedelta(days=DAYS)
+    for i, label in enumerate(orders.reorder_14d):
+        at = orders.placed_at[i]
+        if next_is_same_customer(orders, i):
+            assert label == (orders.placed_at[i + 1] - at <= REORDER_WINDOW)
+        elif at + REORDER_WINDOW <= end:
+            assert label is False
+        else:
+            assert label is None  # the window runs past the simulated period
+
+
+def test_churn_label_reads_the_history() -> None:
+    _, orders = history(n=200)
+    end = START + timedelta(days=DAYS)
+    for i, label in enumerate(orders.churn_30d):
+        at = orders.placed_at[i]
+        if next_is_same_customer(orders, i):
+            assert label == (orders.placed_at[i + 1] - at > CHURN_WINDOW)
+        elif at + CHURN_WINDOW <= end:
+            assert label is True
+        else:
+            assert label is None  # the window runs past the simulated period
+
+
+def test_outcomes_respond_to_fit_the_way_the_design_says() -> None:
+    _, orders = history(n=1_000)
+    high = orders.fit >= np.median(orders.fit)
+    low = ~high
+    # higher fit: more reorders within 14 days
+    assert (
+        known_rate(orders.reorder_14d, high)
+        > known_rate(orders.reorder_14d, low) + 0.05
+    )
+    # higher fit: less churn within 30 days
+    assert known_rate(orders.churn_30d, high) < known_rate(orders.churn_30d, low) - 0.02
+    # higher fit: higher NPS answers
+    nps = np.array([np.nan if a is None else a for a in orders.nps])
+    assert np.nanmean(nps[high]) > np.nanmean(nps[low]) + 1.0
+
+
+def test_outcomes_are_in_the_table() -> None:
+    _, orders = history(n=3)
+    cols = orders.columns()
+    assert {"fit", "nps", "stopped", "reorder_14d", "churn_30d"} <= set(cols)
+    with pytest.raises(ValueError, match="read-only"):
+        orders.fit[0] = 0.0
