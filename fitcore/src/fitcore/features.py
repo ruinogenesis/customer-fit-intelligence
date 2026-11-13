@@ -7,9 +7,10 @@ records each input's direction: x1..x3 are times and costs, where less is
 better; x4..x8 are qualities, where more is better.
 
 A shortfall hurts more than an equal surplus helps, so each gap passes
-through g(gap) = gap when gap >= 0 and kappa * gap when gap < 0. Each input
-has its own kappa >= 1, learned in training and stored in model.json;
-kappa = 1 means symmetric.
+through g(gap) = gap when gap >= 0 and kappa * gap when gap < 0, with
+kappa >= 1; kappa = 1 means symmetric. model.json stores one kappa per
+input. Training learns one value shared by all eight (T114: a kappa per
+input did not earn its place), so today the eight are equal.
 
 Gaps stay in their own units (minutes, ratios, ratings); any scaling is the
 model's job. How x6..x8 combine their two measures into one number is

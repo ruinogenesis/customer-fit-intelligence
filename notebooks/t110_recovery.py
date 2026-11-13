@@ -7,6 +7,8 @@
 # Spearman correlations, per order and per customer average. Then kappa
 # against the truth across the seeds, and one run with the simulator's own
 # item cut points as the marker thresholds, to show what the k/7 marker costs.
+# Since T114 one kappa is shared by all inputs, so the eight estimates in each
+# run are equal; the truth still has its own kappa per input.
 #
 # Phase 1 gate: recovered Love and Respect correlate 0.9 or more with the
 # truth. Saves notebooks/results/t110_recovery.csv.
@@ -98,7 +100,7 @@ def as_rows(
 COLUMNS = ["marker", "seed", "name", "measure", "value"]
 
 
-# %% Train on every seed (about 1.5 to 2 minutes)
+# %% Train on every seed (about a minute)
 rows = []
 kappas = []
 for seed in SEEDS:
