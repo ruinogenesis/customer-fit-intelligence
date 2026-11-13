@@ -71,7 +71,7 @@ done = result.converged and bool(heads["beats_baseline"].all())
 print(f"done when met: {done}")
 heads.round(4)
 
-# %% What was learned: kappa per input, head and anchor slopes
+# %% What was learned: the shared kappa, head and anchor slopes
 network = model.network
 kappa = pd.Series(network.gaps.kappa.detach().numpy(), index=INPUTS, name="kappa")
 print(kappa.round(2).to_string())

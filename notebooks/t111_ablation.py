@@ -12,6 +12,10 @@
 # all (every kappa fixed at 1). Each earns its place if the full model beats
 # the simpler version in every seed.
 #
+# Since T114 the model shares one kappa by default. This notebook still
+# trains its full model with a kappa per input (shared_kappa=False), as when
+# its results were saved, so the comparison above stays meaningful.
+#
 # Saves notebooks/results/t111_ablation.csv.
 
 # %%
@@ -87,7 +91,7 @@ rows = []
 for seed in SEEDS:
     start = time.perf_counter()
     train, test = population(seed)
-    full = FitModel.for_training_set(train)
+    full = FitModel.for_training_set(train, shared_kappa=False)
     assert fit_model(full, train).converged, f"seed {seed}: full model"
     base = held_out(full, test)
     rows += [(seed, "full model", measure, value) for measure, value in base.items()]

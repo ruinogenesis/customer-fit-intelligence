@@ -44,7 +44,10 @@ def _layers(net: FitNetwork) -> list[PositiveMaskedLinear]:
 
 
 def _load_truth(net: FitNetwork, truth: TrueModel) -> None:
-    """Set the network's kappas, weights and biases to the simulator's truth."""
+    """Set the network's kappas, weights and biases to the simulator's truth.
+
+    The truth has its own kappa per input, so net needs shared_kappa=False.
+    """
     with torch.no_grad():
         kappa = torch.tensor(truth.kappa, dtype=DTYPE)
         net.gaps.theta.copy_(inverse_softplus(kappa - 1.0))
@@ -85,7 +88,7 @@ def test_no_gradient_reaches_a_weight_off_the_mask() -> None:
 def test_constraints_hold_at_every_step_of_adversarial_training() -> None:
     # Targets that fall as gaps improve: the data wants every weight negative.
     gaps = _gaps(500)
-    truth_net = FitNetwork(SCALE)
+    truth_net = FitNetwork(SCALE, shared_kappa=False)
     _load_truth(truth_net, DEFAULT_TRUTH)
     with torch.no_grad():
         target = 1.0 - truth_net(gaps)
@@ -128,7 +131,7 @@ def test_kappa_starts_above_1_and_matches_fitcore_features() -> None:
 
 def test_the_simulators_true_weights_reproduce_its_latents_exactly() -> None:
     population = simulate_customers(1000, 2026)
-    net = FitNetwork(DEFAULT_TRUTH.scale)
+    net = FitNetwork(DEFAULT_TRUTH.scale, shared_kappa=False)
     _load_truth(net, DEFAULT_TRUTH)
     with torch.no_grad():
         out = net(torch.tensor(population.gaps, dtype=DTYPE)).numpy()

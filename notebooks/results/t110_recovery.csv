@@ -1,172 +1,172 @@
 marker,seed,name,measure,value
-k/7,2026,respect,pearson,0.984622
-k/7,2026,love,pearson,0.984295
-k/7,2026,convenience,pearson,0.98778
-k/7,2026,trust,pearson,0.976061
-k/7,2026,fit,pearson,0.986764
-k/7,2026,respect,spearman,0.994233
-k/7,2026,love,spearman,0.996422
-k/7,2026,convenience,spearman,0.995455
-k/7,2026,trust,spearman,0.992615
-k/7,2026,fit,spearman,0.988224
-k/7,2026,respect,customer_pearson,0.992703
-k/7,2026,love,customer_pearson,0.990277
-k/7,2026,convenience,customer_pearson,0.99308
-k/7,2026,trust,customer_pearson,0.989282
-k/7,2026,fit,customer_pearson,0.993608
-k/7,2026,respect,customer_spearman,0.994137
-k/7,2026,love,customer_spearman,0.989722
-k/7,2026,convenience,customer_spearman,0.998035
-k/7,2026,trust,customer_spearman,0.9867
-k/7,2026,fit,customer_spearman,0.99512
-k/7,2026,x1,kappa,1.40193
-k/7,2026,x2,kappa,1.05986
-k/7,2026,x3,kappa,2.30092
-k/7,2026,x4,kappa,2.13261
-k/7,2026,x5,kappa,2.29096
-k/7,2026,x6,kappa,1.43061
-k/7,2026,x7,kappa,1.00401
-k/7,2026,x8,kappa,2.04096
-k/7,2027,respect,pearson,0.981104
-k/7,2027,love,pearson,0.987269
-k/7,2027,convenience,pearson,0.98775
-k/7,2027,trust,pearson,0.976153
-k/7,2027,fit,pearson,0.984036
-k/7,2027,respect,spearman,0.999227
-k/7,2027,love,spearman,0.996578
-k/7,2027,convenience,spearman,0.995242
-k/7,2027,trust,spearman,0.991816
-k/7,2027,fit,spearman,0.981811
-k/7,2027,respect,customer_pearson,0.989738
-k/7,2027,love,customer_pearson,0.993641
-k/7,2027,convenience,customer_pearson,0.992182
-k/7,2027,trust,customer_pearson,0.988001
-k/7,2027,fit,customer_pearson,0.993091
-k/7,2027,respect,customer_spearman,0.988507
-k/7,2027,love,customer_spearman,0.99235
-k/7,2027,convenience,customer_spearman,0.996106
-k/7,2027,trust,customer_spearman,0.98441
-k/7,2027,fit,customer_spearman,0.992053
-k/7,2027,x1,kappa,1.83808
-k/7,2027,x2,kappa,1.53293
-k/7,2027,x3,kappa,2.11451
-k/7,2027,x4,kappa,2.1946
-k/7,2027,x5,kappa,1.40949
-k/7,2027,x6,kappa,1.69846
-k/7,2027,x7,kappa,1.12639
-k/7,2027,x8,kappa,1.57041
-k/7,2028,respect,pearson,0.984561
-k/7,2028,love,pearson,0.985427
-k/7,2028,convenience,pearson,0.987686
-k/7,2028,trust,pearson,0.977343
-k/7,2028,fit,pearson,0.985766
-k/7,2028,respect,spearman,0.990781
-k/7,2028,love,spearman,0.994356
-k/7,2028,convenience,spearman,0.993462
-k/7,2028,trust,spearman,0.99257
-k/7,2028,fit,spearman,0.98506
-k/7,2028,respect,customer_pearson,0.993147
-k/7,2028,love,customer_pearson,0.983441
-k/7,2028,convenience,customer_pearson,0.993793
-k/7,2028,trust,customer_pearson,0.988856
-k/7,2028,fit,customer_pearson,0.994475
-k/7,2028,respect,customer_spearman,0.993282
-k/7,2028,love,customer_spearman,0.988398
-k/7,2028,convenience,customer_spearman,0.996201
-k/7,2028,trust,customer_spearman,0.988304
-k/7,2028,fit,customer_spearman,0.995738
-k/7,2028,x1,kappa,1.13399
-k/7,2028,x2,kappa,1.05543
-k/7,2028,x3,kappa,1.7611
-k/7,2028,x4,kappa,1.70691
-k/7,2028,x5,kappa,1.42195
-k/7,2028,x6,kappa,1.66138
-k/7,2028,x7,kappa,1
-k/7,2028,x8,kappa,1.68146
-k/7,2029,respect,pearson,0.982929
-k/7,2029,love,pearson,0.98641
-k/7,2029,convenience,pearson,0.987751
-k/7,2029,trust,pearson,0.972993
-k/7,2029,fit,pearson,0.984428
-k/7,2029,respect,spearman,0.989865
-k/7,2029,love,spearman,0.997662
-k/7,2029,convenience,spearman,0.990668
-k/7,2029,trust,spearman,0.992565
-k/7,2029,fit,spearman,0.984733
-k/7,2029,respect,customer_pearson,0.990239
-k/7,2029,love,customer_pearson,0.98998
-k/7,2029,convenience,customer_pearson,0.99272
-k/7,2029,trust,customer_pearson,0.982953
-k/7,2029,fit,customer_pearson,0.993407
-k/7,2029,respect,customer_spearman,0.992918
-k/7,2029,love,customer_spearman,0.990785
-k/7,2029,convenience,customer_spearman,0.993986
-k/7,2029,trust,customer_spearman,0.987204
-k/7,2029,fit,customer_spearman,0.994991
-k/7,2029,x1,kappa,1.0646
-k/7,2029,x2,kappa,1.68979
-k/7,2029,x3,kappa,2.35689
-k/7,2029,x4,kappa,2.36271
-k/7,2029,x5,kappa,1.18518
-k/7,2029,x6,kappa,1.53591
-k/7,2029,x7,kappa,1.00303
-k/7,2029,x8,kappa,1.76458
-k/7,2030,respect,pearson,0.982704
-k/7,2030,love,pearson,0.990228
-k/7,2030,convenience,pearson,0.987604
-k/7,2030,trust,pearson,0.976591
-k/7,2030,fit,pearson,0.986395
-k/7,2030,respect,spearman,0.991258
-k/7,2030,love,spearman,0.997366
-k/7,2030,convenience,spearman,0.996044
-k/7,2030,trust,spearman,0.992599
-k/7,2030,fit,spearman,0.990335
-k/7,2030,respect,customer_pearson,0.992678
-k/7,2030,love,customer_pearson,0.994031
-k/7,2030,convenience,customer_pearson,0.991478
-k/7,2030,trust,customer_pearson,0.988276
-k/7,2030,fit,customer_pearson,0.993367
-k/7,2030,respect,customer_spearman,0.992007
-k/7,2030,love,customer_spearman,0.993464
-k/7,2030,convenience,customer_spearman,0.997459
-k/7,2030,trust,customer_spearman,0.985228
-k/7,2030,fit,customer_spearman,0.994101
-k/7,2030,x1,kappa,1.30999
-k/7,2030,x2,kappa,1.33366
-k/7,2030,x3,kappa,2.11175
-k/7,2030,x4,kappa,1.73575
-k/7,2030,x5,kappa,1.50579
-k/7,2030,x6,kappa,1.43487
-k/7,2030,x7,kappa,1.04622
-k/7,2030,x8,kappa,1.81976
-simulator cuts,2026,respect,pearson,0.99753
-simulator cuts,2026,love,pearson,0.99294
-simulator cuts,2026,convenience,pearson,0.998917
-simulator cuts,2026,trust,pearson,0.995095
-simulator cuts,2026,fit,pearson,0.99718
-simulator cuts,2026,respect,spearman,0.995838
-simulator cuts,2026,love,spearman,0.995066
-simulator cuts,2026,convenience,spearman,0.998849
-simulator cuts,2026,trust,spearman,0.996639
-simulator cuts,2026,fit,spearman,0.997736
-simulator cuts,2026,respect,customer_pearson,0.998777
-simulator cuts,2026,love,customer_pearson,0.994104
-simulator cuts,2026,convenience,customer_pearson,0.999549
-simulator cuts,2026,trust,customer_pearson,0.995255
-simulator cuts,2026,fit,customer_pearson,0.998082
-simulator cuts,2026,respect,customer_spearman,0.998492
-simulator cuts,2026,love,customer_spearman,0.993626
-simulator cuts,2026,convenience,customer_spearman,0.999451
-simulator cuts,2026,trust,customer_spearman,0.99456
-simulator cuts,2026,fit,customer_spearman,0.998111
-simulator cuts,2026,x1,kappa,1.67854
-simulator cuts,2026,x2,kappa,1.25962
-simulator cuts,2026,x3,kappa,2.23036
-simulator cuts,2026,x4,kappa,3.10059
-simulator cuts,2026,x5,kappa,3.29752
-simulator cuts,2026,x6,kappa,1.58666
-simulator cuts,2026,x7,kappa,1.08608
-simulator cuts,2026,x8,kappa,2.06742
+k/7,2026,respect,pearson,0.984773
+k/7,2026,love,pearson,0.98333
+k/7,2026,convenience,pearson,0.988415
+k/7,2026,trust,pearson,0.975663
+k/7,2026,fit,pearson,0.987076
+k/7,2026,respect,spearman,0.996339
+k/7,2026,love,spearman,0.994404
+k/7,2026,convenience,spearman,0.996587
+k/7,2026,trust,spearman,0.99231
+k/7,2026,fit,spearman,0.989044
+k/7,2026,respect,customer_pearson,0.992059
+k/7,2026,love,customer_pearson,0.988872
+k/7,2026,convenience,customer_pearson,0.992958
+k/7,2026,trust,customer_pearson,0.989079
+k/7,2026,fit,customer_pearson,0.993753
+k/7,2026,respect,customer_spearman,0.994524
+k/7,2026,love,customer_spearman,0.987581
+k/7,2026,convenience,customer_spearman,0.998111
+k/7,2026,trust,customer_spearman,0.986252
+k/7,2026,fit,customer_spearman,0.995301
+k/7,2026,x1,kappa,1.60406
+k/7,2026,x2,kappa,1.60406
+k/7,2026,x3,kappa,1.60406
+k/7,2026,x4,kappa,1.60406
+k/7,2026,x5,kappa,1.60406
+k/7,2026,x6,kappa,1.60406
+k/7,2026,x7,kappa,1.60406
+k/7,2026,x8,kappa,1.60406
+k/7,2027,respect,pearson,0.980421
+k/7,2027,love,pearson,0.986067
+k/7,2027,convenience,pearson,0.987657
+k/7,2027,trust,pearson,0.975435
+k/7,2027,fit,pearson,0.983479
+k/7,2027,respect,spearman,0.998043
+k/7,2027,love,spearman,0.996798
+k/7,2027,convenience,spearman,0.994362
+k/7,2027,trust,spearman,0.991371
+k/7,2027,fit,spearman,0.980994
+k/7,2027,respect,customer_pearson,0.98918
+k/7,2027,love,customer_pearson,0.992865
+k/7,2027,convenience,customer_pearson,0.991968
+k/7,2027,trust,customer_pearson,0.987267
+k/7,2027,fit,customer_pearson,0.992935
+k/7,2027,respect,customer_spearman,0.987995
+k/7,2027,love,customer_spearman,0.991255
+k/7,2027,convenience,customer_spearman,0.995529
+k/7,2027,trust,customer_spearman,0.983358
+k/7,2027,fit,customer_spearman,0.991394
+k/7,2027,x1,kappa,1.67127
+k/7,2027,x2,kappa,1.67127
+k/7,2027,x3,kappa,1.67127
+k/7,2027,x4,kappa,1.67127
+k/7,2027,x5,kappa,1.67127
+k/7,2027,x6,kappa,1.67127
+k/7,2027,x7,kappa,1.67127
+k/7,2027,x8,kappa,1.67127
+k/7,2028,respect,pearson,0.984081
+k/7,2028,love,pearson,0.98412
+k/7,2028,convenience,pearson,0.988623
+k/7,2028,trust,pearson,0.976933
+k/7,2028,fit,pearson,0.985836
+k/7,2028,respect,spearman,0.992729
+k/7,2028,love,spearman,0.989795
+k/7,2028,convenience,spearman,0.994393
+k/7,2028,trust,spearman,0.991171
+k/7,2028,fit,spearman,0.985796
+k/7,2028,respect,customer_pearson,0.992297
+k/7,2028,love,customer_pearson,0.982424
+k/7,2028,convenience,customer_pearson,0.993777
+k/7,2028,trust,customer_pearson,0.987723
+k/7,2028,fit,customer_pearson,0.994113
+k/7,2028,respect,customer_spearman,0.992783
+k/7,2028,love,customer_spearman,0.985897
+k/7,2028,convenience,customer_spearman,0.995843
+k/7,2028,trust,customer_spearman,0.987929
+k/7,2028,fit,customer_spearman,0.995104
+k/7,2028,x1,kappa,1.41427
+k/7,2028,x2,kappa,1.41427
+k/7,2028,x3,kappa,1.41427
+k/7,2028,x4,kappa,1.41427
+k/7,2028,x5,kappa,1.41427
+k/7,2028,x6,kappa,1.41427
+k/7,2028,x7,kappa,1.41427
+k/7,2028,x8,kappa,1.41427
+k/7,2029,respect,pearson,0.983631
+k/7,2029,love,pearson,0.985037
+k/7,2029,convenience,pearson,0.989865
+k/7,2029,trust,pearson,0.972974
+k/7,2029,fit,pearson,0.985717
+k/7,2029,respect,spearman,0.994356
+k/7,2029,love,spearman,0.995743
+k/7,2029,convenience,spearman,0.994771
+k/7,2029,trust,spearman,0.992516
+k/7,2029,fit,spearman,0.986976
+k/7,2029,respect,customer_pearson,0.990901
+k/7,2029,love,customer_pearson,0.989061
+k/7,2029,convenience,customer_pearson,0.993444
+k/7,2029,trust,customer_pearson,0.983811
+k/7,2029,fit,customer_pearson,0.994032
+k/7,2029,respect,customer_spearman,0.993517
+k/7,2029,love,customer_spearman,0.987733
+k/7,2029,convenience,customer_spearman,0.996104
+k/7,2029,trust,customer_spearman,0.987602
+k/7,2029,fit,customer_spearman,0.995754
+k/7,2029,x1,kappa,1.52587
+k/7,2029,x2,kappa,1.52587
+k/7,2029,x3,kappa,1.52587
+k/7,2029,x4,kappa,1.52587
+k/7,2029,x5,kappa,1.52587
+k/7,2029,x6,kappa,1.52587
+k/7,2029,x7,kappa,1.52587
+k/7,2029,x8,kappa,1.52587
+k/7,2030,respect,pearson,0.98228
+k/7,2030,love,pearson,0.989043
+k/7,2030,convenience,pearson,0.987614
+k/7,2030,trust,pearson,0.975721
+k/7,2030,fit,pearson,0.986176
+k/7,2030,respect,spearman,0.99289
+k/7,2030,love,spearman,0.996595
+k/7,2030,convenience,spearman,0.99567
+k/7,2030,trust,spearman,0.992342
+k/7,2030,fit,spearman,0.990525
+k/7,2030,respect,customer_pearson,0.992281
+k/7,2030,love,customer_pearson,0.993
+k/7,2030,convenience,customer_pearson,0.991259
+k/7,2030,trust,customer_pearson,0.987874
+k/7,2030,fit,customer_pearson,0.992985
+k/7,2030,respect,customer_spearman,0.992368
+k/7,2030,love,customer_spearman,0.992704
+k/7,2030,convenience,customer_spearman,0.997112
+k/7,2030,trust,customer_spearman,0.984802
+k/7,2030,fit,customer_spearman,0.993857
+k/7,2030,x1,kappa,1.51888
+k/7,2030,x2,kappa,1.51888
+k/7,2030,x3,kappa,1.51888
+k/7,2030,x4,kappa,1.51888
+k/7,2030,x5,kappa,1.51888
+k/7,2030,x6,kappa,1.51888
+k/7,2030,x7,kappa,1.51888
+k/7,2030,x8,kappa,1.51888
+simulator cuts,2026,respect,pearson,0.998268
+simulator cuts,2026,love,pearson,0.991926
+simulator cuts,2026,convenience,pearson,0.999072
+simulator cuts,2026,trust,pearson,0.994962
+simulator cuts,2026,fit,pearson,0.997098
+simulator cuts,2026,respect,spearman,0.997767
+simulator cuts,2026,love,spearman,0.99266
+simulator cuts,2026,convenience,spearman,0.999088
+simulator cuts,2026,trust,spearman,0.995772
+simulator cuts,2026,fit,spearman,0.997774
+simulator cuts,2026,respect,customer_pearson,0.999175
+simulator cuts,2026,love,customer_pearson,0.993325
+simulator cuts,2026,convenience,customer_pearson,0.999519
+simulator cuts,2026,trust,customer_pearson,0.995232
+simulator cuts,2026,fit,customer_pearson,0.99799
+simulator cuts,2026,respect,customer_spearman,0.998951
+simulator cuts,2026,love,customer_spearman,0.991491
+simulator cuts,2026,convenience,customer_spearman,0.999545
+simulator cuts,2026,trust,customer_spearman,0.994139
+simulator cuts,2026,fit,customer_spearman,0.997912
+simulator cuts,2026,x1,kappa,1.79444
+simulator cuts,2026,x2,kappa,1.79444
+simulator cuts,2026,x3,kappa,1.79444
+simulator cuts,2026,x4,kappa,1.79444
+simulator cuts,2026,x5,kappa,1.79444
+simulator cuts,2026,x6,kappa,1.79444
+simulator cuts,2026,x7,kappa,1.79444
+simulator cuts,2026,x8,kappa,1.79444
 truth,,x1,kappa,2
 truth,,x2,kappa,1.5
 truth,,x3,kappa,2

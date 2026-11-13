@@ -7,8 +7,9 @@ The structure comes from fitcore.model, and training cannot change it:
 
 - every path weight is softplus(raw) times its mask, so it is above zero on
   the mask and exactly zero off it, after every step of any optimiser;
-- every kappa is 1 + softplus(theta), so it stays above 1, as
-  fitcore.features requires;
+- kappa is 1 + softplus(theta), so it stays above 1, as fitcore.features
+  requires. One theta is shared by all eight inputs (T114), unless
+  shared_kappa=False;
 - gaps are divided by a fixed scale per input (a buffer, never trained),
   after the asymmetric transform. Biases are free.
 
@@ -84,15 +85,19 @@ class PositiveMaskedLinear(nn.Module):
 class AsymmetricGaps(nn.Module):
     """g(gap) = gap if gap >= 0, else kappa * gap; then divided by scale.
 
-    kappa = 1 + softplus(theta) is learned, one per input, always above 1.
-    scale is fixed: a scale and the weights after it multiply each other, so
-    they cannot both be learned. Raises ValueError unless scale holds one
-    finite, positive value per input.
+    kappa = 1 + softplus(theta) is learned and always above 1. By default
+    one theta is shared by all inputs (T111: a kappa per input did not earn
+    its place); shared=False learns one per input. Either way, kappa holds
+    one value per input. scale is fixed: a scale and the weights after it
+    multiply each other, so they cannot both be learned. Raises ValueError
+    unless scale holds one finite, positive value per input.
     """
 
     scale: Tensor
 
-    def __init__(self, scale: ArrayLike, init_kappa: float = 1.5) -> None:
+    def __init__(
+        self, scale: ArrayLike, init_kappa: float = 1.5, *, shared: bool = True
+    ) -> None:
         super().__init__()
         s = torch.tensor(np.asarray(scale, dtype=np.float64), dtype=DTYPE)
         if s.shape != (len(INPUTS),):
@@ -103,12 +108,18 @@ class AsymmetricGaps(nn.Module):
             raise ValueError(f"init_kappa must be above 1, got {init_kappa}")
         self.register_buffer("scale", s)
         start = inverse_softplus(torch.tensor(init_kappa - 1.0, dtype=DTYPE))
-        self.theta = nn.Parameter(torch.full(s.shape, start.item(), dtype=DTYPE))
+        count = 1 if shared else len(INPUTS)
+        self.theta = nn.Parameter(torch.full((count,), start.item(), dtype=DTYPE))
+
+    @property
+    def shared(self) -> bool:
+        """True when one kappa is learned for all inputs."""
+        return bool(self.theta.numel() == 1)
 
     @property
     def kappa(self) -> Tensor:
-        """One kappa per input, always above 1."""
-        return 1.0 + F.softplus(self.theta)
+        """One kappa per input, always above 1; all equal when shared."""
+        return (1.0 + F.softplus(self.theta)).expand(len(INPUTS))
 
     def forward(self, gaps: Tensor) -> Tensor:
         shaped = torch.where(gaps >= 0.0, gaps, gaps * self.kappa)
@@ -122,14 +133,19 @@ class FitNetwork(nn.Module):
     fit. Each latent is a sigmoid, so it lies between 0 and 1. masks: one per
     layer, the theory's by default. They may switch a path off, never add
     one (fitcore.model.check_masks raises ValueError otherwise).
+    shared_kappa: one kappa for all inputs (the default), or one per input.
     """
 
     def __init__(
-        self, scale: ArrayLike, masks: Sequence[ArrayLike] = THEORY_MASKS
+        self,
+        scale: ArrayLike,
+        masks: Sequence[ArrayLike] = THEORY_MASKS,
+        *,
+        shared_kappa: bool = True,
     ) -> None:
         super().__init__()
         mask_1, mask_2, mask_3 = check_masks(masks)
-        self.gaps = AsymmetricGaps(scale)
+        self.gaps = AsymmetricGaps(scale, shared=shared_kappa)
         self.layer1 = PositiveMaskedLinear(mask_1)
         self.layer2 = PositiveMaskedLinear(mask_2)
         self.layer3 = PositiveMaskedLinear(mask_3)
@@ -283,8 +299,8 @@ class FitModel(nn.Module):
 
     scale: the gap scale (fitcore.dataset.gap_scale). behaviour_mean and
     behaviour_sd standardise the behaviours. All three come from the
-    training set and stay fixed; for_training_set fills them in. masks: as
-    for FitNetwork.
+    training set and stay fixed; for_training_set fills them in. masks and
+    shared_kappa: as for FitNetwork.
     """
 
     def __init__(
@@ -293,15 +309,21 @@ class FitModel(nn.Module):
         behaviour_mean: ArrayLike,
         behaviour_sd: ArrayLike,
         masks: Sequence[ArrayLike] = THEORY_MASKS,
+        *,
+        shared_kappa: bool = True,
     ) -> None:
         super().__init__()
-        self.network = FitNetwork(scale, masks)
+        self.network = FitNetwork(scale, masks, shared_kappa=shared_kappa)
         self.heads = OutcomeHeads()
         self.anchors = Anchors(behaviour_mean, behaviour_sd)
 
     @classmethod
     def for_training_set(
-        cls, data: TrainingSet, masks: Sequence[ArrayLike] = THEORY_MASKS
+        cls,
+        data: TrainingSet,
+        masks: Sequence[ArrayLike] = THEORY_MASKS,
+        *,
+        shared_kappa: bool = True,
     ) -> "FitModel":
         """A fresh model whose fixed numbers come from the training set."""
         behaviours = data.behaviours
@@ -310,6 +332,7 @@ class FitModel(nn.Module):
             behaviours.mean(axis=0),
             behaviours.std(axis=0),
             masks,
+            shared_kappa=shared_kappa,
         )
 
     def slopes(self) -> list[Tensor]:
