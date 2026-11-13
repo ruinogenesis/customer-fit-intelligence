@@ -82,6 +82,10 @@ jobs:
           python-version: "3.12"
 
       - name: Run every hook on every file
+        # CI never commits, and a push to main runs on main itself, so the
+        # guard against committing on main is skipped here.
+        env:
+          SKIP: no-commit-to-branch
         run: |
           python -m pip install pre-commit
           pre-commit run --all-files --show-diff-on-failure
