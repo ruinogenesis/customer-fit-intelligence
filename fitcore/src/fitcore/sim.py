@@ -1,8 +1,8 @@
 """Customer simulator: customers whose Love, Respect, Trust and Convenience are known.
 
 The simulator hides a true model with exactly the structure the real model
-will learn: the masks below copy the doc's layer tables, every weight is zero
-or more, and every input has a kappa of at least 1. Gaps go in, true latents
+will learn: it uses the masks from fitcore.model, every weight is zero or
+more, and every input has a kappa of at least 1. Gaps go in, true latents
 come out. Training never sees this model; it has to recover the latents from
 gaps, outcomes and anchoring indicators alone.
 
@@ -20,12 +20,9 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 from fitcore.features import INPUTS
+from fitcore.model import MASK_1, MASK_2
 
 Array = NDArray[np.float64]
-
-LAYER_1: tuple[str, ...] = ("respect", "love")
-LAYER_2: tuple[str, ...] = ("convenience", "trust")
-LAYER_2_INPUTS: tuple[str, ...] = ("respect", "love", "x1", "x2", "x3")
 
 
 def _frozen(name: str, value: ArrayLike, shape: tuple[int, ...]) -> Array:
@@ -37,27 +34,6 @@ def _frozen(name: str, value: ArrayLike, shape: tuple[int, ...]) -> Array:
         raise ValueError(f"{name} must be finite")
     array.setflags(write=False)
     return array
-
-
-# Rows: respect, love. Columns: x1..x8. A 1 is a path the model may use.
-MASK_1 = _frozen(
-    "MASK_1",
-    [
-        [1, 0, 0, 1, 1, 1, 0, 0],  # respect <- x1, x4, x5, x6
-        [0, 0, 0, 0, 0, 1, 1, 1],  # love <- x6, x7, x8
-    ],
-    (2, 8),
-)
-
-# Rows: convenience, trust. Columns: respect, love, x1, x2, x3.
-MASK_2 = _frozen(
-    "MASK_2",
-    [
-        [1, 0, 1, 1, 1],  # convenience <- respect, x1, x2, x3
-        [1, 1, 0, 0, 0],  # trust <- respect, love
-    ],
-    (2, 5),
-)
 
 
 @dataclass(frozen=True, eq=False)

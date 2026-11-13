@@ -4,7 +4,7 @@ from dataclasses import FrozenInstanceError, replace
 import numpy as np
 import pytest
 
-from fitcore.sim import LAYER_1, LAYER_2
+from fitcore.model import LAYER_1, LAYER_2
 from fitcore.sim_survey import (
     DEFAULT_ITEMS,
     ITEM_TEXT,

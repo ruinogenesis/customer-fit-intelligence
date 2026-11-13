@@ -4,7 +4,7 @@ from functools import cache
 import numpy as np
 import pytest
 
-from fitcore.sim import LAYER_1, LAYER_2
+from fitcore.model import LAYER_1, LAYER_2
 from fitcore.sim_behaviour import (
     BEHAVIOURS,
     DEFAULT_BEHAVIOUR,
