@@ -39,6 +39,22 @@ def test_malformed_envelope_is_rejected(field, bad_value):
     assert field in excinfo.value.messages
 
 
+@pytest.mark.parametrize("bad_id", ["a/b", "a/b/c", ".", "..", "__x__", "x" * 1501])
+def test_an_id_must_work_as_a_document_id(bad_id):
+    raw = valid_envelope()
+    raw["customer_id"] = bad_id
+    with pytest.raises(ValidationError) as excinfo:
+        EnvelopeSchema().load(raw)
+    assert "customer_id" in excinfo.value.messages
+
+
+def test_payload_ids_are_checked_too():
+    raw = make_event("order_issue", {"order_id": "ord/1", "issue_type": "cold"})
+    with pytest.raises(ValidationError) as excinfo:
+        load_event(raw)
+    assert "order_id" in excinfo.value.messages["payload"]
+
+
 def test_missing_field_is_rejected():
     raw = valid_envelope()
     del raw["customer_id"]

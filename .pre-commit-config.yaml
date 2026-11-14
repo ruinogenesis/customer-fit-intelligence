@@ -34,5 +34,11 @@ repos:
         name: mypy (api)
         files: ^api/src/
         args: [--config-file=api/pyproject.toml]
+        # fitcore itself comes from source (mypy_path in api/pyproject.toml),
+        # so only its dependencies are listed here.
         additional_dependencies:
-          ["flask>=3.1,<4", "flask-smorest>=0.47,<0.48", "marshmallow>=4,<5"]
+          - "flask>=3.1,<4"
+          - "flask-smorest>=0.47,<0.48"
+          - "google-cloud-firestore>=2,<3"
+          - "marshmallow>=4,<5"
+          - "numpy>=2,<3"

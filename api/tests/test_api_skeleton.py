@@ -19,9 +19,9 @@ def test_health_says_ok_and_has_no_model_yet(client: FlaskClient) -> None:
     assert response.get_json() == {"status": "ok", "model_version": None}
 
 
-def test_health_reports_the_configured_model_version() -> None:
-    client = create_app({"MODEL_VERSION": "v1"}).test_client()
-    assert client.get("/api/v1/health").get_json()["model_version"] == "v1"
+def test_health_reports_the_loaded_models_version(reference_model: str) -> None:
+    app = create_app({"MODEL_PATH": reference_model, "MODEL_VERSION": "v1"})
+    assert app.test_client().get("/api/v1/health").get_json()["model_version"] == "v1"
 
 
 def test_the_openapi_document_lists_health(client: FlaskClient) -> None:
