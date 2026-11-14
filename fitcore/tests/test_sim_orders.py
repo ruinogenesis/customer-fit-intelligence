@@ -312,6 +312,15 @@ def test_a_customer_who_stops_places_no_more_orders() -> None:
             assert not next_is_same_customer(orders, i)
 
 
+def test_a_customer_whose_first_order_comes_after_the_period_has_none() -> None:
+    quiet, busy = simulate_profiles(2, seed=0)
+    quiet = replace(quiet, days_between_orders=1e5)
+    orders = simulate_orders([quiet, busy], seed=0)
+    assert quiet.customer_id not in orders.customer_ids
+    assert busy.customer_id in orders.customer_ids
+    assert len(orders.reorder_14d) == len(orders.churn_30d) == len(orders)
+
+
 def test_reorder_label_reads_the_history() -> None:
     _, orders = history(n=200)
     end = START + timedelta(days=DAYS)

@@ -26,6 +26,9 @@ Run it locally with the reference model, from the repo root:
   result if that `event_id` was already received.
 - What-if: `POST /api/v1/score` takes the same event and answers (200) just
   as `/events` would right now, but saves nothing.
+- Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
+  orders (fitcore.sim_events) to a running API, to watch the matrix page
+  move (dashboard/README.md).
 - Tests: `pytest api`
 
 Every error is `{"code": ..., "message": ...}`: `code` is the HTTP status

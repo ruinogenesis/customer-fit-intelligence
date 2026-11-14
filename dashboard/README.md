@@ -19,6 +19,14 @@ Watch it move, from the repo root:
          CFI_MODEL_PATH=notebooks/results/t112_model.json CFI_MODEL_VERSION=t112-sim \
          flask --app cfi_api run --port 8000
 
-3. Open http://127.0.0.1:5002 and post events to `/api/v1/events`.
+3. Open http://127.0.0.1:5002.
+4. In a third terminal, send fake orders (T207) and watch the dots move:
+
+       python -m cfi_api.fake_orders
+
+   It replays 25 simulated customers' first 60 days, a day per second, so it
+   takes about a minute; `--help` lists the options. Running it again
+   changes nothing, as every event was already received: for new customers
+   pass another `--seed`, or restart the emulator, which keeps no data.
 
 Tests: `node --test dashboard/tests/*.test.js` (Node 20 or newer, no packages; CI uses 22).
