@@ -4,7 +4,7 @@ Documents (T301 will document and validate them):
 
 - events/{event_id}: the event as received, and the result it got.
 - customers/{customer_id}: expectations (x2..x8), latest order, scores,
-  churn_risk and the model_version that wrote them.
+  churn_risk, quadrant and the model_version that wrote them.
 - customers/{customer_id}/scores/{event_id}: one entry per scoring.
 - orders/{order_id}: customer, placed_at, promised_eta and the gaps so far.
 
@@ -40,6 +40,7 @@ def customer_document(customer: Customer, model_version: str) -> dict[str, Any]:
         "latest_placed_at": customer.latest_placed_at,
         "scores": None if scores is None else _scores(scores),
         "churn_risk": None if scores is None else scores.churn_risk,
+        "quadrant": None if scores is None else scores.quadrant,
         "model_version": model_version,
     }
 
@@ -47,7 +48,11 @@ def customer_document(customer: Customer, model_version: str) -> dict[str, Any]:
 def customer_from_document(document: Mapping[str, Any]) -> Customer:
     scores = None
     if document["scores"] is not None:
-        scores = Scores(**document["scores"], churn_risk=document["churn_risk"])
+        scores = Scores(
+            **document["scores"],
+            churn_risk=document["churn_risk"],
+            quadrant=document["quadrant"],
+        )
     return Customer(
         customer_id=document["customer_id"],
         baselines={
@@ -86,6 +91,7 @@ def history_document(entry: HistoryEntry) -> dict[str, Any]:
         "at": entry.at,
         "scores": _scores(entry.scores),
         "churn_risk": entry.scores.churn_risk,
+        "quadrant": entry.scores.quadrant,
         "model_version": entry.model_version,
     }
 

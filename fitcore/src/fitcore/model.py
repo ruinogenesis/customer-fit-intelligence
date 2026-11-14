@@ -5,10 +5,11 @@ doc's layer tables: a 1 is a path the model may use, a 0 is a path it may
 never use. The simulator, the PyTorch network and the numpy forward pass all
 read them from here, so the structure is written down once.
 
-ModelParams holds what training learned, as model.json stores it (T112).
-forward() turns gaps into the five latents and outcomes() turns fit into the
-three heads, with the same steps as fitcore.train's network, so the API can
-score without PyTorch.
+ModelParams holds what training learned, as model.json stores it (T112;
+format 2 adds the quadrant lines, D5). forward() turns gaps into the five
+latents and outcomes() turns fit into the three heads, with the same steps
+as fitcore.train's network, so the API can score without PyTorch.
+quadrant() places a Respect and Love score in the love matrix.
 
 numpy only: the API imports this module and must never need PyTorch.
 """
@@ -134,7 +135,14 @@ def masks_without(paths: Iterable[Path]) -> tuple[NDArray[np.float64], ...]:
 
 
 # The layout of model.json that ModelParams writes and reads.
-MODEL_FORMAT = 1
+MODEL_FORMAT = 2
+
+# The love matrix's quadrants, named as in the design (D5).
+QUADRANTS: tuple[str, ...] = ("lovemark", "brand", "fad", "product")
+
+# D5: where the quadrant lines sit unless model.json says otherwise. 0.5 is
+# the survey's neutral answer (the anchors' thresholds sit at k/7).
+QUADRANT_LINE = 0.5
 
 Array = NDArray[np.float64]
 
@@ -172,13 +180,14 @@ class ModelParams:
     weight, softplus(raw) times the mask, never the raw value. Heads: the
     reorder logit is reorder_intercept + reorder_slope * fit, the churn logit
     is churn_intercept - churn_slope * fit, and P(NPS <= k) =
-    sigmoid(nps_cuts[k] - nps_slope * fit) for k = 0..9.
+    sigmoid(nps_cuts[k] - nps_slope * fit) for k = 0..9. respect_line and
+    love_line split the love matrix into its quadrants (D5: 0.5 by default).
 
     Arrays are copied and made read-only. Raises ValueError for a wrong
     shape, a value that is not finite, a mask that adds a path, a weight or
     head slope below zero, a weight off its mask, a kappa below 1, a scale of
-    zero or less, or NPS cuts that do not rise; TypeError for a head number
-    that is not a number.
+    zero or less, NPS cuts that do not rise, or a quadrant line outside 0..1;
+    TypeError for a head number or line that is not a number.
     """
 
     gap_scale: Array
@@ -192,6 +201,8 @@ class ModelParams:
     churn_slope: float
     nps_slope: float
     nps_cuts: Array
+    respect_line: float = QUADRANT_LINE
+    love_line: float = QUADRANT_LINE
 
     def __post_init__(self) -> None:
         count = len(INPUTS)
@@ -229,6 +240,12 @@ class ModelParams:
         cuts = _frozen("nps_cuts", self.nps_cuts, (10,))
         if np.any(np.diff(cuts) <= 0.0):
             raise ValueError("nps_cuts must rise strictly")
+        lines = {
+            name: _number(name, getattr(self, name))
+            for name in ("respect_line", "love_line")
+        }
+        if not all(0.0 < line < 1.0 for line in lines.values()):
+            raise ValueError("quadrant lines must lie between 0 and 1")
         checked = {
             "gap_scale": gap_scale,
             "kappa": kappa,
@@ -237,6 +254,7 @@ class ModelParams:
             "biases": tuple(biases),
             "nps_cuts": cuts,
             **heads,
+            **lines,
         }
         for name, value in checked.items():
             object.__setattr__(self, name, value)
@@ -274,6 +292,7 @@ class ModelParams:
                 "churn": {"intercept": self.churn_intercept, "slope": self.churn_slope},
                 "nps": {"slope": self.nps_slope, "cuts": self.nps_cuts.tolist()},
             },
+            "quadrants": {"respect": self.respect_line, "love": self.love_line},
         }
         return json.dumps(document, indent=2) + "\n"
 
@@ -281,17 +300,21 @@ class ModelParams:
     def from_json(cls, text: str | bytes) -> "ModelParams":
         """Read model.json, as to_json writes it, and check it.
 
-        Raises ValueError unless text is JSON in format MODEL_FORMAT, its
+        Format 1 (before D5) has no quadrant lines, so it gets QUADRANT_LINE.
+        Raises ValueError unless text is JSON in format 1 or MODEL_FORMAT, its
         input, latent and layer names match this module's, and its numbers
         pass every check of ModelParams.
         """
         try:
             document = json.loads(text)
-            if document["format"] != MODEL_FORMAT:
+            if document["format"] not in (1, MODEL_FORMAT):
                 raise ValueError(
-                    f"model.json format must be {MODEL_FORMAT}, "
+                    f"model.json format must be 1 or {MODEL_FORMAT}, "
                     f"got {document['format']!r}"
                 )
+            lines = {"respect": QUADRANT_LINE, "love": QUADRANT_LINE}
+            if document["format"] == MODEL_FORMAT:
+                lines = document["quadrants"]
             layers, heads = document["layers"], document["heads"]
             names = [document["inputs"], document["latents"]] + [
                 [layer["outputs"], layer["sources"]] for layer in layers
@@ -315,6 +338,8 @@ class ModelParams:
                 churn_slope=heads["churn"]["slope"],
                 nps_slope=heads["nps"]["slope"],
                 nps_cuts=heads["nps"]["cuts"],
+                respect_line=lines["respect"],
+                love_line=lines["love"],
             )
         except (KeyError, TypeError) as err:
             raise ValueError(
@@ -386,3 +411,15 @@ def outcomes(params: ModelParams, fit: ArrayLike) -> Outcomes:
         churn=_sigmoid(params.churn_intercept - params.churn_slope * f),
         nps=np.diff(edges, axis=1),
     )
+
+
+def quadrant(params: ModelParams, respect: float, love: float) -> str:
+    """The love-matrix quadrant for one Respect and Love score (D5).
+
+    A score at or above its line counts as high: lovemark (both high), brand
+    (high respect, low love), fad (low respect, high love), product (both
+    low).
+    """
+    if respect >= params.respect_line:
+        return "lovemark" if love >= params.love_line else "brand"
+    return "fad" if love >= params.love_line else "product"

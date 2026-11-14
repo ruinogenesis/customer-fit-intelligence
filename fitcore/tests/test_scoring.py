@@ -11,7 +11,7 @@ import pytest
 
 from fitcore import expectations
 from fitcore.features import INPUTS
-from fitcore.model import LATENTS, ModelParams, forward, outcomes
+from fitcore.model import LATENTS, ModelParams, forward, outcomes, quadrant
 from fitcore.schemas import load_event
 from fitcore.scoring import (
     PRIORS,
@@ -138,7 +138,7 @@ def test_measures(ev: dict[str, Any], expected: dict[str, float]) -> None:
 
 def test_scores_follow_the_models_latent_order() -> None:
     names = [f.name for f in dataclasses.fields(Scores)]
-    assert names == [*LATENTS, "churn_risk"]
+    assert names == [*LATENTS, "churn_risk", "quadrant"]
 
 
 def test_an_input_missing_from_the_gaps_counts_as_zero() -> None:
@@ -146,13 +146,25 @@ def test_an_input_missing_from_the_gaps_counts_as_zero() -> None:
     row[0, 0] = -10.0
     latents = forward(PARAMS, row)[0]
     churn = outcomes(PARAMS, latents[-1:]).churn[0]
-    expected = Scores(*latents.tolist(), churn_risk=float(churn))
+    place = quadrant(PARAMS, latents[0], latents[1])
+    expected = Scores(*latents.tolist(), churn_risk=float(churn), quadrant=place)
     assert score(PARAMS, {"x1": -10.0}) == expected
 
 
 def test_score_rejects_an_unknown_input() -> None:
     with pytest.raises(ValueError, match="x9"):
         score(PARAMS, {"x9": 1.0})
+
+
+def test_the_quadrant_follows_the_scores_and_the_models_lines() -> None:
+    assert score(PARAMS, {}).quadrant == "lovemark"
+    bad_delivery = score(PARAMS, {"x1": -15.0, "x5": -2.5, "x6": 0.7})
+    assert bad_delivery.respect < 0.5 <= bad_delivery.love
+    assert bad_delivery.quadrant == "fad"
+    strict = dataclasses.replace(PARAMS, respect_line=0.95, love_line=0.95)
+    assert score(strict, {}).quadrant == "product"
+    with pytest.raises(ValueError, match="quadrant"):
+        dataclasses.replace(score(PARAMS, {}), quadrant="cult")
 
 
 # --- Applying events ---

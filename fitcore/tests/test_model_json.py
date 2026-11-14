@@ -14,10 +14,12 @@ from fitcore.model import (
     LATENTS,
     MODEL_FORMAT,
     PATHS,
+    QUADRANT_LINE,
     THEORY_MASKS,
     ModelParams,
     forward,
     outcomes,
+    quadrant,
 )
 from fitcore.sim import DEFAULT_TRUTH, simulate_customers, true_latents
 from fitcore.sim_behaviour import simulate_behaviour
@@ -155,6 +157,7 @@ def test_model_json_names_its_numbers() -> None:
     assert layers[0]["mask"][0] == [1, 0, 0, 1, 1, 1, 0, 0]
     assert set(document["heads"]) == {"reorder", "churn", "nps"}
     assert len(document["heads"]["nps"]["cuts"]) == 10
+    assert document["quadrants"] == {"respect": 0.5, "love": 0.5}
 
 
 def test_params_are_read_only() -> None:
@@ -186,6 +189,8 @@ def _bad_numbers() -> dict[str, dict[str, object]]:
         "infinite intercept": {"reorder_intercept": math.inf},
         "cuts that fall": {"nps_cuts": truth.nps_cuts[::-1]},
         "nine cuts": {"nps_cuts": truth.nps_cuts[:9]},
+        "line at 0": {"respect_line": 0.0},
+        "line at 1": {"love_line": 1.0},
     }
 
 
@@ -201,12 +206,16 @@ def test_bad_numbers_are_rejected(case: str) -> None:
 def test_a_head_number_must_be_a_number() -> None:
     with pytest.raises(TypeError):
         dataclasses.replace(_truth(), nps_slope="6")
+    with pytest.raises(TypeError):
+        dataclasses.replace(_truth(), love_line="0.5")
 
 
 @pytest.mark.parametrize(
     ("where", "value"),
     [
-        (("format",), 2),
+        (("format",), 3),
+        (("quadrants",), {}),
+        (("quadrants", "love"), 1.5),
         (("inputs", 0), "speed"),
         (("layers", 1, "sources", 0), "love"),
         (("kappa",), [1.5] * 7),
@@ -225,6 +234,37 @@ def test_a_wrong_model_json_is_rejected(
     target[where[-1]] = value
     with pytest.raises(ValueError):
         ModelParams.from_json(json.dumps(document))
+
+
+def test_quadrant_lines_read_back_exactly() -> None:
+    params = dataclasses.replace(_truth(), respect_line=0.6, love_line=0.45)
+    again = ModelParams.from_json(params.to_json())
+    assert (again.respect_line, again.love_line) == (0.6, 0.45)
+
+
+def test_a_format_1_file_gets_the_d5_lines() -> None:
+    document = json.loads(_truth().to_json())
+    document["format"] = 1
+    del document["quadrants"]
+    params = ModelParams.from_json(json.dumps(document))
+    assert (params.respect_line, params.love_line) == (QUADRANT_LINE, QUADRANT_LINE)
+    assert QUADRANT_LINE == 0.5
+
+
+@pytest.mark.parametrize(
+    ("respect", "love", "lines", "expected"),
+    [
+        (0.9, 0.9, 0.5, "lovemark"),
+        (0.9, 0.1, 0.5, "brand"),
+        (0.1, 0.9, 0.5, "fad"),
+        (0.1, 0.1, 0.5, "product"),
+        (0.5, 0.5, 0.5, "lovemark"),  # on the line counts as high
+        (0.9, 0.9, 0.95, "product"),  # each model's own lines
+    ],
+)
+def test_quadrants(respect: float, love: float, lines: float, expected: str) -> None:
+    params = dataclasses.replace(_truth(), respect_line=lines, love_line=lines)
+    assert quadrant(params, respect, love) == expected
 
 
 @pytest.mark.parametrize("text", ["{", "[]", "{}"])

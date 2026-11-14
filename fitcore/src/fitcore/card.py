@@ -305,10 +305,23 @@ class ModelCard:
             lines += ["", f"kappa, shared by all eight inputs: {kappa[0]:.3f}."]
         else:
             lines += ["", "kappa per input: " + ", ".join(f"{k:.3f}" for k in kappa)]
+        p = self.params
+        quadrant_lines = (
+            f"Quadrant lines (at or above counts as high): respect "
+            f"{p.respect_line:.2f}, love {p.love_line:.2f}."
+        )
+        lines += ["", quadrant_lines]
         lines += ["", "## Changes from the previous version", ""]
         if self.previous is None:
             lines.append("- First version: there is no previous model.")
         lines += [f"- {change}" for change in self.changes]
+        if self.previous is not None:
+            for name in ("respect", "love"):
+                before = getattr(self.previous, f"{name}_line")
+                now = getattr(p, f"{name}_line")
+                if before != now:
+                    moved = f"from {before:.2f} to {now:.2f}"
+                    lines.append(f"- The {name} quadrant line moved {moved}.")
         if self.previous is not None:
             lines += ["", _row(("Weight", "Before", "Now")), "| --- | ---: | ---: |"]
             lines += [

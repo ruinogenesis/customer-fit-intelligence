@@ -96,6 +96,20 @@ def test_a_late_delivery_moves_the_customers_scores(
     assert customer.scores.to_dict() == after
 
 
+def test_the_quadrant_follows_the_customers_scores(
+    app: Flask, client: FlaskClient
+) -> None:
+    placed_scores = client.post(URL, json=placed()).get_json()["scores"]
+    assert placed_scores["quadrant"] == "lovemark"
+    client.post(URL, json=delivered("ord_1", 45))
+    rating = raw("rating_submitted", {"order_id": "ord_1", "courier": 2, "food": 5}, 60)
+    rated = client.post(URL, json=rating).get_json()["scores"]
+    assert rated["respect"] < 0.5 <= rated["love"]
+    assert rated["quadrant"] == "fad"
+    customer = memory(app).customers["cust_1"].scores
+    assert customer is not None and customer.quadrant == "fad"
+
+
 def test_an_event_that_measures_nothing_is_stored_without_scores(
     app: Flask, client: FlaskClient
 ) -> None:
@@ -226,3 +240,5 @@ def test_the_openapi_document_describes_events(client: FlaskClient) -> None:
     assert {"200", "201", "409", "422", "503"} <= set(post["responses"])
     event = spec["components"]["schemas"]["Event"]
     assert {"event_id", "type", "customer_id", "payload"} <= set(event["required"])
+    quadrant = spec["components"]["schemas"]["Scores"]["properties"]["quadrant"]
+    assert quadrant["enum"] == ["lovemark", "brand", "fad", "product"]

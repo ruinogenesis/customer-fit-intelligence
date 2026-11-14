@@ -38,7 +38,7 @@ import numpy as np
 
 from fitcore import expectations
 from fitcore.features import INPUTS, input_gap
-from fitcore.model import ModelParams, forward, outcomes
+from fitcore.model import QUADRANTS, ModelParams, forward, outcomes, quadrant
 
 # The population's usual value of x2..x8: a new customer's expectation, in
 # the model's units. Today these are the simulator's (fitcore.sim_orders);
@@ -74,7 +74,8 @@ class EventConflict(ValueError):
 
 @dataclass(frozen=True)
 class Scores:
-    """One order's five latents, in fitcore.model.LATENTS order, and churn risk."""
+    """One order's five latents (fitcore.model.LATENTS order), its churn risk,
+    and its love-matrix quadrant (one of fitcore.model.QUADRANTS)."""
 
     respect: float
     love: float
@@ -82,8 +83,15 @@ class Scores:
     trust: float
     fit: float
     churn_risk: float
+    quadrant: str
 
-    def to_dict(self) -> dict[str, float]:
+    def __post_init__(self) -> None:
+        if self.quadrant not in QUADRANTS:
+            raise ValueError(
+                f"quadrant must be one of {QUADRANTS}, got {self.quadrant!r}"
+            )
+
+    def to_dict(self) -> dict[str, float | str]:
         return asdict(self)
 
 
@@ -185,7 +193,10 @@ def order_id_for(event: Mapping[str, Any], customer: Customer) -> str | None:
 
 
 def score(params: ModelParams, gaps: Mapping[str, float]) -> Scores:
-    """The scores for one order's gaps; an input missing from gaps counts as 0."""
+    """The scores for one order's gaps; an input missing from gaps counts as 0.
+
+    The quadrant uses the model's own lines (D5).
+    """
     unknown = set(gaps) - set(INPUTS)
     if unknown:
         raise ValueError(f"unknown inputs in gaps: {sorted(unknown)}")
@@ -193,7 +204,8 @@ def score(params: ModelParams, gaps: Mapping[str, float]) -> Scores:
     latents = forward(params, row)[0]
     churn = outcomes(params, latents[-1:]).churn[0]
     respect, love, convenience, trust, fit = (float(value) for value in latents)
-    return Scores(respect, love, convenience, trust, fit, churn_risk=float(churn))
+    place = quadrant(params, respect, love)
+    return Scores(respect, love, convenience, trust, fit, float(churn), place)
 
 
 def _minutes(span: timedelta) -> float:
