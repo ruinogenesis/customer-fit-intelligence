@@ -26,6 +26,13 @@ repos:
     rev: v2.4.1
     hooks:
       - id: mypy
+        name: mypy (fitcore)
         files: ^fitcore/src/
         args: [--config-file=fitcore/pyproject.toml]
         additional_dependencies: ["marshmallow>=4,<5", "numpy>=2,<3"]
+      - id: mypy
+        name: mypy (api)
+        files: ^api/src/
+        args: [--config-file=api/pyproject.toml]
+        additional_dependencies:
+          ["flask>=3.1,<4", "flask-smorest>=0.47,<0.48", "marshmallow>=4,<5"]

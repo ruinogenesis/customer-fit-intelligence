@@ -2,7 +2,7 @@
 
 ## One-time setup
 
-- Python 3.12: `python3 -m venv .venv`, `source .venv/bin/activate`, then `python -m pip install -e "fitcore[dev]"`
+- Python 3.12: `python3 -m venv .venv`, `source .venv/bin/activate`, then `python -m pip install -e "fitcore[dev]" -e "api[dev]"`
 - Git hooks: `brew install pre-commit`, then `pre-commit install`
 - Emulators: Java 21 and the Firebase CLI. The functions environment is created by hand:
   `python3.12 -m venv functions/venv` and `functions/venv/bin/python -m pip install -r functions/requirements.txt`
@@ -18,13 +18,14 @@
 ## Code style
 
 - `ruff format` decides the formatting. `ruff check` runs the defaults plus `I`, `B` and `UP`.
-- Every function in `fitcore/src` has type hints, checked by mypy.
+- Every function in `fitcore/src` and `api/src` has type hints, checked by mypy.
 - Files end with a newline and have no trailing spaces. The pre-commit hooks enforce all of this on every commit.
 
 ## Tests
 
 - Every change in behaviour comes with a test. Write the test first where practical.
 - See a new test fail once before trusting it.
+- Run every test with `pytest fitcore api`.
 - Tests never touch real projects. Firestore tests use the emulator:
   `firebase emulators:exec --only firestore --project demo-cfi "pytest fitcore"`
 
