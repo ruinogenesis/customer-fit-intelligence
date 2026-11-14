@@ -260,8 +260,12 @@ def _labels(
 
     If the next order came within the window, the label is not if_quiet. If
     the whole window passed with no order, it is if_quiet. If the window
-    runs past end before any next order, nobody can know yet: None.
+    runs past end before any next order, nobody can know yet: None. A
+    customer whose first order would come after end has no orders, so no
+    labels.
     """
+    if not times:
+        return []
     labels: list[bool | None] = []
     for at, after in zip(times, [*times[1:], None], strict=True):
         if after is not None and after - at <= window:
