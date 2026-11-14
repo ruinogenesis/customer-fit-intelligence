@@ -233,6 +233,18 @@ def test_a_card_lists_what_changed_from_the_previous_model() -> None:
     assert "| respect <- x1 |" not in text.split("| Weight | Before | Now |")[1]
 
 
+def test_a_card_shows_the_quadrant_lines_and_their_moves() -> None:
+    first = _card().to_markdown()
+    lines = "Quadrant lines (at or above counts as high): respect 0.50, love 0.50."
+    assert lines in first
+    previous = _params()
+    params = dataclasses.replace(previous, love_line=0.55)
+    text = _card(params=params, previous=previous).to_markdown()
+    assert "respect 0.50, love 0.55." in text
+    assert "- The love quadrant line moved from 0.50 to 0.55.\n" in text
+    assert "respect quadrant line" not in text
+
+
 def test_a_card_leaves_out_the_parts_it_was_not_given() -> None:
     text = _card().to_markdown()
     assert "Churn 30d against" not in text

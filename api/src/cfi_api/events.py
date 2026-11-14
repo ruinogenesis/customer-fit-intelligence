@@ -6,12 +6,13 @@ answers exactly as this endpoint would, from a Reader that cannot save.
 
 from typing import Any
 
+from fitcore.model import QUADRANTS
 from fitcore.schemas import EventSchema
 from fitcore.scoring import Applied, Customer, EventConflict, apply_event, order_id_for
 from flask import abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 from cfi_api.errors import ErrorSchema
 from cfi_api.runtime import live_model, store
@@ -27,6 +28,11 @@ class ScoresSchema(Schema):
     trust = fields.Float(required=True)
     fit = fields.Float(required=True)
     churn_risk = fields.Float(required=True)
+    quadrant = fields.String(
+        required=True,
+        validate=validate.OneOf(QUADRANTS),
+        metadata={"description": "Love-matrix quadrant, from the model's lines (D5)"},
+    )
 
 
 class EventResultSchema(Schema):

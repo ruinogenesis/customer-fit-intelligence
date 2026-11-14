@@ -27,7 +27,7 @@ from cfi_api.firestore_store import (
 from cfi_api.store import HistoryEntry
 
 T0 = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
-SCORES = Scores(0.9, 0.8, 0.7, 0.6, 0.5, churn_risk=0.04)
+SCORES = Scores(0.9, 0.8, 0.7, 0.6, 0.5, churn_risk=0.04, quadrant="lovemark")
 
 needs_emulator = pytest.mark.skipif(
     "FIRESTORE_EMULATOR_HOST" not in os.environ,
@@ -52,6 +52,7 @@ def test_a_customer_round_trips_through_its_document() -> None:
         "fit": 0.5,
     }
     assert (document["churn_risk"], document["model_version"]) == (0.04, "t112-sim")
+    assert document["quadrant"] == "lovemark"
     assert document["expectations"]["x5"] == {
         "mean": 4.0,
         "weight": 1.0,
@@ -66,10 +67,10 @@ def test_an_order_round_trips_through_its_document() -> None:
     assert order_from_document(order_document(order)) == order
 
 
-def test_a_history_entry_keeps_scores_and_churn_risk_apart() -> None:
+def test_a_history_entry_keeps_scores_churn_risk_and_quadrant_apart() -> None:
     entry = HistoryEntry("ev_1", "ord_1", T0, SCORES, "t112-sim")
     document = history_document(entry)
-    assert document["churn_risk"] == 0.04
+    assert (document["churn_risk"], document["quadrant"]) == (0.04, "lovemark")
     assert set(document["scores"]) == {"respect", "love", "convenience", "trust", "fit"}
     assert (document["order_id"], document["at"]) == ("ord_1", T0)
 
@@ -139,6 +140,7 @@ def test_events_are_stored_and_scored_in_firestore(
     assert stored["churn_risk"] == scores["churn_risk"]
     assert stored["scores"]["fit"] == scores["fit"]
     assert stored["model_version"] == "t112-sim"
+    assert stored["quadrant"] == scores["quadrant"]
     gaps = db.document(f"orders/{order}").get().to_dict()["gaps"]
     assert set(gaps) == {"x1", "x3"}
     history = db.collection(f"customers/{customer}/scores").get()
