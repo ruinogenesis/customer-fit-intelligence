@@ -14,7 +14,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "dashboard/dist",
+    "public": "dashboard/public",
     "ignore": [
       "firebase.json",
       "**/.*",
