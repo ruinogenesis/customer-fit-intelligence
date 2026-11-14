@@ -159,3 +159,36 @@ def test_a_conflict_writes_nothing_to_firestore(firestore_client: FlaskClient) -
     db = firestore.Client(project="demo-cfi")
     assert not db.document(f"events/{event['event_id']}").get().exists
     assert not db.document(f"customers/cust_{tag}").get().exists
+
+
+@needs_emulator
+def test_a_what_if_saves_nothing_in_firestore(firestore_client: FlaskClient) -> None:
+    tag = uuid.uuid4().hex[:8]
+    customer, order = f"cust_{tag}", f"ord_{tag}"
+    placed = _event(
+        "order_placed",
+        {
+            "order_id": order,
+            "restaurant_id": "rest_1",
+            "basket_value": 50_000,
+            "fees": 6_000,
+            "promised_eta": (T0 + timedelta(minutes=30)).isoformat(),
+            "promo_used": False,
+        },
+        customer,
+        0,
+    )
+    late = _event(
+        "order_delivered", {"order_id": order, "courier_id": "c1"}, customer, 45
+    )
+    now = firestore_client.post("/api/v1/events", json=placed).get_json()["scores"]
+    what_if = firestore_client.post("/api/v1/score", json=late)
+    assert what_if.status_code == 200
+    assert what_if.get_json()["scores"]["fit"] < now["fit"]
+
+    db = firestore.Client(project="demo-cfi")
+    assert not db.document(f"events/{late['event_id']}").get().exists
+    assert set(db.document(f"orders/{order}").get().to_dict()["gaps"]) == {"x3"}
+    stored = db.document(f"customers/{customer}").get().to_dict()
+    assert stored["scores"]["fit"] == now["fit"]
+    assert len(db.collection(f"customers/{customer}/scores").get()) == 1

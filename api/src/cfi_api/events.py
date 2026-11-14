@@ -1,9 +1,13 @@
-"""POST /api/v1/events: validate an event, store it once, re-score its customer."""
+"""POST /api/v1/events: validate an event, store it once, re-score its customer.
+
+receive() holds every step but the save, so POST /score (cfi_api.score)
+answers exactly as this endpoint would, from a Reader that cannot save.
+"""
 
 from typing import Any
 
 from fitcore.schemas import EventSchema
-from fitcore.scoring import Customer, EventConflict, apply_event, order_id_for
+from fitcore.scoring import Applied, Customer, EventConflict, apply_event, order_id_for
 from flask import abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
@@ -11,7 +15,7 @@ from marshmallow import Schema, fields
 
 from cfi_api.errors import ErrorSchema
 from cfi_api.runtime import live_model, store
-from cfi_api.store import EventRecord
+from cfi_api.store import EventRecord, Reader
 
 blp = Blueprint("events", __name__, description="Events in, scores out")
 
@@ -46,6 +50,48 @@ class EventResultSchema(Schema):
     model_version = fields.String(required=True)
 
 
+def as_stored(event: dict[str, Any]) -> dict[str, Any]:
+    """A validated event as it is stored and compared: event_id as text."""
+    return {**event, "event_id": str(event["event_id"])}
+
+
+def receive(event: dict[str, Any], db: Reader) -> tuple[dict[str, Any], Applied | None]:
+    """What POST /events answers for event (as_stored), and what it changes.
+
+    The change is None when this event_id was already received: the answer
+    is then its first result, with duplicate set to true. Only reads db.
+    Aborts with 503 without a model, and 409 for an event that does not fit
+    what is stored or reuses an event_id for a different event.
+    """
+    model = live_model()
+    if model is None:
+        abort(503, description="No model is loaded, so events cannot be scored.")
+    stored = db.find_event(event["event_id"])
+    if stored is not None:
+        if stored.event != event:
+            abort(409, description="This event_id was used for a different event.")
+        return {**stored.result, "duplicate": True}, None
+
+    customer_id = event["customer_id"]
+    customer = db.find_customer(customer_id) or Customer.new(customer_id)
+    order_id = order_id_for(event, customer)
+    order = None if order_id is None else db.find_order(order_id)
+    try:
+        applied = apply_event(model.params, event, customer, order)
+    except EventConflict as err:
+        abort(409, description=str(err))
+    scored = applied.scored
+    result = {
+        "event_id": event["event_id"],
+        "customer_id": customer_id,
+        "duplicate": False,
+        "order_id": applied.order.order_id if scored and applied.order else None,
+        "scores": None if scored is None else scored.to_dict(),
+        "model_version": model.version,
+    }
+    return result, applied
+
+
 @blp.route("/events")
 class Events(MethodView):
     @blp.arguments(EventSchema)
@@ -63,33 +109,10 @@ class Events(MethodView):
         Idempotent by event_id: sending the same event again returns its
         first result, with duplicate set to true, and changes nothing.
         """
-        model = live_model()
-        if model is None:
-            abort(503, description="No model is loaded, so events cannot be scored.")
-        event = {**event, "event_id": str(event["event_id"])}
+        event = as_stored(event)
         db = store()
-        stored = db.find_event(event["event_id"])
-        if stored is not None:
-            if stored.event != event:
-                abort(409, description="This event_id was used for a different event.")
-            return {**stored.result, "duplicate": True}, 200
-
-        customer_id = event["customer_id"]
-        customer = db.find_customer(customer_id) or Customer.new(customer_id)
-        order_id = order_id_for(event, customer)
-        order = None if order_id is None else db.find_order(order_id)
-        try:
-            applied = apply_event(model.params, event, customer, order)
-        except EventConflict as err:
-            abort(409, description=str(err))
-        scored = applied.scored
-        result = {
-            "event_id": event["event_id"],
-            "customer_id": customer_id,
-            "duplicate": False,
-            "order_id": applied.order.order_id if scored and applied.order else None,
-            "scores": None if scored is None else scored.to_dict(),
-            "model_version": model.version,
-        }
-        db.save(EventRecord(event, result), applied, model.version)
+        result, applied = receive(event, db)
+        if applied is None:
+            return result, 200
+        db.save(EventRecord(event, result), applied, result["model_version"])
         return result

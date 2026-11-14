@@ -5,7 +5,7 @@ from typing import Any
 
 from flask import Flask
 
-from cfi_api import events, health
+from cfi_api import events, health, score
 from cfi_api.errors import CfiApi
 from cfi_api.runtime import load_model, make_store
 
@@ -50,4 +50,5 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     api = CfiApi(app)
     api.register_blueprint(health.blp, url_prefix=API_PREFIX)
     api.register_blueprint(events.blp, url_prefix=API_PREFIX)
+    api.register_blueprint(score.blp, url_prefix=API_PREFIX)
     return app
