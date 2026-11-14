@@ -1,0 +1,23 @@
+# What gcloud uploads for gcloud run deploy --source . (T204): only the
+# API image's inputs, as in .dockerignore but in .gitignore's syntax. A
+# directory must be let back in before the files inside it.
+/*
+!/Dockerfile
+!/.dockerignore
+!/fitcore/
+/fitcore/*
+!/fitcore/pyproject.toml
+!/fitcore/README.md
+!/fitcore/src/
+!/api/
+/api/*
+!/api/pyproject.toml
+!/api/README.md
+!/api/src/
+!/notebooks/
+/notebooks/*
+!/notebooks/results/
+/notebooks/results/*
+!/notebooks/results/t112_model.json
+__pycache__/
+.DS_Store
