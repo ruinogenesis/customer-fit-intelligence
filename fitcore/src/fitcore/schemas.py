@@ -1,5 +1,6 @@
 """Event schemas v1: the contract for every event that enters the system."""
 
+import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Any
@@ -9,6 +10,7 @@ from marshmallow import (
     Schema,
     ValidationError,
     fields,
+    post_load,
     validate,
     validates_schema,
 )
@@ -16,8 +18,27 @@ from marshmallow import (
 SCHEMA_VERSION = 1
 
 
+def _check_id(value: str) -> None:
+    """Reject an id that cannot be a Firestore document id.
+
+    No "/" (it would point into another collection), not "." or "..", not
+    __name__, and at most 1,500 bytes.
+    """
+    if (
+        "/" in value
+        or value in (".", "..")
+        or re.fullmatch("__.*__", value)
+        or len(value.encode()) > 1500
+    ):
+        raise ValidationError(
+            "Not a usable id: no '/', '.', '..', __name__ or 1,500+ bytes."
+        )
+
+
 def _id(required: bool = True) -> fields.String:
-    return fields.String(required=required, validate=validate.Length(min=1))
+    return fields.String(
+        required=required, validate=[validate.Length(min=1), _check_id]
+    )
 
 
 def _count() -> fields.Integer:
@@ -174,16 +195,28 @@ class EnvelopeSchema(StrictSchema):
     payload = fields.Dict(required=True)
 
 
+class EventSchema(EnvelopeSchema):
+    """A whole event: the envelope, then the payload checked against its type.
+
+    Payload errors are nested under "payload". The payload is checked only
+    once the envelope is valid, because its schema depends on the type.
+    """
+
+    @post_load
+    def load_payload(self, data: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
+        payload_schema = PAYLOAD_SCHEMAS[data["type"]]()
+        try:
+            data["payload"] = payload_schema.load(data["payload"])
+        except ValidationError as err:
+            raise ValidationError(err.messages, field_name="payload") from err
+        return data
+
+
 def load_event(raw: Mapping[str, Any]) -> dict[str, Any]:
     """Validate one raw event and return it with its payload validated.
 
     Raises ValidationError. Envelope errors are keyed by field name;
     payload errors are nested under "payload".
     """
-    event: dict[str, Any] = EnvelopeSchema().load(raw)
-    payload_schema = PAYLOAD_SCHEMAS[event["type"]]()
-    try:
-        event["payload"] = payload_schema.load(event["payload"])
-    except ValidationError as err:
-        raise ValidationError({"payload": err.messages}) from err
+    event: dict[str, Any] = EventSchema().load(raw)
     return event
