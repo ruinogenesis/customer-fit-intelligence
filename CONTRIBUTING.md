@@ -25,7 +25,7 @@
 
 - Every change in behaviour comes with a test. Write the test first where practical.
 - See a new test fail once before trusting it.
-- Run every test with `pytest fitcore api`.
+- Run every test with `pytest fitcore api`, and the dashboard's with `node --test dashboard/tests/*.test.js`.
 - Tests never touch real projects. Firestore tests use the emulator, and are skipped without it:
   `firebase emulators:exec --only firestore --project demo-cfi "pytest fitcore api"`
 

@@ -2,9 +2,21 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Locked: no app can read or write directly.
-    // The API uses the Admin SDK, which these rules don't affect.
-    // Per-role rules come in T304.
+    // Staff carry a role claim (admin, analyst or viewer), set by the Admin
+    // SDK. Nobody has one until T303 grants them.
+    function isStaff() {
+      return request.auth != null
+        && request.auth.token.role in ['admin', 'analyst', 'viewer'];
+    }
+
+    // Staff may read customers: the love matrix listens to them (T206).
+    // Only the API writes, through the Admin SDK, which these rules don't
+    // affect. Per-role rules for every collection come in T304.
+    match /customers/{customerId} {
+      allow read: if isStaff();
+    }
+
+    // Everything else stays locked.
     match /{document=**} {
       allow read, write: if false;
     }

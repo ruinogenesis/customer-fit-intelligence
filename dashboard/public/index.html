@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Love matrix · Customer Fit Intelligence</title>
+    <link rel="stylesheet" href="matrix.css">
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Love matrix</h1>
+      <p id="status" role="status">Connecting to Firestore…</p>
+      <svg id="matrix" role="img" aria-labelledby="matrix-title">
+        <title id="matrix-title">Each customer as a dot: Respect across, Love up</title>
+        <g id="frame"></g>
+        <g id="dots"></g>
+      </svg>
+      <table id="counts">
+        <caption>Customers per quadrant</caption>
+        <tbody></tbody>
+      </table>
+    </main>
+  </body>
+</html>
