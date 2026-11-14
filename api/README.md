@@ -23,6 +23,8 @@ Run it locally with the reference model, from the repo root:
 - Events: `POST /api/v1/events`, one event per call (fitcore.schemas, v1).
   It answers 201 with the re-scored order's scores, or 200 with the first
   result if that `event_id` was already received.
+- What-if: `POST /api/v1/score` takes the same event and answers (200) just
+  as `/events` would right now, but saves nothing.
 - Tests: `pytest api`
 
 Every error is `{"code": ..., "message": ...}`: `code` is the HTTP status
