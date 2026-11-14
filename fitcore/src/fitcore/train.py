@@ -30,7 +30,9 @@ The loss adds up each term's mean over the rows that have its value, plus
 the L2 penalty. fit_model trains with full-batch LBFGS until the loss stops
 changing.
 
-Everything is float64, so the numpy forward pass can match it exactly.
+export_params (T112) hands what training learned to fitcore.model, which
+writes model.json and scores with numpy. Everything is float64, so the numpy
+forward pass matches this network to about 1e-16.
 """
 
 from collections.abc import Sequence
@@ -40,12 +42,12 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 import torch.nn.functional as F
-from numpy.typing import ArrayLike
+from numpy.typing import ArrayLike, NDArray
 from torch import Tensor, nn
 
 from fitcore.dataset import ANCHOR_BEHAVIOURS, ITEM_LATENTS, TrainingSet, gap_scale
 from fitcore.features import INPUTS
-from fitcore.model import PATHS, THEORY_MASKS, Path, check_masks
+from fitcore.model import PATHS, THEORY_MASKS, ModelParams, Path, check_masks
 
 DTYPE = torch.float64
 
@@ -534,3 +536,34 @@ def without_path(model: FitModel, path: Path) -> FitModel:
     with torch.no_grad():
         layer.mask[row, column] = 0.0
     return ablated
+
+
+def _numpy(tensor: Tensor) -> NDArray[np.float64]:
+    """A float64 numpy copy of a tensor, outside autograd."""
+    return np.array(tensor.detach().numpy(), dtype=np.float64)
+
+
+def export_params(model: FitModel) -> ModelParams:
+    """What the numpy forward pass needs from a trained model (T112).
+
+    Weights are the effective ones, softplus(raw) times the mask, so a path
+    that is switched off exports as exactly 0. The anchors are left out: they
+    only matter in training. Write model.json with
+    export_params(model).to_json().
+    """
+    network, heads = model.network, model.heads
+    with torch.no_grad():
+        slope = heads.slope
+        return ModelParams(
+            gap_scale=_numpy(network.gaps.scale),
+            kappa=_numpy(network.gaps.kappa),
+            masks=tuple(_numpy(layer.mask) for layer in network.layers),
+            weights=tuple(_numpy(layer.weight) for layer in network.layers),
+            biases=tuple(_numpy(layer.bias) for layer in network.layers),
+            reorder_intercept=float(heads.intercept[0]),
+            reorder_slope=float(slope[0]),
+            churn_intercept=float(heads.intercept[1]),
+            churn_slope=float(slope[1]),
+            nps_slope=float(slope[2]),
+            nps_cuts=_numpy(heads.cuts),
+        )
