@@ -125,6 +125,46 @@ jobs:
         # Node's own test runner: the dashboard has no npm packages yet.
         run: node --test dashboard/tests/*.test.js
 
+  container:
+    name: container (build + health)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Build the API image
+        # The same Dockerfile and build context Cloud Run deploys from (T204).
+        run: docker build --tag cfi-api .
+
+      - name: Start it as Cloud Run would
+        # Cloud Run sets PORT. CI has no Firestore, so the in-memory store.
+        run: docker run --detach --name api --publish 8080:8080 --env PORT=8080 --env CFI_STORE=memory cfi-api
+
+      - name: Health answers, with the model from the image
+        run: |
+          for attempt in $(seq 30); do
+            curl --silent --fail http://127.0.0.1:8080/api/v1/health && break
+            sleep 1
+          done
+          curl --silent --fail http://127.0.0.1:8080/api/v1/health | tee /tmp/health.json
+          grep -q '"model_version":"t112-sim"' /tmp/health.json
+
+      - name: An event is scored inside the container
+        run: |
+          curl --silent --fail --header "Content-Type: application/json" --data @- \
+            http://127.0.0.1:8080/api/v1/events <<'JSON' | tee /tmp/event.json
+          {"event_id": "00000000-0000-4000-8000-000000000001", "type": "order_placed",
+           "customer_id": "ci", "occurred_at": "2026-01-01T12:00:00+00:00", "schema_version": 1,
+           "payload": {"order_id": "ci-1", "restaurant_id": "r", "basket_value": 35000,
+                       "fees": 4200, "promised_eta": "2026-01-01T12:30:00+00:00",
+                       "promo_used": false}}
+          JSON
+          grep -q '"quadrant":"lovemark"' /tmp/event.json
+
+      - name: Show the server's log
+        if: always()
+        run: docker logs api
+
   pre-commit:
     name: pre-commit (format, lint, types)
     runs-on: ubuntu-latest
