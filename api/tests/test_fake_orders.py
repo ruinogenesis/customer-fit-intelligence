@@ -3,6 +3,7 @@
 import json
 import socket
 import threading
+import urllib.error
 from collections.abc import Iterator, Mapping
 from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -15,6 +16,7 @@ from flask import Flask
 from cfi_api import create_app, fake_orders
 from cfi_api.fake_orders import Refused, Send, http_sender, replay
 from cfi_api.store import MemoryStore
+from cfi_api.write_key import HEADER
 
 DAY0 = datetime(2026, 1, 1, tzinfo=UTC)
 
@@ -158,7 +160,12 @@ def server() -> Iterator[tuple[str, list[dict[str, Any]]]]:
         def do_POST(self) -> None:
             body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             received.append(
-                {"path": self.path, "type": self.headers["Content-Type"], "body": body}
+                {
+                    "path": self.path,
+                    "type": self.headers["Content-Type"],
+                    "key": self.headers.get(HEADER),
+                    "body": body,
+                }
             )
             refused = body["type"] == "order_issue"
             data = b'{"code": "conflict"}' if refused else b"{}"
@@ -171,7 +178,9 @@ def server() -> Iterator[tuple[str, list[dict[str, Any]]]]:
             pass
 
     httpd = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
-    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread = threading.Thread(
+        target=httpd.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True
+    )
     thread.start()
     yield f"http://127.0.0.1:{httpd.server_port}/", received
     httpd.shutdown()
@@ -188,15 +197,111 @@ def test_http_sender_posts_json_and_returns_errors_as_answers(
     assert [r["path"] for r in received] == ["/api/v1/events"] * 2
     assert {r["type"] for r in received} == {"application/json"}
     assert received[1]["body"] == {"type": "order_issue"}
+    assert {r["key"] for r in received} == {None}
+
+
+def test_http_sender_sends_the_write_key_when_given_one(
+    server: tuple[str, list[dict[str, Any]]],
+) -> None:
+    url, received = server
+    assert http_sender(url, key="k3y")({"type": "order_placed"}) == (201, "{}")
+    assert received[0]["key"] == "k3y"
+
+
+@pytest.fixture
+def dropping_server() -> Iterator[tuple[str, dict[str, int]]]:
+    """A local server that drops the first state["drops"] connections without
+    an answer, as Hosting sometimes did in T205, then answers 201."""
+    state = {"drops": 0, "seen": 0}
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_POST(self) -> None:
+            self.rfile.read(int(self.headers["Content-Length"]))
+            state["seen"] += 1
+            if state["drops"] > 0:
+                state["drops"] -= 1
+                self.close_connection = True
+                return  # no answer: the client sees RemoteDisconnected
+            self.send_response(201)
+            self.send_header("Content-Length", "2")
+            self.end_headers()
+            self.wfile.write(b"{}")
+
+        def log_message(self, *args: Any) -> None:
+            pass
+
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    thread = threading.Thread(
+        target=httpd.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True
+    )
+    thread.start()
+    yield f"http://127.0.0.1:{httpd.server_port}", state
+    httpd.shutdown()
+    httpd.server_close()
+
+
+def test_a_dropped_connection_is_tried_again(
+    dropping_server: tuple[str, dict[str, int]], capsys: pytest.CaptureFixture[str]
+) -> None:
+    url, state = dropping_server
+    state["drops"] = 2
+    pauses: list[float] = []
+    send = http_sender(url, sleep=pauses.append)
+    assert send({"type": "order_placed"}) == (201, "{}")
+    assert state["seen"] == 3
+    assert pauses == [0.5, 1.0]
+    err = capsys.readouterr().err
+    assert err.count("Connection dropped") == 2
+    assert "trying again in 0.5 s." in err
+    assert "trying again in 1 s." in err
+
+
+def test_three_dropped_connections_in_a_row_give_up(
+    dropping_server: tuple[str, dict[str, int]],
+) -> None:
+    url, state = dropping_server
+    state["drops"] = 3
+    pauses: list[float] = []
+    with pytest.raises(ConnectionError):
+        http_sender(url, sleep=pauses.append)({"type": "order_placed"})
+    assert state["seen"] == 3
+    assert pauses == [0.5, 1.0]
+
+
+def test_a_refused_connection_is_not_tried_again() -> None:
+    with socket.socket() as spare:
+        spare.bind(("127.0.0.1", 0))
+        port = spare.getsockname()[1]  # free once closed: nothing listens there
+    pauses: list[float] = []
+    with pytest.raises(urllib.error.URLError):
+        http_sender(f"http://127.0.0.1:{port}", sleep=pauses.append)({})
+    assert pauses == []
+
+
+def test_main_says_when_the_connection_keeps_dropping(
+    dropping_server: tuple[str, dict[str, int]],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    url, state = dropping_server
+    state["drops"] = 1000
+    monkeypatch.setattr(fake_orders, "PAUSE", 0.0)
+    argv = ["--customers", "3", "--days", "14", "--speed", "1e6", "--url", url]
+    assert fake_orders.main(argv) == 1
+    err = capsys.readouterr().err
+    assert f"Lost the connection to {url} 3 times in a row" in err
+    assert "Run it again to resume" in err
 
 
 def test_main_sends_the_run_and_says_how_it_went(
     app: Flask, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     urls: list[str] = []
+    keys: list[str | None] = []
 
-    def sender(url: str, timeout: float = 10.0) -> Send:
+    def sender(url: str, key: str | None = None, timeout: float = 10.0) -> Send:
         urls.append(url)
+        keys.append(key)
         return client_sender(app)
 
     monkeypatch.setattr(fake_orders, "http_sender", sender)
@@ -205,6 +310,7 @@ def test_main_sends_the_run_and_says_how_it_went(
     events = simulate_events(3, seed=1, days=14.0)
     out = capsys.readouterr().out
     assert urls == ["http://x"]
+    assert keys == [None]
     assert out.startswith(f"Sending {len(events)} events from 3 customers' first 14")
     assert out.endswith(
         f"Done: {len(events)} events sent, {len(events)} new, 0 already received.\n"
@@ -231,3 +337,32 @@ def test_main_rejects_a_run_that_cannot_happen(flag: str, value: str) -> None:
     with pytest.raises(SystemExit) as stopped:
         fake_orders.main([flag, value])
     assert stopped.value.code == 2
+
+
+@pytest.mark.parametrize(
+    ("argv", "environ", "expected"),
+    [
+        (["--key", "from-flag"], {}, "from-flag"),
+        ([], {"CFI_WRITE_KEY": "from-env"}, "from-env"),
+        (["--key", "from-flag"], {"CFI_WRITE_KEY": "from-env"}, "from-flag"),
+    ],
+)
+def test_main_passes_the_write_key_from_the_flag_or_the_environment(
+    app: Flask,
+    monkeypatch: pytest.MonkeyPatch,
+    argv: list[str],
+    environ: dict[str, str],
+    expected: str,
+) -> None:
+    keys: list[str | None] = []
+
+    def sender(url: str, key: str | None = None, timeout: float = 10.0) -> Send:
+        keys.append(key)
+        return client_sender(app)
+
+    for name, value in environ.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.setattr(fake_orders, "http_sender", sender)
+    base = ["--customers", "1", "--days", "7", "--speed", "1e6"]
+    assert fake_orders.main(base + argv) == 0
+    assert keys == [expected]

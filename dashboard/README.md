@@ -7,7 +7,9 @@ Here will be love matrix, customer profiles, drivers, automations and models. Th
 `public/` holds a plain page (no build step) that plots every customer as a
 dot, Respect across and Love up, coloured by quadrant, live from Firestore.
 For now it reads the local emulator only, as a stand-in "viewer"; staff
-sign-in comes with the React dashboard (T401).
+sign-in comes with the React dashboard (T401). Firebase Hosting also serves
+it at https://cfi-dev-th26.web.app (T205), where it only says to open it
+from the emulator.
 
 Watch it move, from the repo root:
 
