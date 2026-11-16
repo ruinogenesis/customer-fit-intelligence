@@ -1,8 +1,8 @@
-"""T202: the Firestore store.
+"""T202: the Firestore store; T301: the documents every event writes.
 
-The document conversions run everywhere. The tests marked needs_emulator
-run only against the Firestore emulator (CI's emulator job, or locally with
-firebase emulators:exec); elsewhere they are skipped.
+writes() and the document checks run everywhere. The tests marked
+needs_emulator run only against the Firestore emulator (CI's emulator job,
+or locally with firebase emulators:exec); elsewhere they are skipped.
 """
 
 import os
@@ -11,20 +11,20 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import pytest
-from fitcore.expectations import Baseline, update
-from fitcore.scoring import Customer, Order, Scores
+from fitcore.documents import DocumentError
+from fitcore.schemas import load_event
+from fitcore.scoring import Applied, Customer, Scores
 from flask.testing import FlaskClient
 from google.cloud import firestore
 
 from cfi_api import create_app
-from cfi_api.firestore_store import (
-    customer_document,
-    customer_from_document,
+from cfi_api.store import (
+    EventRecord,
+    HistoryEntry,
+    MemoryStore,
     history_document,
-    order_document,
-    order_from_document,
+    writes,
 )
-from cfi_api.store import HistoryEntry
 
 T0 = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 SCORES = Scores(0.9, 0.8, 0.7, 0.6, 0.5, churn_risk=0.04, quadrant="lovemark")
@@ -38,41 +38,52 @@ needs_emulator = pytest.mark.skipif(
 # --- Documents ---
 
 
-def test_a_customer_round_trips_through_its_document() -> None:
-    new = Customer.new("cust_1")
-    baselines = dict(new.baselines)
-    baselines["x5"] = update(Baseline(), 4.0, T0)
-    customer = Customer("cust_1", baselines, "ord_1", T0, SCORES)
-    document = customer_document(customer, "t112-sim")
-    assert document["scores"] == {
-        "respect": 0.9,
-        "love": 0.8,
-        "convenience": 0.7,
-        "trust": 0.6,
-        "fit": 0.5,
-    }
-    assert (document["churn_risk"], document["model_version"]) == (0.04, "t112-sim")
-    assert document["quadrant"] == "lovemark"
-    assert document["expectations"]["x5"] == {
-        "mean": 4.0,
-        "weight": 1.0,
-        "last_seen": T0,
-    }
-    assert customer_from_document(document) == customer
-    assert customer_from_document(customer_document(new, "v")) == new
-
-
-def test_an_order_round_trips_through_its_document() -> None:
-    order = Order("ord_1", "cust_1", T0, T0 + timedelta(minutes=30), {"x1": -5.0})
-    assert order_from_document(order_document(order)) == order
-
-
 def test_a_history_entry_keeps_scores_churn_risk_and_quadrant_apart() -> None:
     entry = HistoryEntry("ev_1", "ord_1", T0, SCORES, "t112-sim")
     document = history_document(entry)
     assert (document["churn_risk"], document["quadrant"]) == (0.04, "lovemark")
     assert set(document["scores"]) == {"respect", "love", "convenience", "trust", "fit"}
     assert (document["order_id"], document["at"]) == ("ord_1", T0)
+
+
+def _survey() -> EventRecord:
+    event_id = str(uuid.uuid4())
+    event = load_event(
+        {
+            "event_id": event_id,
+            "type": "survey_response",
+            "customer_id": "cust_1",
+            "occurred_at": T0.isoformat(),
+            "schema_version": 1,
+            "payload": {"item_id": "trust", "value": 6},
+        }
+    )
+    result = {
+        "event_id": event_id,
+        "customer_id": "cust_1",
+        "duplicate": False,
+        "order_id": None,
+        "scores": None,
+        "model_version": "t112-sim",
+    }
+    return EventRecord({**event, "event_id": event_id}, result)
+
+
+def test_an_event_writes_its_event_and_customer_documents() -> None:
+    record = _survey()
+    applied = Applied(Customer.new("cust_1"), order=None, scored=None)
+    paths = [path for path, _ in writes(record, applied, "t112-sim")]
+    event_id = record.event["event_id"]
+    assert paths == [f"events/{event_id}", "customers/cust_1"]
+
+
+def test_a_document_of_the_wrong_shape_is_never_saved() -> None:
+    record = _survey()
+    applied = Applied(Customer.new("cust_1"), order=None, scored=None)
+    store = MemoryStore()
+    with pytest.raises(DocumentError, match="customers.*model_version"):
+        store.save(record, applied, "")  # a customer document needs a model
+    assert (store.events, store.customers) == ({}, {})
 
 
 # --- Against the emulator ---
@@ -141,8 +152,13 @@ def test_events_are_stored_and_scored_in_firestore(
     assert stored["scores"]["fit"] == scores["fit"]
     assert stored["model_version"] == "t112-sim"
     assert stored["quadrant"] == scores["quadrant"]
-    gaps = db.document(f"orders/{order}").get().to_dict()["gaps"]
-    assert set(gaps) == {"x1", "x3"}
+    stored_order = db.document(f"orders/{order}").get().to_dict()
+    assert set(stored_order["gaps"]) == {"x1", "x3"}
+    assert (stored_order["restaurant_id"], stored_order["courier_id"]) == (
+        "rest_1",
+        "c1",
+    )
+    assert stored_order["delivered_at"] == T0 + timedelta(minutes=45)
     history = db.collection(f"customers/{customer}/scores").get()
     assert {doc.id for doc in history} == {placed["event_id"], delivered["event_id"]}
 

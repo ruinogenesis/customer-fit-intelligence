@@ -18,6 +18,7 @@ from fitcore.scoring import (
     Applied,
     Customer,
     EventConflict,
+    Issue,
     Order,
     Scores,
     apply_event,
@@ -32,6 +33,13 @@ MODEL = Path(__file__).resolve().parents[2] / "notebooks/results/t112_model.json
 PARAMS = ModelParams.from_json(MODEL.read_bytes())
 T0 = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 MINUTE = timedelta(minutes=1)
+# What order_placed records about an order, for orders built by hand.
+RECORD: dict[str, Any] = {
+    "restaurant_id": "rest_1",
+    "basket_value": 50_000,
+    "fees": 6_000,
+    "promo_used": False,
+}
 
 
 def event(
@@ -270,8 +278,6 @@ def test_a_support_case_without_an_order_counts_toward_the_latest() -> None:
     "ev",
     [
         session(None, T0 + MINUTE),
-        rated("ord_1", T0 + MINUTE, overall=3),
-        event("order_issue", {"order_id": "ord_1", "issue_type": "late"}),
         event("survey_response", {"item_id": "trust", "value": 2}),
     ],
 )
@@ -280,6 +286,50 @@ def test_an_event_that_measures_nothing_changes_nothing(ev: dict[str, Any]) -> N
     before = replay.send(placed("ord_1", T0)).customer
     applied = replay.send(ev)
     assert applied == Applied(customer=before, order=None, scored=None)
+
+
+@pytest.mark.parametrize(
+    "ev",
+    [
+        rated("ord_1", T0 + MINUTE, overall=3),
+        event("order_issue", {"order_id": "ord_1", "issue_type": "late"}),
+    ],
+)
+def test_an_event_that_only_adds_to_the_record_changes_no_score(
+    ev: dict[str, Any],
+) -> None:
+    replay = Replay()
+    first = replay.send(placed("ord_1", T0))
+    applied = replay.send(ev)
+    assert first.order is not None and applied.order is not None
+    assert (applied.customer, applied.scored) == (first.customer, None)
+    assert applied.order.gaps == first.order.gaps
+    assert applied.order != first.order
+
+
+# --- The order's record ---
+
+
+def test_an_order_keeps_its_record() -> None:
+    replay = Replay()
+    replay.send(placed("ord_1", T0, basket=42_000, fees=3_500))
+    replay.send(rated("ord_1", T0 + 50 * MINUTE, food=2, overall=3))
+    replay.send(event("order_issue", {"order_id": "ord_1", "issue_type": "cold"}))
+    replay.send(delivered("ord_1", T0 + 40 * MINUTE))
+    hour = 60 * MINUTE
+    late = event("order_issue", {"order_id": "ord_1", "issue_type": "late"}, T0 + hour)
+    replay.send(late)
+    replay.send(rated("ord_1", T0 + 2 * hour, food=4, courier=5))
+    order = replay.orders["ord_1"]
+    assert (order.restaurant_id, order.basket_value, order.fees) == (
+        "rest_1",
+        42_000,
+        3_500,
+    )
+    assert order.promo_used is False
+    assert (order.courier_id, order.delivered_at) == ("cour_1", T0 + 40 * MINUTE)
+    assert order.issues == (Issue("cold", T0), Issue("late", T0 + hour))
+    assert order.ratings == {"food": 4, "overall": 3, "courier": 5}
 
 
 def _conflicts() -> dict[str, tuple[list[dict[str, Any]], dict[str, Any], str]]:
@@ -320,24 +370,30 @@ def test_apply_event_checks_its_caller() -> None:
     ev = placed()
     with pytest.raises(ValueError, match="another customer"):
         apply_event(PARAMS, ev, Customer.new("cust_2"), None)
-    order = Order("ord_7", "cust_1", T0, T0 + 30 * MINUTE)
+    order = Order("ord_7", "cust_1", T0, T0 + 30 * MINUTE, **RECORD)
     with pytest.raises(ValueError, match="ord_7"):
         apply_event(PARAMS, delivered("ord_1", T0), Customer.new("cust_1"), order)
 
 
 def test_state_is_checked_and_read_only() -> None:
     customer = Customer.new("cust_1")
-    order = Order("ord_1", "cust_1", T0, T0, {"x1": 1.0})
+    order = Order("ord_1", "cust_1", T0, T0, {"x1": 1.0}, **RECORD, ratings={"food": 4})
     with pytest.raises(TypeError):
         customer.baselines["x2"] = expectations.Baseline()  # type: ignore[index]
     with pytest.raises(TypeError):
         order.gaps["x1"] = 2.0  # type: ignore[index]
+    with pytest.raises(TypeError):
+        order.ratings["food"] = 1  # type: ignore[index]
     with pytest.raises(ValueError, match="baselines"):
         Customer("cust_1", {"x2": expectations.Baseline()})
     with pytest.raises(ValueError, match="together"):
         Customer("cust_1", customer.baselines, latest_order_id="ord_1")
     with pytest.raises(ValueError, match="x9"):
-        Order("ord_1", "cust_1", T0, T0, {"x9": 1.0})
+        Order("ord_1", "cust_1", T0, T0, {"x9": 1.0}, **RECORD)
+    with pytest.raises(ValueError, match="taste"):
+        Order("ord_1", "cust_1", T0, T0, **RECORD, ratings={"taste": 4})
+    with pytest.raises(ValueError, match="together"):
+        Order("ord_1", "cust_1", T0, T0, **RECORD, courier_id="cour_1")
 
 
 # --- Serving matches training ---
@@ -363,13 +419,19 @@ def test_replaying_simulated_orders_reproduces_the_simulators_gaps() -> None:
                 at,
                 {
                     "order_id": oid,
+                    "restaurant_id": "rest_1",
                     "basket_value": 1.0,
                     "fees": value["x3"],
                     "promised_eta": at + promise * MINUTE,
+                    "promo_used": False,
                 },
             ),
             ("app_session", at, {"time_to_checkout_s": value["x2"]}),
-            ("order_delivered", at + value["x1"] * MINUTE, {"order_id": oid}),
+            (
+                "order_delivered",
+                at + value["x1"] * MINUTE,
+                {"order_id": oid, "courier_id": "cour_1"},
+            ),
             (
                 "rating_submitted",
                 at,

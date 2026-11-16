@@ -6,13 +6,12 @@ answers exactly as this endpoint would, from a Reader that cannot save.
 
 from typing import Any
 
-from fitcore.model import QUADRANTS
+from fitcore.documents import EventResultSchema
 from fitcore.schemas import EventSchema
 from fitcore.scoring import Applied, Customer, EventConflict, apply_event, order_id_for
 from flask import abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from marshmallow import Schema, fields, validate
 
 from cfi_api.errors import ErrorSchema
 from cfi_api.runtime import live_model, store
@@ -20,41 +19,6 @@ from cfi_api.store import EventRecord, Reader
 from cfi_api.write_key import SCHEME
 
 blp = Blueprint("events", __name__, description="Events in, scores out")
-
-
-class ScoresSchema(Schema):
-    respect = fields.Float(required=True)
-    love = fields.Float(required=True)
-    convenience = fields.Float(required=True)
-    trust = fields.Float(required=True)
-    fit = fields.Float(required=True)
-    churn_risk = fields.Float(required=True)
-    quadrant = fields.String(
-        required=True,
-        validate=validate.OneOf(QUADRANTS),
-        metadata={"description": "Love-matrix quadrant, from the model's lines (D5)"},
-    )
-
-
-class EventResultSchema(Schema):
-    event_id = fields.String(required=True)
-    customer_id = fields.String(required=True)
-    duplicate = fields.Boolean(
-        required=True,
-        metadata={"description": "True if this event_id was already received"},
-    )
-    order_id = fields.String(
-        required=True,
-        allow_none=True,
-        metadata={"description": "The order this event re-scored; null if none"},
-    )
-    scores = fields.Nested(
-        ScoresSchema,
-        required=True,
-        allow_none=True,
-        metadata={"description": "That order's new scores; null if none changed"},
-    )
-    model_version = fields.String(required=True)
 
 
 def as_stored(event: dict[str, Any]) -> dict[str, Any]:

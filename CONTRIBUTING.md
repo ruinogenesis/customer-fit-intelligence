@@ -33,6 +33,7 @@
 
 - Never commit secrets: no `.env` files, no service-account keys.
 - Money is whole satang. Timestamps carry a timezone and are stored in UTC.
+- Every Firestore document has a schema in `fitcore.documents`, and the API checks each one before writing it. After changing a schema, run `python -m fitcore.documents > fitcore/DOCUMENTS.md`.
 - Firestore rules stay locked until per-role rules exist (T304).
 - Deploys go through CI only, never from a laptop.
 
