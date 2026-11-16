@@ -211,8 +211,10 @@ def test_http_sender_sends_the_write_key_when_given_one(
 @pytest.fixture
 def dropping_server() -> Iterator[tuple[str, dict[str, int]]]:
     """A local server that drops the first state["drops"] connections without
-    an answer, as Hosting sometimes did in T205, then answers 201."""
-    state = {"drops": 0, "seen": 0}
+    an answer, as Hosting sometimes did in T205, then answers the next
+    state["busy"] requests 503 with Retry-After: 1, as the API does when a
+    customer has too many events at once (T302), then answers 201."""
+    state = {"drops": 0, "busy": 0, "seen": 0}
 
     class Handler(BaseHTTPRequestHandler):
         def do_POST(self) -> None:
@@ -222,6 +224,14 @@ def dropping_server() -> Iterator[tuple[str, dict[str, int]]]:
                 state["drops"] -= 1
                 self.close_connection = True
                 return  # no answer: the client sees RemoteDisconnected
+            if state["busy"] > 0:
+                state["busy"] -= 1
+                self.send_response(503)
+                self.send_header("Retry-After", "1")
+                self.send_header("Content-Length", "6")
+                self.end_headers()
+                self.wfile.write(b'"busy"')
+                return
             self.send_response(201)
             self.send_header("Content-Length", "2")
             self.end_headers()
@@ -266,6 +276,31 @@ def test_three_dropped_connections_in_a_row_give_up(
         http_sender(url, sleep=pauses.append)({"type": "order_placed"})
     assert state["seen"] == 3
     assert pauses == [0.5, 1.0]
+
+
+def test_a_busy_answer_is_tried_again_after_retry_after(
+    dropping_server: tuple[str, dict[str, int]], capsys: pytest.CaptureFixture[str]
+) -> None:
+    url, state = dropping_server
+    state["busy"] = 2
+    pauses: list[float] = []
+    send = http_sender(url, sleep=pauses.append)
+    assert send({"type": "order_placed"}) == (201, "{}")
+    assert state["seen"] == 3
+    assert pauses == [1.0, 1.0]
+    assert capsys.readouterr().err.count("The API is busy (503)") == 2
+
+
+def test_busy_on_every_try_is_answered(
+    dropping_server: tuple[str, dict[str, int]],
+) -> None:
+    url, state = dropping_server
+    state["busy"] = 3
+    pauses: list[float] = []
+    send = http_sender(url, sleep=pauses.append)
+    assert send({"type": "order_placed"}) == (503, '"busy"')
+    assert state["seen"] == 3
+    assert pauses == [1.0, 1.0]
 
 
 def test_a_refused_connection_is_not_tried_again() -> None:
