@@ -10,10 +10,15 @@ days, in about a minute. Sending the same run again changes nothing, as
 every event comes back as already received, so a stopped run can be resumed
 by starting it again. A new --seed adds new customers. Uses only the
 standard library to talk HTTP.
+
+An API with a write key (on Cloud Run, T205) needs it as --key, or in the
+environment as CFI_WRITE_KEY. A dropped connection is retried: every event
+has a fixed event_id, so sending one again is always safe.
 """
 
 import argparse
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -25,38 +30,78 @@ from typing import Any
 
 from fitcore.sim_events import simulate_events
 
+from cfi_api.write_key import HEADER
+
 # Sends one event and answers its HTTP status and body.
 Send = Callable[[Mapping[str, Any]], tuple[int, str]]
 
 DAY = timedelta(days=1)
 REPORT_EVERY = 7  # simulated days between progress lines
+RETRIES = 2  # more tries after a dropped connection, PAUSE seconds apart and more
+PAUSE = 0.5
 
 
 class Refused(Exception):
     """The API refused an event, so the run stopped there."""
 
 
-def http_sender(url: str, timeout: float = 10.0) -> Send:
+def http_sender(
+    url: str,
+    key: str | None = None,
+    *,
+    timeout: float = 10.0,
+    retries: int = RETRIES,
+    sleep: Callable[[float], None] = time.sleep,
+) -> Send:
     """A Send that POSTs each event to url's /api/v1/events.
 
-    Raises urllib.error.URLError when the API cannot be reached.
+    With a key, every request carries it as the X-CFI-Key header. A
+    connection dropped before the answer (T205 saw 2 in about 90 requests
+    through Hosting) is tried again up to retries times, PAUSE seconds apart
+    and then longer. That is safe because of the event_id: if the API had
+    already saved the event, it answers 200, already received. Raises
+    ConnectionError when every try is dropped, and urllib.error.URLError
+    when the API cannot be reached at all.
     """
     endpoint = url.rstrip("/") + "/api/v1/events"
+    headers = {"Content-Type": "application/json"}
+    if key is not None:
+        headers[HEADER] = key
 
     def send(event: Mapping[str, Any]) -> tuple[int, str]:
-        request = urllib.request.Request(
-            endpoint,
-            data=json.dumps(event).encode(),
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
-                return response.status, response.read().decode()
-        except urllib.error.HTTPError as err:
-            return err.code, err.read().decode(errors="replace")
+        data = json.dumps(event).encode()
+        for attempt in range(retries + 1):
+            request = urllib.request.Request(
+                endpoint, data=data, headers=headers, method="POST"
+            )
+            try:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    return response.status, response.read().decode()
+            except urllib.error.HTTPError as err:
+                return err.code, err.read().decode(errors="replace")
+            except OSError as err:
+                if attempt == retries or not _dropped(err):
+                    raise
+                pause = PAUSE * (attempt + 1)
+                print(
+                    f"Connection dropped ({err}); trying again in {pause:g} s.",
+                    file=sys.stderr,
+                )
+                sleep(pause)
+        raise AssertionError("unreachable")  # the loop returns or raises
 
     return send
+
+
+def _dropped(err: OSError) -> bool:
+    """Whether a connection broke after it was made: worth another try.
+
+    A refused connection is not: nothing is listening, so main says so.
+    """
+    reason = err.reason if isinstance(err, urllib.error.URLError) else err
+    return isinstance(reason, ConnectionError) and not isinstance(
+        reason, ConnectionRefusedError
+    )
 
 
 def _when(event: Mapping[str, Any]) -> datetime:
@@ -141,6 +186,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         default="http://127.0.0.1:8000",
         help="the API's address (default: %(default)s)",
     )
+    parser.add_argument(
+        "--key",
+        default=os.environ.get("CFI_WRITE_KEY"),
+        help="the API's write key, if it has one (default: $CFI_WRITE_KEY)",
+    )
     args = parser.parse_args(argv)
     if args.customers < 1:
         parser.error("--customers must be at least 1")
@@ -155,13 +205,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"{args.speed:g} day(s) per second: about {args.days / args.speed:.0f} s."
     )
     try:
-        counts = replay(events, http_sender(args.url), args.speed)
+        counts = replay(events, http_sender(args.url, args.key), args.speed)
     except Refused as err:
         print(f"Stopped: {err}", file=sys.stderr)
         return 1
     except urllib.error.URLError as err:
         print(f"Cannot reach the API at {args.url} ({err.reason}).", file=sys.stderr)
         print("Is it running? See dashboard/README.md.", file=sys.stderr)
+        return 1
+    except ConnectionError as err:
+        print(
+            f"Lost the connection to {args.url} {RETRIES + 1} times in a row "
+            f"({err}). Run it again to resume: events already sent change nothing.",
+            file=sys.stderr,
+        )
         return 1
     except KeyboardInterrupt:
         print("Stopped. Run it again to resume: events already sent change nothing.")
