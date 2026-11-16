@@ -2,21 +2,50 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Staff carry a role claim (admin, analyst or viewer), set by the Admin
-    // SDK. Nobody has one until T303 grants them.
+    // Staff carry a role claim, set by python -m cfi_api.roles (T303):
+    // viewer < analyst < admin. An account without one, such as a customer
+    // of the ordering app, may read nothing here.
     function isStaff() {
       return request.auth != null
         && request.auth.token.role in ['admin', 'analyst', 'viewer'];
     }
 
-    // Staff may read customers: the love matrix listens to them (T206).
-    // Only the API writes, through the Admin SDK, which these rules don't
-    // affect. Per-role rules for every collection come in T304.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.role == 'admin';
+    }
+
+    // Who may read what (T304). Every role reads what the dashboard shows;
+    // the roles differ in what they may do, which goes through the API
+    // (cfi_api.access). No app writes anything: the API, Cloud Functions
+    // and the training pipeline write through server SDKs, which these
+    // rules don't affect. api/tests/test_firestore_rules.py checks every
+    // collection against every kind of caller.
+
     match /customers/{customerId} {
+      allow read: if isStaff();
+
+      match /scores/{eventId} {
+        allow read: if isStaff();
+      }
+    }
+
+    match /orders/{orderId} {
       allow read: if isStaff();
     }
 
-    // Everything else stays locked.
+    // Events as received, for an admin looking into a problem.
+    match /events/{eventId} {
+      allow read: if isAdmin();
+    }
+
+    // Staff read their own document; admins read everyone's.
+    match /users/{uid} {
+      allow get: if isStaff() && request.auth.uid == uid;
+      allow read: if isAdmin();
+    }
+
+    // Everything else stays locked, rules, actions and models included:
+    // the task that first writes a collection decides who may read it.
     match /{document=**} {
       allow read, write: if false;
     }

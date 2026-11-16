@@ -101,9 +101,10 @@ integration key from Secret Manager as `CFI_WRITE_KEY`.
 Every merge to `main` deploys dev (T208). Once every check has passed, the
 `deploy` job in `.github/workflows/ci.yml` builds the image, pushes it to the
 Artifact Registry repo `cfi` tagged with the commit, deploys it to Cloud Run
-with every setting of the service, deploys the page to Firebase Hosting, and
-checks that dev serves that commit and refuses `POST /score` without a
-token. To deploy again without a new commit, re-run the job on GitHub;
+with every setting of the service, deploys the page to Firebase Hosting and
+`firestore.rules` to Firestore (T304), and checks that dev serves that
+commit, refuses `POST /score` without a token and refuses a Firestore read
+without one. To deploy again without a new commit, re-run the job on GitHub;
 nobody deploys from a laptop (CONTRIBUTING.md).
 
 The job signs in with Workload Identity Federation, so no key is stored
@@ -111,7 +112,8 @@ anywhere: GitHub gives each run a short-lived token naming the repo and the
 branch, and Google trades it for the service account `cfi-deployer`. Only
 runs on `main` of this repo, matched by its numeric ID, can do that; pull
 requests cannot. `cfi-deployer` may deploy Cloud Run revisions that run as
-`cfi-api` and deploy Hosting, but not change who may call the service, and
+`cfi-api`, Hosting and the Firestore rules, but not change who may call the
+service, and
 may push only to the repo `cfi`, which keeps the 5 newest images
 (`api/artifact-cleanup.json`).
 
@@ -137,7 +139,7 @@ One-time setup of a project (dev: T204, T205 and T208):
    `api/artifact-cleanup.json`.
 6. Create the service account `cfi-deployer`. Grant it
    `roles/run.developer`, `roles/firebasehosting.admin`,
-   `roles/serviceusage.apiKeysViewer` and
+   `roles/firebaserules.admin` (T304), `roles/serviceusage.apiKeysViewer` and
    `roles/serviceusage.serviceUsageConsumer` on the project,
    `roles/iam.serviceAccountUser` on `cfi-api`, and
    `roles/artifactregistry.writer` on the repo `cfi`.

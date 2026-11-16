@@ -245,10 +245,10 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Deploy the page to Firebase Hosting
+      - name: Deploy the page and the Firestore rules to Firebase
         run: |
           npm install -g firebase-tools@15
-          firebase deploy --only hosting --project "$PROJECT" --non-interactive --message "CI ${GITHUB_SHA::7}"
+          firebase deploy --only hosting,firestore:rules --project "$PROJECT" --non-interactive --message "CI ${GITHUB_SHA::7}"
 
       - name: Dev serves this commit
         run: |
@@ -262,3 +262,8 @@ jobs:
             --retry 5 --retry-all-errors --request POST \
             https://cfi-dev-th26.web.app/api/v1/score | tee /tmp/score.txt
           grep -qx 401 /tmp/score.txt
+          curl --silent --output /dev/null --write-out '%{http_code}\n' \
+            --retry 5 --retry-all-errors \
+            "https://firestore.googleapis.com/v1/projects/$PROJECT/databases/(default)/documents/customers" \
+            | tee /tmp/firestore.txt
+          grep -qx 403 /tmp/firestore.txt

@@ -1,6 +1,10 @@
-"""T206: Firestore rules. Staff with a role claim may read customers, nothing more.
+"""T206 and T304: who may read what in Firestore, through the rules.
 
-These run against the Firestore emulator only; elsewhere they are skipped.
+READERS is the table firestore.rules carries out, one row per collection
+fitcore.documents knows. The tests run every collection against every kind
+of caller in CALLERS, on the Firestore emulator only; elsewhere they are
+skipped, except the check that READERS covers every collection.
+
 Each request carries an unsigned token built as the JS SDK's mockUserToken
 builds it: the emulator accepts one, production never would. Documents are
 seeded with the Python client, which the emulator lets past the rules.
@@ -9,40 +13,75 @@ seeded with the Python client, which the emulator lets past the rules.
 import base64
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 import uuid
 from typing import Any
 
 import pytest
+from fitcore.documents import COLLECTIONS
 from google.cloud import firestore
 
 PROJECT = "demo-cfi"
 
-pytestmark = pytest.mark.skipif(
+emulator = pytest.mark.skipif(
     "FIRESTORE_EMULATOR_HOST" not in os.environ,
     reason="needs the Firestore emulator: run via firebase emulators:exec",
 )
+
+STAFF = frozenset({"viewer", "analyst", "admin"})
+
+# Who may read each collection, a document or the whole listing. Every role
+# reads what the dashboard shows; nobody reads what nothing writes yet. Staff
+# also read their own users/{uid}, which a test below checks on its own.
+READERS: dict[str, frozenset[str]] = {
+    "customers": STAFF,
+    "scores": STAFF,
+    "orders": STAFF,
+    "events": frozenset({"admin"}),
+    "users": frozenset({"admin"}),
+    "rules": frozenset(),
+    "actions": frozenset(),
+    "models": frozenset(),
+}
+
+# Each kind of caller, by the claims its token adds; None is no sign-in.
+CALLERS: dict[str, dict[str, Any] | None] = {
+    "no sign-in": None,
+    "no role": {},
+    "another role": {"role": "customer"},
+    "role in a list": {"role": ["admin"]},
+    "viewer": {"role": "viewer"},
+    "analyst": {"role": "analyst"},
+    "admin": {"role": "admin"},
+}
 
 
 def _encoded(part: dict[str, Any]) -> str:
     return base64.urlsafe_b64encode(json.dumps(part).encode()).rstrip(b"=").decode()
 
 
-def token(**claims: Any) -> str:
-    """An unsigned ID token for user "tester" with these extra claims."""
+def token(uid: str, **claims: Any) -> str:
+    """An unsigned ID token for uid with these extra claims."""
     payload = {
         "iss": f"https://securetoken.google.com/{PROJECT}",
         "aud": PROJECT,
         "iat": 0,
         "exp": 3600,
         "auth_time": 0,
-        "sub": "tester",
-        "user_id": "tester",
+        "sub": uid,
+        "user_id": uid,
         "firebase": {"sign_in_provider": "custom", "identities": {}},
         **claims,
     }
     return ".".join([_encoded({"alg": "none", "type": "JWT"}), _encoded(payload), ""])
+
+
+def bearer(caller: str, uid: str = "tester") -> str | None:
+    """The token caller sends as uid, or None if it is not signed in."""
+    claims = CALLERS[caller]
+    return None if claims is None else token(uid, **claims)
 
 
 def status(
@@ -65,47 +104,52 @@ def status(
         return err.code
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def seeded() -> dict[str, str]:
-    """One customer with an order, an event and a history entry; their paths."""
+    """One document in every collection, under new ids: its path, by collection."""
     tag = uuid.uuid4().hex[:8]
     paths = {
-        "customer": f"customers/cust_{tag}",
-        "history": f"customers/cust_{tag}/scores/ev_{tag}",
-        "order": f"orders/ord_{tag}",
-        "event": f"events/ev_{tag}",
+        name: re.sub(r"\{(\w+)\}", lambda m: f"{m.group(1)}_{tag}", collection.path)
+        for name, collection in COLLECTIONS.items()
     }
     db = firestore.Client(project=PROJECT)
     for path in paths.values():
-        db.document(path).set({"quadrant": "fad"})
+        db.document(path).set({"seeded": True})
     return paths
 
 
-@pytest.mark.parametrize("role", ["admin", "analyst", "viewer"])
-def test_staff_can_read_customers(seeded: dict[str, str], role: str) -> None:
-    assert status("GET", seeded["customer"], token(role=role)) == 200
-    assert status("GET", "customers", token(role=role)) == 200
+def test_readers_cover_every_collection() -> None:
+    assert set(READERS) == set(COLLECTIONS)
 
 
-@pytest.mark.parametrize(
-    "bearer",
-    [None, token(), token(role="customer"), token(role=["viewer"])],
-    ids=["no sign-in", "no role", "another role", "role in a list"],
-)
-def test_others_cannot_read_customers(
-    seeded: dict[str, str], bearer: str | None
+@emulator
+@pytest.mark.parametrize("caller", CALLERS)
+@pytest.mark.parametrize("name", READERS)
+def test_who_may_read_each_collection(
+    seeded: dict[str, str], name: str, caller: str
 ) -> None:
-    assert status("GET", seeded["customer"], bearer) == 403
-    assert status("GET", "customers", bearer) == 403
+    expected = 200 if caller in READERS[name] else 403
+    document = seeded[name]
+    listing = document.rsplit("/", 1)[0]
+    assert status("GET", document, bearer(caller)) == expected
+    assert status("GET", listing, bearer(caller)) == expected
 
 
-def test_no_one_writes_through_the_rules(seeded: dict[str, str]) -> None:
-    change = {"fields": {"quadrant": {"stringValue": "lovemark"}}}
-    admin = token(role="admin")
-    assert status("PATCH", seeded["customer"], admin, change) == 403
-    assert status("DELETE", seeded["customer"], admin) == 403
+@emulator
+@pytest.mark.parametrize("caller", CALLERS)
+def test_staff_read_their_own_user_document(caller: str) -> None:
+    uid = f"staff_{uuid.uuid4().hex[:8]}"
+    firestore.Client(project=PROJECT).document(f"users/{uid}").set({"seeded": True})
+    expected = 200 if caller in STAFF else 403
+    assert status("GET", f"users/{uid}", bearer(caller, uid)) == expected
 
 
-@pytest.mark.parametrize("name", ["history", "order", "event"])
-def test_everything_else_stays_locked(seeded: dict[str, str], name: str) -> None:
-    assert status("GET", seeded[name], token(role="admin")) == 403
+@emulator
+@pytest.mark.parametrize("name", READERS)
+def test_no_one_writes_through_the_rules(seeded: dict[str, str], name: str) -> None:
+    admin = bearer("admin")
+    document = seeded[name]
+    change = {"fields": {"seeded": {"booleanValue": False}}}
+    assert status("PATCH", document, admin, change) == 403
+    assert status("PATCH", f"{document}_new", admin, change) == 403
+    assert status("DELETE", document, admin) == 403
