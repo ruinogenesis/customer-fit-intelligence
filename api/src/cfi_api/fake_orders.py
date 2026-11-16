@@ -31,7 +31,7 @@ from typing import Any
 
 from fitcore.sim_events import simulate_events
 
-from cfi_api.write_key import HEADER
+from cfi_api.access import KEY_HEADER
 
 # Sends one event and answers its HTTP status and body.
 Send = Callable[[Mapping[str, Any]], tuple[int, str]]
@@ -69,7 +69,7 @@ def http_sender(
     endpoint = url.rstrip("/") + "/api/v1/events"
     headers = {"Content-Type": "application/json"}
     if key is not None:
-        headers[HEADER] = key
+        headers[KEY_HEADER] = key
 
     def send(event: Mapping[str, Any]) -> tuple[int, str]:
         data = json.dumps(event).encode()

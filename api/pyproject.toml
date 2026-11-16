@@ -12,6 +12,7 @@ requires-python = ">=3.12"
 # command, e.g. pip install -e fitcore -e api, so pip never looks for it.
 dependencies = [
     "fitcore",
+    "firebase-admin>=7.8,<8",
     "flask>=3.1,<4",
     "flask-smorest>=0.47,<0.48",
     "google-cloud-firestore>=2,<3",
@@ -45,7 +46,8 @@ warn_unused_ignores = true
 # fitcore is read from source, so the mypy hook needs no copy of it.
 mypy_path = "$MYPY_CONFIG_FILE_DIR/../fitcore/src"
 
-# flask-smorest ships no type hints, so mypy treats it as untyped.
+# flask-smorest and firebase-admin ship no type hints, so mypy treats them
+# as untyped.
 [[tool.mypy.overrides]]
-module = ["flask_smorest", "flask_smorest.*"]
+module = ["flask_smorest", "flask_smorest.*", "firebase_admin", "firebase_admin.*"]
 ignore_missing_imports = true

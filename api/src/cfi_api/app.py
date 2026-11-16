@@ -6,9 +6,9 @@ from typing import Any
 from flask import Flask
 
 from cfi_api import events, health, score
+from cfi_api.access import SECURITY_SCHEMES, require_access
 from cfi_api.errors import CfiApi
 from cfi_api.runtime import load_model, make_store
-from cfi_api.write_key import SCHEME, SECURITY_SCHEME, require_write_key
 
 API_PREFIX = "/api/v1"
 
@@ -26,10 +26,13 @@ DEFAULTS: dict[str, Any] = {
     "MODEL_VERSION": None,
     # Where events and state live: "memory" (this process only) or "firestore".
     "STORE": "memory",
-    # The Google Cloud project for Firestore; None uses the environment's.
-    "FIRESTORE_PROJECT": None,
-    # The key every request but a read must carry as X-CFI-Key (T205, until
-    # T303); None checks nothing.
+    # The Google Cloud project, for Firestore and sign-in tokens; None uses
+    # the environment's.
+    "PROJECT": None,
+    # Who may call what (cfi_api.access): "firebase" checks staff sign-in
+    # tokens and the integration key; None checks nothing.
+    "AUTH": None,
+    # The integration key that opens POST /events as X-CFI-Key; needs AUTH.
     "WRITE_KEY": None,
 }
 
@@ -39,22 +42,24 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
 
     An environment variable drops its prefix: CFI_MODEL_PATH sets
     MODEL_PATH. Tests pass their own config. Raises ValueError for a model
-    with only a path or only a version, an unknown store or an empty write
-    key.
+    with only a path or only a version, an unknown store, an unknown AUTH or
+    a write key that would not be checked.
     """
-    app = Flask(__name__)
+    # No static files: the API serves only its endpoints.
+    app = Flask(__name__, static_folder=None)
     app.config.update(DEFAULTS)
     app.config.from_prefixed_env("CFI")
     app.config.update(config or {})
     app.extensions["cfi_model"] = load_model(
         app.config["MODEL_PATH"], app.config["MODEL_VERSION"]
     )
-    app.extensions["cfi_store"] = make_store(
-        app.config["STORE"], app.config["FIRESTORE_PROJECT"]
+    app.extensions["cfi_store"] = make_store(app.config["STORE"], app.config["PROJECT"])
+    require_access(
+        app, app.config["AUTH"], app.config["PROJECT"], app.config["WRITE_KEY"]
     )
-    require_write_key(app, app.config["WRITE_KEY"])
     api = CfiApi(app)
-    api.spec.components.security_scheme(SCHEME, SECURITY_SCHEME)
+    for name, scheme in SECURITY_SCHEMES.items():
+        api.spec.components.security_scheme(name, scheme)
     api.register_blueprint(health.blp, url_prefix=API_PREFIX)
     api.register_blueprint(events.blp, url_prefix=API_PREFIX)
     api.register_blueprint(score.blp, url_prefix=API_PREFIX)
