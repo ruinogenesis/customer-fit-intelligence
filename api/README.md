@@ -44,11 +44,10 @@ The API runs on Cloud Run as the service `cfi-api` in `cfi-dev-th26`, region
 `asia-southeast3`, next to Firestore. Firebase Hosting sends every `/api/**`
 request to it (`firebase.json`, T205), so it answers on the Hosting domain
 too: https://cfi-dev-th26.web.app/api/v1/health. The image comes from the
-`Dockerfile` at the repo root: `.gcloudignore` (what is uploaded) and
-`.dockerignore` (what the image may copy) let in only fitcore, the API and
-the model, `notebooks/results/t112_model.json`. The service runs as the
-service account `cfi-api`, which may only read and write Firestore and read
-the secret `cfi-write-key`.
+`Dockerfile` at the repo root, and `.dockerignore` lets in only fitcore, the
+API and the model, `notebooks/results/t112_model.json`. The service runs as
+the service account `cfi-api`, which may only read and write Firestore and
+read the secret `cfi-write-key`.
 
 The service is public, because Hosting can only reach a service that takes
 calls without Google credentials. Until T303 checks staff roles, every
@@ -56,15 +55,21 @@ request but a read needs the write key in the header `X-CFI-Key`; the
 service gets it from Secret Manager as `CFI_WRITE_KEY`. Reads, `/health` and
 the docs included, are open.
 
-Until T208 deploys from CI, deploy by hand from the repo root:
+Every merge to `main` deploys dev (T208). Once every check has passed, the
+`deploy` job in `.github/workflows/ci.yml` builds the image, pushes it to the
+Artifact Registry repo `cfi` tagged with the commit, deploys it to Cloud Run
+with every setting of the service, deploys the page to Firebase Hosting, and
+checks that dev serves that commit. To deploy again without a new commit,
+re-run the job on GitHub; nobody deploys from a laptop (CONTRIBUTING.md).
 
-    gcloud run deploy cfi-api --source . --project cfi-dev-th26 \
-      --region asia-southeast3 \
-      --service-account cfi-api@cfi-dev-th26.iam.gserviceaccount.com \
-      --no-invoker-iam-check --min-instances 0 --max-instances 2 \
-      --cpu 1 --memory 512Mi --set-env-vars CFI_STORE=firestore \
-      --update-secrets CFI_WRITE_KEY=cfi-write-key:latest
-    firebase deploy --only hosting --project cfi-dev-th26
+The job signs in with Workload Identity Federation, so no key is stored
+anywhere: GitHub gives each run a short-lived token naming the repo and the
+branch, and Google trades it for the service account `cfi-deployer`. Only
+runs on `main` of this repo, matched by its numeric ID, can do that; pull
+requests cannot. `cfi-deployer` may deploy Cloud Run revisions that run as
+`cfi-api` and deploy Hosting, but not change who may call the service, and
+may push only to the repo `cfi`, which keeps the 5 newest images
+(`api/artifact-cleanup.json`).
 
 Send fake orders to it with the key from Secret Manager:
 
@@ -75,14 +80,26 @@ Send fake orders to it with the key from Secret Manager:
 A full fake-order run is about 3,100 Firestore writes, of the 20,000 free
 per day.
 
-One-time setup of a project (dev: T204 and T205):
+One-time setup of a project (dev: T204, T205 and T208):
 
 1. Link a billing account; this moves the Firebase project to Blaze.
 2. Enable the APIs: `run.googleapis.com`, `artifactregistry.googleapis.com`,
-   `cloudbuild.googleapis.com`, `iam.googleapis.com` and
-   `secretmanager.googleapis.com`.
+   `iam.googleapis.com`, `iamcredentials.googleapis.com`,
+   `sts.googleapis.com` and `secretmanager.googleapis.com`.
 3. Create the service account `cfi-api` and grant it `roles/datastore.user`.
-4. Grant `roles/run.builder` to the Compute Engine default service account,
-   which Cloud Build uses for source deploys.
-5. Create the secret `cfi-write-key` holding a random key, and grant
+4. Create the secret `cfi-write-key` holding a random key, and grant
    `cfi-api` `roles/secretmanager.secretAccessor` on it.
+5. Create the Docker repo `cfi` in the region, with the cleanup policies in
+   `api/artifact-cleanup.json`.
+6. Create the service account `cfi-deployer`. Grant it
+   `roles/run.developer`, `roles/firebasehosting.admin`,
+   `roles/serviceusage.apiKeysViewer` and
+   `roles/serviceusage.serviceUsageConsumer` on the project,
+   `roles/iam.serviceAccountUser` on `cfi-api`, and
+   `roles/artifactregistry.writer` on the repo `cfi`.
+7. Create the workload identity pool `github` and in it the OIDC provider
+   `cfi-repo` for `https://token.actions.githubusercontent.com`, letting in
+   only this repo's ID on `refs/heads/main`. Grant the pool's principals for
+   this repo `roles/iam.workloadIdentityUser` on `cfi-deployer`.
+8. After the first deploy creates the service, make it public once:
+   `gcloud run services update cfi-api --no-invoker-iam-check`.

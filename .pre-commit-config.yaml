@@ -42,3 +42,12 @@ repos:
           - "google-cloud-firestore>=2,<3"
           - "marshmallow>=4,<5"
           - "numpy>=2,<3"
+
+  - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+    rev: v1.7.12.25
+    hooks:
+      - id: actionlint
+        # Checks the GitHub Actions workflows (T208). shellcheck-py brings
+        # shellcheck along, so their run: scripts are checked on every
+        # machine, not only where shellcheck happens to be installed.
+        additional_dependencies: ["shellcheck-py==0.11.0.1"]

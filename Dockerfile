@@ -1,5 +1,5 @@
-# The API's container image for Cloud Run (T204). Cloud Build builds it from
-# the repo root with: gcloud run deploy cfi-api --source . (api/README.md).
+# The API's container image for Cloud Run (T204). CI builds it from the repo
+# root and deploys it on every merge to main (T208, api/README.md).
 # Only what .dockerignore lets in can be copied: fitcore, the API, the model.
 FROM python:3.12-slim
 
