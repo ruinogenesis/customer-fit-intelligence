@@ -20,6 +20,10 @@ What each event measures, in the units the model was trained on:
 x4 and x7 have no measure in the training units yet. order_issue and the
 other event types measure nothing, so they change no score.
 
+Each order also keeps its record (T301): restaurant, basket, fees and promo
+from order_placed; courier and delivery time from order_delivered; every
+order_issue; and the latest score of each kind from rating_submitted.
+
 x2..x8 are judged against the customer's own expectation
 (fitcore.expectations), read just before the observation updates it, as the
 simulator does; x1 is judged against the promise. Each order is scored on
@@ -29,7 +33,7 @@ customer's scores are those of their latest order.
 """
 
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass, field, replace
+from dataclasses import KW_ONLY, asdict, dataclass, field, replace
 from datetime import datetime, timedelta
 from types import MappingProxyType
 from typing import Any
@@ -39,6 +43,7 @@ import numpy as np
 from fitcore import expectations
 from fitcore.features import INPUTS, input_gap
 from fitcore.model import QUADRANTS, ModelParams, forward, outcomes, quadrant
+from fitcore.schemas import RATINGS
 
 # The population's usual value of x2..x8: a new customer's expectation, in
 # the model's units. Today these are the simulator's (fitcore.sim_orders);
@@ -96,10 +101,22 @@ class Scores:
 
 
 @dataclass(frozen=True)
+class Issue:
+    """One order_issue: what went wrong, and when it was reported."""
+
+    issue_type: str
+    at: datetime
+
+
+@dataclass(frozen=True)
 class Order:
-    """One order: who placed it, when, what was promised, and its gaps so far.
+    """One order: who placed it, when, what was promised, its gaps so far,
+    and its record.
 
     gaps holds only the inputs this order has measured (x1..x8, own units).
+    The record: restaurant_id, basket_value and fees (satang) and promo_used
+    from order_placed; courier_id and delivered_at once delivered; issues in
+    the order reported; ratings, the latest score of each kind (RATINGS).
     """
 
     order_id: str
@@ -107,12 +124,28 @@ class Order:
     placed_at: datetime
     promised_eta: datetime
     gaps: Mapping[str, float] = field(default_factory=dict)
+    _: KW_ONLY
+    restaurant_id: str
+    basket_value: int
+    fees: int
+    promo_used: bool
+    courier_id: str | None = None
+    delivered_at: datetime | None = None
+    issues: tuple[Issue, ...] = ()
+    ratings: Mapping[str, int] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         unknown = set(self.gaps) - set(INPUTS)
         if unknown:
             raise ValueError(f"unknown inputs in gaps: {sorted(unknown)}")
+        unknown = set(self.ratings) - set(RATINGS)
+        if unknown:
+            raise ValueError(f"unknown ratings: {sorted(unknown)}")
+        if (self.courier_id is None) != (self.delivered_at is None):
+            raise ValueError("courier_id and delivered_at go together")
         object.__setattr__(self, "gaps", MappingProxyType(dict(self.gaps)))
+        object.__setattr__(self, "issues", tuple(self.issues))
+        object.__setattr__(self, "ratings", MappingProxyType(dict(self.ratings)))
 
 
 @dataclass(frozen=True)
@@ -145,8 +178,8 @@ class Applied:
     """What one event changed.
 
     customer: the customer afterwards (always saved). order: the order the
-    event created or changed, None if none. scored: that order's new scores,
-    None if no score changed.
+    event created or changed (its gaps or its record), None if none. scored:
+    that order's new scores, None if no score changed.
     """
 
     customer: Customer
@@ -212,6 +245,25 @@ def _minutes(span: timedelta) -> float:
     return span.total_seconds() / 60.0
 
 
+def _record(event: Mapping[str, Any], order: Order) -> dict[str, Any]:
+    """What this event adds to its order's record, as Order fields to replace."""
+    payload = event["payload"]
+    match event["type"]:
+        case "order_delivered":
+            return {
+                "courier_id": payload["courier_id"],
+                "delivered_at": event["occurred_at"],
+            }
+        case "order_issue":
+            issue = Issue(payload["issue_type"], event["occurred_at"])
+            return {"issues": (*order.issues, issue)}
+        case "rating_submitted":
+            scores = {name: payload[name] for name in RATINGS if name in payload}
+            return {"ratings": {**order.ratings, **scores}}
+        case _:
+            return {}
+
+
 def apply_event(
     params: ModelParams,
     event: Mapping[str, Any],
@@ -240,7 +292,14 @@ def apply_event(
         if order is not None:
             raise EventConflict(f"Order {wanted!r} was already placed.")
         order = Order(
-            payload["order_id"], customer.customer_id, at, payload["promised_eta"]
+            payload["order_id"],
+            customer.customer_id,
+            at,
+            payload["promised_eta"],
+            restaurant_id=payload["restaurant_id"],
+            basket_value=payload["basket_value"],
+            fees=payload["fees"],
+            promo_used=payload["promo_used"],
         )
     elif named and order is None:
         raise EventConflict(f"Order {wanted!r} has not been placed.")
@@ -268,11 +327,14 @@ def apply_event(
 
     changed: Order | None = None
     scored: Scores | None = None
-    if order is not None and (gaps or kind == "order_placed"):
-        changed = replace(order, gaps={**order.gaps, **gaps})
-        scored = score(params, changed.gaps)
+    if order is not None:
+        record = _record(event, order)
+        if gaps or record or kind == "order_placed":
+            changed = replace(order, gaps={**order.gaps, **gaps}, **record)
+        if changed is not None and (gaps or kind == "order_placed"):
+            scored = score(params, changed.gaps)
     latest_scores = customer.scores
-    if changed is not None and changed.order_id == latest_id:
+    if scored is not None and changed is not None and changed.order_id == latest_id:
         latest_scores = scored
     return Applied(
         customer=replace(

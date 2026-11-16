@@ -130,6 +130,8 @@ def test_valid_payload_loads(event_type):
     [
         ("order_placed", {"basket_value": 350.0}, "basket_value"),  # not whole satang
         ("order_placed", {"basket_value": -1}, "basket_value"),
+        ("order_placed", {"promo_used": 1}, "promo_used"),  # not a boolean
+        ("order_placed", {"promo_used": "true"}, "promo_used"),
         ("order_issue", {"issue_type": "rude"}, "issue_type"),
         ("rating_submitted", {"food": 6}, "food"),
         ("survey_response", {"value": 0}, "value"),

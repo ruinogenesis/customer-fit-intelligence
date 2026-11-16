@@ -2,12 +2,13 @@
 
 from typing import Any
 
+from fitcore.documents import EventResultSchema
 from fitcore.schemas import EventSchema
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
 from cfi_api.errors import ErrorSchema
-from cfi_api.events import EventResultSchema, as_stored, receive
+from cfi_api.events import as_stored, receive
 from cfi_api.runtime import store
 from cfi_api.write_key import SCHEME
 

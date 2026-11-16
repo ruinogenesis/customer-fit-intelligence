@@ -17,8 +17,21 @@ from marshmallow import (
 
 SCHEMA_VERSION = 1
 
+# Choices that events and stored documents (fitcore.documents) share.
+ISSUE_TYPES: tuple[str, ...] = ("missing", "wrong", "cold", "late")
+RATINGS: tuple[str, ...] = ("food", "courier", "accuracy", "overall")
+ARMS: tuple[str, ...] = ("treatment", "holdout")
+CHANNELS: tuple[str, ...] = ("push", "in_app", "email", "voucher")
+ACTION_RESULTS: tuple[str, ...] = (
+    "delivered",
+    "opened",
+    "clicked",
+    "redeemed",
+    "failed",
+)
 
-def _check_id(value: str) -> None:
+
+def check_id(value: str) -> None:
     """Reject an id that cannot be a Firestore document id.
 
     No "/" (it would point into another collection), not "." or "..", not
@@ -36,9 +49,7 @@ def _check_id(value: str) -> None:
 
 
 def _id(required: bool = True) -> fields.String:
-    return fields.String(
-        required=required, validate=[validate.Length(min=1), _check_id]
-    )
+    return fields.String(required=required, validate=[validate.Length(min=1), check_id])
 
 
 def _count() -> fields.Integer:
@@ -63,6 +74,24 @@ class StrictSchema(Schema):
         unknown = RAISE
 
 
+class StrictBoolean(fields.Boolean):
+    """true or false only: not 1, 0 or "true".
+
+    (fields.Boolean with truthy={True} still lets 1 in, because 1 == True.)
+    """
+
+    def _deserialize(
+        self,
+        value: Any,
+        attr: str | None,
+        data: Mapping[str, Any] | None,
+        **kwargs: Any,
+    ) -> bool:
+        if not isinstance(value, bool):
+            raise self.make_error("invalid", input=value)
+        return value
+
+
 class UtcDateTime(fields.AwareDateTime):
     """A timestamp that must carry a timezone; always returned in UTC."""
 
@@ -85,7 +114,7 @@ class OrderPlacedPayload(StrictSchema):
     basket_value = _count()
     fees = _count()
     promised_eta = UtcDateTime(required=True)
-    promo_used = fields.Boolean(required=True, truthy={True}, falsy={False})
+    promo_used = StrictBoolean(required=True)
 
 
 class OrderDeliveredPayload(StrictSchema):
@@ -95,7 +124,7 @@ class OrderDeliveredPayload(StrictSchema):
 
 class OrderIssuePayload(StrictSchema):
     order_id = _id()
-    issue_type = _one_of("missing", "wrong", "cold", "late")
+    issue_type = _one_of(*ISSUE_TYPES)
 
 
 class RatingSubmittedPayload(StrictSchema):
@@ -107,7 +136,7 @@ class RatingSubmittedPayload(StrictSchema):
 
     @validates_schema
     def at_least_one_score(self, data: dict[str, Any], **kwargs: Any) -> None:
-        if not any(name in data for name in ("food", "courier", "accuracy", "overall")):
+        if not any(name in data for name in RATINGS):
             raise ValidationError("At least one score is required.")
 
 
@@ -151,13 +180,13 @@ class SurveyResponsePayload(StrictSchema):
 class ActionSentPayload(StrictSchema):
     action_id = _id()
     rule_id = _id()
-    arm = _one_of("treatment", "holdout")
-    channel = _one_of("push", "in_app", "email", "voucher")
+    arm = _one_of(*ARMS)
+    channel = _one_of(*CHANNELS)
 
 
 class ActionOutcomePayload(StrictSchema):
     action_id = _id()
-    result = _one_of("delivered", "opened", "clicked", "redeemed", "failed")
+    result = _one_of(*ACTION_RESULTS)
 
 
 # --- Registry: the single list of event types ---

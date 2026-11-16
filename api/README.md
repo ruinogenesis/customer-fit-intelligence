@@ -33,6 +33,11 @@ Run it locally with the reference model, from the repo root:
   move (dashboard/README.md).
 - Tests: `pytest api`
 
+What the API keeps in Firestore, document by document, is in
+`fitcore/DOCUMENTS.md` (T301). Before it writes a document, it checks it
+against its schema in `fitcore.documents`; one that does not fit fails the
+request with a 500, and nothing of that event is saved.
+
 Every error is `{"code": ..., "message": ...}`: `code` is the HTTP status
 name in snake case, such as `not_found`. Validation errors (400, 422) add
 `errors`; an event that does not fit what is stored, such as a delivery

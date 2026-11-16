@@ -5,6 +5,11 @@ all that what-if scoring gets. MemoryStore keeps everything in this process
 (tests, and trying the API without Firestore);
 cfi_api.firestore_store.FirestoreStore keeps it in Firestore. One event is
 saved with one call, so a store can write it all at once.
+
+writes() lists the Firestore documents one event saves, each checked
+against its schema (fitcore.documents, T301). Both stores call it, so a
+document of the wrong shape fails the request in tests as it would in
+Firestore.
 """
 
 import copy
@@ -12,6 +17,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Protocol
 
+from fitcore.documents import check, customer_document, order_document
+from fitcore.model import LATENTS
 from fitcore.scoring import Applied, Customer, Order, Scores
 
 
@@ -47,6 +54,50 @@ def history_entry(
         scores=applied.scored,
         model_version=model_version,
     )
+
+
+def history_document(entry: HistoryEntry) -> dict[str, Any]:
+    return {
+        "event_id": entry.event_id,
+        "order_id": entry.order_id,
+        "at": entry.at,
+        "scores": {name: getattr(entry.scores, name) for name in LATENTS},
+        "churn_risk": entry.scores.churn_risk,
+        "quadrant": entry.scores.quadrant,
+        "model_version": entry.model_version,
+    }
+
+
+def writes(
+    record: EventRecord, applied: Applied, model_version: str
+) -> list[tuple[str, dict[str, Any]]]:
+    """The documents one event saves, as (path, document), each checked.
+
+    Raises fitcore.documents.DocumentError if one does not fit its schema.
+    """
+    customer_id = applied.customer.customer_id
+    documents = [
+        (
+            "events",
+            f"events/{record.event['event_id']}",
+            {"event": record.event, "result": record.result},
+        ),
+        (
+            "customers",
+            f"customers/{customer_id}",
+            customer_document(applied.customer, model_version),
+        ),
+    ]
+    if applied.order is not None:
+        path = f"orders/{applied.order.order_id}"
+        documents.append(("orders", path, order_document(applied.order)))
+    entry = history_entry(record, applied, model_version)
+    if entry is not None:
+        path = f"customers/{customer_id}/scores/{entry.event_id}"
+        documents.append(("scores", path, history_document(entry)))
+    for collection, _, document in documents:
+        check(collection, document)
+    return [(path, document) for _, path, document in documents]
 
 
 class Reader(Protocol):
@@ -94,6 +145,7 @@ class MemoryStore:
         return self.orders.get(order_id)
 
     def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
+        writes(record, applied, model_version)  # checks what Firestore would get
         customer = applied.customer
         self.events[record.event["event_id"]] = _copied(record)
         self.customers[customer.customer_id] = customer
