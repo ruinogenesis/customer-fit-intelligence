@@ -12,8 +12,9 @@ by starting it again. A new --seed adds new customers. Uses only the
 standard library to talk HTTP.
 
 An API with a write key (on Cloud Run, T205) needs it as --key, or in the
-environment as CFI_WRITE_KEY. A dropped connection is retried: every event
-has a fixed event_id, so sending one again is always safe.
+environment as CFI_WRITE_KEY. A dropped connection is retried, and so is an
+event the API was too busy for (503, T302): every event has a fixed
+event_id, so sending one again is always safe.
 """
 
 import argparse
@@ -37,8 +38,9 @@ Send = Callable[[Mapping[str, Any]], tuple[int, str]]
 
 DAY = timedelta(days=1)
 REPORT_EVERY = 7  # simulated days between progress lines
-RETRIES = 2  # more tries after a dropped connection, PAUSE seconds apart and more
-PAUSE = 0.5
+RETRIES = 2  # more tries after a dropped connection or a busy answer
+PAUSE = 0.5  # seconds before the first retry, more before later ones
+BUSY = 503  # the API's answer when the customer has too many events at once
 
 
 class Refused(Exception):
@@ -58,10 +60,11 @@ def http_sender(
     With a key, every request carries it as the X-CFI-Key header. A
     connection dropped before the answer (T205 saw 2 in about 90 requests
     through Hosting) is tried again up to retries times, PAUSE seconds apart
-    and then longer. That is safe because of the event_id: if the API had
-    already saved the event, it answers 200, already received. Raises
+    and then longer; so is a 503, after the Retry-After seconds the API
+    asks for. That is safe because of the event_id: if the API had already
+    saved the event, it answers 200, already received. Raises
     ConnectionError when every try is dropped, and urllib.error.URLError
-    when the API cannot be reached at all.
+    when the API cannot be reached at all; a 503 on every try is answered.
     """
     endpoint = url.rstrip("/") + "/api/v1/events"
     headers = {"Content-Type": "application/json"}
@@ -78,6 +81,15 @@ def http_sender(
                 with urllib.request.urlopen(request, timeout=timeout) as response:
                     return response.status, response.read().decode()
             except urllib.error.HTTPError as err:
+                if err.code == BUSY and attempt < retries:
+                    pause = _retry_after(err) or PAUSE * (attempt + 1)
+                    err.close()
+                    print(
+                        f"The API is busy ({err.code}); trying again in {pause:g} s.",
+                        file=sys.stderr,
+                    )
+                    sleep(pause)
+                    continue
                 return err.code, err.read().decode(errors="replace")
             except OSError as err:
                 if attempt == retries or not _dropped(err):
@@ -91,6 +103,14 @@ def http_sender(
         raise AssertionError("unreachable")  # the loop returns or raises
 
     return send
+
+
+def _retry_after(err: urllib.error.HTTPError) -> float | None:
+    """The seconds the answer's Retry-After header asks for, if it gives any."""
+    try:
+        return float(err.headers.get("Retry-After", ""))
+    except ValueError:
+        return None
 
 
 def _dropped(err: OSError) -> bool:

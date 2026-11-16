@@ -3,6 +3,12 @@
 writes() and the document checks run everywhere. The tests marked
 needs_emulator run only against the Firestore emulator (CI's emulator job,
 or locally with firebase emulators:exec); elsewhere they are skipped.
+
+There is no emulator test of many events for one customer at once (T302):
+the emulator deadlocks on concurrent transactions over the same documents
+and breaks the deadlock only after about 30 s (firebase-tools issue #2452),
+which production Firestore does not. test_one_at_a_time.py tests that logic,
+and the T302 check on dev measures it against real Firestore.
 """
 
 import os

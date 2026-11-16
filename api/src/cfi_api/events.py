@@ -2,6 +2,8 @@
 
 receive() holds every step but the save, so POST /score (cfi_api.score)
 answers exactly as this endpoint would, from a Reader that cannot save.
+POST /events runs it through the store's handle(), which saves what it
+changed in the same transaction as its reads (T302).
 """
 
 from typing import Any
@@ -12,13 +14,17 @@ from fitcore.scoring import Applied, Customer, EventConflict, apply_event, order
 from flask import abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
+from flask_smorest import abort as abort_with
 
 from cfi_api.errors import ErrorSchema
 from cfi_api.runtime import live_model, store
-from cfi_api.store import EventRecord, Reader
+from cfi_api.store import Busy, Reader
 from cfi_api.write_key import SCHEME
 
 blp = Blueprint("events", __name__, description="Events in, scores out")
+
+# Seconds a sender should wait before sending an event the store was too busy for.
+RETRY_AFTER = 1
 
 
 def as_stored(event: dict[str, Any]) -> dict[str, Any]:
@@ -78,7 +84,12 @@ class Events(MethodView):
         schema=ErrorSchema,
         description="No valid X-CFI-Key, on a server with a write key",
     )
-    @blp.alt_response(503, schema=ErrorSchema, description="No model is loaded")
+    @blp.alt_response(
+        503,
+        schema=ErrorSchema,
+        description="No model is loaded, or too many events for one customer at "
+        "once: send it again after Retry-After seconds",
+    )
     @blp.doc(security=[{SCHEME: []}])
     def post(self, event: dict[str, Any]) -> Any:
         """Ingest one event and re-score its customer.
@@ -87,9 +98,15 @@ class Events(MethodView):
         first result, with duplicate set to true, and changes nothing.
         """
         event = as_stored(event)
-        db = store()
-        result, applied = receive(event, db)
+        try:
+            result, applied = store().handle(event, lambda db: receive(event, db))
+        except Busy:
+            abort_with(
+                503,
+                message="Too many events for this customer at once; "
+                "send it again shortly.",
+                headers={"Retry-After": str(RETRY_AFTER)},
+            )
         if applied is None:
             return result, 200
-        db.save(EventRecord(event, result), applied, result["model_version"])
         return result

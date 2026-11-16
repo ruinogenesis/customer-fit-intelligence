@@ -10,9 +10,16 @@ writes() lists the Firestore documents one event saves, each checked
 against its schema (fitcore.documents, T301). Both stores call it, so a
 document of the wrong shape fails the request in tests as it would in
 Firestore.
+
+handle() runs one event's reads, its scoring and its writes as one unit
+(T302): no other event's change can land between them, so two events for
+one customer at the same moment are applied one after the other instead of
+the second erasing the first.
 """
 
 import copy
+import threading
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Protocol
@@ -114,10 +121,31 @@ class Reader(Protocol):
     def find_order(self, order_id: str) -> Order | None: ...
 
 
+# One event's work: read what it needs through the Reader, and answer the
+# result and what changed (None: nothing to save). It must only read, as a
+# store may run it again.
+Work = Callable[[Reader], tuple[dict[str, Any], Applied | None]]
+
+
+class Busy(Exception):
+    """The store gave up: too many events for one customer at the same moment.
+
+    Nothing was saved, so sending the event again is safe.
+    """
+
+
 class Store(Reader, Protocol):
-    def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
-        """Save the event, the customer, the order if any, and the history
-        entry if an order was scored: all of them, or none."""
+    def handle(
+        self, event: dict[str, Any], work: Work
+    ) -> tuple[dict[str, Any], Applied | None]:
+        """Run work, then save what it changed, as one unit, and return what
+        work returned.
+
+        No other event's change lands between work's reads and the save: the
+        event, the customer, the order if any, and the history entry if an
+        order was scored are saved together, or not at all. Raises Busy if
+        the store gives up.
+        """
         ...
 
 
@@ -126,13 +154,17 @@ def _copied(record: EventRecord) -> EventRecord:
 
 
 class MemoryStore:
-    """A Store in this process's memory; it is lost when the process stops."""
+    """A Store in this process's memory; it is lost when the process stops.
+
+    One lock runs one event at a time, as a transaction would.
+    """
 
     def __init__(self) -> None:
         self.events: dict[str, EventRecord] = {}
         self.customers: dict[str, Customer] = {}
         self.orders: dict[str, Order] = {}
         self.history: dict[str, list[HistoryEntry]] = {}
+        self._lock = threading.Lock()
 
     def find_event(self, event_id: str) -> EventRecord | None:
         record = self.events.get(event_id)
@@ -144,7 +176,18 @@ class MemoryStore:
     def find_order(self, order_id: str) -> Order | None:
         return self.orders.get(order_id)
 
+    def handle(
+        self, event: dict[str, Any], work: Work
+    ) -> tuple[dict[str, Any], Applied | None]:
+        with self._lock:
+            result, applied = work(self)
+            if applied is not None:
+                record = EventRecord(event, result)
+                self.save(record, applied, result["model_version"])
+        return result, applied
+
     def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
+        """Save one event's changes; handle() calls it under the lock."""
         writes(record, applied, model_version)  # checks what Firestore would get
         customer = applied.customer
         self.events[record.event["event_id"]] = _copied(record)

@@ -25,7 +25,10 @@ Run it locally with the reference model, from the repo root:
 - Events: `POST /api/v1/events`, one event per call (fitcore.schemas, v1).
   It answers 201 with the re-scored order's scores (the five latents,
   `churn_risk` and the love-matrix `quadrant`), or 200 with the first
-  result if that `event_id` was already received.
+  result if that `event_id` was already received. Each event is read,
+  scored and saved in one Firestore transaction (T302), so events for one
+  customer at the same moment are applied one after the other. If too many
+  arrive at once it answers 503 with `Retry-After`: send it again then.
 - What-if: `POST /api/v1/score` takes the same event and answers (200) just
   as `/events` would right now, but saves nothing.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
