@@ -7,10 +7,10 @@ from fitcore.schemas import EventSchema
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
+from cfi_api.access import ACCESS
 from cfi_api.errors import ErrorSchema
 from cfi_api.events import as_stored, receive
 from cfi_api.runtime import store
-from cfi_api.write_key import SCHEME
 
 blp = Blueprint("score", __name__, description="What-if scoring: nothing is saved")
 
@@ -22,13 +22,12 @@ class Score(MethodView):
     @blp.alt_response(
         409, schema=ErrorSchema, description="Valid, but does not fit what is stored"
     )
+    @blp.alt_response(401, schema=ErrorSchema, description="No valid sign-in token")
     @blp.alt_response(
-        401,
-        schema=ErrorSchema,
-        description="No valid X-CFI-Key, on a server with a write key",
+        403, schema=ErrorSchema, description="Only for analysts and admins"
     )
     @blp.alt_response(503, schema=ErrorSchema, description="No model is loaded")
-    @blp.doc(security=[{SCHEME: []}])
+    @blp.doc(security=ACCESS["score.Score", "POST"].security)
     def post(self, event: dict[str, Any]) -> Any:
         """Score a hypothetical event without saving anything.
 

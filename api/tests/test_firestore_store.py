@@ -115,7 +115,7 @@ def firestore_client(reference_model: str) -> FlaskClient:
             "MODEL_PATH": reference_model,
             "MODEL_VERSION": "t112-sim",
             "STORE": "firestore",
-            "FIRESTORE_PROJECT": "demo-cfi",
+            "PROJECT": "demo-cfi",
         }
     )
     return app.test_client()

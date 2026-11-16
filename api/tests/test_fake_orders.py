@@ -14,9 +14,9 @@ from fitcore.sim_events import simulate_events
 from flask import Flask
 
 from cfi_api import create_app, fake_orders
+from cfi_api.access import KEY_HEADER
 from cfi_api.fake_orders import Refused, Send, http_sender, replay
 from cfi_api.store import MemoryStore
-from cfi_api.write_key import HEADER
 
 DAY0 = datetime(2026, 1, 1, tzinfo=UTC)
 
@@ -163,7 +163,7 @@ def server() -> Iterator[tuple[str, list[dict[str, Any]]]]:
                 {
                     "path": self.path,
                     "type": self.headers["Content-Type"],
-                    "key": self.headers.get(HEADER),
+                    "key": self.headers.get(KEY_HEADER),
                     "body": body,
                 }
             )

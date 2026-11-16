@@ -16,10 +16,10 @@ from flask.views import MethodView
 from flask_smorest import Blueprint
 from flask_smorest import abort as abort_with
 
+from cfi_api.access import ACCESS
 from cfi_api.errors import ErrorSchema
 from cfi_api.runtime import live_model, store
 from cfi_api.store import Busy, Reader
-from cfi_api.write_key import SCHEME
 
 blp = Blueprint("events", __name__, description="Events in, scores out")
 
@@ -80,17 +80,16 @@ class Events(MethodView):
         409, schema=ErrorSchema, description="Valid, but does not fit what is stored"
     )
     @blp.alt_response(
-        401,
-        schema=ErrorSchema,
-        description="No valid X-CFI-Key, on a server with a write key",
+        401, schema=ErrorSchema, description="No valid sign-in token or X-CFI-Key"
     )
+    @blp.alt_response(403, schema=ErrorSchema, description="Only for admins")
     @blp.alt_response(
         503,
         schema=ErrorSchema,
         description="No model is loaded, or too many events for one customer at "
         "once: send it again after Retry-After seconds",
     )
-    @blp.doc(security=[{SCHEME: []}])
+    @blp.doc(security=ACCESS["events.Events", "POST"].security)
     def post(self, event: dict[str, Any]) -> Any:
         """Ingest one event and re-score its customer.
 

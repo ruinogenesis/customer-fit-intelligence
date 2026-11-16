@@ -11,9 +11,12 @@ Settings come from `CFI_*` environment variables (the prefix is dropped):
 - `CFI_MODEL_PATH` and `CFI_MODEL_VERSION`: the model.json to score with
   and its version; set both or neither. Without a model, `/events` answers 503.
 - `CFI_STORE`: `memory` (the default; lost when the server stops) or `firestore`.
-- `CFI_FIRESTORE_PROJECT`: the Firestore project, such as `demo-cfi` for the emulator.
-- `CFI_WRITE_KEY`: if set, every request but a read must carry it in the
-  header `X-CFI-Key` (T205, until T303); leave it unset locally.
+- `CFI_PROJECT`: the Google Cloud project, for Firestore and sign-in
+  tokens, such as `demo-cfi` for the emulators; unset, the environment's.
+- `CFI_AUTH`: `firebase` checks who may call what (below); unset, as
+  locally, nothing is checked.
+- `CFI_WRITE_KEY`: the integration key that opens `POST /events` in the
+  header `X-CFI-Key`; it needs `CFI_AUTH`.
 
 Run it locally with the reference model, from the repo root:
 
@@ -46,6 +49,39 @@ name in snake case, such as `not_found`. Validation errors (400, 422) add
 `errors`; an event that does not fit what is stored, such as a delivery
 for an order never placed, is a 409 `conflict`.
 
+## Who may call what (T303)
+
+With `CFI_AUTH=firebase`, as on Cloud Run, the API checks each request
+against the table `ACCESS` in `src/cfi_api/access.py`:
+
+| Request | Who may |
+| --- | --- |
+| `GET /health`, `/docs`, `/openapi.json` | anyone |
+| `POST /score` | analysts and admins |
+| `POST /events` | admins, and the ordering app with the integration key |
+| anything the table does not list | admins |
+
+Staff send a Firebase ID token as `Authorization: Bearer <token>`. Its
+`role` claim ranks viewer < analyst < admin, and a role may do what the
+roles below it may. The ordering app sends the key in `X-CFI-Key` instead.
+No valid token (or key, where one is enough) gets 401 `unauthorized`; a
+role that ranks too low gets 403 `forbidden`. Only the token is checked, so
+a role taken away works until that token expires, within an hour.
+
+Give roles with `python -m cfi_api.roles`. It runs as you, with
+Application Default Credentials: once, `gcloud auth application-default
+login`, then `gcloud auth application-default set-quota-project
+cfi-dev-th26`.
+
+    python -m cfi_api.roles --project cfi-dev-th26 grant ann@example.com analyst --create
+    python -m cfi_api.roles --project cfi-dev-th26 revoke ann@example.com
+    python -m cfi_api.roles --project cfi-dev-th26 list
+
+`grant` sets the claim and writes `users/{uid}` (`fitcore/DOCUMENTS.md`);
+with `--create` it first makes the account, with a password you type.
+`revoke` takes both away and signs the account out everywhere. A new role
+reaches a person's token at their next sign-in, or within an hour.
+
 ## Deploy to Cloud Run (dev)
 
 The API runs on Cloud Run as the service `cfi-api` in `cfi-dev-th26`, region
@@ -58,17 +94,17 @@ the service account `cfi-api`, which may only read and write Firestore and
 read the secret `cfi-write-key`.
 
 The service is public, because Hosting can only reach a service that takes
-calls without Google credentials. Until T303 checks staff roles, every
-request but a read needs the write key in the header `X-CFI-Key`; the
-service gets it from Secret Manager as `CFI_WRITE_KEY`. Reads, `/health` and
-the docs included, are open.
+calls without Google credentials. So the API checks its callers itself
+(above): the deploy sets `CFI_AUTH=firebase`, and the service gets the
+integration key from Secret Manager as `CFI_WRITE_KEY`.
 
 Every merge to `main` deploys dev (T208). Once every check has passed, the
 `deploy` job in `.github/workflows/ci.yml` builds the image, pushes it to the
 Artifact Registry repo `cfi` tagged with the commit, deploys it to Cloud Run
 with every setting of the service, deploys the page to Firebase Hosting, and
-checks that dev serves that commit. To deploy again without a new commit,
-re-run the job on GitHub; nobody deploys from a laptop (CONTRIBUTING.md).
+checks that dev serves that commit and refuses `POST /score` without a
+token. To deploy again without a new commit, re-run the job on GitHub;
+nobody deploys from a laptop (CONTRIBUTING.md).
 
 The job signs in with Workload Identity Federation, so no key is stored
 anywhere: GitHub gives each run a short-lived token naming the repo and the
@@ -111,3 +147,6 @@ One-time setup of a project (dev: T204, T205 and T208):
    this repo `roles/iam.workloadIdentityUser` on `cfi-deployer`.
 8. After the first deploy creates the service, make it public once:
    `gcloud run services update cfi-api --no-invoker-iam-check`.
+9. In the Firebase console, start Authentication and turn on the
+   Email/Password provider. In its settings, untick "Enable create
+   (sign-up)": accounts come only from `python -m cfi_api.roles` (T303).
