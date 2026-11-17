@@ -18,6 +18,11 @@ the second erasing the first.
 
 A store made with outbox=True also saves the event's outbox entry in that
 unit, for cfi_api.export to send on to BigQuery (T306).
+
+Browser is what the dashboard's read endpoints need (T311): one customer,
+pages of customers, of a customer's scores and of their orders, and the
+customers per quadrant. Both stores answer from the same documents, so the
+API answers the same from either.
 """
 
 import copy
@@ -28,10 +33,15 @@ from datetime import UTC, datetime
 from typing import Any, NamedTuple, Protocol
 
 from fitcore.documents import check, customer_document, order_document
-from fitcore.model import LATENTS
+from fitcore.model import LATENTS, QUADRANTS
 from fitcore.scoring import Applied, Customer, Order, Scores
 
 from cfi_api.export import OutboxEntry, outbox_document, outbox_entry
+
+# Where a list resumes: the sort key of the previous page's last document.
+# Customers go riskiest first, then by id; scores and orders newest first.
+CustomerKey = tuple[float | None, str]  # churn_risk (None: not scored), id
+TimeKey = tuple[datetime, str]  # at or placed_at, then the event or order id
 
 
 @dataclass(frozen=True)
@@ -141,6 +151,53 @@ class Handled(NamedTuple):
     outbox: OutboxEntry | None
 
 
+@dataclass(frozen=True)
+class Page:
+    """One page of a list: its documents, and the key the next page starts
+    after (None when this page is the last)."""
+
+    documents: list[dict[str, Any]]
+    next: CustomerKey | TimeKey | None
+
+
+class Browser(Protocol):
+    """What the dashboard's read endpoints need (T311), from stored documents."""
+
+    def customer_document(self, customer_id: str) -> dict[str, Any] | None:
+        """customers/{customer_id}, or None if there is no such customer."""
+        ...
+
+    def list_customers(
+        self,
+        *,
+        quadrant: str | None,
+        min_churn_risk: float | None,
+        limit: int,
+        after: CustomerKey | None,
+    ) -> Page:
+        """Customers riskiest first (unscored last), then by id, high to low.
+
+        Only those in quadrant and at or above min_churn_risk, when given.
+        """
+        ...
+
+    def list_scores(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        """A customer's score history, newest first."""
+        ...
+
+    def list_orders(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        """A customer's orders, newest first."""
+        ...
+
+    def count_quadrants(self) -> dict[str | None, int]:
+        """Customers per quadrant; None counts those not scored yet."""
+        ...
+
+
 class Busy(Exception):
     """The store gave up: too many events for one customer at the same moment.
 
@@ -148,7 +205,7 @@ class Busy(Exception):
     """
 
 
-class Store(Reader, Protocol):
+class Store(Reader, Browser, Protocol):
     def handle(self, event: dict[str, Any], work: Work) -> Handled:
         """Run work, then save what it changed, as one unit.
 
@@ -172,6 +229,50 @@ def _copied(record: EventRecord) -> EventRecord:
     return EventRecord(copy.deepcopy(record.event), copy.deepcopy(record.result))
 
 
+def _as_firestore(value: Any) -> Any:
+    """A copy of value as Firestore gives it back: timestamps in UTC."""
+    if isinstance(value, datetime):
+        return value.astimezone(UTC)
+    if isinstance(value, dict):
+        return {key: _as_firestore(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_as_firestore(item) for item in value]
+    return value
+
+
+def customer_key(document: dict[str, Any]) -> CustomerKey:
+    return document["churn_risk"], document["customer_id"]
+
+
+def _customer_rank(key: CustomerKey) -> tuple[bool, float, str]:
+    """Sorts as Firestore does: a missing churn risk (null) below any number."""
+    churn_risk, customer_id = key
+    return churn_risk is not None, churn_risk or 0.0, customer_id
+
+
+def score_key(document: dict[str, Any]) -> TimeKey:
+    return document["at"], document["event_id"]
+
+
+def order_key(document: dict[str, Any]) -> TimeKey:
+    return document["placed_at"], document["order_id"]
+
+
+def _page(
+    documents: list[dict[str, Any]],
+    key: Callable[[dict[str, Any]], Any],
+    rank: Callable[[Any], Any],
+    limit: int,
+    after: Any,
+) -> Page:
+    """The page of documents, ranked high to low, that starts after `after`."""
+    ranked = sorted(documents, key=lambda document: rank(key(document)), reverse=True)
+    if after is not None:
+        ranked = [document for document in ranked if rank(key(document)) < rank(after)]
+    page = [copy.deepcopy(document) for document in ranked[:limit]]
+    return Page(page, key(page[-1]) if len(ranked) > limit else None)
+
+
 class MemoryStore:
     """A Store in this process's memory; it is lost when the process stops.
 
@@ -185,6 +286,8 @@ class MemoryStore:
         self.history: dict[str, list[HistoryEntry]] = {}
         self.has_outbox = outbox
         self.outbox: dict[str, OutboxEntry] = {}
+        # Every document as Firestore would hold it, by path: what Browser reads.
+        self.documents: dict[str, dict[str, Any]] = {}
         self._lock = threading.Lock()
 
     def find_event(self, event_id: str) -> EventRecord | None:
@@ -223,7 +326,8 @@ class MemoryStore:
 
     def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
         """Save one event's changes; handle() calls it under the lock."""
-        writes(record, applied, model_version)  # checks what Firestore would get
+        for path, document in writes(record, applied, model_version):
+            self.documents[path] = _as_firestore(document)
         customer = applied.customer
         self.events[record.event["event_id"]] = _copied(record)
         self.customers[customer.customer_id] = customer
@@ -232,3 +336,64 @@ class MemoryStore:
         entry = history_entry(record, applied, model_version)
         if entry is not None:
             self.history.setdefault(customer.customer_id, []).append(entry)
+
+    # --- Browser: the read endpoints (T311) ---
+
+    def _found(
+        self, keep: Callable[[str, dict[str, Any]], bool]
+    ) -> list[dict[str, Any]]:
+        with self._lock:
+            return [doc for path, doc in self.documents.items() if keep(path, doc)]
+
+    def customer_document(self, customer_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            found = self.documents.get(f"customers/{customer_id}")
+        return copy.deepcopy(found)
+
+    def list_customers(
+        self,
+        *,
+        quadrant: str | None,
+        min_churn_risk: float | None,
+        limit: int,
+        after: CustomerKey | None,
+    ) -> Page:
+        def keep(path: str, doc: dict[str, Any]) -> bool:
+            risk = doc.get("churn_risk")
+            return (
+                path.startswith("customers/")
+                and path.count("/") == 1
+                and (quadrant is None or doc["quadrant"] == quadrant)
+                and (
+                    min_churn_risk is None
+                    or (risk is not None and risk >= min_churn_risk)
+                )
+            )
+
+        return _page(self._found(keep), customer_key, _customer_rank, limit, after)
+
+    def list_scores(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        prefix = f"customers/{customer_id}/scores/"
+        found = self._found(lambda path, _: path.startswith(prefix))
+        return _page(found, score_key, lambda key: key, limit, after)
+
+    def list_orders(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        found = self._found(
+            lambda path, doc: (
+                path.startswith("orders/") and doc["customer_id"] == customer_id
+            )
+        )
+        return _page(found, order_key, lambda key: key, limit, after)
+
+    def count_quadrants(self) -> dict[str | None, int]:
+        customers = self._found(
+            lambda path, _: path.startswith("customers/") and path.count("/") == 1
+        )
+        counts: dict[str | None, int] = {quadrant: 0 for quadrant in (*QUADRANTS, None)}
+        for doc in customers:
+            counts[doc["quadrant"]] += 1
+        return counts

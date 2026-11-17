@@ -89,6 +89,12 @@ ACCESS: dict[tuple[str, str], Rule] = {
     ("api-docs.openapi_swagger_ui", "GET"): ANYONE,
     ("events.Events", "POST"): Rule("admin", key=True),
     ("score.Score", "POST"): Rule("analyst"),
+    # The dashboard's reads (T311): every staff role.
+    ("customers.Customers", "GET"): Rule("viewer"),
+    ("customers.Customer", "GET"): Rule("viewer"),
+    ("customers.CustomerScores", "GET"): Rule("viewer"),
+    ("customers.CustomerOrders", "GET"): Rule("viewer"),
+    ("matrix.Matrix", "GET"): Rule("viewer"),
 }
 
 # Checks an ID token: its claims, or None if it is not a valid token.
