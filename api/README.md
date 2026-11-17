@@ -181,3 +181,5 @@ One-time setup of a project (dev: T204, T205 and T208):
     `roles/bigquery.dataEditor` on the table `raw.changes`. Then create the
     subscription `raw-changes-bigquery` on the topic with
     `--bigquery-table=PROJECT:raw.changes --use-table-schema --write-metadata`.
+11. Labels (T307): run `bigquery/labels.sql` the same way, after `raw.sql`
+    (bigquery/README.md).
