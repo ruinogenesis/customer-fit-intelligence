@@ -15,7 +15,7 @@ whole satang. Scores are between 0 and 1.
 
 Fields that later tasks add are not here yet; each task adds its own:
 consent flags and the holdout bucket on customers (T610, T503), the top
-drivers on score entries (T115), and an expiry time on events (T305).
+drivers on score entries (T316), and an expiry time on events (T305).
 
 customer_document and order_document (and their inverses) convert
 fitcore.scoring's Customer and Order, for the API and for Cloud Functions.
