@@ -22,8 +22,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    # DuckDB and sqlglot run the BigQuery SQL in tests (api/tests/test_labels.py).
+    "duckdb>=2,<3",
     "pytest>=8",
     "ruff==0.17.4",  # keep equal to the ruff rev in .pre-commit-config.yaml
+    "sqlglot>=30,<31",
 ]
 
 [tool.hatch.version]
