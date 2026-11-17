@@ -14,7 +14,7 @@ from google.api_core.exceptions import Aborted
 
 from cfi_api import create_app
 from cfi_api.firestore_store import gave_up
-from cfi_api.store import Busy, EventRecord, MemoryStore, Work
+from cfi_api.store import Busy, EventRecord, Handled, MemoryStore, Work
 
 T0 = datetime(2026, 11, 16, 12, 0, tzinfo=UTC)
 ROUND_TRIP = 0.01  # seconds, about one Firestore call from Cloud Run
@@ -118,9 +118,7 @@ def test_the_same_event_at_once_is_saved_once(
 
 
 class BusyStore(MemoryStore):
-    def handle(
-        self, event: dict[str, Any], work: Work
-    ) -> tuple[dict[str, Any], Applied | None]:
+    def handle(self, event: dict[str, Any], work: Work) -> Handled:
         raise Busy("too much contention")
 
 

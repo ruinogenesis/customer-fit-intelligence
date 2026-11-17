@@ -5,17 +5,6 @@
       "codebase": "default",
       "runtime": "python312",
       "ignore": ["venv", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"]
-    },
-    {
-      "source": "bigquery",
-      "kit": "bigquery-export",
-      "instances": {
-        "events": "bigquery/instances/events",
-        "customers": "bigquery/instances/customers",
-        "orders": "bigquery/instances/orders",
-        "scores": "bigquery/instances/scores"
-      },
-      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
     }
   ],
   "firestore": {
@@ -54,6 +43,9 @@
     },
     "firestore": {
       "port": 8080
+    },
+    "pubsub": {
+      "port": 8085
     },
     "hosting": {
       "port": 5002

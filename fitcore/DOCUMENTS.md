@@ -145,3 +145,13 @@ One per dashboard user, written by admins: a dashboard user (T303).
 | `email` | email |  | Their sign-in email |
 | `role` | string | one of `admin`, `analyst`, `viewer` | Their role; T303 keeps it in step with the custom claim |
 | `updated_at` | timestamp |  | When their role last changed |
+
+## `outbox/{event_id}`
+
+One per event whose changes Pub/Sub does not have yet, written by the API: an event's changes on their way to BigQuery (T306).
+
+| Field | Type | Values | Meaning |
+| --- | --- | --- | --- |
+| `event_id` | UUID, as text |  | The event that wrote them, as text |
+| `messages` | list of strings |  | One Pub/Sub message per document the event wrote: a row of raw.changes, as JSON text |
+| `created_at` | timestamp |  | When the API wrote them: each message's written_at |

@@ -33,8 +33,9 @@ emulator = pytest.mark.skipif(
 STAFF = frozenset({"viewer", "analyst", "admin"})
 
 # Who may read each collection, a document or the whole listing. Every role
-# reads what the dashboard shows; nobody reads what nothing writes yet. Staff
-# also read their own users/{uid}, which a test below checks on its own.
+# reads what the dashboard shows; nobody reads what nothing writes yet, or
+# the outbox, which only the API uses (T306). Staff also read their own
+# users/{uid}, which a test below checks on its own.
 READERS: dict[str, frozenset[str]] = {
     "customers": STAFF,
     "scores": STAFF,
@@ -44,6 +45,7 @@ READERS: dict[str, frozenset[str]] = {
     "rules": frozenset(),
     "actions": frozenset(),
     "models": frozenset(),
+    "outbox": frozenset(),
 }
 
 # Each kind of caller, by the claims its token adds; None is no sign-in.

@@ -83,7 +83,7 @@ jobs:
             fitcore/pyproject.toml
             api/pyproject.toml
 
-      - name: Set up Java (for the Firestore emulator)
+      - name: Set up Java (for the Firestore and Pub/Sub emulators)
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -100,8 +100,8 @@ jobs:
       - name: Install fitcore and the API with dev tools
         run: python -m pip install -e "fitcore[dev]" -e "api[dev]"
 
-      - name: Firestore and Auth tests against the emulators
-        run: firebase emulators:exec --only firestore,auth --project demo-cfi "pytest fitcore/tests/test_round_trip.py api/tests/test_firestore_store.py api/tests/test_firestore_rules.py api/tests/test_roles.py api/tests/test_golden_api.py -rs --junitxml=/tmp/round-trip.xml"
+      - name: Firestore, Auth and Pub/Sub tests against the emulators
+        run: firebase emulators:exec --only firestore,auth,pubsub --project demo-cfi "pytest fitcore/tests/test_round_trip.py api/tests/test_firestore_store.py api/tests/test_firestore_rules.py api/tests/test_roles.py api/tests/test_golden_api.py api/tests/test_export.py -rs --junitxml=/tmp/round-trip.xml"
 
       - name: Fail if any emulator test was skipped
         run: grep -q 'skipped="0"' /tmp/round-trip.xml
@@ -124,29 +124,6 @@ jobs:
       - name: Test
         # Node's own test runner: the dashboard has no npm packages yet.
         run: node --test dashboard/tests/*.test.js
-
-  bigquery:
-    name: bigquery (build + settings)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v6
-
-      - name: Set up Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: bigquery/package-lock.json
-
-      - name: Install the kit
-        run: npm ci --prefix bigquery
-
-      - name: Build
-        run: npm run --prefix bigquery build
-
-      - name: Every instance sets every kit setting, every function runs in Singapore
-        run: npm run --prefix bigquery check
 
   container:
     name: container (build + health)
@@ -213,7 +190,7 @@ jobs:
     name: deploy to dev
     # A merge: a push to main, and only after every check above passed.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [fitcore, api, emulator, dashboard, bigquery, container, pre-commit]
+    needs: [fitcore, api, emulator, dashboard, container, pre-commit]
     runs-on: ubuntu-latest
     # One deploy at a time, in merge order. A newer merge that is waiting
     # replaces an older one that is waiting; a running deploy is never cut off.
@@ -260,7 +237,7 @@ jobs:
           --project "$PROJECT" --region "$REGION"
           --service-account cfi-api@cfi-dev-th26.iam.gserviceaccount.com
           --min-instances 0 --max-instances 2 --cpu 1 --memory 512Mi
-          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT"
+          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes"
           --set-secrets CFI_WRITE_KEY=cfi-write-key:latest
 
       - name: Set up Node (for the Firebase CLI)
