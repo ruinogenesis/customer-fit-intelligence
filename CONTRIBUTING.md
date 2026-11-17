@@ -28,6 +28,7 @@
 - Run every test with `pytest fitcore api`, and the dashboard's with `node --test dashboard/tests/*.test.js`.
 - Tests never touch real projects. Firestore and Auth tests use the emulators, and are skipped without them:
   `firebase emulators:exec --only firestore,auth --project demo-cfi "pytest fitcore api"`
+- Scores are pinned by the golden replay (T309): a frozen event log, replayed through fitcore and through the API with each store, must match `notebooks/results/t309_golden.json`. A change meant to move scores re-runs `python notebooks/t309_golden.py` and commits the new golden file with it, so the review sees every score that moved.
 
 ## Data and security
 
