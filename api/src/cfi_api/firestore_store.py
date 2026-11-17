@@ -6,16 +6,29 @@ scores and writes one event inside a Firestore transaction, so an event for
 a customer that another event changed meanwhile is scored again on top of
 that change; nothing is overwritten. After MAX_ATTEMPTS tries it gives up
 with Busy, and the API asks the sender to try again.
+
+With outbox=True the transaction also writes the event's outbox entry
+(cfi_api.export, T306). Its time is read after the transaction's reads, so
+when two events change one document, the one that commits later has the
+later time: that is the order BigQuery's views go by.
 """
 
+from datetime import UTC, datetime
 from typing import Any
 
 from fitcore.documents import customer_from_document, order_from_document
-from fitcore.scoring import Applied, Customer, Order
+from fitcore.scoring import Customer, Order
 from google.api_core.exceptions import Aborted
 from google.cloud import firestore
+from google.cloud.firestore import FieldFilter
 
-from cfi_api.store import Busy, EventRecord, Work, writes
+from cfi_api.export import (
+    OutboxEntry,
+    outbox_document,
+    outbox_entry,
+    outbox_from_document,
+)
+from cfi_api.store import Busy, EventRecord, Handled, Work, writes
 
 # Tries per event before giving up: the client library's default is 5.
 MAX_ATTEMPTS = 10
@@ -54,32 +67,47 @@ class FirestoreReader:
 class FirestoreStore(FirestoreReader):
     """A Store in Firestore, through the client it is given."""
 
-    def __init__(self, client: firestore.Client) -> None:
+    def __init__(self, client: firestore.Client, *, outbox: bool = False) -> None:
         super().__init__(client)
+        self._outbox = outbox
 
-    def handle(
-        self, event: dict[str, Any], work: Work
-    ) -> tuple[dict[str, Any], Applied | None]:
+    def handle(self, event: dict[str, Any], work: Work) -> Handled:
         @firestore.transactional
-        def run(
-            transaction: firestore.Transaction,
-        ) -> tuple[dict[str, Any], Applied | None]:
+        def run(transaction: firestore.Transaction) -> Handled:
             result, applied = work(FirestoreReader(self._client, transaction))
-            if applied is not None:
-                record = EventRecord(event, result)
-                for path, document in writes(record, applied, result["model_version"]):
-                    transaction.set(self._client.document(path), document)
-            return result, applied
+            if applied is None:
+                return Handled(result, None, None)
+            record = EventRecord(event, result)
+            documents = writes(record, applied, result["model_version"])
+            entry = None
+            if self._outbox:
+                now = datetime.now(UTC)
+                entry = outbox_entry(event["event_id"], documents, now)
+                documents.append((f"outbox/{entry.event_id}", outbox_document(entry)))
+            for path, document in documents:
+                transaction.set(self._client.document(path), document)
+            return Handled(result, applied, entry)
 
         try:
-            done: tuple[dict[str, Any], Applied | None] = run(
-                self._client.transaction(max_attempts=MAX_ATTEMPTS)
-            )
+            done: Handled = run(self._client.transaction(max_attempts=MAX_ATTEMPTS))
         except (Aborted, ValueError) as err:
             if gave_up(err):
                 raise Busy(str(err)) from err
             raise
         return done
+
+    def unsent(self, before: datetime, limit: int) -> list[OutboxEntry]:
+        query = (
+            self._client.collection("outbox")
+            .where(filter=FieldFilter("created_at", "<", before))
+            .order_by("created_at")
+            .limit(limit)
+        )
+        found = (snapshot.to_dict() for snapshot in query.stream())
+        return [outbox_from_document(document) for document in found if document]
+
+    def sent(self, event_id: str) -> None:
+        self._client.document(f"outbox/{event_id}").delete()
 
 
 def gave_up(err: Exception) -> bool:

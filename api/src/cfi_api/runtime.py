@@ -1,4 +1,5 @@
-"""What the app runs with, set up once in create_app: the model and the store."""
+"""What the app runs with, set up once in create_app: the model, the store
+and the publisher."""
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -6,6 +7,7 @@ from pathlib import Path
 from fitcore.model import ModelParams
 from flask import current_app
 
+from cfi_api.export import Publisher, PubSubPublisher
 from cfi_api.store import MemoryStore, Store
 
 
@@ -30,22 +32,35 @@ def load_model(path: str | None, version: object) -> LiveModel | None:
     return LiveModel(ModelParams.from_json(Path(path).read_bytes()), str(version))
 
 
-def make_store(kind: str, project: str | None) -> Store:
-    """A MemoryStore for "memory", or a FirestoreStore for "firestore".
+def make_store(kind: str, project: str | None, *, outbox: bool = False) -> Store:
+    """A MemoryStore for "memory", or a FirestoreStore for "firestore", each
+    with an outbox if asked (T306).
 
     The Firestore client is imported only when it is used: it is slow to
     import, and most tests never need it. Raises ValueError for any other
     kind.
     """
     if kind == "memory":
-        return MemoryStore()
+        return MemoryStore(outbox=outbox)
     if kind == "firestore":
         from google.cloud import firestore
 
         from cfi_api.firestore_store import FirestoreStore
 
-        return FirestoreStore(firestore.Client(project=project))
+        return FirestoreStore(firestore.Client(project=project), outbox=outbox)
     raise ValueError(f"STORE must be 'memory' or 'firestore', got {kind!r}")
+
+
+def make_publisher(topic: str | None, project: str | None) -> Publisher | None:
+    """A PubSubPublisher to topic in project, or None without a topic.
+
+    Raises ValueError for a topic without a project.
+    """
+    if topic is None:
+        return None
+    if project is None:
+        raise ValueError("TOPIC needs PROJECT")
+    return PubSubPublisher(project, topic)
 
 
 def live_model() -> LiveModel | None:
@@ -57,4 +72,10 @@ def live_model() -> LiveModel | None:
 def store() -> Store:
     """The current app's store."""
     current: Store = current_app.extensions["cfi_store"]
+    return current
+
+
+def publisher() -> Publisher | None:
+    """The current app's publisher, or None when it exports nothing."""
+    current: Publisher | None = current_app.extensions["cfi_publisher"]
     return current

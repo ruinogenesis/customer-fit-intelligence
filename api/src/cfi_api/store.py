@@ -15,18 +15,23 @@ handle() runs one event's reads, its scoring and its writes as one unit
 (T302): no other event's change can land between them, so two events for
 one customer at the same moment are applied one after the other instead of
 the second erasing the first.
+
+A store made with outbox=True also saves the event's outbox entry in that
+unit, for cfi_api.export to send on to BigQuery (T306).
 """
 
 import copy
 import threading
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
-from typing import Any, Protocol
+from datetime import UTC, datetime
+from typing import Any, NamedTuple, Protocol
 
 from fitcore.documents import check, customer_document, order_document
 from fitcore.model import LATENTS
 from fitcore.scoring import Applied, Customer, Order, Scores
+
+from cfi_api.export import OutboxEntry, outbox_document, outbox_entry
 
 
 @dataclass(frozen=True)
@@ -127,6 +132,15 @@ class Reader(Protocol):
 Work = Callable[[Reader], tuple[dict[str, Any], Applied | None]]
 
 
+class Handled(NamedTuple):
+    """What handle() returns: work's result and change, and the outbox entry
+    it saved (None if it saved nothing or the store has no outbox)."""
+
+    result: dict[str, Any]
+    applied: Applied | None
+    outbox: OutboxEntry | None
+
+
 class Busy(Exception):
     """The store gave up: too many events for one customer at the same moment.
 
@@ -135,17 +149,22 @@ class Busy(Exception):
 
 
 class Store(Reader, Protocol):
-    def handle(
-        self, event: dict[str, Any], work: Work
-    ) -> tuple[dict[str, Any], Applied | None]:
-        """Run work, then save what it changed, as one unit, and return what
-        work returned.
+    def handle(self, event: dict[str, Any], work: Work) -> Handled:
+        """Run work, then save what it changed, as one unit.
 
         No other event's change lands between work's reads and the save: the
-        event, the customer, the order if any, and the history entry if an
-        order was scored are saved together, or not at all. Raises Busy if
-        the store gives up.
+        event, the customer, the order if any, the history entry if an order
+        was scored, and the outbox entry if the store has an outbox are saved
+        together, or not at all. Raises Busy if the store gives up.
         """
+        ...
+
+    def unsent(self, before: datetime, limit: int) -> list[OutboxEntry]:
+        """Up to limit outbox entries created before `before`, oldest first."""
+        ...
+
+    def sent(self, event_id: str) -> None:
+        """Delete event_id's outbox entry: Pub/Sub has every message in it."""
         ...
 
 
@@ -159,11 +178,13 @@ class MemoryStore:
     One lock runs one event at a time, as a transaction would.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, *, outbox: bool = False) -> None:
         self.events: dict[str, EventRecord] = {}
         self.customers: dict[str, Customer] = {}
         self.orders: dict[str, Order] = {}
         self.history: dict[str, list[HistoryEntry]] = {}
+        self.has_outbox = outbox
+        self.outbox: dict[str, OutboxEntry] = {}
         self._lock = threading.Lock()
 
     def find_event(self, event_id: str) -> EventRecord | None:
@@ -176,15 +197,29 @@ class MemoryStore:
     def find_order(self, order_id: str) -> Order | None:
         return self.orders.get(order_id)
 
-    def handle(
-        self, event: dict[str, Any], work: Work
-    ) -> tuple[dict[str, Any], Applied | None]:
+    def handle(self, event: dict[str, Any], work: Work) -> Handled:
+        entry = None
         with self._lock:
             result, applied = work(self)
             if applied is not None:
                 record = EventRecord(event, result)
                 self.save(record, applied, result["model_version"])
-        return result, applied
+                if self.has_outbox:
+                    documents = writes(record, applied, result["model_version"])
+                    now = datetime.now(UTC)
+                    entry = outbox_entry(event["event_id"], documents, now)
+                    outbox_document(entry)  # checks what Firestore would get
+                    self.outbox[entry.event_id] = entry
+        return Handled(result, applied, entry)
+
+    def unsent(self, before: datetime, limit: int) -> list[OutboxEntry]:
+        with self._lock:
+            old = [e for e in self.outbox.values() if e.created_at < before]
+        return sorted(old, key=lambda entry: entry.created_at)[:limit]
+
+    def sent(self, event_id: str) -> None:
+        with self._lock:
+            self.outbox.pop(event_id, None)
 
     def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
         """Save one event's changes; handle() calls it under the lock."""

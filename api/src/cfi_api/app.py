@@ -1,4 +1,5 @@
-"""The app factory: configuration, the model, the store and the blueprints."""
+"""The app factory: configuration, the model, the store, the publisher and
+the blueprints."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -8,7 +9,7 @@ from flask import Flask
 from cfi_api import events, health, score
 from cfi_api.access import SECURITY_SCHEMES, require_access
 from cfi_api.errors import CfiApi
-from cfi_api.runtime import load_model, make_store
+from cfi_api.runtime import load_model, make_publisher, make_store
 
 API_PREFIX = "/api/v1"
 
@@ -34,6 +35,9 @@ DEFAULTS: dict[str, Any] = {
     "AUTH": None,
     # The integration key that opens POST /events as X-CFI-Key; needs AUTH.
     "WRITE_KEY": None,
+    # The Pub/Sub topic that takes every saved document on to BigQuery
+    # (cfi_api.export, T306); needs PROJECT. None exports nothing.
+    "TOPIC": None,
 }
 
 
@@ -42,8 +46,8 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
 
     An environment variable drops its prefix: CFI_MODEL_PATH sets
     MODEL_PATH. Tests pass their own config. Raises ValueError for a model
-    with only a path or only a version, an unknown store, an unknown AUTH or
-    a write key that would not be checked.
+    with only a path or only a version, an unknown store, an unknown AUTH, a
+    write key that would not be checked or a topic without a project.
     """
     # No static files: the API serves only its endpoints.
     app = Flask(__name__, static_folder=None)
@@ -53,7 +57,11 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     app.extensions["cfi_model"] = load_model(
         app.config["MODEL_PATH"], app.config["MODEL_VERSION"]
     )
-    app.extensions["cfi_store"] = make_store(app.config["STORE"], app.config["PROJECT"])
+    publisher = make_publisher(app.config["TOPIC"], app.config["PROJECT"])
+    app.extensions["cfi_publisher"] = publisher
+    app.extensions["cfi_store"] = make_store(
+        app.config["STORE"], app.config["PROJECT"], outbox=publisher is not None
+    )
     require_access(
         app, app.config["AUTH"], app.config["PROJECT"], app.config["WRITE_KEY"]
     )

@@ -1,6 +1,6 @@
 """Firestore documents v1: the shape of everything the system keeps (T301).
 
-COLLECTIONS lists the eight collections, each with the schema its documents
+COLLECTIONS lists the nine collections, each with the schema its documents
 must pass. check() validates one document before it is written: the API's
 stores call it on every write, so a document of the wrong shape fails the
 request instead of reaching Firestore. Reads are not checked.
@@ -191,7 +191,7 @@ def _covers_every_prior(value: Mapping[str, Any]) -> None:
         raise ValidationError(f"Must cover exactly {', '.join(PRIORS)}.")
 
 
-# --- The eight collections ---
+# --- The nine collections ---
 
 
 class EventDocument(StrictSchema):
@@ -363,6 +363,26 @@ class UserDocument(StrictSchema):
     updated_at = _time("When their role last changed")
 
 
+# Written in the event's own transaction, and deleted once Pub/Sub has
+# every message (cfi_api.export).
+class OutboxDocument(StrictSchema):
+    """outbox/{event_id}: an event's changes on their way to BigQuery (T306)."""
+
+    event_id = fields.UUID(
+        required=True, metadata={"description": "The event that wrote them, as text"}
+    )
+    messages = fields.List(
+        fields.String(validate=validate.Length(min=1)),
+        required=True,
+        validate=validate.Length(min=1),
+        metadata={
+            "description": "One Pub/Sub message per document the event wrote: "
+            "a row of raw.changes, as JSON text"
+        },
+    )
+    created_at = _time("When the API wrote them: each message's written_at")
+
+
 # --- The registry ---
 
 
@@ -400,6 +420,12 @@ COLLECTIONS: Mapping[str, Collection] = {
         "models/{version}", ModelDocument, "model version", "the training pipeline"
     ),
     "users": Collection("users/{uid}", UserDocument, "dashboard user", "admins"),
+    "outbox": Collection(
+        "outbox/{event_id}",
+        OutboxDocument,
+        "event whose changes Pub/Sub does not have yet",
+        "the API",
+    ),
 }
 
 
@@ -520,8 +546,10 @@ def _kind(field: fields.Field) -> str:
         return "email"
     if isinstance(field, fields.Nested | fields.Dict):
         return "map"
-    if isinstance(field, fields.List):
+    if isinstance(field, fields.List) and isinstance(field.inner, fields.Nested):
         return "list of maps"
+    if isinstance(field, fields.List):
+        return "list of strings"
     return "string"
 
 

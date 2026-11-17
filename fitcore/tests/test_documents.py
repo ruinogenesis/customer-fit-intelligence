@@ -130,13 +130,18 @@ def _examples() -> dict[str, dict[str, Any]]:
             "role": "analyst",
             "updated_at": T0,
         },
+        "outbox": {
+            "event_id": EVENT_ID,
+            "messages": ['{"collection": "events"}'],
+            "created_at": T0,
+        },
     }
 
 
 # --- Every collection ---
 
 
-def test_there_are_eight_collections_with_an_example_each() -> None:
+def test_there_are_nine_collections_with_an_example_each() -> None:
     assert (
         set(COLLECTIONS)
         == set(_examples())
@@ -149,6 +154,7 @@ def test_there_are_eight_collections_with_an_example_each() -> None:
             "actions",
             "models",
             "users",
+            "outbox",
         }
     )
 
@@ -215,6 +221,8 @@ def _refused(collection: str, change: dict[str, Any], match: str) -> None:
         ("users", {"role": "owner"}, "role"),
         ("users", {"email": "not an email"}, "email"),
         ("events", {"result": {}}, "result"),
+        ("outbox", {"messages": []}, "messages"),
+        ("outbox", {"messages": [""]}, "messages"),
     ],
 )
 def test_a_document_that_breaks_a_rule_is_refused(

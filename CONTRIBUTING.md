@@ -26,18 +26,18 @@
 - Every change in behaviour comes with a test. Write the test first where practical.
 - See a new test fail once before trusting it.
 - Run every test with `pytest fitcore api`, and the dashboard's with `node --test dashboard/tests/*.test.js`.
-- Tests never touch real projects. Firestore and Auth tests use the emulators, and are skipped without them:
-  `firebase emulators:exec --only firestore,auth --project demo-cfi "pytest fitcore api"`
+- Tests never touch real projects. Firestore, Auth and Pub/Sub tests use the emulators, and are skipped without them:
+  `firebase emulators:exec --only firestore,auth,pubsub --project demo-cfi "pytest fitcore api"`
 - Scores are pinned by the golden replay (T309): a frozen event log, replayed through fitcore and through the API with each store, must match `notebooks/results/t309_golden.json`. A change meant to move scores re-runs `python notebooks/t309_golden.py` and commits the new golden file with it, so the review sees every score that moved.
 
 ## Data and security
 
-- Never commit secrets: no `.env` files, no service-account keys. The one exception is `bigquery/instances/*/.env`: the BigQuery kit's settings, which never hold a secret (T306).
+- Never commit secrets: no `.env` files, no service-account keys.
 - Money is whole satang. Timestamps carry a timezone and are stored in UTC.
 - Every Firestore document has a schema in `fitcore.documents`, and the API checks each one before writing it. After changing a schema, run `python -m fitcore.documents > fitcore/DOCUMENTS.md`.
 - No app writes to Firestore, and staff read only what `firestore.rules` lets their role read (T304). `READERS` in `api/tests/test_firestore_rules.py` is that table; a new collection stays locked until its task adds a row.
-- Every change to events, customers, orders and score history streams to BigQuery's `raw` dataset in Bangkok, through Firebase's function kit in `bigquery/` (T306). `STREAMED` in `api/tests/test_bigquery_export.py` says which collections stream; a new collection fails it until its task decides. Rows that fail every retry land in the `bigquery_failures` collection, which the kit writes without a `fitcore.documents` schema.
-- Deploys go through CI only, never from a laptop. The one exception is the BigQuery kit's first deploy, by a project owner, because it creates the kit's service account and grants its roles (T306).
+- Every document `POST /events` saves also goes to BigQuery (T306). `EXPORTED` and `NOT_EXPORTED` in `api/tests/test_export.py` say which collections do; a new collection joins one or the other.
+- Deploys go through CI only, never from a laptop.
 
 ## Decisions
 

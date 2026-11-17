@@ -15,7 +15,7 @@ It does all the act automatically with measured actions.
 
 ## Local development
 
-Start the Firestore, Auth, Functions and Hosting emulators:
+Start the Firestore, Auth, Pub/Sub, Functions and Hosting emulators:
 
     firebase emulators:start --project demo-cfi
 

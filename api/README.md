@@ -17,6 +17,8 @@ Settings come from `CFI_*` environment variables (the prefix is dropped):
   locally, nothing is checked.
 - `CFI_WRITE_KEY`: the integration key that opens `POST /events` in the
   header `X-CFI-Key`; it needs `CFI_AUTH`.
+- `CFI_TOPIC`: the Pub/Sub topic that takes every saved document on to
+  BigQuery (below); it needs `CFI_PROJECT`. Unset, nothing is exported.
 
 Run it locally with the reference model, from the repo root:
 
@@ -48,6 +50,24 @@ Every error is `{"code": ..., "message": ...}`: `code` is the HTTP status
 name in snake case, such as `not_found`. Validation errors (400, 422) add
 `errors`; an event that does not fit what is stored, such as a delivery
 for an order never placed, is a 409 `conflict`.
+
+## Export to BigQuery (T306)
+
+Every document `POST /events` saves also goes to BigQuery, as a row of
+`raw.changes`: its collection, path, event, the time the API saved it, and
+the document itself as JSON. `bigquery/raw.sql` makes the table, and a view
+per collection holding the latest version of each document: `raw.events`,
+`raw.customers`, `raw.orders` and `raw.scores`.
+
+The rows travel as Pub/Sub messages, one per document, to the topic
+`raw-changes`; its BigQuery subscription `raw-changes-bigquery` writes them
+to the table. Each event's messages are first saved in an `outbox` document
+in the event's own transaction (`cfi_api.export`), so a message exists
+exactly when its document does. After the commit the API publishes them and
+deletes the entry. If Pub/Sub fails, the event is still answered and the
+entry stays; a later `POST /events` sends entries over a minute old, ten at
+a time. So a row can arrive twice, and the views keep one per
+`(event_id, path)`. The messages and the topic stay in `asia-southeast3`.
 
 ## Who may call what (T303)
 
@@ -90,8 +110,8 @@ request to it (`firebase.json`, T205), so it answers on the Hosting domain
 too: https://cfi-dev-th26.web.app/api/v1/health. The image comes from the
 `Dockerfile` at the repo root, and `.dockerignore` lets in only fitcore, the
 API and the model, `notebooks/results/t112_model.json`. The service runs as
-the service account `cfi-api`, which may only read and write Firestore and
-read the secret `cfi-write-key`.
+the service account `cfi-api`, which may only read and write Firestore,
+read the secret `cfi-write-key` and publish to the topic `raw-changes`.
 
 The service is public, because Hosting can only reach a service that takes
 calls without Google credentials. So the API checks its callers itself
@@ -123,8 +143,8 @@ Send fake orders to it with the key from Secret Manager:
       --secret cfi-write-key --project cfi-dev-th26)
     python -m cfi_api.fake_orders --url https://cfi-dev-th26.web.app
 
-A full fake-order run is about 3,100 Firestore writes, of the 20,000 free
-per day.
+A full fake-order run is about 4,000 Firestore writes and 800 deletes, of
+the 20,000 of each free per day.
 
 One-time setup of a project (dev: T204, T205 and T208):
 
@@ -152,3 +172,12 @@ One-time setup of a project (dev: T204, T205 and T208):
 9. In the Firebase console, start Authentication and turn on the
    Email/Password provider. In its settings, untick "Enable create
    (sign-up)": accounts come only from `python -m cfi_api.roles` (T303).
+10. Export to BigQuery (T306): enable `pubsub.googleapis.com` and
+    `bigquery.googleapis.com`, and run `bigquery/raw.sql` (the command is at
+    its top). Create the topic `raw-changes` with
+    `--message-storage-policy-allowed-regions=asia-southeast3`, and grant
+    `cfi-api` `roles/pubsub.publisher` on it. Grant the Pub/Sub service agent
+    `service-PROJECT_NUMBER@gcp-sa-pubsub.iam.gserviceaccount.com`
+    `roles/bigquery.dataEditor` on the table `raw.changes`. Then create the
+    subscription `raw-changes-bigquery` on the topic with
+    `--bigquery-table=PROJECT:raw.changes --use-table-schema --write-metadata`.

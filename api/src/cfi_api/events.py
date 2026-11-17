@@ -3,9 +3,11 @@
 receive() holds every step but the save, so POST /score (cfi_api.score)
 answers exactly as this endpoint would, from a Reader that cannot save.
 POST /events runs it through the store's handle(), which saves what it
-changed in the same transaction as its reads (T302).
+changed in the same transaction as its reads (T302), then sends what was
+saved on to BigQuery (cfi_api.export, T306).
 """
 
+from datetime import UTC, datetime
 from typing import Any
 
 from fitcore.documents import EventResultSchema
@@ -18,7 +20,8 @@ from flask_smorest import abort as abort_with
 
 from cfi_api.access import ACCESS
 from cfi_api.errors import ErrorSchema
-from cfi_api.runtime import live_model, store
+from cfi_api.export import export
+from cfi_api.runtime import live_model, publisher, store
 from cfi_api.store import Busy, Reader
 
 blp = Blueprint("events", __name__, description="Events in, scores out")
@@ -98,7 +101,9 @@ class Events(MethodView):
         """
         event = as_stored(event)
         try:
-            result, applied = store().handle(event, lambda db: receive(event, db))
+            result, applied, entry = store().handle(
+                event, lambda db: receive(event, db)
+            )
         except Busy:
             abort_with(
                 503,
@@ -106,6 +111,9 @@ class Events(MethodView):
                 "send it again shortly.",
                 headers={"Retry-After": str(RETRY_AFTER)},
             )
+        to_bigquery = publisher()
+        if to_bigquery is not None:
+            export(store(), to_bigquery, entry, datetime.now(UTC))
         if applied is None:
             return result, 200
         return result
