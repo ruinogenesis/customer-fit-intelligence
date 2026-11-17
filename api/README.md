@@ -36,6 +36,12 @@ Run it locally with the reference model, from the repo root:
   arrive at once it answers 503 with `Retry-After`: send it again then.
 - What-if: `POST /api/v1/score` takes the same event and answers (200) just
   as `/events` would right now, but saves nothing.
+- Reads for the dashboard (T311): `GET /api/v1/customers` (riskiest first;
+  filter with `quadrant` and `min_churn_risk`), `/customers/{id}`,
+  `/customers/{id}/scores` and `/customers/{id}/orders` (newest first), and
+  `/matrix` (customers per quadrant). Lists come a page at a time: `limit`
+  (default 50, at most 200), then the answer's `next_cursor` as `cursor`
+  for the next page. An unknown query parameter is a 422.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md).
@@ -77,6 +83,7 @@ against the table `ACCESS` in `src/cfi_api/access.py`:
 | Request | Who may |
 | --- | --- |
 | `GET /health`, `/docs`, `/openapi.json` | anyone |
+| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix` | every staff role |
 | `POST /score` | analysts and admins |
 | `POST /events` | admins, and the ordering app with the integration key |
 | anything the table does not list | admins |
@@ -159,7 +166,8 @@ One-time setup of a project (dev: T204, T205 and T208):
    `api/artifact-cleanup.json`.
 6. Create the service account `cfi-deployer`. Grant it
    `roles/run.developer`, `roles/firebasehosting.admin`,
-   `roles/firebaserules.admin` (T304), `roles/serviceusage.apiKeysViewer` and
+   `roles/firebaserules.admin` (T304), `roles/datastore.indexAdmin` (T311),
+   `roles/serviceusage.apiKeysViewer` and
    `roles/serviceusage.serviceUsageConsumer` on the project,
    `roles/iam.serviceAccountUser` on `cfi-api`, and
    `roles/artifactregistry.writer` on the repo `cfi`.

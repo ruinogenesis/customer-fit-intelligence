@@ -189,6 +189,16 @@ def test_reads_and_options_need_nothing(client: FlaskClient) -> None:
     assert client.options(EVENTS).status_code == 200
 
 
+def test_the_dashboard_reads_need_a_staff_role(client: FlaskClient) -> None:
+    assert client.post(EVENTS, json=EVENT, headers=bearer("admin")).status_code == 201
+    customer = f"/api/v1/customers/{EVENT['customer_id']}"
+    reads = ["/api/v1/customers", customer, f"{customer}/scores"]
+    for path in [*reads, f"{customer}/orders", "/api/v1/matrix"]:
+        assert client.get(path).status_code == 401
+        assert client.get(path, headers=bearer()).status_code == 403  # no role
+        assert client.get(path, headers=bearer("viewer")).status_code == 200
+
+
 def test_a_path_nobody_serves_answers_404_or_405(client: FlaskClient) -> None:
     assert client.post("/api/v1/nothing-here").status_code == 404
     assert client.post("/api/v1/health").status_code == 405

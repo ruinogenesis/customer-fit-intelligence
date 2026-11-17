@@ -17,10 +17,12 @@ from datetime import UTC, datetime
 from typing import Any
 
 from fitcore.documents import customer_from_document, order_from_document
+from fitcore.model import QUADRANTS
 from fitcore.scoring import Customer, Order
 from google.api_core.exceptions import Aborted
 from google.cloud import firestore
 from google.cloud.firestore import FieldFilter
+from google.cloud.firestore_v1.field_path import FieldPath
 
 from cfi_api.export import (
     OutboxEntry,
@@ -28,7 +30,32 @@ from cfi_api.export import (
     outbox_entry,
     outbox_from_document,
 )
-from cfi_api.store import Busy, EventRecord, Handled, Work, writes
+from cfi_api.store import (
+    Busy,
+    CustomerKey,
+    EventRecord,
+    Handled,
+    Page,
+    TimeKey,
+    Work,
+    customer_key,
+    order_key,
+    score_key,
+    writes,
+)
+
+DESCENDING = firestore.Query.DESCENDING
+# The document id, as order_by and start_after name it.
+NAME = FieldPath.document_id()
+
+# The composite indexes the read queries need: (collection, fields in
+# order). firestore.indexes.json must list them, and CI deploys it; the
+# emulator runs any query without one, so only this list and the test that
+# compares it with the file stand in for real Firestore.
+COMPOSITE_INDEXES = (
+    ("customers", (("quadrant", "ASCENDING"), ("churn_risk", "DESCENDING"))),
+    ("orders", (("customer_id", "ASCENDING"), ("placed_at", "DESCENDING"))),
+)
 
 # Tries per event before giving up: the client library's default is 5.
 MAX_ATTEMPTS = 10
@@ -109,6 +136,70 @@ class FirestoreStore(FirestoreReader):
     def sent(self, event_id: str) -> None:
         self._client.document(f"outbox/{event_id}").delete()
 
+    # --- Browser: the read endpoints (T311) ---
+    # Each list is ordered high to low, ending with the document id, so a
+    # page resumes exactly after the last one. Lists that filter on one field
+    # and sort on another need the composite indexes in firestore.indexes.json.
+
+    def customer_document(self, customer_id: str) -> dict[str, Any] | None:
+        return self._get(f"customers/{customer_id}")
+
+    def list_customers(
+        self,
+        *,
+        quadrant: str | None,
+        min_churn_risk: float | None,
+        limit: int,
+        after: CustomerKey | None,
+    ) -> Page:
+        query: Any = self._client.collection("customers")
+        if quadrant is not None:
+            query = query.where(filter=FieldFilter("quadrant", "==", quadrant))
+        if min_churn_risk is not None:
+            query = query.where(filter=FieldFilter("churn_risk", ">=", min_churn_risk))
+        query = query.order_by("churn_risk", direction=DESCENDING).order_by(
+            NAME, direction=DESCENDING
+        )
+        if after is not None:
+            query = query.start_after({"churn_risk": after[0], NAME: after[1]})
+        return _page(query, customer_key, limit)
+
+    def list_scores(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        query: Any = (
+            self._client.collection(f"customers/{customer_id}/scores")
+            .order_by("at", direction=DESCENDING)
+            .order_by(NAME, direction=DESCENDING)
+        )
+        if after is not None:
+            query = query.start_after({"at": after[0], NAME: after[1]})
+        return _page(query, score_key, limit)
+
+    def list_orders(
+        self, customer_id: str, *, limit: int, after: TimeKey | None
+    ) -> Page:
+        query: Any = (
+            self._client.collection("orders")
+            .where(filter=FieldFilter("customer_id", "==", customer_id))
+            .order_by("placed_at", direction=DESCENDING)
+            .order_by(NAME, direction=DESCENDING)
+        )
+        if after is not None:
+            query = query.start_after({"placed_at": after[0], NAME: after[1]})
+        return _page(query, order_key, limit)
+
+    def count_quadrants(self) -> dict[str | None, int]:
+        # Typed loosely: the client's hints say count().get() gives a flat
+        # list, but it gives one list of results per answer.
+        customers: Any = self._client.collection("customers")
+        counts: dict[str | None, int] = {}
+        for quadrant in (*QUADRANTS, None):
+            query = customers.where(filter=FieldFilter("quadrant", "==", quadrant))
+            # One aggregation per quadrant: billed by index entries, not documents.
+            counts[quadrant] = int(query.count().get()[0][0].value)
+        return counts
+
 
 def gave_up(err: Exception) -> bool:
     """Whether err is Firestore giving up on contention: Aborted (a read gave
@@ -117,3 +208,10 @@ def gave_up(err: Exception) -> bool:
     if isinstance(err, Aborted):
         return True
     return isinstance(err, ValueError) and isinstance(err.__cause__, Aborted)
+
+
+def _page(query: Any, key: Any, limit: int) -> Page:
+    """The first limit documents query finds, and whether there are more."""
+    found = [snapshot.to_dict() for snapshot in query.limit(limit + 1).stream()]
+    page = [document for document in found[:limit] if document is not None]
+    return Page(page, key(page[-1]) if len(found) > limit else None)
