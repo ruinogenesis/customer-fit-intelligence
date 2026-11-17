@@ -125,6 +125,29 @@ jobs:
         # Node's own test runner: the dashboard has no npm packages yet.
         run: node --test dashboard/tests/*.test.js
 
+  bigquery:
+    name: bigquery (build + settings)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: bigquery/package-lock.json
+
+      - name: Install the kit
+        run: npm ci --prefix bigquery
+
+      - name: Build
+        run: npm run --prefix bigquery build
+
+      - name: Every instance sets every kit setting, every function runs in Singapore
+        run: npm run --prefix bigquery check
+
   container:
     name: container (build + health)
     runs-on: ubuntu-latest
@@ -190,7 +213,7 @@ jobs:
     name: deploy to dev
     # A merge: a push to main, and only after every check above passed.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [fitcore, api, emulator, dashboard, container, pre-commit]
+    needs: [fitcore, api, emulator, dashboard, bigquery, container, pre-commit]
     runs-on: ubuntu-latest
     # One deploy at a time, in merge order. A newer merge that is waiting
     # replaces an older one that is waiting; a running deploy is never cut off.

@@ -5,6 +5,8 @@
 .env
 .env.*
 !.env.example
+# The BigQuery kit's settings, never secrets (T306, CONTRIBUTING.md)
+!bigquery/instances/*/.env
 *firebase-adminsdk*.json
 service-account*.json
 
@@ -23,8 +25,9 @@ build/
 # --- Jupyter ---
 .ipynb_checkpoints/
 
-# --- Node (dashboard, Firebase tools) ---
+# --- Node (dashboard, Firebase tools, the BigQuery kit) ---
 node_modules/
+bigquery/lib/
 
 # --- Firebase ---
 .firebase/

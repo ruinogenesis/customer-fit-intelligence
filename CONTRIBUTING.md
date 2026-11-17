@@ -32,11 +32,12 @@
 
 ## Data and security
 
-- Never commit secrets: no `.env` files, no service-account keys.
+- Never commit secrets: no `.env` files, no service-account keys. The one exception is `bigquery/instances/*/.env`: the BigQuery kit's settings, which never hold a secret (T306).
 - Money is whole satang. Timestamps carry a timezone and are stored in UTC.
 - Every Firestore document has a schema in `fitcore.documents`, and the API checks each one before writing it. After changing a schema, run `python -m fitcore.documents > fitcore/DOCUMENTS.md`.
 - No app writes to Firestore, and staff read only what `firestore.rules` lets their role read (T304). `READERS` in `api/tests/test_firestore_rules.py` is that table; a new collection stays locked until its task adds a row.
-- Deploys go through CI only, never from a laptop.
+- Every change to events, customers, orders and score history streams to BigQuery's `raw` dataset in Bangkok, through Firebase's function kit in `bigquery/` (T306). `STREAMED` in `api/tests/test_bigquery_export.py` says which collections stream; a new collection fails it until its task decides. Rows that fail every retry land in the `bigquery_failures` collection, which the kit writes without a `fitcore.documents` schema.
+- Deploys go through CI only, never from a laptop. The one exception is the BigQuery kit's first deploy, by a project owner, because it creates the kit's service account and grants its roles (T306).
 
 ## Decisions
 
