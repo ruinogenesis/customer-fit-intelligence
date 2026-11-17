@@ -1,5 +1,5 @@
-"""The app factory: configuration, the model, the store, the publisher and
-the blueprints."""
+"""The app factory: configuration, the model, the store, the publisher, the
+history and the blueprints."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -9,7 +9,7 @@ from flask import Flask
 from cfi_api import customers, events, health, matrix, score
 from cfi_api.access import SECURITY_SCHEMES, require_access
 from cfi_api.errors import CfiApi
-from cfi_api.runtime import load_model, make_publisher, make_store
+from cfi_api.runtime import load_model, make_history, make_publisher, make_store
 
 API_PREFIX = "/api/v1"
 
@@ -38,6 +38,9 @@ DEFAULTS: dict[str, Any] = {
     # The Pub/Sub topic that takes every saved document on to BigQuery
     # (cfi_api.export, T306); needs PROJECT. None exports nothing.
     "TOPIC": None,
+    # Where /matrix reads movement between two dates (cfi_api.history, T313):
+    # "bigquery", in PROJECT. None reads no history: movement answers 503.
+    "HISTORY": None,
 }
 
 
@@ -47,7 +50,8 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     An environment variable drops its prefix: CFI_MODEL_PATH sets
     MODEL_PATH. Tests pass their own config. Raises ValueError for a model
     with only a path or only a version, an unknown store, an unknown AUTH, a
-    write key that would not be checked or a topic without a project.
+    write key that would not be checked, a topic without a project or an
+    unknown history.
     """
     # No static files: the API serves only its endpoints.
     app = Flask(__name__, static_folder=None)
@@ -61,6 +65,9 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     app.extensions["cfi_publisher"] = publisher
     app.extensions["cfi_store"] = make_store(
         app.config["STORE"], app.config["PROJECT"], outbox=publisher is not None
+    )
+    app.extensions["cfi_history"] = make_history(
+        app.config["HISTORY"], app.config["PROJECT"]
     )
     require_access(
         app, app.config["AUTH"], app.config["PROJECT"], app.config["WRITE_KEY"]

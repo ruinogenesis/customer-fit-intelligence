@@ -19,6 +19,8 @@ Settings come from `CFI_*` environment variables (the prefix is dropped):
   header `X-CFI-Key`; it needs `CFI_AUTH`.
 - `CFI_TOPIC`: the Pub/Sub topic that takes every saved document on to
   BigQuery (below); it needs `CFI_PROJECT`. Unset, nothing is exported.
+- `CFI_HISTORY`: `bigquery` reads BigQuery's daily snapshots in
+  `CFI_PROJECT`, for movement on `/matrix`. Unset, movement answers 503.
 
 Run it locally with the reference model, from the repo root:
 
@@ -42,6 +44,12 @@ Run it locally with the reference model, from the repo root:
   `/matrix` (customers per quadrant). Lists come a page at a time: `limit`
   (default 50, at most 200), then the answer's `next_cursor` as `cursor`
   for the next page. An unknown query parameter is a 422.
+- Movement (T313): `GET /api/v1/matrix?from=2026-10-01&to=2026-11-17` adds
+  `movement`: the customers scored by the end of `to`, by their quadrant at
+  the end of `from` (or `unscored`), then at the end of `to`. Days are
+  Bangkok days, read from BigQuery's `features.daily`, so `to` must be
+  before today; a day with no snapshot yet (yesterday before the 02:00 run)
+  is a 422.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md).
@@ -194,3 +202,6 @@ One-time setup of a project (dev: T204, T205 and T208):
 12. Daily snapshots (T308): run `bigquery/features.sql`, then schedule
     `bigquery/features_daily.sql` as the service account `cfi-features`
     (bigquery/README.md has the steps).
+13. Movement (T313): grant `cfi-api` `roles/bigquery.jobUser` on the
+    project and `roles/bigquery.dataViewer` on the dataset `features`
+    (`GRANT ... ON SCHEMA features`).

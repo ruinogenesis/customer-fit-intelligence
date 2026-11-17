@@ -237,7 +237,7 @@ jobs:
           --project "$PROJECT" --region "$REGION"
           --service-account cfi-api@cfi-dev-th26.iam.gserviceaccount.com
           --min-instances 0 --max-instances 2 --cpu 1 --memory 512Mi
-          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes"
+          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes,CFI_HISTORY=bigquery"
           --set-secrets CFI_WRITE_KEY=cfi-write-key:latest
 
       - name: Set up Node (for the Firebase CLI)
