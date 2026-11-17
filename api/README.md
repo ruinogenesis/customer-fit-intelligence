@@ -191,3 +191,6 @@ One-time setup of a project (dev: T204, T205 and T208):
     `--bigquery-table=PROJECT:raw.changes --use-table-schema --write-metadata`.
 11. Labels (T307): run `bigquery/labels.sql` the same way, after `raw.sql`
     (bigquery/README.md).
+12. Daily snapshots (T308): run `bigquery/features.sql`, then schedule
+    `bigquery/features_daily.sql` as the service account `cfi-features`
+    (bigquery/README.md has the steps).

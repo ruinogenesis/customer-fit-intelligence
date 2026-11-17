@@ -29,7 +29,7 @@
 - Tests never touch real projects. Firestore, Auth and Pub/Sub tests use the emulators, and are skipped without them:
   `firebase emulators:exec --only firestore,auth,pubsub --project demo-cfi "pytest fitcore api"`
 - Scores are pinned by the golden replay (T309): a frozen event log, replayed through fitcore and through the API with each store, must match `notebooks/results/t309_golden.json`. A change meant to move scores re-runs `python notebooks/t309_golden.py` and commits the new golden file with it, so the review sees every score that moved.
-- BigQuery SQL lives in `bigquery/` (its README). `api/tests/test_labels.py` runs it on DuckDB through sqlglot, so keep to SQL that sqlglot translates.
+- BigQuery SQL lives in `bigquery/` (its README). The tests run it on DuckDB through sqlglot (`api/tests/bigquery_on_duckdb.py`), so keep to SQL that sqlglot translates.
 
 ## Data and security
 
