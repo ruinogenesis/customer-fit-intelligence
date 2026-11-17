@@ -7,7 +7,7 @@ History and training data, in `asia-southeast3`. Each file makes one dataset. Ru
 | --- | --- | --- |
 | `raw.sql` | `raw` | `raw.changes`: every document the API saves, as Pub/Sub delivers it (T306); a view per collection with each document's latest version |
 | `labels.sql` | `labels` | `labels.order_labels(horizon)`: `reorder_14d` and `churn_30d` for every order, as known at `horizon`; the view `labels.orders` uses now (T307) |
-| `features.sql` | `features` | `features.daily`: every customer on every Bangkok day since their first scoring, with their latest scores and the gaps behind them; `features.snapshots(first_day, last_day)` gives those rows for any days (T308) |
+| `features.sql` | `features` | `features.daily`: every customer on every Bangkok day since their first scoring, with their latest scores and the gaps behind them; `features.snapshots(first_day, last_day)` gives those rows for any days (T308). The API reads `features.daily` for movement on `/matrix` (T313) |
 
 Run `raw.sql` first: the others read its views.
 

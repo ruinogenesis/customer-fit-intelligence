@@ -1,5 +1,5 @@
-"""What the app runs with, set up once in create_app: the model, the store
-and the publisher."""
+"""What the app runs with, set up once in create_app: the model, the store,
+the publisher and the history."""
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -8,6 +8,7 @@ from fitcore.model import ModelParams
 from flask import current_app
 
 from cfi_api.export import Publisher, PubSubPublisher
+from cfi_api.history import BigQueryHistory, History
 from cfi_api.store import MemoryStore, Store
 
 
@@ -63,6 +64,21 @@ def make_publisher(topic: str | None, project: str | None) -> Publisher | None:
     return PubSubPublisher(project, topic)
 
 
+def make_history(kind: str | None, project: str | None) -> History | None:
+    """A BigQueryHistory in project for "bigquery", or None for None.
+
+    The client is imported only when it is used, as Firestore's is. Raises
+    ValueError for any other kind.
+    """
+    if kind is None:
+        return None
+    if kind == "bigquery":
+        from google.cloud import bigquery
+
+        return BigQueryHistory(bigquery.Client(project=project))
+    raise ValueError(f"HISTORY must be 'bigquery' or unset, got {kind!r}")
+
+
 def live_model() -> LiveModel | None:
     """The current app's model, or None when it has none."""
     model: LiveModel | None = current_app.extensions["cfi_model"]
@@ -78,4 +94,10 @@ def store() -> Store:
 def publisher() -> Publisher | None:
     """The current app's publisher, or None when it exports nothing."""
     current: Publisher | None = current_app.extensions["cfi_publisher"]
+    return current
+
+
+def history() -> History | None:
+    """The current app's history, or None when it reads no BigQuery."""
+    current: History | None = current_app.extensions["cfi_history"]
     return current
