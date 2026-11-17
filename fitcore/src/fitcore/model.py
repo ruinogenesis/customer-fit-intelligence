@@ -10,10 +10,13 @@ format 2 adds the quadrant lines, D5). forward() turns gaps into the five
 latents and outcomes() turns fit into the three heads, with the same steps
 as fitcore.train's network, so the API can score without PyTorch.
 quadrant() places a Respect and Love score in the love matrix.
+attributions() splits each score's distance from an as-expected order
+across the eight inputs, exactly (T115).
 
 numpy only: the API imports this module and must never need PyTorch.
 """
 
+import itertools
 import json
 import math
 from collections.abc import Iterable, Sequence
@@ -423,3 +426,77 @@ def quadrant(params: ModelParams, respect: float, love: float) -> str:
     if respect >= params.respect_line:
         return "lovemark" if love >= params.love_line else "brand"
     return "fad" if love >= params.love_line else "product"
+
+
+# --- Attributions (T115) ---
+
+# Every score attributions() splits: the five latents, then churn_risk.
+SCORES: tuple[str, ...] = (*LATENTS, "churn_risk")
+
+
+def all_scores(params: ModelParams, gaps: ArrayLike) -> Array:
+    """The six SCORES (n x 6) for gaps (n x 8, own units): forward(), then
+    the churn head on fit. Raises ValueError as forward() does."""
+    latents = forward(params, gaps)
+    return np.column_stack([latents, outcomes(params, latents[:, -1]).churn])
+
+
+def _pairs() -> tuple[NDArray[np.intp], NDArray[np.intp], Array]:
+    """For each input i, every coalition S without it: S's row in
+    _COALITIONS, the row of S with i, and Shapley's weight |S|! (n-|S|-1)! / n!.
+    Each is n x 2^(n-1)."""
+    n = len(INPUTS)
+    rows = {coalition: k for k, coalition in enumerate(_COALITION_TUPLES)}
+    without, with_i, weight = [], [], []
+    for i in range(n):
+        pairs = [c for c in _COALITION_TUPLES if c[i] == 0]
+        without.append([rows[c] for c in pairs])
+        with_i.append([rows[c[:i] + (1,) + c[i + 1 :]] for c in pairs])
+        sizes = [sum(c) for c in pairs]
+        weight.append([math.factorial(s) * math.factorial(n - s - 1) for s in sizes])
+    return (
+        np.array(without, dtype=np.intp),
+        np.array(with_i, dtype=np.intp),
+        np.array(weight, dtype=np.float64) / math.factorial(n),
+    )
+
+
+# Every coalition of inputs, as rows of 0 and 1: 2^8 = 256 of them.
+_COALITION_TUPLES = list(itertools.product((0, 1), repeat=len(INPUTS)))
+_COALITIONS = np.array(_COALITION_TUPLES, dtype=np.float64)
+_WITHOUT, _WITH, _WEIGHT = _pairs()
+
+# Orders scored at once: 256 coalitions each, so a chunk is 128k forward rows.
+_CHUNK = 512
+
+
+def attributions(params: ModelParams, gaps: ArrayLike) -> Array:
+    """Each input's contribution to each score: n x 6 x 8 (SCORES, INPUTS).
+
+    The baseline is an order exactly as expected: every gap 0, so
+    all_scores(params, zeros) for every order. An input's contribution is
+    its Shapley value: the change it makes when its gap goes from 0 to its
+    value, averaged over every order of adding the inputs one by one. So
+    the eight contributions to a score add up to that score minus its
+    baseline (up to rounding, about 1e-15), an input whose gap is 0 or that
+    has no path to the score gets exactly 0, and two orders' contributions
+    subtract to explain the change between them.
+
+    Exact, with 256 forward passes per order: about 0.1 to 0.2 ms. Raises
+    ValueError for gaps forward() would refuse.
+    """
+    g = np.asarray(gaps, dtype=np.float64)
+    if g.ndim != 2 or g.shape[1] != len(INPUTS):
+        raise ValueError(f"gaps must have shape (n, {len(INPUTS)}), got {g.shape}")
+    found = np.empty((len(g), len(SCORES), len(INPUTS)))
+    for start in range(0, len(g), _CHUNK):
+        chunk = g[start : start + _CHUNK]
+        # A coalition keeps its inputs' gaps and sets the rest to 0, as
+        # expected; the asymmetric transform keeps a 0 at 0.
+        masked = (_COALITIONS[:, None, :] * chunk[None, :, :]).reshape(-1, len(INPUTS))
+        value = all_scores(params, masked).reshape(len(_COALITIONS), len(chunk), -1)
+        # value[with i] - value[without i], so an input that changes nothing
+        # gets exactly 0: inputs x 2^(n-1) x orders x scores.
+        change = value[_WITH] - value[_WITHOUT]
+        found[start : start + len(chunk)] = np.einsum("ijms,ij->msi", change, _WEIGHT)
+    return found
