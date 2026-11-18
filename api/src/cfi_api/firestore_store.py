@@ -238,15 +238,12 @@ class FirestoreStore(FirestoreReader):
         customers: Any = self._client.collection("customers")
         # Aggregations, billed by index entries read (one read per 1,000);
         # avg() skips customers not scored yet (no scores, churn_risk null).
-        averages = customers.avg("scores.fit", alias="fit").avg(
-            "churn_risk", alias="churn_risk"
-        )
-        found = {result.alias: result.value for result in averages.get()[0]}
+        # One field per aggregation: two would need a composite index.
         risky = customers.where(filter=FieldFilter("churn_risk", ">=", at_risk))
         return Overview(
             counts=self.count_quadrants(),
-            average_fit=_average(found["fit"]),
-            average_churn_risk=_average(found["churn_risk"]),
+            average_fit=_average(customers.avg("scores.fit").get()[0][0].value),
+            average_churn_risk=_average(customers.avg("churn_risk").get()[0][0].value),
             at_risk=int(risky.count().get()[0][0].value),
         )
 
