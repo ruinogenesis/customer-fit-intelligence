@@ -163,6 +163,24 @@ test("the last days are two charts, ending on their latest values, and a table",
   ]);
 });
 
+test("a flat trend is a flat line on a readable axis, not magnified noise", async () => {
+  // Dev's first 28 days: one average every day, apart from floating-point noise.
+  const api = fakeApi();
+  api.answers["/overview/trend"] = {
+    ...TREND,
+    days: TREND.days.map((d, i) => ({
+      ...d,
+      average_fit: 0.48213457 + i * 2 ** -54,
+      average_churn_risk: 0.05531 + i * 2 ** -57,
+    })),
+  };
+  await overviewWith(api);
+  const [fit, churn] = screen.getAllByRole("img");
+  const labels = (svg: Element) => [...svg.querySelectorAll(".tick text")].map((t) => t.textContent);
+  expect(labels(fit!)).toEqual(["0.46", "0.48", "0.50"]);
+  expect(labels(churn!)).toEqual(["5.0%", "5.5%", "6.0%"]);
+});
+
 test("without the daily snapshots the screen says why and shows the rest", async () => {
   const api = fakeApi();
   api.answers["/overview/trend"] = new ApiError(503, "This API reads no BigQuery history (HISTORY is unset), so it shows no trend.");
