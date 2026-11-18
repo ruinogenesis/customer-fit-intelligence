@@ -119,10 +119,18 @@ body {
   vertical-align: top;
 }
 
+/* Versions, dates and buttons stay on one line; the confirm and card rows wrap. */
+.models th,
+.models tr:not(.confirm, .card-row) > td {
+  white-space: nowrap;
+}
+
 .models .actions {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
+  text-align: right;
+}
+
+.models .actions button + button {
+  margin-left: 0.5rem;
 }
 
 .status {
