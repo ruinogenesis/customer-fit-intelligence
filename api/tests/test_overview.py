@@ -7,6 +7,7 @@ stand-in for BigQuery over the golden log, as test_movement does, and is
 compared with the same daily rows read in Python.
 """
 
+import re
 from collections import defaultdict
 from datetime import date, timedelta
 from typing import Any
@@ -16,6 +17,10 @@ import pytest
 from bigquery_on_duckdb import MODEL
 from fitcore.model import QUADRANTS
 from flask.testing import FlaskClient
+from google.auth.credentials import AnonymousCredentials
+from google.cloud import firestore
+from google.cloud.firestore_v1.aggregation import AggregationQuery
+from google.cloud.firestore_v1.base_aggregation import AggregationResult
 from test_access import bearer
 from test_customers import OURS, _app_with_events, everything, needs_emulator
 from test_features import FIRST, LAST
@@ -23,6 +28,7 @@ from test_movement import _app, _today, db, rows, snapshot  # noqa: F401 (fixtur
 
 from cfi_api import create_app
 from cfi_api.access import ACCESS, EMULATOR
+from cfi_api.firestore_store import FirestoreStore
 from cfi_api.overview import AT_RISK, DAYS
 
 API = "/api/v1"
@@ -93,6 +99,28 @@ def test_before_anyone_is_scored_the_averages_are_null() -> None:
         "average_churn_risk": None,
         "at_risk": {"threshold": AT_RISK, "customers": 0},
     }
+
+
+def test_each_firestore_aggregation_reads_one_field(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Real Firestore runs an aggregation that filters or aggregates on two
+    fields only with a composite index; the emulator never asks for one, so
+    T402's first deploy answered 500 while every test passed. One field per
+    aggregation keeps each on the single-field indexes Firestore keeps anyway.
+    No emulator needed: the queries are built, read and answered here."""
+    asked: list[set[str]] = []
+
+    def get(query: AggregationQuery, **_: Any) -> list[list[AggregationResult]]:
+        sent = str(query._to_protobuf())  # what would go to Firestore
+        asked.append(set(re.findall(r'field_path: "([^"]+)"', sent)))
+        return [[AggregationResult(a.alias or "", 0) for a in query._aggregations]]
+
+    monkeypatch.setattr(AggregationQuery, "get", get)
+    client = firestore.Client(project="demo-cfi", credentials=AnonymousCredentials())
+    FirestoreStore(client).overview(AT_RISK)
+    assert {"quadrant", "scores.fit", "churn_risk"} == set().union(*asked)
+    assert all(len(fields) == 1 for fields in asked), asked
 
 
 @pytest.mark.parametrize(
