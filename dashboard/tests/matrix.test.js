@@ -11,7 +11,7 @@ import {
   along,
   countByQuadrant,
   toDot,
-} from "../public/matrix.js";
+} from "../legacy/matrix.js";
 
 test("scores map onto the plot inside its margins", () => {
   assert.equal(along(0), MARGIN);

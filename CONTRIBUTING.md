@@ -25,7 +25,7 @@
 
 - Every change in behaviour comes with a test. Write the test first where practical.
 - See a new test fail once before trusting it.
-- Run every test with `pytest fitcore api`, and the dashboard's with `node --test dashboard/tests/*.test.js`.
+- Run every test with `pytest fitcore api`, and the dashboard's with `npm test` in `dashboard/` (Node 24; `npm ci` first).
 - Tests never touch real projects. Firestore, Auth and Pub/Sub tests use the emulators, and are skipped without them:
   `firebase emulators:exec --only firestore,auth,pubsub --project demo-cfi "pytest fitcore api"`
 - Scores are pinned by the golden replay (T309): a frozen event log, replayed through fitcore and through the API with each store, must match `notebooks/results/t309_golden.json`. A change meant to move scores re-runs `python notebooks/t309_golden.py` and commits the new golden file with it, so the review sees every score that moved.
