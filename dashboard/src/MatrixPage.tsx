@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 
 import { customerPath } from "./customers";
 import {
+  addDays,
   AT_RISK,
   bangkokDay,
   countByQuadrant,
@@ -267,13 +268,6 @@ type Moves =
   | { state: "failed"; message: string }
   | { state: "ready"; movement: Movement };
 
-/** A day, n days later (or earlier, for a negative n). */
-function shift(day: string, n: number): string {
-  const d = new Date(`${day}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n);
-  return d.toISOString().slice(0, 10);
-}
-
 /** How far back the quick spans reach. */
 const SPANS = [
   { days: 1, label: "Day before" },
@@ -286,7 +280,7 @@ function MovementView() {
   // Daily snapshots end yesterday (Bangkok): the last day to compare.
   const [latest] = useState(() => bangkokDay(new Date(), 1));
   const [to, setTo] = useState(latest);
-  const [from, setFrom] = useState(() => shift(latest, -7));
+  const [from, setFrom] = useState(() => addDays(latest, -7));
   const [moves, setMoves] = useState<Moves>({ state: "loading" });
 
   useEffect(() => {
@@ -324,8 +318,8 @@ function MovementView() {
           <button
             key={days}
             type="button"
-            aria-pressed={from === shift(to, -days)}
-            onClick={() => setFrom(shift(to, -days))}
+            aria-pressed={from === addDays(to, -days)}
+            onClick={() => setFrom(addDays(to, -days))}
           >
             {label}
           </button>
