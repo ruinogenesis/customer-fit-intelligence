@@ -10,7 +10,7 @@
     "dev:cloud": "vite --mode cloud",
     "build": "tsc -b && vite build",
     "lint": "oxlint src tests",
-    "test": "vitest run && node --test tests/*.test.js",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {

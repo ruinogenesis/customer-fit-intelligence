@@ -3,6 +3,8 @@ import { act } from "@testing-library/react";
 
 import { ApiError, type Api } from "../src/api";
 import { SignInError, signInMessage, type AuthService, type Session } from "../src/auth";
+import type { CustomerFeed } from "../src/feed";
+import type { FeedCustomer } from "../src/matrix";
 import type { ModelVersion } from "../src/models";
 import type { Role } from "../src/roles";
 
@@ -120,5 +122,36 @@ export class FakeApi implements Api {
     const card = this.cards[version];
     if (card === undefined) throw new ApiError(404, `${version} has no model card.`);
     return card;
+  }
+}
+
+/** The live customer feed's stand-in: the test says when customers change. */
+export class FakeFeed implements CustomerFeed {
+  /** How many watch, and how many have stopped watching. */
+  started = 0;
+  stopped = 0;
+  private watchers = new Set<{
+    onCustomers: (customers: FeedCustomer[]) => void;
+    onError: (message: string) => void;
+  }>();
+
+  watch(onCustomers: (customers: FeedCustomer[]) => void, onError: (message: string) => void) {
+    const watcher = { onCustomers, onError };
+    this.watchers.add(watcher);
+    this.started += 1;
+    return () => {
+      this.watchers.delete(watcher);
+      this.stopped += 1;
+    };
+  }
+
+  /** Every customer, as Firestore would send them after a change. */
+  send(customers: FeedCustomer[]): void {
+    act(() => this.watchers.forEach((w) => w.onCustomers(structuredClone(customers))));
+  }
+
+  /** The listener stops, as when Firestore refuses. */
+  fail(message: string): void {
+    act(() => this.watchers.forEach((w) => w.onError(message)));
   }
 }
