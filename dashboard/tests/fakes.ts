@@ -72,10 +72,17 @@ export class FakeApi implements Api {
   failNext: ApiError | null = null;
   models: ModelVersion[];
   cards: Record<string, string>;
+  /** Other GET answers by path; an ApiError there is thrown, as a refusal. */
+  answers: Record<string, unknown> = {};
 
   constructor(models: ModelVersion[] = registry(), cards: Record<string, string> = {}) {
     this.models = models;
     this.cards = cards;
+  }
+
+  /** How many times path was asked for. */
+  asked(path: string): number {
+    return this.calls.filter((call) => call === `GET ${path}`).length;
   }
 
   private record(method: string, path: string): void {
@@ -87,8 +94,11 @@ export class FakeApi implements Api {
 
   async get<T>(path: string): Promise<T> {
     this.record("GET", path);
-    if (path !== "/models") throw new ApiError(404, `No ${path} here.`);
-    return { models: structuredClone(this.models) } as T;
+    if (path === "/models") return { models: structuredClone(this.models) } as T;
+    const answer = this.answers[path];
+    if (answer instanceof ApiError) throw answer;
+    if (answer === undefined) throw new ApiError(404, `No ${path} here.`);
+    return structuredClone(answer) as T;
   }
 
   async post<T>(path: string): Promise<T> {

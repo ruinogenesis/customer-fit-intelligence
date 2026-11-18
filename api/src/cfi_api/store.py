@@ -240,6 +240,20 @@ class Browser(Protocol):
         """Customers per quadrant; None counts those not scored yet."""
         ...
 
+    def overview(self, at_risk: float) -> "Overview":
+        """Every customer by quadrant, their averages, and the at-risk count."""
+        ...
+
+
+class Overview(NamedTuple):
+    """The Overview screen's numbers now (T402). The averages are over the
+    customers scored so far: None while there are none."""
+
+    counts: dict[str | None, int]
+    average_fit: float | None
+    average_churn_risk: float | None
+    at_risk: int
+
 
 class Busy(Exception):
     """The store gave up: too many events for one customer at the same moment.
@@ -489,6 +503,20 @@ class MemoryStore:
         for doc in customers:
             counts[doc["quadrant"]] += 1
         return counts
+
+    def overview(self, at_risk: float) -> Overview:
+        customers = self._found(
+            lambda path, _: path.startswith("customers/") and path.count("/") == 1
+        )
+        scored = [doc for doc in customers if doc["scores"] is not None]
+        fits = [doc["scores"]["fit"] for doc in scored]
+        risks = [doc["churn_risk"] for doc in scored]
+        return Overview(
+            counts=self.count_quadrants(),
+            average_fit=sum(fits) / len(fits) if fits else None,
+            average_churn_risk=sum(risks) / len(risks) if risks else None,
+            at_risk=sum(risk >= at_risk for risk in risks),
+        )
 
     # --- The model registry (T310) ---
 

@@ -20,6 +20,7 @@ type Router = ReturnType<typeof createBrowserRouter>;
 /** Screens built so far, each loaded when first opened (its own chunk, with
  * its own libraries); the rest show what they will hold (ScreenPage). */
 const PAGES: Record<string, ComponentType> = {
+  overview: lazy(async () => ({ default: (await import("./OverviewPage")).OverviewPage })),
   models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
 };
 

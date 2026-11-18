@@ -1,11 +1,14 @@
 """What the API reads from BigQuery: history too long to read from Firestore
-on every request (T313, T315).
+on every request (T313, T315, T402).
 
 T308's scheduled query writes features.daily: every customer's latest
 scoring at the end of each Bangkok day, up to yesterday. GET /matrix reads
 two of its days to show how customers moved between quadrants: two day
 partitions, a few MB at 10,000 customers, where Firestore would read every
 score entry since the first day.
+
+GET /overview/trend gives each day's averages and quadrant counts over a
+span of features.daily (T402): one row per day, whatever the customers.
 
 GET /drivers averages each restaurant's or courier's orders' contributions
 to fit (T316's splits) from raw.scores and raw.orders, which are live.
@@ -19,6 +22,7 @@ from typing import Any, NamedTuple, Protocol
 from zoneinfo import ZoneInfo
 
 from fitcore.features import INPUTS
+from fitcore.model import QUADRANTS
 
 # Where the datasets live, so where BigQuery runs the queries.
 LOCATION = "asia-southeast3"
@@ -41,6 +45,28 @@ LEFT JOIN (
   ON earlier.customer_id = later.customer_id
 GROUP BY was, now
 """
+
+
+# Each Bangkok day from @first_day to @last_day that features.daily has: how
+# many customers it holds, their average fit and churn risk, and how many
+# are in each quadrant (QUADRANTS). A day before anyone's first scoring has
+# no rows, so no answer.
+TREND = (
+    """
+SELECT
+  day,
+  COUNT(*) AS customers,
+  AVG(fit) AS fit,
+  AVG(churn_risk) AS churn_risk,
+"""
+    + ",\n".join(f"  COUNTIF(quadrant = '{q}') AS {q}" for q in QUADRANTS)
+    + """
+FROM features.daily
+WHERE day BETWEEN @first_day AND @last_day
+GROUP BY day
+ORDER BY day
+"""
+)
 
 
 # Each restaurant (@by = 'restaurant') or courier (@by = 'courier') with
@@ -139,6 +165,16 @@ class Group(NamedTuple):
     drag: tuple[float, ...]
 
 
+class Day(NamedTuple):
+    """One day of features.daily, summed up."""
+
+    day: date
+    customers: int
+    fit: float
+    churn_risk: float
+    quadrants: dict[str, int]
+
+
 class History(Protocol):
     """Reads from BigQuery's history."""
 
@@ -152,6 +188,10 @@ class History(Protocol):
     def drivers(self, by: str, first: date, last: date) -> list[Group]:
         """Every restaurant (by "restaurant") or courier (by "courier") with
         orders placed from first to last, Bangkok days, that have a split."""
+        ...
+
+    def trend(self, first: date, last: date) -> list[Day]:
+        """Each day from first to last that features.daily has, in order."""
         ...
 
 
@@ -176,6 +216,19 @@ class BigQueryHistory:
                 int(row["orders"]),
                 float(row["fit"]),
                 tuple(float(row[key]) for key in INPUTS),
+            )
+            for row in rows
+        ]
+
+    def trend(self, first: date, last: date) -> list[Day]:
+        rows = self._query(TREND, first_day=first, last_day=last)
+        return [
+            Day(
+                row["day"],
+                int(row["customers"]),
+                float(row["fit"]),
+                float(row["churn_risk"]),
+                {quadrant: int(row[quadrant]) for quadrant in QUADRANTS},
             )
             for row in rows
         ]

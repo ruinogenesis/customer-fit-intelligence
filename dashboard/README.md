@@ -17,6 +17,17 @@ screens fill in with T402 to T407.
 Screens call the API as the person signed in (`src/api.ts`): same origin,
 `/api/v1/...`, with their ID token as `Authorization: Bearer`.
 
+## Overview (T402)
+
+Today's numbers from `GET /overview`: customers, average fit, average churn
+risk, how many are at risk (churn 10% or more), and customers per quadrant.
+They refresh every 30 seconds while the tab is visible, and as soon as it
+shows again; a failed refresh keeps the last numbers and says so. Below
+them, the last 28 days through yesterday from `GET /overview/trend` (read
+once: a day's snapshot is written at 02:00 Bangkok), as two line charts
+with a crosshair on hover and arrow keys, and a table of the numbers; then
+the 10 riskiest customers from `GET /customers`.
+
 ## Models (T407)
 
 Every version in the registry, newest first, with its status, metrics and

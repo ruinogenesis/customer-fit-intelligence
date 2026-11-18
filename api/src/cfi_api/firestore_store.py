@@ -36,6 +36,7 @@ from cfi_api.store import (
     CustomerKey,
     EventRecord,
     Handled,
+    Overview,
     Page,
     TimeKey,
     Work,
@@ -64,6 +65,12 @@ COMPOSITE_INDEXES = (
 # field of a score entry is left out of Firestore's indexes in
 # firestore.indexes.json (T317). Questions across scorings go to BigQuery.
 SCORES_ORDER = "at"
+
+
+def _average(value: Any) -> float | None:
+    """An avg() result: None when no document had the field."""
+    return None if value is None else float(value)
+
 
 # Tries per event before giving up: the client library's default is 5.
 MAX_ATTEMPTS = 10
@@ -226,6 +233,22 @@ class FirestoreStore(FirestoreReader):
             # One aggregation per quadrant: billed by index entries, not documents.
             counts[quadrant] = int(query.count().get()[0][0].value)
         return counts
+
+    def overview(self, at_risk: float) -> Overview:
+        customers: Any = self._client.collection("customers")
+        # Aggregations, billed by index entries read (one read per 1,000);
+        # avg() skips customers not scored yet (no scores, churn_risk null).
+        averages = customers.avg("scores.fit", alias="fit").avg(
+            "churn_risk", alias="churn_risk"
+        )
+        found = {result.alias: result.value for result in averages.get()[0]}
+        risky = customers.where(filter=FieldFilter("churn_risk", ">=", at_risk))
+        return Overview(
+            counts=self.count_quadrants(),
+            average_fit=_average(found["fit"]),
+            average_churn_risk=_average(found["churn_risk"]),
+            at_risk=int(risky.count().get()[0][0].value),
+        )
 
     # --- The model registry (T310) ---
 

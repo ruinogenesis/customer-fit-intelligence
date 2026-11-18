@@ -168,3 +168,138 @@ body {
 .card table {
   width: auto;
 }
+
+/* Overview (T402) */
+
+.overview h2 {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+.updated {
+  color: #57606a;
+  font-size: 0.9em;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.tile {
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.tile .label,
+.tile .note {
+  color: #57606a;
+  font-size: 0.85em;
+}
+
+.tile .value {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 0.75rem;
+}
+
+.line-chart {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.line-chart figcaption {
+  font-weight: 600;
+}
+
+.line-chart .plot {
+  position: relative;
+}
+
+.line-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-size: 11px;
+}
+
+.line-chart svg:focus-visible {
+  outline: 2px solid #2a78d6;
+  outline-offset: 2px;
+}
+
+.line-chart .tick line {
+  stroke: #e4e2dd;
+  stroke-width: 1;
+}
+
+.line-chart text {
+  fill: #57606a;
+}
+
+.line-chart text.end {
+  fill: #1f2328;
+  font-weight: 600;
+}
+
+.line-chart .series {
+  fill: none;
+  stroke: #2a78d6;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.line-chart .dot {
+  fill: #2a78d6;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.line-chart .crosshair {
+  stroke: #8c959f;
+  stroke-width: 1;
+}
+
+.line-chart .tooltip {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 0.85em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.line-chart .tooltip span {
+  color: #57606a;
+}
+
+.overview details {
+  margin-top: 0.75rem;
+}
+
+.overview table {
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.overview th,
+.overview td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #d0d7de;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
