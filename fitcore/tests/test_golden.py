@@ -31,7 +31,11 @@ SCORES = {
 
 
 def result(**scores: Any) -> dict[str, Any]:
-    return {"order_id": "ord_1", "scores": {**SCORES, **scores}}
+    return {
+        "order_id": "ord_1",
+        "scores": {**SCORES, **scores},
+        "drivers": ["x1", "x6"],
+    }
 
 
 def test_the_golden_file_was_made_with_this_model() -> None:
@@ -43,6 +47,13 @@ def test_fitcore_scores_the_log_as_the_golden_file_says() -> None:
     assert differences(got, read_golden(GOLDEN).results) == []
 
 
+def test_the_golden_file_names_drivers_for_every_scoring() -> None:
+    # T316: each result that has scores has fit's drivers, and only those.
+    results = read_golden(GOLDEN).results.values()
+    assert all((r["scores"] is None) == (r["drivers"] is None) for r in results)
+    assert sum(bool(r["drivers"]) for r in results) > 700
+
+
 def test_matching_results_have_no_differences() -> None:
     assert differences({"e1": result()}, {"e1": result()}) == []
 
@@ -52,8 +63,16 @@ def test_matching_results_have_no_differences() -> None:
     [
         (result(love=0.75 + 1e-9), "e1: love 0.750000001 for 0.75"),
         (result(quadrant="lovemark"), "e1: quadrant 'lovemark' for 'fad'"),
-        ({"order_id": "ord_2", "scores": SCORES}, "e1: order ord_2 for ord_1"),
-        ({"order_id": None, "scores": None}, "e1: order None for ord_1"),
+        ({**result(), "order_id": "ord_2"}, "e1: order ord_2 for ord_1"),
+        (
+            {"order_id": None, "scores": None, "drivers": None},
+            "e1: order None for ord_1",
+        ),
+        (
+            {**result(), "drivers": ["x6", "x1"]},
+            "e1: drivers ['x6', 'x1'] for ['x1', 'x6']",
+        ),
+        ({**result(), "drivers": ["x1"]}, "e1: drivers ['x1'] for ['x1', 'x6']"),
     ],
 )
 def test_a_difference_is_reported(got: dict[str, Any], line: str) -> None:

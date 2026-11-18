@@ -18,8 +18,10 @@ from typing import Any
 
 import pytest
 from fitcore.documents import DocumentError
+from fitcore.features import INPUTS
+from fitcore.model import SCORES as SCORE_NAMES
 from fitcore.schemas import load_event
-from fitcore.scoring import Applied, Customer, Scores
+from fitcore.scoring import Applied, Customer, Explanation, Scores
 from flask.testing import FlaskClient
 from google.cloud import firestore
 
@@ -34,6 +36,8 @@ from cfi_api.store import (
 
 T0 = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 SCORES = Scores(0.9, 0.8, 0.7, 0.6, 0.5, churn_risk=0.04, quadrant="lovemark")
+SHARES = {name: {**dict.fromkeys(INPUTS, 0.0), "x1": -0.1} for name in SCORE_NAMES}
+EXPLAINED = Explanation(SHARES, ("x1",))
 
 needs_emulator = pytest.mark.skipif(
     "FIRESTORE_EMULATOR_HOST" not in os.environ,
@@ -45,11 +49,12 @@ needs_emulator = pytest.mark.skipif(
 
 
 def test_a_history_entry_keeps_scores_churn_risk_and_quadrant_apart() -> None:
-    entry = HistoryEntry("ev_1", "ord_1", T0, SCORES, "t112-sim")
+    entry = HistoryEntry("ev_1", "ord_1", T0, SCORES, EXPLAINED, "t112-sim")
     document = history_document(entry)
     assert (document["churn_risk"], document["quadrant"]) == (0.04, "lovemark")
     assert set(document["scores"]) == {"respect", "love", "convenience", "trust", "fit"}
     assert (document["order_id"], document["at"]) == ("ord_1", T0)
+    assert (document["contributions"], document["drivers"]) == (SHARES, ["x1"])
 
 
 def _survey() -> EventRecord:
@@ -70,6 +75,7 @@ def _survey() -> EventRecord:
         "duplicate": False,
         "order_id": None,
         "scores": None,
+        "drivers": None,
         "model_version": "t112-sim",
     }
     return EventRecord({**event, "event_id": event_id}, result)
@@ -167,6 +173,11 @@ def test_events_are_stored_and_scored_in_firestore(
     assert stored_order["delivered_at"] == T0 + timedelta(minutes=45)
     history = db.collection(f"customers/{customer}/scores").get()
     assert {doc.id for doc in history} == {placed["event_id"], delivered["event_id"]}
+    entry = db.document(f"customers/{customer}/scores/{delivered['event_id']}").get()
+    stored_entry = entry.to_dict()
+    assert stored_entry is not None
+    assert stored_entry["drivers"] == late.get_json()["drivers"] == ["x1"]
+    assert set(stored_entry["contributions"]) == set(SCORE_NAMES)
 
 
 @needs_emulator
