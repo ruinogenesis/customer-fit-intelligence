@@ -56,6 +56,9 @@ Run it locally with the reference model, from the repo root:
   `/matrix` (customers per quadrant). Lists come a page at a time: `limit`
   (default 50, at most 200), then the answer's `next_cursor` as `cursor`
   for the next page. An unknown query parameter is a 422.
+  Score history is indexed on `at` alone (T317): `firestore.indexes.json`
+  leaves every other field of a score entry out, as nothing queries it in
+  Firestore; BigQuery's `raw.scores` answers questions across scorings.
 - Movement (T313): `GET /api/v1/matrix?from=2026-10-01&to=2026-11-17` adds
   `movement`: the customers scored by the end of `to`, by their quadrant at
   the end of `from` (or `unscored`), then at the end of `to`. Days are

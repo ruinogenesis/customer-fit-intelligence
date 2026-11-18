@@ -60,6 +60,11 @@ COMPOSITE_INDEXES = (
     ("orders", (("customer_id", "ASCENDING"), ("placed_at", "DESCENDING"))),
 )
 
+# Score history is queried on this field alone (list_scores); every other
+# field of a score entry is left out of Firestore's indexes in
+# firestore.indexes.json (T317). Questions across scorings go to BigQuery.
+SCORES_ORDER = "at"
+
 # Tries per event before giving up: the client library's default is 5.
 MAX_ATTEMPTS = 10
 
@@ -191,11 +196,11 @@ class FirestoreStore(FirestoreReader):
     ) -> Page:
         query: Any = (
             self._client.collection(f"customers/{customer_id}/scores")
-            .order_by("at", direction=DESCENDING)
+            .order_by(SCORES_ORDER, direction=DESCENDING)
             .order_by(NAME, direction=DESCENDING)
         )
         if after is not None:
-            query = query.start_after({"at": after[0], NAME: after[1]})
+            query = query.start_after({SCORES_ORDER: after[0], NAME: after[1]})
         return _page(query, score_key, limit)
 
     def list_orders(
