@@ -33,7 +33,7 @@ import copy
 import threading
 from collections.abc import Callable
 from dataclasses import dataclass, replace
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, NamedTuple, Protocol
 
 from fitcore.documents import check, customer_document, order_document
@@ -108,19 +108,27 @@ def history_document(entry: HistoryEntry) -> dict[str, Any]:
 
 
 def writes(
-    record: EventRecord, applied: Applied, model_version: str
+    record: EventRecord,
+    applied: Applied,
+    model_version: str,
+    received_at: datetime,
 ) -> list[tuple[str, dict[str, Any]]]:
     """The documents one event saves, as (path, document), each checked.
+
+    The event's document expires EVENT_RETENTION after received_at, the
+    API's clock: never the event's own occurred_at, which a client or a
+    simulation sets.
 
     Raises fitcore.documents.DocumentError if one does not fit its schema.
     """
     customer_id = applied.customer.customer_id
+    event = {
+        "event": record.event,
+        "result": record.result,
+        EXPIRES_AT: received_at + EVENT_RETENTION,
+    }
     documents = [
-        (
-            "events",
-            f"events/{record.event['event_id']}",
-            {"event": record.event, "result": record.result},
-        ),
+        ("events", f"events/{record.event['event_id']}", event),
         (
             "customers",
             f"customers/{customer_id}",
@@ -137,6 +145,20 @@ def writes(
     for collection, _, document in documents:
         check(collection, document)
     return [(path, document) for _, path, document in documents]
+
+
+EVENT_RETENTION = timedelta(days=30)
+"""How long Firestore keeps events/{event_id} after the API received it.
+
+Firestore's TTL policy on EXPIRES_AT (firestore.indexes.json) deletes the
+document, usually within a day after it expires; BigQuery keeps every event.
+The same event_id is recognised as a repeat only while its document is
+there: sent again later, it counts as new (an order_placed is still refused,
+since orders/{order_id} stays).
+"""
+
+EXPIRES_AT = "expires_at"
+"""The TTL field on events/{event_id}: a timestamp, never indexed."""
 
 
 class Reader(Protocol):
@@ -370,10 +392,10 @@ class MemoryStore:
             result, applied = work(self)
             if applied is not None:
                 record = EventRecord(event, result)
-                self.save(record, applied, result["model_version"])
+                version, now = result["model_version"], datetime.now(UTC)
+                self.save(record, applied, version, now)
                 if self.has_outbox:
-                    documents = writes(record, applied, result["model_version"])
-                    now = datetime.now(UTC)
+                    documents = writes(record, applied, version, now)
                     entry = outbox_entry(event["event_id"], documents, now)
                     outbox_document(entry)  # checks what Firestore would get
                     self.outbox[entry.event_id] = entry
@@ -388,9 +410,15 @@ class MemoryStore:
         with self._lock:
             self.outbox.pop(event_id, None)
 
-    def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
+    def save(
+        self,
+        record: EventRecord,
+        applied: Applied,
+        model_version: str,
+        received_at: datetime,
+    ) -> None:
         """Save one event's changes; handle() calls it under the lock."""
-        for path, document in writes(record, applied, model_version):
+        for path, document in writes(record, applied, model_version, received_at):
             self.documents[path] = _as_firestore(document)
         customer = applied.customer
         self.events[record.event["event_id"]] = _copied(record)

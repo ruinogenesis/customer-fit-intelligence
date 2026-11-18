@@ -127,11 +127,10 @@ class FirestoreStore(FirestoreReader):
             result, applied = work(FirestoreReader(self._client, transaction))
             if applied is None:
                 return Handled(result, None, None)
-            record = EventRecord(event, result)
-            documents = writes(record, applied, result["model_version"])
+            record, now = EventRecord(event, result), datetime.now(UTC)
+            documents = writes(record, applied, result["model_version"], now)
             entry = None
             if self._outbox:
-                now = datetime.now(UTC)
                 entry = outbox_entry(event["event_id"], documents, now)
                 documents.append((f"outbox/{entry.event_id}", outbox_document(entry)))
             for path, document in documents:

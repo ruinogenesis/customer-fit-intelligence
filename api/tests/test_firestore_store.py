@@ -27,6 +27,8 @@ from google.cloud import firestore
 
 from cfi_api import create_app
 from cfi_api.store import (
+    EVENT_RETENTION,
+    EXPIRES_AT,
     EventRecord,
     HistoryEntry,
     MemoryStore,
@@ -84,7 +86,7 @@ def _survey() -> EventRecord:
 def test_an_event_writes_its_event_and_customer_documents() -> None:
     record = _survey()
     applied = Applied(Customer.new("cust_1"), order=None, scored=None)
-    paths = [path for path, _ in writes(record, applied, "t112-sim")]
+    paths = [path for path, _ in writes(record, applied, "t112-sim", T0)]
     event_id = record.event["event_id"]
     assert paths == [f"events/{event_id}", "customers/cust_1"]
 
@@ -94,7 +96,7 @@ def test_a_document_of_the_wrong_shape_is_never_saved() -> None:
     applied = Applied(Customer.new("cust_1"), order=None, scored=None)
     store = MemoryStore()
     with pytest.raises(DocumentError, match="customers.*model_version"):
-        store.save(record, applied, "")  # a customer document needs a model
+        store.save(record, applied, "", T0)  # a customer document needs a model
     assert (store.events, store.customers) == ({}, {})
 
 
@@ -178,6 +180,37 @@ def test_events_are_stored_and_scored_in_firestore(
     assert stored_entry is not None
     assert stored_entry["drivers"] == late.get_json()["drivers"] == ["x1"]
     assert set(stored_entry["contributions"]) == set(SCORE_NAMES)
+
+
+@needs_emulator
+def test_firestore_keeps_an_events_expiry_as_a_timestamp(
+    firestore_client: FlaskClient,
+) -> None:
+    # TTL deletes only by a timestamp; a string there would never expire.
+    tag = uuid.uuid4().hex[:8]
+    event = _event(
+        "order_placed",
+        {
+            "order_id": f"ord_{tag}",
+            "restaurant_id": "rest_1",
+            "basket_value": 50_000,
+            "fees": 6_000,
+            "promised_eta": (T0 + timedelta(minutes=30)).isoformat(),
+            "promo_used": False,
+        },
+        f"cust_{tag}",
+        0,
+    )
+    before = datetime.now(UTC)
+    assert firestore_client.post("/api/v1/events", json=event).status_code == 201
+    after = datetime.now(UTC)
+    db = firestore.Client(project="demo-cfi")
+    stored = db.document(f"events/{event['event_id']}").get().to_dict()
+    assert stored is not None
+    expires = stored[EXPIRES_AT]
+    assert isinstance(expires, datetime)
+    # Firestore keeps microseconds, so the stored time is within the window.
+    assert before + EVENT_RETENTION <= expires <= after + EVENT_RETENTION
 
 
 @needs_emulator

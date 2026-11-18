@@ -14,8 +14,7 @@ ids; timestamps carry a timezone (Firestore keeps them in UTC); money is
 whole satang. Scores are between 0 and 1.
 
 Fields that later tasks add are not here yet; each task adds its own:
-consent flags and the holdout bucket on customers (T610, T503), and an
-expiry time on events (T305).
+consent flags and the holdout bucket on customers (T610, T503).
 
 customer_document and order_document (and their inverses) convert
 fitcore.scoring's Customer and Order, for the API and for Cloud Functions.
@@ -248,6 +247,10 @@ class EventDocument(StrictSchema):
         EventSchema, "The event as received and validated (fitcore.schemas)"
     )
     result = _nested(EventResultSchema, "What POST /events answered")
+    expires_at = _time(
+        "When Firestore's TTL policy deletes it: 30 days after the API received "
+        "it (T305); BigQuery keeps every event"
+    )
 
 
 class CustomerDocument(StrictSchema):

@@ -29,5 +29,22 @@
       ]
     }
   ],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    {
+      "collectionGroup": "events",
+      "fieldPath": "event",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "events",
+      "fieldPath": "expires_at",
+      "ttl": true,
+      "indexes": []
+    },
+    {
+      "collectionGroup": "events",
+      "fieldPath": "result",
+      "indexes": []
+    }
+  ]
 }

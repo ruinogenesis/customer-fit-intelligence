@@ -57,9 +57,15 @@ class SlowStore(MemoryStore):
         time.sleep(ROUND_TRIP)
         return super().find_order(order_id)
 
-    def save(self, record: EventRecord, applied: Applied, model_version: str) -> None:
+    def save(
+        self,
+        record: EventRecord,
+        applied: Applied,
+        model_version: str,
+        received_at: datetime,
+    ) -> None:
         time.sleep(ROUND_TRIP)
-        super().save(record, applied, model_version)
+        super().save(record, applied, model_version, received_at)
 
 
 @pytest.fixture

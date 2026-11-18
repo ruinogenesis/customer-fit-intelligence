@@ -92,6 +92,7 @@ def _examples() -> dict[str, dict[str, Any]]:
                 "drivers": None,
                 "model_version": "t112-sim",
             },
+            "expires_at": T0 + timedelta(days=30),
         },
         "customers": customer_document(_customer(), "t112-sim"),
         "scores": {
@@ -240,6 +241,8 @@ def _refused(collection: str, change: dict[str, Any], match: str) -> None:
         ("users", {"role": "owner"}, "role"),
         ("users", {"email": "not an email"}, "email"),
         ("events", {"result": {}}, "result"),
+        ("events", {"expires_at": None}, "expires_at"),
+        ("events", {"expires_at": datetime(2026, 12, 14)}, "aware"),
         ("outbox", {"messages": []}, "messages"),
         ("outbox", {"messages": [""]}, "messages"),
     ],
@@ -255,6 +258,13 @@ def test_a_customer_needs_an_expectation_for_every_input() -> None:
     del document["expectations"]["x8"]
     with pytest.raises(DocumentError, match="x2, x3, x4, x5, x6, x7, x8"):
         check("customers", document)
+
+
+def test_an_events_document_needs_its_expiry() -> None:
+    document = _examples()["events"]
+    del document["expires_at"]
+    with pytest.raises(DocumentError, match="expires_at"):
+        check("events", document)
 
 
 def test_an_events_document_checks_the_event_itself() -> None:
