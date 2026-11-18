@@ -31,7 +31,7 @@ DEFAULTS: dict[str, Any] = {
     # neither. With neither, /health reports no model and /events answers 503.
     "MODEL_PATH": None,
     "MODEL_VERSION": None,
-    # Or the model registry (cfi_api.registry, T310): "gcs" scores with the
+    # Or the model registry (cfi_api.model_registry, T310): "gcs" scores with the
     # store's live version, its files in Cloud Storage; "memory" keeps the
     # files in this process (tests). Not with MODEL_PATH.
     "REGISTRY": None,

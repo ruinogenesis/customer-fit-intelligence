@@ -24,7 +24,7 @@ pages of customers, of a customer's scores and of their orders, and the
 customers per quadrant. Both stores answer from the same documents, so the
 API answers the same from either.
 
-The model registry lives in the store too (T310, cfi_api.registry): a
+The model registry lives in the store too (T310, cfi_api.model_registry): a
 Reader finds the live version, inside an event's own unit of work, and a
 Store lists, adds and promotes versions.
 """
@@ -41,7 +41,7 @@ from fitcore.model import LATENTS, QUADRANTS
 from fitcore.scoring import Applied, Customer, Explanation, Order, Scores
 
 from cfi_api.export import OutboxEntry, outbox_document, outbox_entry
-from cfi_api.registry import (
+from cfi_api.model_registry import (
     LIVE,
     ModelEntry,
     UnknownVersion,

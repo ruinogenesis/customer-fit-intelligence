@@ -21,7 +21,7 @@ from flask_smorest import abort as abort_with
 from cfi_api.access import ACCESS
 from cfi_api.errors import ErrorSchema
 from cfi_api.export import export
-from cfi_api.registry import BadModel
+from cfi_api.model_registry import BadModel
 from cfi_api.runtime import live_model, publisher, store
 from cfi_api.store import Busy, Reader
 

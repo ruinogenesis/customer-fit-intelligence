@@ -30,7 +30,7 @@ from cfi_api.export import (
     outbox_entry,
     outbox_from_document,
 )
-from cfi_api.registry import LIVE, ModelEntry, entry_from_document, model_document
+from cfi_api.model_registry import LIVE, ModelEntry, entry_from_document, model_document
 from cfi_api.store import (
     Busy,
     CustomerKey,

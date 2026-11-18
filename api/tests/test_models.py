@@ -8,6 +8,8 @@ test_firestore_store.py runs the store's half against the Firestore emulator.
 
 import json
 import os
+import subprocess
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -20,7 +22,7 @@ from test_events import delivered, placed
 
 from cfi_api import create_app, registry
 from cfi_api.access import ACCESS, EMULATOR
-from cfi_api.registry import (
+from cfi_api.model_registry import (
     BadModel,
     MemoryFiles,
     ModelEntry,
@@ -305,3 +307,19 @@ def test_the_command_line_registers_lists_and_promotes(
 def test_the_command_line_needs_a_project(capsys: pytest.CaptureFixture[str]) -> None:
     assert registry.main(["list"]) == 2
     assert "--project" in capsys.readouterr().err
+
+
+def test_the_command_line_runs_without_a_double_import_warning() -> None:
+    # cfi_api imports the library (model_registry), never the command line,
+    # so python -m cfi_api.registry loads it once.
+    command = ["-W", "error::RuntimeWarning", "-m", "cfi_api.registry", "list"]
+    run = subprocess.run(
+        [sys.executable, *command],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert (run.returncode, run.stderr.strip()) == (
+        2,
+        "Give --project, the project with the registry.",
+    )

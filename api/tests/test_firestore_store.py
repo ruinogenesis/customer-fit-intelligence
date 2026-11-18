@@ -235,7 +235,7 @@ def test_a_what_if_saves_nothing_in_firestore(firestore_client: FlaskClient) -> 
 @needs_emulator
 def test_the_registry_promotes_and_rolls_back_in_firestore() -> None:
     from cfi_api.firestore_store import FirestoreStore
-    from cfi_api.registry import ModelEntry, UnknownVersion
+    from cfi_api.model_registry import ModelEntry, UnknownVersion
 
     store = FirestoreStore(firestore.Client(project="demo-cfi"))
     tag = uuid.uuid4().hex[:8]
@@ -273,7 +273,7 @@ def test_the_registry_promotes_and_rolls_back_in_firestore() -> None:
 def test_an_event_reads_the_live_version_inside_its_transaction(
     reference_model: str,
 ) -> None:
-    from cfi_api.registry import Models, register
+    from cfi_api.model_registry import Models, register
 
     app = create_app(
         {"STORE": "firestore", "PROJECT": "demo-cfi", "REGISTRY": "memory"}

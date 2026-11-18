@@ -8,7 +8,7 @@ from flask import current_app
 
 from cfi_api.export import Publisher, PubSubPublisher
 from cfi_api.history import BigQueryHistory, History
-from cfi_api.registry import GcsFiles, LiveModel, MemoryFiles, Models
+from cfi_api.model_registry import GcsFiles, LiveModel, MemoryFiles, Models
 from cfi_api.store import MemoryStore, Reader, Store
 
 __all__ = ["LiveModel"]

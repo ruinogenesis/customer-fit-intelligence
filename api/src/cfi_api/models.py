@@ -2,7 +2,7 @@
 
 Every staff role sees the versions; only admins promote. Promoting checks
 that the version's file loads before it goes live, and the next event on
-every instance is scored by it (cfi_api.registry). Rolling back is
+every instance is scored by it (cfi_api.model_registry). Rolling back is
 promoting an older version.
 """
 
@@ -18,7 +18,13 @@ from marshmallow import Schema, fields
 from cfi_api.access import ACCESS
 from cfi_api.customers import NOT_STAFF, UNSIGNED
 from cfi_api.errors import ErrorSchema
-from cfi_api.registry import BadModel, Models, UnknownVersion, model_document, promote
+from cfi_api.model_registry import (
+    BadModel,
+    Models,
+    UnknownVersion,
+    model_document,
+    promote,
+)
 from cfi_api.runtime import registry, store
 
 blp = Blueprint("models", __name__, description="The model registry")
