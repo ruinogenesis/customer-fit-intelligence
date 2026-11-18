@@ -14,6 +14,18 @@ screen of the design doc. Each screen says whether this role may take its
 main action; an account with no role sees "No dashboard access". The
 screens fill in with T402 to T407.
 
+Screens call the API as the person signed in (`src/api.ts`): same origin,
+`/api/v1/...`, with their ID token as `Authorization: Bearer`.
+
+## Models (T407)
+
+Every version in the registry, newest first, with its status, metrics and
+dates (Bangkok time), and its model card rendered from markdown (DOMPurify
+removes anything unsafe). Admins promote a candidate, or roll back by
+promoting a retired version, after a confirm step that says which version
+goes live and which is retired. The screen loads as its own chunk, so the
+markdown libraries stay out of the first page load.
+
 The Firebase config, Web API key included, is never in the repo or the
 build: on Hosting the app fetches the project's own from
 `/__/firebase/init.json`, which needs a registered web app (one-time setup
@@ -28,7 +40,16 @@ Node 24, from `dashboard/`:
     npm run lint      # oxlint
     npm run build     # type-check (tsc -b), then build dist/
 
-To click through it locally against the Auth emulator:
+Two ways to run it locally:
+
+- `npm run dev:cloud`: the dev project, as on Hosting. The dev server
+  proxies `/api` and `/__/firebase/init.json` to https://cfi-dev-th26.web.app,
+  so you sign in with a real dev staff account and see dev data; no key is
+  copied anywhere. What you do there (a promote, say) happens on dev.
+- `npm run dev`: the emulators, as below. `/api` goes to an API you run
+  locally on port 8000.
+
+With the emulators:
 
 1. From the repo root: `firebase emulators:start --only auth,firestore --project demo-cfi`
 2. Make a staff account in the emulators (the role is a claim, plus
@@ -37,7 +58,14 @@ To click through it locally against the Auth emulator:
        FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 \
          python -m cfi_api.roles --project demo-cfi grant you@example.com admin --create
 
-3. `npm run dev` here, then open http://localhost:5173.
+3. For screens that call the API, run it against the emulators, from the
+   repo root (its registry starts empty):
+
+       FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 \
+         CFI_AUTH=firebase CFI_PROJECT=demo-cfi CFI_STORE=firestore CFI_REGISTRY=memory \
+         flask --app cfi_api run --port 8000
+
+4. `npm run dev` here, then open http://localhost:5173.
 
 ## One-time setup per project
 

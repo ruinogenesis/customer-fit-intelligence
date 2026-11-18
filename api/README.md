@@ -76,7 +76,8 @@ Run it locally with the reference model, from the repo root:
   with its status (candidate, live or retired) and metrics; `POST
   /api/v1/models/{version}/promote` (admins) makes one live, after checking
   that its file loads, and retires the one before. Promoting an older version
-  rolls back. Each event reads the live version inside its own transaction,
+  rolls back. `GET /api/v1/models/{version}/card` (every staff role) gives
+  its `model_card.md` as markdown (T407). Each event reads the live version inside its own transaction,
   so the next event on every instance uses it, with no redeploy. Admins add
   versions from the command line, which runs as they do, with Application
   Default Credentials, as `cfi_api.roles` does (below):
@@ -134,7 +135,7 @@ against the table `ACCESS` in `src/cfi_api/access.py`:
 | Request | Who may |
 | --- | --- |
 | `GET /health`, `/docs`, `/openapi.json` | anyone |
-| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers`, `/models` | every staff role |
+| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers`, `/models` and `/models/{version}/card` | every staff role |
 | `POST /score` | analysts and admins |
 | `POST /events` | admins, and the ordering app with the integration key |
 | `POST /models/{version}/promote` | admins |

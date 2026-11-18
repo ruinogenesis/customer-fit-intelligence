@@ -3,7 +3,8 @@
 // The config, Web API key included, is never in the repo or the build:
 // Hosting serves the project's own at /__/firebase/init.json, so one build
 // works for dev, staging and prod. `npm run dev` uses the emulators' demo
-// project instead, with the Auth emulator.
+// project instead, with the Auth emulator; `npm run dev:cloud` fetches dev's
+// config through the dev server's proxy (vite.config.ts), as Hosting would.
 import { FirebaseError, initializeApp, type FirebaseOptions } from "firebase/app";
 import {
   connectAuthEmulator,
@@ -23,8 +24,11 @@ const DEMO: FirebaseOptions = {
 };
 const AUTH_EMULATOR = "http://127.0.0.1:9099";
 
+/** npm run dev: the emulators. Built, or npm run dev:cloud: a real project. */
+const EMULATORS = import.meta.env.DEV && import.meta.env.MODE !== "cloud";
+
 async function config(): Promise<FirebaseOptions> {
-  if (import.meta.env.DEV) return DEMO;
+  if (EMULATORS) return DEMO;
   const answer = await fetch("/__/firebase/init.json");
   if (!answer.ok) throw new Error(`No Firebase config from Hosting (${answer.status})`);
   return (await answer.json()) as FirebaseOptions;
@@ -32,7 +36,7 @@ async function config(): Promise<FirebaseOptions> {
 
 export async function firebaseAuth(): Promise<AuthService> {
   const auth = getAuth(initializeApp(await config()));
-  if (import.meta.env.DEV) connectAuthEmulator(auth, AUTH_EMULATOR, { disableWarnings: true });
+  if (EMULATORS) connectAuthEmulator(auth, AUTH_EMULATOR, { disableWarnings: true });
   return {
     watch: (callback) =>
       onAuthStateChanged(auth, (user) => {
@@ -54,5 +58,9 @@ export async function firebaseAuth(): Promise<AuthService> {
       }
     },
     signOut: () => signOut(auth),
+    token: async () => {
+      if (auth.currentUser === null) throw new Error("Nobody is signed in");
+      return auth.currentUser.getIdToken();
+    },
   };
 }

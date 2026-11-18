@@ -24,6 +24,7 @@ from cfi_api import create_app, registry
 from cfi_api.access import ACCESS, EMULATOR
 from cfi_api.model_registry import (
     BadModel,
+    GcsFiles,
     MemoryFiles,
     ModelEntry,
     Models,
@@ -256,14 +257,68 @@ def test_staff_see_the_models_and_only_admins_promote(
     done = client.post(f"{API}/models/t112-sim/promote", headers=bearer("admin"))
     assert done.status_code == 200
     assert ACCESS["models.Promote", "POST"].role == "admin"
+    card = f"{API}/models/t112-sim/card"
+    assert client.get(card).status_code == 401
+    assert client.get(card, headers=bearer("viewer")).status_code == 200
 
 
 def test_the_endpoints_are_documented(client: FlaskClient) -> None:
     paths = client.get(f"{API}/openapi.json").get_json()["paths"]
     listing = paths[f"{API}/models"]["get"]["responses"]
     promoting = paths[f"{API}/models/{{version}}/promote"]["post"]["responses"]
+    carding = paths[f"{API}/models/{{version}}/card"]["get"]["responses"]
     assert {"200", "401", "403", "503"} <= set(listing)
     assert {"200", "401", "403", "404", "409", "503"} <= set(promoting)
+    assert {"200", "401", "403", "404", "503"} <= set(carding)
+    assert "text/markdown" in carding["200"]["content"]
+
+
+# --- Model cards (T407) ---
+
+
+def test_staff_read_a_versions_model_card(app: Flask, client: FlaskClient) -> None:
+    add(app, "t112-sim")
+    answer = client.get(f"{API}/models/t112-sim/card")
+    assert answer.status_code == 200
+    assert answer.mimetype == "text/markdown"
+    assert answer.get_data(as_text=True) == "# Model card\n"
+
+
+def test_a_card_for_an_unknown_version_or_a_missing_file_is_404(
+    app: Flask, client: FlaskClient
+) -> None:
+    entry = add(app, "t112-sim")
+    assert client.get(f"{API}/models/t999/card").status_code == 404
+    del files(app).files[card_path(entry.path)]
+    answer = client.get(f"{API}/models/t112-sim/card")
+    assert answer.status_code == 404
+    assert "no model card" in answer.get_json()["message"]
+
+
+def test_without_a_registry_cards_are_503(reference_model: str) -> None:
+    app = _app(REGISTRY=None, MODEL_PATH=reference_model, MODEL_VERSION="t112-sim")
+    assert app.test_client().get(f"{API}/models/t112-sim/card").status_code == 503
+
+
+def test_a_missing_cloud_storage_file_is_file_not_found() -> None:
+    from google.api_core.exceptions import NotFound
+
+    class Blob:
+        def download_as_bytes(self) -> bytes:
+            raise NotFound("No such object")
+
+    class Bucket:
+        def blob(self, name: str) -> Blob:
+            return Blob()
+
+    class Client:
+        def bucket(self, name: str) -> Bucket:
+            return Bucket()
+
+    gcs = GcsFiles(project=None)
+    gcs._client = Client()
+    with pytest.raises(FileNotFoundError, match="model_card.md"):
+        gcs.read("gs://cfi-test-models/models/t112-sim/model_card.md")
 
 
 # --- The command line ---

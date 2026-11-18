@@ -14,6 +14,8 @@ export interface AuthService {
   /** Rejects with a SignInError whose message is fit to show. */
   signIn(email: string, password: string): Promise<void>;
   signOut(): Promise<void>;
+  /** The signed-in person's ID token, for the API (refreshed when needed). */
+  token(): Promise<string>;
 }
 
 export class SignInError extends Error {}

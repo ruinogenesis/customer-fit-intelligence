@@ -1,6 +1,6 @@
 // The staff dashboard's shell (T401): sign-in, then every screen in a nav,
 // each saying what this person's role lets them do there.
-import { createContext, use, useEffect, useState, type FormEvent } from "react";
+import { lazy, Suspense, useEffect, useState, type ComponentType, type FormEvent } from "react";
 import {
   createBrowserRouter,
   Navigate,
@@ -10,23 +10,27 @@ import {
   type RouteObject,
 } from "react-router";
 
+import { httpApi, type Api } from "./api";
 import { SignInError, type AuthService, type Session } from "./auth";
-import { atLeast, SCREENS, whoMay, type Role, type Screen } from "./roles";
+import { atLeast, SCREENS, whoMay, type Screen } from "./roles";
+import { StaffContext, useStaff } from "./staff";
 
 type Router = ReturnType<typeof createBrowserRouter>;
 
-interface Staff {
-  email: string;
-  role: Role;
-  signOut: () => void;
-}
+/** Screens built so far, each loaded when first opened (its own chunk, with
+ * its own libraries); the rest show what they will hold (ScreenPage). */
+const PAGES: Record<string, ComponentType> = {
+  models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
+};
 
-const StaffContext = createContext<Staff | null>(null);
-
-function useStaff(): Staff {
-  const staff = use(StaffContext);
-  if (staff === null) throw new Error("The shell is shown only to signed-in staff");
-  return staff;
+function page(screen: Screen) {
+  const Page = PAGES[screen.path];
+  if (Page === undefined) return <ScreenPage screen={screen} />;
+  return (
+    <Suspense fallback={<p>Loading…</p>}>
+      <Page />
+    </Suspense>
+  );
 }
 
 export const routes: RouteObject[] = [
@@ -35,7 +39,7 @@ export const routes: RouteObject[] = [
     element: <Shell />,
     children: [
       { index: true, element: <Navigate to={SCREENS[0].path} replace /> },
-      ...SCREENS.map((screen) => ({ path: screen.path, element: <ScreenPage screen={screen} /> })),
+      ...SCREENS.map((screen) => ({ path: screen.path, element: page(screen) })),
       { path: "*", element: <NotFound /> },
     ],
   },
@@ -43,14 +47,18 @@ export const routes: RouteObject[] = [
 
 export function App({
   auth,
+  api,
   createRouter = createBrowserRouter,
 }: {
   auth: AuthService;
+  /** The API as the signed-in person; by default over HTTP with their token. */
+  api?: Api;
   createRouter?: (routes: RouteObject[]) => Router;
 }) {
   // undefined until Firebase says whether someone is signed in.
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [router] = useState(() => createRouter(routes));
+  const [client] = useState(() => api ?? httpApi(() => auth.token()));
   useEffect(() => auth.watch(setSession), [auth]);
 
   if (session === undefined) return <p className="status">Loading…</p>;
@@ -58,7 +66,7 @@ export function App({
   const signOut = () => void auth.signOut();
   if (session.role === null) return <NoAccess email={session.email} signOut={signOut} />;
   return (
-    <StaffContext value={{ email: session.email, role: session.role, signOut }}>
+    <StaffContext value={{ email: session.email, role: session.role, signOut, api: client }}>
       <RouterProvider router={router} />
     </StaffContext>
   );
