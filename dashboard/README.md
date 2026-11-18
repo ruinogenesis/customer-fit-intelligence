@@ -1,34 +1,52 @@
 # dashboard
 
-Here will be love matrix, customer profiles, drivers, automations and models. This is the ops dashboard for the business team.
+The ops dashboard for the business team: love matrix, customer profiles,
+drivers, automations and models. React + TypeScript, built by Vite, served
+by Firebase Hosting at https://cfi-dev-th26.web.app (CI deploys it on every
+merge).
 
-## Love matrix (T206, bare)
+## The shell (T401)
 
-`public/` holds a plain page (no build step) that plots every customer as a
-dot, Respect across and Love up, coloured by quadrant, live from Firestore.
-For now it reads the local emulator only, as a stand-in "viewer"; staff
-sign-in comes with the React dashboard (T401). Firebase Hosting also serves
-it at https://cfi-dev-th26.web.app (T205), where it only says to open it
-from the emulator.
+Staff sign in with Firebase Auth (email and password; there is no sign-up).
+The app reads the `role` claim on the person's ID token (T303: viewer,
+analyst or admin, granted with `python -m cfi_api.roles`) and shows every
+screen of the design doc. Each screen says whether this role may take its
+main action; an account with no role sees "No dashboard access". The
+screens fill in with T402 to T407.
 
-Watch it move, from the repo root:
+The Firebase config, Web API key included, is never in the repo or the
+build: on Hosting the app fetches the project's own from
+`/__/firebase/init.json`, which needs a registered web app (one-time setup
+below). `npm run dev` uses the emulators' demo project instead.
 
-1. `firebase emulators:start --only firestore,hosting --project demo-cfi`
-2. In a second terminal, the API writing to the emulator:
+## Work on it
 
-       FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 CFI_STORE=firestore \
-         CFI_FIRESTORE_PROJECT=demo-cfi \
-         CFI_MODEL_PATH=notebooks/results/t112_model.json CFI_MODEL_VERSION=t112-sim \
-         flask --app cfi_api run --port 8000
+Node 24, from `dashboard/`:
 
-3. Open http://127.0.0.1:5002.
-4. In a third terminal, send fake orders (T207) and watch the dots move:
+    npm ci            # the packages exactly as package-lock.json pins them
+    npm test          # Vitest (tests/*.test.ts[x]) and the legacy matrix tests
+    npm run lint      # oxlint
+    npm run build     # type-check (tsc -b), then build dist/
 
-       python -m cfi_api.fake_orders
+To click through it locally against the Auth emulator:
 
-   It replays 25 simulated customers' first 60 days, a day per second, so it
-   takes about a minute; `--help` lists the options. Running it again
-   changes nothing, as every event was already received: for new customers
-   pass another `--seed`, or restart the emulator, which keeps no data.
+1. From the repo root: `firebase emulators:start --only auth,firestore --project demo-cfi`
+2. Make a staff account in the emulators (the role is a claim, plus
+   `users/{uid}` in Firestore), from the repo root:
 
-Tests: `node --test dashboard/tests/*.test.js` (Node 20 or newer, no packages; CI uses 22).
+       FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 \
+         python -m cfi_api.roles --project demo-cfi grant you@example.com admin --create
+
+3. `npm run dev` here, then open http://localhost:5173.
+
+## One-time setup per project
+
+Register the dashboard as a web app, so Hosting can serve its config:
+
+    firebase apps:create WEB "CFI dashboard" --project cfi-dev-th26
+
+## legacy/ (T206)
+
+The first, no-build love matrix: live dots from the Firestore emulator. It
+is no longer served; T403 brings the matrix into the app, starting from
+`legacy/matrix.js` and its tests (`tests/matrix.test.js`, Node's own runner).

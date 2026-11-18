@@ -92,7 +92,7 @@ jobs:
       - name: Set up Node (for the Firebase CLI)
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Install the Firebase CLI
         run: npm install -g firebase-tools@15
@@ -116,14 +116,26 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
 
-      - name: Check that the page's scripts parse
-        run: node --check dashboard/public/main.js && node --check dashboard/public/matrix.js
+      - name: Install the dashboard's packages, exactly as locked
+        run: npm ci
+        working-directory: dashboard
+
+      - name: Lint
+        run: npm run lint
+        working-directory: dashboard
+
+      - name: Type-check and build
+        run: npm run build
+        working-directory: dashboard
 
       - name: Test
-        # Node's own test runner: the dashboard has no npm packages yet.
-        run: node --test dashboard/tests/*.test.js
+        # Vitest for the app, Node's own runner for the legacy matrix (T206).
+        run: npm test
+        working-directory: dashboard
 
   container:
     name: container (build + health)
@@ -249,7 +261,14 @@ jobs:
       - name: Set up Node (for the Firebase CLI)
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
+
+      - name: Build the dashboard
+        # No Firebase config goes in: the page fetches Hosting's own (T401).
+        run: npm ci && npm run build
+        working-directory: dashboard
+        env:
+          VITE_COMMIT: ${{ github.sha }}
 
       - name: Deploy the page and the Firestore rules and indexes to Firebase
         run: |
@@ -274,3 +293,11 @@ jobs:
             "https://firestore.googleapis.com/v1/projects/$PROJECT/databases/(default)/documents/customers" \
             | tee /tmp/firestore.txt
           grep -qx 403 /tmp/firestore.txt
+          # The dashboard built from this commit, and a web app config for it
+          # to sign in with (read, never printed: it holds the Web API key).
+          curl --silent --fail --retry 5 --retry-all-errors \
+            --output /tmp/index.html https://cfi-dev-th26.web.app/
+          grep -q "content=\"$GITHUB_SHA\"" /tmp/index.html
+          curl --silent --fail --retry 5 --retry-all-errors \
+            https://cfi-dev-th26.web.app/__/firebase/init.json \
+            | python3 -c 'import json, sys; assert json.load(sys.stdin).get("appId")'
