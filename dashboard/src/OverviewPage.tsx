@@ -3,7 +3,7 @@
 // and the riskiest customers.
 import { useCallback, useEffect, useState } from "react";
 
-import { LineChart } from "./LineChart";
+import { digitsFor, LineChart } from "./LineChart";
 import {
   clock,
   decimal,
@@ -20,6 +20,11 @@ import { useStaff } from "./staff";
 
 export const REFRESH_MS = 30_000;
 const RISKIEST = 10;
+
+// The smallest change that fills a trend chart's height: smaller ones, down
+// to the floating-point noise in BigQuery's daily averages, draw nearly flat.
+const FIT_SPAN = 0.05;
+const CHURN_SPAN = 0.01; // one percentage point
 
 type Now =
   | { state: "loading" }
@@ -162,12 +167,19 @@ function TrendView({ daily }: { daily: Daily }) {
         {trend.from} to {trend.to}, from the daily snapshots written at 02:00 Bangkok.
       </p>
       <div className="charts">
-        <LineChart title="Average fit" points={fit} format={(v) => decimal(v)} axis={(v) => decimal(v, 2)} />
+        <LineChart
+          title="Average fit"
+          points={fit}
+          minSpan={FIT_SPAN}
+          format={(v) => decimal(v)}
+          axis={(v, step) => decimal(v, digitsFor(step))}
+        />
         <LineChart
           title="Average churn risk"
           points={churn}
+          minSpan={CHURN_SPAN}
           format={(v) => percent(v)}
-          axis={(v) => percent(v, 1)}
+          axis={(v, step) => percent(v, digitsFor(step * 100))}
         />
       </div>
       <details>
