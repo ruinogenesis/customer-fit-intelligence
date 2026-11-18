@@ -227,3 +227,86 @@ def test_a_what_if_saves_nothing_in_firestore(firestore_client: FlaskClient) -> 
     stored = db.document(f"customers/{customer}").get().to_dict()
     assert stored["scores"]["fit"] == now["fit"]
     assert len(db.collection(f"customers/{customer}/scores").get()) == 1
+
+
+# --- The model registry in Firestore (T310) ---
+
+
+@needs_emulator
+def test_the_registry_promotes_and_rolls_back_in_firestore() -> None:
+    from cfi_api.firestore_store import FirestoreStore
+    from cfi_api.model_registry import ModelEntry, UnknownVersion
+
+    store = FirestoreStore(firestore.Client(project="demo-cfi"))
+    tag = uuid.uuid4().hex[:8]
+    first, second = f"a-{tag}", f"b-{tag}"
+
+    def entry(version: str, hours: int) -> ModelEntry:
+        return ModelEntry(
+            version=version,
+            status="candidate",
+            path=f"gs://cfi-test-models/models/{version}/model.json",
+            sha256="0" * 64,
+            metrics={"churn_auc": 0.7},
+            created_at=T0 + timedelta(hours=hours),
+            promoted_at=None,
+        )
+
+    store.add_model(entry(first, 0))
+    store.add_model(entry(second, 1))
+    with pytest.raises(ValueError, match="already registered"):
+        store.add_model(entry(first, 2))
+    assert store.promote_model(first, T0).status == "live"
+    found = store.find_live_model()
+    assert found is not None and found.version == first
+    store.promote_model(second, T0)
+    mine = {e.version: e.status for e in store.list_models() if e.version.endswith(tag)}
+    assert mine == {first: "retired", second: "live"}
+    store.promote_model(first, T0)  # rolling back
+    mine = {e.version: e.status for e in store.list_models() if e.version.endswith(tag)}
+    assert mine == {first: "live", second: "retired"}
+    with pytest.raises(UnknownVersion):
+        store.promote_model(f"none-{tag}", T0)
+
+
+@needs_emulator
+def test_an_event_reads_the_live_version_inside_its_transaction(
+    reference_model: str,
+) -> None:
+    from cfi_api.model_registry import Models, register
+
+    app = create_app(
+        {"STORE": "firestore", "PROJECT": "demo-cfi", "REGISTRY": "memory"}
+    )
+    models = app.extensions["cfi_models"]
+    assert isinstance(models, Models)
+    tag = uuid.uuid4().hex[:8]
+    with open(reference_model, "rb") as model:
+        register(
+            app.extensions["cfi_store"],
+            models.files,
+            version=f"live-{tag}",
+            model_json=model.read(),
+            card=b"# card",
+            bucket="cfi-test-models",
+            trained=T0,
+            metrics={},
+        )
+    client = app.test_client()
+    assert client.post(f"/api/v1/models/live-{tag}/promote").status_code == 200
+    placed = _event(
+        "order_placed",
+        {
+            "order_id": f"ord_{tag}",
+            "restaurant_id": "rest_1",
+            "basket_value": 50_000,
+            "fees": 6_000,
+            "promised_eta": (T0 + timedelta(minutes=30)).isoformat(),
+            "promo_used": False,
+        },
+        f"cust_{tag}",
+        0,
+    )
+    answer = client.post("/api/v1/events", json=placed)
+    assert answer.status_code == 201
+    assert answer.get_json()["model_version"] == f"live-{tag}"

@@ -406,6 +406,11 @@ class ModelDocument(StrictSchema):
     version = _id("The model version")
     status = _choice(MODEL_STATUSES, "Only one version is live at a time")
     path = _gs_path("Its model.json in Cloud Storage; model_card.md sits next to it")
+    sha256 = fields.String(
+        required=True,
+        validate=validate.Regexp(r"^[0-9a-f]{64}$"),
+        metadata={"description": "model.json's SHA-256, checked before it is used"},
+    )
     metrics = fields.Dict(
         required=True,
         keys=fields.String(validate=validate.Length(min=1)),

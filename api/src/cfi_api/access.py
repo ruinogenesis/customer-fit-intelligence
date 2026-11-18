@@ -96,6 +96,8 @@ ACCESS: dict[tuple[str, str], Rule] = {
     ("customers.CustomerOrders", "GET"): Rule("viewer"),
     ("matrix.Matrix", "GET"): Rule("viewer"),
     ("drivers.Drivers", "GET"): Rule("viewer"),
+    ("models.ModelList", "GET"): Rule("viewer"),
+    ("models.Promote", "POST"): Rule("admin"),
 }
 
 # Checks an ID token: its claims, or None if it is not a valid token.

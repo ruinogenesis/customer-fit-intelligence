@@ -19,7 +19,7 @@ from typing import Any
 from fitcore.documents import customer_from_document, order_from_document
 from fitcore.model import QUADRANTS
 from fitcore.scoring import Customer, Order
-from google.api_core.exceptions import Aborted
+from google.api_core.exceptions import Aborted, AlreadyExists
 from google.cloud import firestore
 from google.cloud.firestore import FieldFilter
 from google.cloud.firestore_v1.field_path import FieldPath
@@ -30,6 +30,7 @@ from cfi_api.export import (
     outbox_entry,
     outbox_from_document,
 )
+from cfi_api.model_registry import LIVE, ModelEntry, entry_from_document, model_document
 from cfi_api.store import (
     Busy,
     CustomerKey,
@@ -39,7 +40,9 @@ from cfi_api.store import (
     TimeKey,
     Work,
     customer_key,
+    newest_first,
     order_key,
+    promoted,
     score_key,
     writes,
 )
@@ -89,6 +92,26 @@ class FirestoreReader:
     def find_order(self, order_id: str) -> Order | None:
         document = self._get(f"orders/{order_id}")
         return None if document is None else order_from_document(document)
+
+    def find_live_model(self) -> ModelEntry | None:
+        # A query, inside the event's transaction when it has one: a promote
+        # then changes what this read, and Firestore runs the event again.
+        query = (
+            self._client.collection("models")
+            .where(filter=FieldFilter("status", "==", LIVE))
+            .limit(2)
+        )
+        found = [
+            snapshot.to_dict()
+            for snapshot in (
+                self._transaction.get(query)
+                if self._transaction is not None
+                else query.stream()
+            )
+        ]
+        if len(found) > 1:
+            raise RuntimeError("more than one model version is live")
+        return entry_from_document(found[0]) if found and found[0] else None
 
 
 class FirestoreStore(FirestoreReader):
@@ -199,6 +222,44 @@ class FirestoreStore(FirestoreReader):
             # One aggregation per quadrant: billed by index entries, not documents.
             counts[quadrant] = int(query.count().get()[0][0].value)
         return counts
+
+    # --- The model registry (T310) ---
+
+    def list_models(self) -> list[ModelEntry]:
+        found = (
+            snapshot.to_dict()
+            for snapshot in self._client.collection("models").stream()
+        )
+        return newest_first([entry_from_document(doc) for doc in found if doc])
+
+    def add_model(self, entry: ModelEntry) -> None:
+        try:
+            self._client.document(f"models/{entry.version}").create(
+                model_document(entry)
+            )
+        except AlreadyExists as err:
+            raise ValueError(f"{entry.version} is already registered") from err
+
+    def promote_model(self, version: str, now: datetime) -> ModelEntry:
+        @firestore.transactional
+        def run(transaction: firestore.Transaction) -> None:
+            every = self._client.collection("models").order_by("created_at")
+            snapshots = transaction.get(every)
+            entries = {
+                doc["version"]: entry_from_document(doc)
+                for doc in (snapshot.to_dict() for snapshot in snapshots)
+                if doc
+            }
+            for entry in promoted(entries, version, now):
+                transaction.set(
+                    self._client.document(f"models/{entry.version}"),
+                    model_document(entry),
+                )
+
+        run(self._client.transaction(max_attempts=MAX_ATTEMPTS))
+        found = self._client.document(f"models/{version}").get().to_dict()
+        assert found is not None
+        return entry_from_document(found)
 
 
 def gave_up(err: Exception) -> bool:

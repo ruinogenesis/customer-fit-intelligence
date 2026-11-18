@@ -6,10 +6,16 @@ from typing import Any
 
 from flask import Flask
 
-from cfi_api import customers, drivers, events, health, matrix, score
+from cfi_api import customers, drivers, events, health, matrix, models, score
 from cfi_api.access import SECURITY_SCHEMES, require_access
 from cfi_api.errors import CfiApi
-from cfi_api.runtime import load_model, make_history, make_publisher, make_store
+from cfi_api.runtime import (
+    load_model,
+    make_history,
+    make_models,
+    make_publisher,
+    make_store,
+)
 
 API_PREFIX = "/api/v1"
 
@@ -25,6 +31,10 @@ DEFAULTS: dict[str, Any] = {
     # neither. With neither, /health reports no model and /events answers 503.
     "MODEL_PATH": None,
     "MODEL_VERSION": None,
+    # Or the model registry (cfi_api.model_registry, T310): "gcs" scores with the
+    # store's live version, its files in Cloud Storage; "memory" keeps the
+    # files in this process (tests). Not with MODEL_PATH.
+    "REGISTRY": None,
     # Where events and state live: "memory" (this process only) or "firestore".
     "STORE": "memory",
     # The Google Cloud project, for Firestore and sign-in tokens; None uses
@@ -49,9 +59,9 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
 
     An environment variable drops its prefix: CFI_MODEL_PATH sets
     MODEL_PATH. Tests pass their own config. Raises ValueError for a model
-    with only a path or only a version, an unknown store, an unknown AUTH, a
-    write key that would not be checked, a topic without a project or an
-    unknown history.
+    with only a path or only a version, a model file and a registry both,
+    an unknown store or registry, an unknown AUTH, a write key that would
+    not be checked, a topic without a project or an unknown history.
     """
     # No static files: the API serves only its endpoints.
     app = Flask(__name__, static_folder=None)
@@ -60,6 +70,11 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     app.config.update(config or {})
     app.extensions["cfi_model"] = load_model(
         app.config["MODEL_PATH"], app.config["MODEL_VERSION"]
+    )
+    if app.config["REGISTRY"] is not None and app.extensions["cfi_model"]:
+        raise ValueError("set MODEL_PATH or REGISTRY, not both")
+    app.extensions["cfi_models"] = make_models(
+        app.config["REGISTRY"], app.config["PROJECT"]
     )
     publisher = make_publisher(app.config["TOPIC"], app.config["PROJECT"])
     app.extensions["cfi_publisher"] = publisher
@@ -81,4 +96,5 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     api.register_blueprint(customers.blp, url_prefix=API_PREFIX)
     api.register_blueprint(matrix.blp, url_prefix=API_PREFIX)
     api.register_blueprint(drivers.blp, url_prefix=API_PREFIX)
+    api.register_blueprint(models.blp, url_prefix=API_PREFIX)
     return app
