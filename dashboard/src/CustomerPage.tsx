@@ -7,13 +7,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 
 import { ApiError, type Api } from "./api";
+import { Bars } from "./Bars";
 import {
   baht,
   changeOf,
   customerPath,
   delivery,
   INPUT_NAMES,
-  INPUTS,
   mergeScorings,
   signed,
   splitOf,
@@ -409,7 +409,7 @@ function SplitView({ scoring, score }: { scoring: Scoring; score: Score }) {
       {scoring.drivers !== undefined && scoring.drivers.length > 0 && (
         <p>Fit's top drivers here: {scoring.drivers.map((d) => INPUT_NAMES[d]).join(", ")}.</p>
       )}
-      <Bars parts={split.parts} score={score} label={`${SCORE_NAMES[score]}: each input's share`} />
+      <ScoreBars parts={split.parts} score={score} label={`${SCORE_NAMES[score]}: each input's share`} />
     </>
   );
 }
@@ -444,17 +444,17 @@ function ChangeView({
           parts don't add up to the change.
         </p>
       )}
-      <Bars parts={change.parts} score={score} label={`${SCORE_NAMES[score]}: each input's change`} />
+      <ScoreBars
+        parts={change.parts}
+        score={score}
+        label={`${SCORE_NAMES[score]}: each input's change`}
+      />
     </>
   );
 }
 
-/**
- * Each input's share as a bar from a middle line: right raises the score,
- * left lowers it. Blue is better for the customer than expected, red worse
- * (for churn risk, lower is better). Every value is printed, signed.
- */
-function Bars({
+/** A score's bars: blue is better for the customer (for churn risk, lower is). */
+function ScoreBars({
   parts,
   score,
   label,
@@ -463,39 +463,21 @@ function Bars({
   score: Score;
   label: string;
 }) {
-  const scale = Math.max(SPAN[score], ...INPUTS.map((input) => Math.abs(parts[input])));
-  const better = (value: number) => (score === "churn_risk" ? value < 0 : value > 0);
   return (
-    <>
-      <table className="bars" aria-label={label}>
-        <tbody>
-          {INPUTS.map((input) => {
-            const value = parts[input];
-            const width = `${(Math.abs(value) / scale) * 50}%`;
-            const side = value > 0 ? "right" : "left";
-            return (
-              <tr key={input}>
-                <th scope="row">{INPUT_NAMES[input]}</th>
-                <td className="track">
-                  {Math.abs(value) >= 5e-4 * scale && (
-                    <span
-                      className={`bar ${side} ${better(value) ? "better" : "worse"}`}
-                      style={{ width }}
-                    />
-                  )}
-                </td>
-                <td className="amount">{showPart(score, value)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <p className="legend">
-        <span className="key better" /> better for the customer than expected{" "}
-        <span className="key worse" /> worse. Bars to the right raise{" "}
-        {SCORE_NAMES[score].toLowerCase()}, to the left lower it.
-      </p>
-    </>
+    <Bars
+      parts={parts}
+      label={label}
+      floor={SPAN[score]}
+      format={(value) => showPart(score, value)}
+      better={(value) => (score === "churn_risk" ? value < 0 : value > 0)}
+      legend={
+        <>
+          <span className="key better" /> better for the customer than expected{" "}
+          <span className="key worse" /> worse. Bars to the right raise{" "}
+          {SCORE_NAMES[score].toLowerCase()}, to the left lower it.
+        </>
+      }
+    />
   );
 }
 

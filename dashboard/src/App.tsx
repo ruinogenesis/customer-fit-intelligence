@@ -24,6 +24,7 @@ const PAGES: Record<string, ComponentType> = {
   overview: lazy(async () => ({ default: (await import("./OverviewPage")).OverviewPage })),
   matrix: lazy(async () => ({ default: (await import("./MatrixPage")).MatrixPage })),
   customers: lazy(async () => ({ default: (await import("./CustomersPage")).CustomersPage })),
+  drivers: lazy(async () => ({ default: (await import("./DriversPage")).DriversPage })),
   models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
 };
 

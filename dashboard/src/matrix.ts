@@ -117,3 +117,10 @@ export function bangkokDay(at: Date, daysBefore = 0): string {
   day.setUTCDate(day.getUTCDate() - daysBefore);
   return day.toISOString().slice(0, 10);
 }
+
+/** A day, n days later (or earlier, for a negative n): 2026-11-12 for -7. */
+export function addDays(day: string, n: number): string {
+  const d = new Date(`${day}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}

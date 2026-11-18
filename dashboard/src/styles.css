@@ -174,7 +174,8 @@ body {
 
 .overview h2,
 .customer h2,
-.matrix h2 {
+.matrix h2,
+.drivers h2 {
   margin-top: 2rem;
   font-size: 1.1rem;
 }
@@ -297,7 +298,8 @@ body {
 .overview table,
 .customers table,
 .customer table,
-.matrix table {
+.matrix table,
+.drivers table {
   border-collapse: collapse;
   background: #fff;
 }
@@ -309,7 +311,9 @@ body {
 .customer th,
 .customer td,
 .matrix th,
-.matrix td {
+.matrix td,
+.drivers th,
+.drivers td {
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid #d0d7de;
   text-align: left;
@@ -380,14 +384,15 @@ body {
 }
 
 .customer .note,
+.drivers .note,
 .legend {
   color: #57606a;
   font-size: 0.85em;
 }
 
-/* Each input's share: a bar from the middle line, at most 14px thick, its
-   free end rounded (dataviz skill); blue better than expected, red worse. */
-.customer table.bars {
+/* Each input's share (Bars.tsx): a bar from the middle line, at most 14px
+   thick, its free end rounded (dataviz skill); blue good news, red bad. */
+table.bars {
   width: 100%;
   max-width: 42rem;
 }
@@ -397,7 +402,7 @@ body {
   white-space: nowrap;
 }
 
-.customer .bars td.track {
+.bars td.track {
   position: relative;
   width: 60%;
   padding: 0;
@@ -589,4 +594,35 @@ body {
 .movement td.moved {
   background: #eef4fc;
   font-weight: 600;
+}
+
+/* Drivers (T405) */
+
+.drivers .days {
+  margin-bottom: 0.5rem;
+}
+
+.drivers .row-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: LinkText;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The open row and its inputs, tinted together. */
+.drivers tr.picked > th,
+.drivers tr.picked > td,
+.drivers tr.detail > td {
+  background: #eef4fc;
+}
+
+.drivers tr.detail > td {
+  padding: 0.25rem 1rem 1rem;
+}
+
+.drivers .ranking > tbody > tr > th {
+  font-weight: normal;
 }

@@ -28,6 +28,16 @@ once: a day's snapshot is written at 02:00 Bangkok), as two line charts
 with a crosshair on hover and arrow keys, and a table of the numbers; then
 the 10 riskiest customers from `GET /customers`.
 
+## Drivers (T405)
+
+Which inputs pull fit down at each restaurant or courier, from
+`GET /drivers`: first each input's average share of fit over every order in
+the span, then the groups worst first, each with the inputs that are worse
+there than over every order; a row opens all eight. The span defaults to the
+last 28 Bangkok days, today included. The grouping, span and minimum orders
+are kept in the URL (`?by=courier&from=2026-01-01&to=2026-04-01&min_orders=10`),
+so a link opens the same list.
+
 ## Models (T407)
 
 Every version in the registry, newest first, with its status, metrics and
