@@ -17,6 +17,11 @@ Some orders send more, after the delivery:
   incident has an issue type (ISSUE_TYPES), and a support_case opened 15
   minutes later and closed 30 minutes after that: its satisfaction is x8.
 
+With plant=True (T315), most incidents of some kinds go to a few named
+restaurants and couriers (PLANTED), so a check can tell whether /drivers
+finds them. Only who made or brought those orders changes: every gap, time
+and event id stays as it is without planting.
+
 The seed decides everything, so the same arguments always give the same
 events, ids included. Ids carry the seed ("sim1-000003"), so runs with
 different seeds never share a customer. A customer's orders, and the details
@@ -58,6 +63,19 @@ RESTAURANTS = 40
 COURIERS = 60
 PROMO_RATE = 0.2
 
+# Planted trouble (T315): with plant=True, PLANT_SHARE of each kind of
+# incident below goes to one of a few restaurants or couriers, drawn from
+# the order's own planting stream. The kitchens behind late and cold orders,
+# and the couriers behind rude ones.
+PLANTED: Mapping[str, tuple[str, tuple[str, ...]]] = MappingProxyType(
+    {
+        "late": ("restaurant_id", ("rest-00", "rest-01")),
+        "cold_food": ("restaurant_id", ("rest-02",)),
+        "rude_courier": ("courier_id", ("courier-00", "courier-01", "courier-02")),
+    }
+)
+PLANT_SHARE = 0.8
+
 # Event ids are uuid5 names in this namespace, so they never change.
 NAMESPACE = uuid.UUID("0b6f3f0e-7a1d-4c2e-9f5a-2d8c4e6b1a37")
 
@@ -65,6 +83,18 @@ NAMESPACE = uuid.UUID("0b6f3f0e-7a1d-4c2e-9f5a-2d8c4e6b1a37")
 def stars(value: float) -> int:
     """A rating as whole stars: the nearest of 1 to 5, halves rounded up."""
     return int(np.clip(np.floor(value + 0.5), 1, 5))
+
+
+def _planted(
+    incident: str | None, planting: np.random.Generator | None
+) -> dict[str, str]:
+    """Where a PLANTED incident moves its order: {field: name}, or nothing."""
+    if planting is None or incident is None or incident not in PLANTED:
+        return {}
+    field, names = PLANTED[incident]
+    if planting.random() >= PLANT_SHARE:
+        return {}
+    return {field: names[int(planting.integers(len(names)))]}
 
 
 def _order_events(
@@ -75,11 +105,14 @@ def _order_events(
     measured: Mapping[str, float],
     incident: str | None,
     rng: np.random.Generator,
+    planting: np.random.Generator | None = None,
 ) -> list[tuple[datetime, dict[str, Any]]]:
     """One order's raw events, each with its time for sorting.
 
     An order sends each event type at most once, so the order id and the
-    type are enough to name an event: they make its event_id.
+    type are enough to name an event: they make its event_id. With a
+    planting stream, a PLANTED incident may move the order to one of its
+    restaurants or couriers; rng draws exactly as it would without one.
     """
     events: list[tuple[datetime, dict[str, Any]]] = []
 
@@ -96,12 +129,14 @@ def _order_events(
 
     basket = max(BASKET_LOW, round(rng.lognormal(np.log(BASKET_MEDIAN), BASKET_SIGMA)))
     delivered = placed + timedelta(minutes=measured["x1"])
+    restaurant = f"rest-{int(rng.integers(RESTAURANTS)):02d}"
+    moved = _planted(incident, planting)
     add(
         "order_placed",
         placed,
         {
             "order_id": order_id,
-            "restaurant_id": f"rest-{int(rng.integers(RESTAURANTS)):02d}",
+            "restaurant_id": moved.get("restaurant_id", restaurant),
             "basket_value": basket,
             "fees": round(basket * measured["x3"]),
             "promised_eta": (placed + timedelta(minutes=promise)).isoformat(),
@@ -118,13 +153,11 @@ def _order_events(
             "errors": 0,
         },
     )
+    courier = f"courier-{int(rng.integers(COURIERS)):02d}"
     add(
         "order_delivered",
         delivered,
-        {
-            "order_id": order_id,
-            "courier_id": f"courier-{int(rng.integers(COURIERS)):02d}",
-        },
+        {"order_id": order_id, "courier_id": moved.get("courier_id", courier)},
     )
     if incident is not None or rng.random() < RATING_RATE:
         add(
@@ -160,13 +193,14 @@ def _order_events(
 
 
 def simulate_events(
-    customers: int, seed: int, days: float = DAYS
+    customers: int, seed: int, days: float = DAYS, *, plant: bool = False
 ) -> list[dict[str, Any]]:
     """The raw events of `customers` simulated customers over `days` days.
 
     The orders come from fitcore.sim_orders (simulate_profiles, then
-    simulate_orders from its START), and the events are in time order.
-    Raises ValueError if customers is below 1 or days is not positive.
+    simulate_orders from its START), and the events are in time order. With
+    plant, PLANTED restaurants and couriers take most of their incidents
+    (T315). Raises ValueError if customers is below 1 or days is not positive.
     """
     profiles = simulate_profiles(customers, seed)
     orders = simulate_orders(profiles, seed, start=START, days=days)
@@ -185,8 +219,13 @@ def simulate_events(
                 key: float(orders.measured[row, i]) for i, key in enumerate(INPUTS)
             },
             incident=orders.incidents[row],
-            # The order's own stream, so it does not depend on the run's size.
+            # The order's own streams, so they do not depend on the run's size.
             rng=np.random.default_rng([seed, position[sim_id], number]),
+            planting=(
+                np.random.default_rng([seed, position[sim_id], number, 1])
+                if plant
+                else None
+            ),
         )
     timed.sort(key=lambda pair: pair[0])
     return [event for _, event in timed]

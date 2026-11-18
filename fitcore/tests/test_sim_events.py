@@ -1,4 +1,8 @@
-"""T207: simulated orders as v1 events, as fake customers' apps would send them."""
+"""T207: simulated orders as v1 events, as fake customers' apps would send them.
+
+T315 adds planting: plant=True gives most of some incidents to a few
+restaurants and couriers, and changes nothing else.
+"""
 
 from collections import defaultdict
 from collections.abc import Sequence
@@ -13,8 +17,15 @@ from fitcore.features import INPUTS
 from fitcore.model import ModelParams
 from fitcore.schemas import load_event
 from fitcore.scoring import Customer, Order, apply_event, order_id_for
-from fitcore.sim_events import ISSUE_TYPES, RATING_RATE, simulate_events, stars
-from fitcore.sim_orders import simulate_orders, simulate_profiles
+from fitcore.sim_events import (
+    ISSUE_TYPES,
+    PLANT_SHARE,
+    PLANTED,
+    RATING_RATE,
+    simulate_events,
+    stars,
+)
+from fitcore.sim_orders import START, simulate_orders, simulate_profiles
 
 MODEL = Path(__file__).resolve().parents[2] / "notebooks/results/t112_model.json"
 CUSTOMERS, SEED, DAYS = 20, 3, 90.0
@@ -159,3 +170,64 @@ def test_replaying_them_scores_every_customer_and_moves_some_across_lines() -> N
     # Each session's checkout time went to its own order.
     assert all({"x1", "x2", "x3"} <= set(order.gaps) for order in orders.values())
     assert len(quadrants) >= 2
+
+
+# --- Planting (T315) ---
+
+
+def incidents(customers: int, seed: int, days: float) -> dict[str, str | None]:
+    """Each simulated order's incident, by order id."""
+    profiles = simulate_profiles(customers, seed)
+    orders = simulate_orders(profiles, seed, start=START, days=days)
+    position = {profile.customer_id: i for i, profile in enumerate(profiles)}
+    return {
+        f"sim{seed}-{position[sim_id]:06d}-{orders.order_numbers[row]:03d}": (
+            orders.incidents[row]
+        )
+        for row, sim_id in enumerate(orders.customer_ids)
+    }
+
+
+SERVED = {"order_placed": "restaurant_id", "order_delivered": "courier_id"}
+
+
+def test_planting_moves_only_who_served_an_incident_order() -> None:
+    plain = simulate_events(CUSTOMERS, SEED, DAYS)
+    planted = simulate_events(CUSTOMERS, SEED, DAYS, plant=True)
+    assert simulate_events(CUSTOMERS, SEED, DAYS, plant=False) == plain
+    assert [e["event_id"] for e in planted] == [e["event_id"] for e in plain]
+    kinds = incidents(CUSTOMERS, SEED, DAYS)
+    moved = 0
+    for was, now in zip(plain, planted, strict=True):
+        if was == now:
+            continue
+        field = SERVED[was["type"]]
+        assert {**now["payload"], field: was["payload"][field]} == was["payload"]
+        assert {**now, "payload": was["payload"]} == was
+        assert kinds[was["payload"]["order_id"]] in PLANTED
+        assert now["payload"][field] in PLANTED[kinds[was["payload"]["order_id"]]][1]
+        moved += 1
+    assert moved > 0
+
+
+def test_planted_names_take_most_of_their_incidents() -> None:
+    customers, days = 100, 180.0
+    kinds = incidents(customers, SEED, days)
+    served = {}
+    for event in simulate_events(customers, SEED, days, plant=True):
+        if event["type"] in SERVED:
+            field = SERVED[event["type"]]
+            served[event["payload"]["order_id"], field] = event["payload"][field]
+    for incident, (field, names) in PLANTED.items():
+        orders = [order for order, kind in kinds.items() if kind == incident]
+        share = sum(served[order, field] in names for order in orders) / len(orders)
+        assert share == pytest.approx(PLANT_SHARE, abs=0.1), incident
+        calm = [order for order, kind in kinds.items() if kind is None]
+        calm_share = sum(served[order, field] in names for order in calm) / len(calm)
+        assert calm_share < 0.15, incident  # elsewhere they are like the rest
+
+
+def test_a_smaller_planted_run_is_part_of_a_bigger_one() -> None:
+    small = simulate_events(5, SEED, 30.0, plant=True)
+    big = {e["event_id"]: e for e in simulate_events(10, SEED, 60.0, plant=True)}
+    assert all(big[event["event_id"]] == event for event in small)

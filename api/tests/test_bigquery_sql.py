@@ -17,7 +17,10 @@ from cfi_api import history
 
 FILES = {path.name: path.read_text() for path in sorted(ROOT.glob("bigquery/*.sql"))}
 # The SQL in cfi_api (T313), by the name it has there.
-QUERIES = {"cfi_api.history.MOVEMENT": history.MOVEMENT}
+QUERIES = {
+    "cfi_api.history.MOVEMENT": history.MOVEMENT,
+    "cfi_api.history.DRIVERS": history.DRIVERS,
+}
 SOURCES = FILES | QUERIES
 
 

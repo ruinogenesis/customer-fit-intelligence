@@ -4,7 +4,8 @@ BigQuery has no emulator. sqlglot translates each view and table function
 of a file to DuckDB, and raw.changes is filled with the rows the API's
 export sends for a list of events, through the memory store (T306). The
 tests check the SQL's logic; each task's dev check runs the same files on
-BigQuery itself.
+BigQuery itself. DuckDBClient stands in for BigQuery's client, so the
+queries in cfi_api.history run through BigQueryHistory as on Cloud Run.
 """
 
 import json
@@ -19,6 +20,7 @@ import sqlglot
 
 from cfi_api import create_app
 from cfi_api.export import MemoryPublisher
+from cfi_api.history import LOCATION
 from cfi_api.store import MemoryStore
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -87,3 +89,29 @@ def stand_in(rows: list[dict[str, Any]], *files: str) -> duckdb.DuckDBPyConnecti
         for statement in duckdb_sql(ROOT / "bigquery" / name):
             db.execute(statement)
     return db
+
+
+class DuckDBClient:
+    """BigQuery's client, as BigQueryHistory uses it, on the stand-in."""
+
+    def __init__(self, db: duckdb.DuckDBPyConnection) -> None:
+        self.db = db
+        self.types: list[str] = []  # each parameter's BigQuery type, as sent
+
+    def query(self, sql: str, *, job_config: Any, location: str) -> Any:
+        assert location == LOCATION
+        params = {}
+        for param in job_config.query_parameters:
+            self.types.append(param.type_)
+            params[param.name] = param.value
+        found = self.db.execute(
+            sqlglot.transpile(sql, read="bigquery", write="duckdb")[0], params
+        )
+        names = [column[0] for column in found.description]
+        rows = [dict(zip(names, row, strict=True)) for row in found.fetchall()]
+
+        class Job:
+            def result(self) -> list[dict[str, Any]]:
+                return rows
+
+        return Job()

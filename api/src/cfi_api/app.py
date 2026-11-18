@@ -6,7 +6,7 @@ from typing import Any
 
 from flask import Flask
 
-from cfi_api import customers, events, health, matrix, score
+from cfi_api import customers, drivers, events, health, matrix, score
 from cfi_api.access import SECURITY_SCHEMES, require_access
 from cfi_api.errors import CfiApi
 from cfi_api.runtime import load_model, make_history, make_publisher, make_store
@@ -80,4 +80,5 @@ def create_app(config: Mapping[str, Any] | None = None) -> Flask:
     api.register_blueprint(score.blp, url_prefix=API_PREFIX)
     api.register_blueprint(customers.blp, url_prefix=API_PREFIX)
     api.register_blueprint(matrix.blp, url_prefix=API_PREFIX)
+    api.register_blueprint(drivers.blp, url_prefix=API_PREFIX)
     return app
