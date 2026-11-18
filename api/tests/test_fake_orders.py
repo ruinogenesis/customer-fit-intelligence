@@ -352,6 +352,27 @@ def test_main_sends_the_run_and_says_how_it_went(
     )
 
 
+def test_main_plants_when_asked(
+    app: Flask, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    sent: list[dict[str, Any]] = []
+    send = client_sender(app)
+
+    def sender(url: str, key: str | None = None, timeout: float = 10.0) -> Send:
+        def recording(event: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+            sent.append(event)
+            return send(event)
+
+        return recording
+
+    monkeypatch.setattr(fake_orders, "http_sender", sender)
+    argv = ["--customers", "20", "--days", "60", "--speed", "1e6", "--plant"]
+    assert fake_orders.main(argv) == 0
+    assert sent == simulate_events(20, seed=1, days=60.0, plant=True)
+    assert sent != simulate_events(20, seed=1, days=60.0)
+    assert "(seed 1, planted)" in capsys.readouterr().out
+
+
 def test_main_says_when_the_api_cannot_be_reached(
     capsys: pytest.CaptureFixture[str],
 ) -> None:

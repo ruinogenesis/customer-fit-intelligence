@@ -16,8 +16,7 @@ from typing import Any
 
 import duckdb
 import pytest
-import sqlglot
-from bigquery_on_duckdb import MODEL, exported, stand_in
+from bigquery_on_duckdb import MODEL, DuckDBClient, exported, stand_in
 from fitcore.golden import read_events
 from fitcore.model import QUADRANTS
 from flask import Flask
@@ -25,36 +24,11 @@ from flask.testing import FlaskClient
 from test_features import BANGKOK, EVENTS, FIRST, LAST, expected
 
 from cfi_api import create_app
-from cfi_api.history import LOCATION, BigQueryHistory, Move
+from cfi_api.history import BigQueryHistory, Move
 
 API = "/api/v1"
 ROWS = (*QUADRANTS, "unscored")
 QUADRANT = 11  # a snapshot row's quadrant (test_features.expected)
-
-
-class DuckDBClient:
-    """BigQuery's client, as BigQueryHistory uses it, on the DuckDB stand-in."""
-
-    def __init__(self, db: duckdb.DuckDBPyConnection) -> None:
-        self.db = db
-
-    def query(self, sql: str, *, job_config: Any, location: str) -> Any:
-        assert location == LOCATION
-        params = {}
-        for param in job_config.query_parameters:
-            assert param.type_ == "DATE"
-            params[param.name] = param.value
-        found = self.db.execute(
-            sqlglot.transpile(sql, read="bigquery", write="duckdb")[0], params
-        )
-        names = [column[0] for column in found.description]
-        rows = [dict(zip(names, row, strict=True)) for row in found.fetchall()]
-
-        class Job:
-            def result(self) -> list[dict[str, Any]]:
-                return rows
-
-        return Job()
 
 
 @pytest.fixture(scope="module")
@@ -133,7 +107,9 @@ def test_history_counts_each_customer_once_by_both_quadrants(
     first: date,
     last: date,
 ) -> None:
-    moves = BigQueryHistory(DuckDBClient(db)).movement(first, last)
+    client = DuckDBClient(db)
+    moves = BigQueryHistory(client).movement(first, last)
+    assert client.types == ["DATE", "DATE"]
     got = {row: dict.fromkeys(QUADRANTS, 0) for row in ROWS}
     for move in moves:
         assert isinstance(move, Move) and move.customers > 0

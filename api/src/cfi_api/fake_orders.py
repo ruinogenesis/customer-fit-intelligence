@@ -8,7 +8,8 @@ The events come from fitcore.sim_events, in time order, and are replayed at
 --speed simulated days per real second: by default 25 customers' first 60
 days, in about a minute. Sending the same run again changes nothing, as
 every event comes back as already received, so a stopped run can be resumed
-by starting it again. A new --seed adds new customers. Uses only the
+by starting it again. A new --seed adds new customers; --plant gives most of some incidents to a
+few restaurants and couriers (T315). Uses only the
 standard library to talk HTTP.
 
 An API with a write key (on Cloud Run, T205) needs it as --key, or in the
@@ -211,6 +212,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=os.environ.get("CFI_WRITE_KEY"),
         help="the API's write key, if it has one (default: $CFI_WRITE_KEY)",
     )
+    parser.add_argument(
+        "--plant",
+        action="store_true",
+        help="give most late, cold and rude orders to a few restaurants and "
+        "couriers, for /drivers to find (fitcore.sim_events.PLANTED)",
+    )
     args = parser.parse_args(argv)
     if args.customers < 1:
         parser.error("--customers must be at least 1")
@@ -218,10 +225,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--days must be positive")
     if not args.speed > 0:
         parser.error("--speed must be positive")
-    events = simulate_events(args.customers, args.seed, args.days)
+    events = simulate_events(args.customers, args.seed, args.days, plant=args.plant)
+    planted = ", planted" if args.plant else ""
     print(
         f"Sending {len(events)} events from {args.customers} customers' first "
-        f"{args.days:g} days (seed {args.seed}) to {args.url}, "
+        f"{args.days:g} days (seed {args.seed}{planted}) to {args.url}, "
         f"{args.speed:g} day(s) per second: about {args.days / args.speed:.0f} s."
     )
     try:

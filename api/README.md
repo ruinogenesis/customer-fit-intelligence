@@ -19,8 +19,9 @@ Settings come from `CFI_*` environment variables (the prefix is dropped):
   header `X-CFI-Key`; it needs `CFI_AUTH`.
 - `CFI_TOPIC`: the Pub/Sub topic that takes every saved document on to
   BigQuery (below); it needs `CFI_PROJECT`. Unset, nothing is exported.
-- `CFI_HISTORY`: `bigquery` reads BigQuery's daily snapshots in
-  `CFI_PROJECT`, for movement on `/matrix`. Unset, movement answers 503.
+- `CFI_HISTORY`: `bigquery` reads BigQuery in `CFI_PROJECT`: the daily
+  snapshots for movement on `/matrix`, and raw for `/drivers`. Unset, both
+  answer 503.
 
 Run it locally with the reference model, from the repo root:
 
@@ -53,9 +54,18 @@ Run it locally with the reference model, from the repo root:
   Bangkok days, read from BigQuery's `features.daily`, so `to` must be
   before today; a day with no snapshot yet (yesterday before the 02:00 run)
   is a 422.
+- Drivers (T315): `GET /api/v1/drivers?by=courier` (or `by=restaurant`)
+  averages each input's contribution to fit (T316's split) over each
+  courier's orders placed from `from` to `to`, Bangkok days (by default the
+  last 28, today included), each order by its latest scoring with a split.
+  `excess` compares each group with all those orders, and `drivers` names
+  the inputs worse there than overall, worst first. Groups with fewer than
+  `min_orders` (5) orders are left out; the worst `limit` (50) come first.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
-  move (dashboard/README.md).
+  move (dashboard/README.md). With `--plant`, most late and cold orders go to
+  a few restaurants and most rude ones to a few couriers, for `/drivers` to
+  find.
 - Tests: `pytest api`
 
 What the API keeps in Firestore, document by document, is in
@@ -94,7 +104,7 @@ against the table `ACCESS` in `src/cfi_api/access.py`:
 | Request | Who may |
 | --- | --- |
 | `GET /health`, `/docs`, `/openapi.json` | anyone |
-| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix` | every staff role |
+| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers` | every staff role |
 | `POST /score` | analysts and admins |
 | `POST /events` | admins, and the ordering app with the integration key |
 | anything the table does not list | admins |
@@ -208,3 +218,6 @@ One-time setup of a project (dev: T204, T205 and T208):
 13. Movement (T313): grant `cfi-api` `roles/bigquery.jobUser` on the
     project and `roles/bigquery.dataViewer` on the dataset `features`
     (`GRANT ... ON SCHEMA features`).
+14. Drivers (T315): grant `cfi-api` `roles/bigquery.dataViewer` on the
+    dataset `raw` too (`GRANT ... ON SCHEMA raw`). It already reads the same
+    documents in Firestore.
