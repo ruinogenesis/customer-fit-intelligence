@@ -16,6 +16,7 @@ import {
   type OverviewNow,
   type Trend,
 } from "./overview";
+import { CustomerTable, Tile } from "./parts";
 import { useStaff } from "./staff";
 
 export const REFRESH_MS = 30_000;
@@ -137,16 +138,6 @@ function Today({ overview, at, stale }: { overview: OverviewNow; at: Date; stale
   );
 }
 
-function Tile({ label, value, note }: { label: string; value: string; note?: string }) {
-  return (
-    <div className="tile">
-      <div className="label">{label}</div>
-      <div className="value">{value}</div>
-      {note !== undefined && <div className="note">{note}</div>}
-    </div>
-  );
-}
-
 function TrendView({ daily }: { daily: Daily }) {
   if (daily.state === "loading") return <p>Loading the daily snapshots…</p>;
   if (daily.state === "failed") return <p role="alert">No trend: {daily.message}</p>;
@@ -213,32 +204,7 @@ function Riskiest({ customers }: { customers: ListedCustomer[] }) {
   return (
     <>
       <h2>Riskiest customers</h2>
-      {customers.length === 0 ? (
-        <p>No customers yet.</p>
-      ) : (
-        <table className="riskiest">
-          <thead>
-            <tr>
-              <th>Customer</th>
-              <th>Churn risk</th>
-              <th>Fit</th>
-              <th>Quadrant</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((c) => (
-              <tr key={c.customer_id}>
-                <td>
-                  <code>{c.customer_id}</code>
-                </td>
-                <td>{percent(c.churn_risk)}</td>
-                <td>{decimal(c.scores?.fit ?? null)}</td>
-                <td>{c.quadrant === null ? "not scored" : QUADRANT_NAMES[c.quadrant]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {customers.length === 0 ? <p>No customers yet.</p> : <CustomerTable customers={customers} />}
     </>
   );
 }
