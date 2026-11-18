@@ -101,8 +101,10 @@ class Events(MethodView):
     def post(self, event: dict[str, Any]) -> Any:
         """Ingest one event and re-score its customer.
 
-        Idempotent by event_id: sending the same event again returns its
-        first result, with duplicate set to true, and changes nothing.
+        Idempotent by event_id for 30 days: sending the same event again
+        within 30 days of the first returns its first result, with duplicate
+        set to true, and changes nothing. After that the stored event has
+        expired and a repeat counts as new.
         """
         event = as_stored(event)
         try:

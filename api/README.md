@@ -42,6 +42,12 @@ Run it locally with the reference model, from the repo root:
   scored and saved in one Firestore transaction (T302), so events for one
   customer at the same moment are applied one after the other. If too many
   arrive at once it answers 503 with `Retry-After`: send it again then.
+  Firestore keeps each `events/{event_id}` for 30 days after the API
+  received it (T305): `expires_at` is the TTL field set in
+  `firestore.indexes.json`, which CI deploys, and Firestore deletes the
+  document usually within a day after that. A repeat is recognised only
+  while it is there; sent again later, an event counts as new (an
+  `order_placed` is still refused). BigQuery keeps every event.
 - What-if: `POST /api/v1/score` takes the same event and answers (200) just
   as `/events` would right now, but saves nothing.
 - Reads for the dashboard (T311): `GET /api/v1/customers` (riskiest first;

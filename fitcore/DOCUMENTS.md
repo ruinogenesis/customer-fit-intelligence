@@ -27,6 +27,7 @@ One per event received, written by the API: an event as received, and what it go
 | `result.scores.quadrant` | string | one of `lovemark`, `brand`, `fad`, `product` | Love-matrix quadrant, from the model's lines (D5) |
 | `result.drivers` | list of strings | or null | The inputs that moved that order's fit most, biggest first (at most 3); null if no score changed |
 | `result.model_version` | string |  | The model that scored it |
+| `expires_at` | timestamp |  | When Firestore's TTL policy deletes it: 30 days after the API received it (T305); BigQuery keeps every event |
 
 ## `customers/{customer_id}`
 
