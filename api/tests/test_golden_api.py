@@ -47,7 +47,9 @@ def test_the_api_scores_the_log_as_fitcore_and_the_golden_file_do(
         # 200: already received, in an emulator that outlived an earlier run
         assert response.status_code in (200, 201), response.get_json()
         answer = response.get_json()
-        got[event["event_id"]] = {k: answer[k] for k in ("order_id", "scores")}
+        got[event["event_id"]] = {
+            k: answer[k] for k in ("order_id", "scores", "drivers")
+        }
     fitcore = replay(ModelParams.from_json(Path(reference_model).read_bytes()), events)
     assert differences(got, fitcore, tolerance=0.0) == []
     assert differences(got, read_golden(GOLDEN).results) == []

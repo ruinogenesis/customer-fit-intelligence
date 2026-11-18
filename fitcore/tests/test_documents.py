@@ -19,6 +19,8 @@ from fitcore.documents import (
     reference,
 )
 from fitcore.expectations import Baseline, update
+from fitcore.features import INPUTS
+from fitcore.model import SCORES as SCORE_NAMES
 from fitcore.model import ModelParams
 from fitcore.schemas import load_event
 from fitcore.scoring import (
@@ -36,6 +38,12 @@ T0 = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 SCORES = Scores(0.9, 0.8, 0.7, 0.6, 0.5, churn_risk=0.04, quadrant="lovemark")
 LATENTS = {"respect": 0.9, "love": 0.8, "convenience": 0.7, "trust": 0.6, "fit": 0.5}
 EVENT_ID = "6f1c2c8e-8a52-4a8e-9f0e-6b1d5b0c4a11"
+
+
+def _shares(**changed: float) -> dict[str, dict[str, float]]:
+    """A score entry's contributions: every score by every input (T316)."""
+    return {name: {**dict.fromkeys(INPUTS, 0.0), **changed} for name in SCORE_NAMES}
+
 
 ORDER = Order(
     "ord_1",
@@ -81,6 +89,7 @@ def _examples() -> dict[str, dict[str, Any]]:
                 "duplicate": False,
                 "order_id": None,
                 "scores": None,
+                "drivers": None,
                 "model_version": "t112-sim",
             },
         },
@@ -92,6 +101,8 @@ def _examples() -> dict[str, dict[str, Any]]:
             "scores": LATENTS,
             "churn_risk": 0.04,
             "quadrant": "lovemark",
+            "contributions": _shares(x1=-0.2, x6=0.05),
+            "drivers": ["x1", "x6"],
             "model_version": "t112-sim",
         },
         "orders": order_document(ORDER),
@@ -206,6 +217,12 @@ def _refused(collection: str, change: dict[str, Any], match: str) -> None:
         ("customers", {"churn_risk": 1.5}, "churn_risk"),
         ("customers", {"latest_placed_at": datetime(2026, 11, 14)}, "aware"),
         ("scores", {"quadrant": "cult"}, "quadrant"),
+        ("scores", {"contributions": {"fit": dict.fromkeys(INPUTS, 0.0)}}, "cover"),
+        ("scores", {"contributions": {n: {"x1": 0.0} for n in SCORE_NAMES}}, "x2"),
+        ("scores", {"contributions": _shares(x1=-1.5)}, "contributions"),
+        ("scores", {"drivers": ["x9"]}, "drivers"),
+        ("scores", {"drivers": ["x1", "x2", "x3", "x4"]}, "drivers"),
+        ("scores", {"drivers": ["x1", "x1"]}, "once"),
         ("orders", {"fees": -1}, "fees"),
         ("orders", {"fees": 1.5}, "fees"),
         ("orders", {"promo_used": 1}, "promo_used"),

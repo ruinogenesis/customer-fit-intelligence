@@ -31,8 +31,11 @@ Run it locally with the reference model, from the repo root:
 - OpenAPI docs: http://127.0.0.1:8000/api/v1/docs (JSON at `/api/v1/openapi.json`)
 - Events: `POST /api/v1/events`, one event per call (fitcore.schemas, v1).
   It answers 201 with the re-scored order's scores (the five latents,
-  `churn_risk` and the love-matrix `quadrant`), or 200 with the first
-  result if that `event_id` was already received. Each event is read,
+  `churn_risk` and the love-matrix `quadrant`) and `drivers`, the inputs
+  that moved its fit most (T316), or 200 with the first result if that
+  `event_id` was already received. Each scoring's history entry also keeps
+  every input's share of every score (`contributions`, from
+  `fitcore.model.attributions`). Each event is read,
   scored and saved in one Firestore transaction (T302), so events for one
   customer at the same moment are applied one after the other. If too many
   arrive at once it answers 503 with `Retry-After`: send it again then.

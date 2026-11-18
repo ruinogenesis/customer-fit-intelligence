@@ -5,7 +5,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pytest
+from fitcore.features import INPUTS
+from fitcore.model import LATENTS, SCORES, all_scores
 from fitcore.scoring import score
 from flask import Flask
 from flask.testing import FlaskClient
@@ -76,12 +79,38 @@ def test_a_valid_event_is_stored_and_scored(app: Flask, client: FlaskClient) -> 
         "duplicate": False,
         "order_id": "ord_1",
         "scores": score(params, {"x3": 0.0}).to_dict(),  # 6,000 / 50,000 = the prior
+        "drivers": [],  # so nothing moved fit away from an order as expected
         "model_version": "t112-sim",
     }
     store = memory(app)
     assert set(store.events) == {event["event_id"]}
     assert store.customers["cust_1"].scores == score(params, {"x3": 0.0})
     assert [entry.order_id for entry in store.history["cust_1"]] == ["ord_1"]
+
+
+def test_each_scoring_stores_its_split_and_answers_its_drivers(
+    app: Flask, client: FlaskClient
+) -> None:
+    # T316: every score entry holds each input's share of each score, which
+    # adds up to the score's distance from an order exactly as expected.
+    answers = [
+        client.post(URL, json=placed()).get_json(),
+        client.post(URL, json=delivered("ord_1", 45)).get_json(),
+    ]
+    assert answers[1]["drivers"][0] == "x1"  # 15 minutes late
+    entries = client.get("/api/v1/customers/cust_1/scores").get_json()["scores"]
+    baseline = all_scores(
+        app.extensions["cfi_model"].params, np.zeros((1, len(INPUTS)))
+    )[0]
+    for entry, answer in zip(reversed(entries), answers, strict=True):
+        assert entry["drivers"] == answer["drivers"]
+        shares = entry["contributions"]
+        assert set(shares) == set(SCORES)  # JSON and Firestore keep no key order
+        stored = [*(entry["scores"][name] for name in LATENTS), entry["churn_risk"]]
+        for k, name in enumerate(SCORES):
+            assert set(shares[name]) == set(INPUTS)
+            total = sum(shares[name].values())
+            assert total == pytest.approx(stored[k] - baseline[k], abs=1e-12)
 
 
 def test_a_late_delivery_moves_the_customers_scores(

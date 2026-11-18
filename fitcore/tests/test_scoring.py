@@ -11,17 +11,29 @@ import pytest
 
 from fitcore import expectations
 from fitcore.features import INPUTS
-from fitcore.model import LATENTS, ModelParams, forward, outcomes, quadrant
+from fitcore.model import (
+    LATENTS,
+    SCORES,
+    ModelParams,
+    all_scores,
+    attributions,
+    forward,
+    outcomes,
+    quadrant,
+)
 from fitcore.schemas import load_event
 from fitcore.scoring import (
+    DRIVERS,
     PRIORS,
     Applied,
     Customer,
     EventConflict,
+    Explanation,
     Issue,
     Order,
     Scores,
     apply_event,
+    explain,
     measures,
     order_id_for,
     score,
@@ -447,3 +459,83 @@ def test_replaying_simulated_orders_reproduces_the_simulators_gaps() -> None:
             truth = float(orders.gaps[row, INPUTS.index(key)])
             assert gaps[key] == pytest.approx(truth, abs=1e-6 if key == "x1" else 1e-12)
     assert len(replay.orders) == len(orders) > 300
+
+
+# --- Explanations (T316) ---
+
+
+def _row(gaps: dict[str, float]) -> np.ndarray:
+    return np.array([[gaps.get(key, 0.0) for key in INPUTS]])
+
+
+def test_an_explanation_holds_all_48_contributions_adding_up() -> None:
+    gaps = {"x1": -15.0, "x3": -0.01, "x6": 0.5, "x8": -1.0}
+    explained = explain(PARAMS, gaps)
+    assert list(explained.contributions) == list(SCORES)
+    assert all(
+        list(shares) == list(INPUTS) for shares in explained.contributions.values()
+    )
+    change = all_scores(PARAMS, _row(gaps))[0] - all_scores(PARAMS, _row({}))[0]
+    for k, name in enumerate(SCORES):
+        assert sum(explained.contributions[name].values()) == pytest.approx(
+            change[k], abs=1e-12
+        )
+    fit = attributions(PARAMS, _row(gaps))[0, SCORES.index("fit")]
+    assert explained.contributions["fit"] == dict(zip(INPUTS, fit, strict=True))
+
+
+def test_drivers_are_the_inputs_that_moved_fit_most_up_or_down() -> None:
+    gaps = {"x1": -15.0, "x3": -0.01, "x6": 0.5, "x8": -1.0}
+    explained = explain(PARAMS, gaps)
+    fit = explained.contributions["fit"]
+    assert len(explained.drivers) == DRIVERS
+    sizes = [abs(fit[key]) for key in explained.drivers]
+    assert sizes == sorted(sizes, reverse=True)
+    assert min(sizes) >= max(
+        abs(fit[key]) for key in INPUTS if key not in explained.drivers
+    )
+    assert explained.drivers[0] == "x1"  # 15 minutes late
+    assert fit["x6"] > 0 and "x6" in explained.drivers  # better food also counts
+
+
+def test_only_inputs_that_moved_fit_are_drivers() -> None:
+    assert explain(PARAMS, {"x1": -15.0}).drivers == ("x1",)
+    assert explain(PARAMS, {"x1": -15.0, "x6": 0.0}).drivers == ("x1",)
+    as_expected = explain(PARAMS, {})
+    assert as_expected.drivers == ()
+    assert {
+        v for shares in as_expected.contributions.values() for v in shares.values()
+    } == {0.0}
+
+
+def test_explain_rejects_an_unknown_input() -> None:
+    with pytest.raises(ValueError, match="x9"):
+        explain(PARAMS, {"x9": 1.0})
+
+
+def test_every_scoring_is_explained_and_nothing_else_is() -> None:
+    replay = Replay()
+    sent = [
+        placed(),
+        session(150, T0 + MINUTE),
+        delivered("ord_1", T0 + 45 * MINUTE),
+        rated("ord_1", T0 + 60 * MINUTE, courier=2, food=5),
+        event("survey_response", {"item_id": "trust", "value": 2}, T0 + 70 * MINUTE),
+    ]
+    for ev in sent:
+        applied = replay.send(ev)
+        assert (applied.explained is None) == (applied.scored is None)
+        if applied.explained is not None:
+            assert applied.order is not None
+            assert applied.explained == explain(PARAMS, applied.order.gaps)
+    late = replay.send(delivered("ord_1", T0 + 50 * MINUTE))
+    assert late.explained is not None and late.explained.drivers[0] == "x1"
+
+
+def test_scored_and_explained_go_together() -> None:
+    customer = Customer.new("cust_1")
+    scores = score(PARAMS, {})
+    with pytest.raises(ValueError, match="together"):
+        Applied(customer, order=None, scored=scores)
+    with pytest.raises(ValueError, match="together"):
+        Applied(customer, None, None, explained=Explanation({}, ()))

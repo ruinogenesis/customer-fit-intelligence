@@ -8,8 +8,9 @@ replay the same log through fitcore (fitcore/tests/test_golden.py) and
 through the API with each store (api/tests/test_golden_api.py), and compare.
 
 A result is what POST /events answers about scores: the order the event
-scored and that order's scores, or None for both. Results are compared
-number by number within TOLERANCE, everything else exactly. The tolerance
+scored, that order's scores and fit's top drivers (T316), or None for all
+three. Results are compared number by number within TOLERANCE, everything
+else exactly. The tolerance
 is for another machine adding up in another order: in a trial, that moved
 a latent by at most 4.4e-16, while the closest score to a quadrant line was
 7.7e-3 away.
@@ -28,7 +29,8 @@ from fitcore.scoring import Customer, Order, apply_event, order_id_for
 
 TOLERANCE = 1e-12
 
-# One event's result: {"order_id": str | None, "scores": dict | None}.
+# One event's result: {"order_id": str | None, "scores": dict | None,
+# "drivers": list | None}.
 Result = dict[str, Any]
 
 
@@ -78,10 +80,11 @@ def replay(
         customers[customer_id] = applied.customer
         if applied.order is not None:
             orders[applied.order.order_id] = applied.order
-        scored = applied.scored
+        scored, explained = applied.scored, applied.explained
         results[str(event["event_id"])] = {
             "order_id": applied.order.order_id if scored and applied.order else None,
             "scores": None if scored is None else scored.to_dict(),
+            "drivers": None if explained is None else list(explained.drivers),
         }
     return results
 
@@ -119,10 +122,10 @@ def differences(
         if result is None:
             found.append(f"{key}: missing")
             continue
-        if result["order_id"] != expected["order_id"]:
-            found.append(
-                f"{key}: order {result['order_id']} for {expected['order_id']}"
-            )
+        for part, label in (("order_id", "order"), ("drivers", "drivers")):
+            got_part, want_part = result.get(part), expected.get(part)
+            if got_part != want_part:
+                found.append(f"{key}: {label} {got_part} for {want_part}")
         scores, wanted = result["scores"] or {}, expected["scores"] or {}
         for name in sorted(set(scores) | set(wanted)):
             value, target = scores.get(name), wanted.get(name)

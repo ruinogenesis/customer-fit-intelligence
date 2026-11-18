@@ -34,7 +34,7 @@ from typing import Any, NamedTuple, Protocol
 
 from fitcore.documents import check, customer_document, order_document
 from fitcore.model import LATENTS, QUADRANTS
-from fitcore.scoring import Applied, Customer, Order, Scores
+from fitcore.scoring import Applied, Customer, Explanation, Order, Scores
 
 from cfi_api.export import OutboxEntry, outbox_document, outbox_entry
 
@@ -60,6 +60,7 @@ class HistoryEntry:
     order_id: str
     at: datetime
     scores: Scores
+    explained: Explanation
     model_version: str
 
 
@@ -67,13 +68,14 @@ def history_entry(
     record: EventRecord, applied: Applied, model_version: str
 ) -> HistoryEntry | None:
     """The history entry for an event that scored an order, else None."""
-    if applied.scored is None or applied.order is None:
+    if applied.scored is None or applied.explained is None or applied.order is None:
         return None
     return HistoryEntry(
         event_id=record.event["event_id"],
         order_id=applied.order.order_id,
         at=record.event["occurred_at"],
         scores=applied.scored,
+        explained=applied.explained,
         model_version=model_version,
     )
 
@@ -86,6 +88,10 @@ def history_document(entry: HistoryEntry) -> dict[str, Any]:
         "scores": {name: getattr(entry.scores, name) for name in LATENTS},
         "churn_risk": entry.scores.churn_risk,
         "quadrant": entry.scores.quadrant,
+        "contributions": {
+            name: dict(shares) for name, shares in entry.explained.contributions.items()
+        },
+        "drivers": list(entry.explained.drivers),
         "model_version": entry.model_version,
     }
 
