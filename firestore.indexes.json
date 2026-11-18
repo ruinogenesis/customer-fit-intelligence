@@ -45,6 +45,46 @@
       "collectionGroup": "events",
       "fieldPath": "result",
       "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "churn_risk",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "contributions",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "drivers",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "event_id",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "model_version",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "order_id",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "quadrant",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "scores",
+      "fieldPath": "scores",
+      "indexes": []
     }
   ]
 }
