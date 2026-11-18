@@ -64,22 +64,26 @@ test("signing in opens the overview, with every screen in the nav", async () => 
   expect(screen.getByRole("banner").textContent).toContain("ana@example.com analyst");
 });
 
-test("a viewer reads the drivers screen; acting on customers is for analysts up", () => {
+test("a viewer reads the drivers screen; acting on automations is for admins", () => {
   signedInAs("viewer", "/drivers");
   expect(screen.getByText("Main action: Hand an operational fix to the right owner.")).toBeTruthy();
-  fireEvent.click(screen.getByRole("link", { name: "Customers" }));
+  fireEvent.click(screen.getByRole("link", { name: "Automations" }));
   expect(
-    screen.getByText(
-      "Read-only for you: only analysts and admins can trigger an action by hand.",
-    ),
+    screen.getByText("Read-only for you: only admins can turn rules on or off, promote from test to live."),
   ).toBeTruthy();
 });
 
-test("an analyst may act on customers, but not on automations", () => {
-  signedInAs("analyst", "/customers");
-  expect(screen.getByText("Main action: Trigger an action by hand.")).toBeTruthy();
-  fireEvent.click(screen.getByRole("link", { name: "Automations" }));
+test("an admin may act on automations; an analyst may not", () => {
+  signedInAs("admin", "/automations");
+  expect(screen.getByText("Main action: Turn rules on or off, promote from test to live.")).toBeTruthy();
+  cleanup();
+  signedInAs("analyst", "/automations");
   expect(screen.getByText(/Read-only for you: only admins/)).toBeTruthy();
+});
+
+test("the customers screen is its own page (T404)", async () => {
+  signedInAs("viewer", "/customers");
+  expect(await screen.findByRole("heading", { level: 1, name: "Customers" })).toBeTruthy();
 });
 
 test("the models screen is its own page (T407)", async () => {

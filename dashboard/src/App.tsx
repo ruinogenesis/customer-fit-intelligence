@@ -21,17 +21,24 @@ type Router = ReturnType<typeof createBrowserRouter>;
  * its own libraries); the rest show what they will hold (ScreenPage). */
 const PAGES: Record<string, ComponentType> = {
   overview: lazy(async () => ({ default: (await import("./OverviewPage")).OverviewPage })),
+  customers: lazy(async () => ({ default: (await import("./CustomersPage")).CustomersPage })),
   models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
 };
 
-function page(screen: Screen) {
-  const Page = PAGES[screen.path];
-  if (Page === undefined) return <ScreenPage screen={screen} />;
+/** One customer's profile (T404), under the Customers screen. */
+const Profile = lazy(async () => ({ default: (await import("./CustomerPage")).CustomerPage }));
+
+function loaded(Page: ComponentType) {
   return (
     <Suspense fallback={<p>Loading…</p>}>
       <Page />
     </Suspense>
   );
+}
+
+function page(screen: Screen) {
+  const Page = PAGES[screen.path];
+  return Page === undefined ? <ScreenPage screen={screen} /> : loaded(Page);
 }
 
 export const routes: RouteObject[] = [
@@ -41,6 +48,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Navigate to={SCREENS[0].path} replace /> },
       ...SCREENS.map((screen) => ({ path: screen.path, element: page(screen) })),
+      { path: "customers/:customerId", element: loaded(Profile) },
       { path: "*", element: <NotFound /> },
     ],
   },

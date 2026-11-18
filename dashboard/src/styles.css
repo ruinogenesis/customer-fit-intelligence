@@ -37,7 +37,8 @@ body {
 
 .shell {
   display: grid;
-  grid-template: "header header" auto "nav main" 1fr / 12rem 1fr;
+  /* minmax(0, 1fr): wide tables scroll in their own box, not the page. */
+  grid-template: "header header" auto "nav main" 1fr / 12rem minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -171,7 +172,8 @@ body {
 
 /* Overview (T402) */
 
-.overview h2 {
+.overview h2,
+.customer h2 {
   margin-top: 2rem;
   font-size: 1.1rem;
 }
@@ -291,15 +293,174 @@ body {
   margin-top: 0.75rem;
 }
 
-.overview table {
+.overview table,
+.customers table,
+.customer table {
   border-collapse: collapse;
   background: #fff;
 }
 
 .overview th,
-.overview td {
+.overview td,
+.customers th,
+.customers td,
+.customer th,
+.customer td {
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid #d0d7de;
   text-align: left;
   font-variant-numeric: tabular-nums;
+}
+
+/* Customers and one customer's profile (T404) */
+
+.filter {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.customers button,
+.customer button {
+  margin-top: 0.75rem;
+}
+
+.score-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.score-tabs button {
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #d0d7de;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.score-tabs button[aria-pressed="true"] {
+  border-color: #1f2328;
+  background: #1f2328;
+  color: #fff;
+}
+
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.stepper button {
+  margin: 0;
+}
+
+.mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.mode legend {
+  float: left;
+  font-weight: 600;
+}
+
+.sum {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.customer .note,
+.legend {
+  color: #57606a;
+  font-size: 0.85em;
+}
+
+/* Each input's share: a bar from the middle line, at most 14px thick, its
+   free end rounded (dataviz skill); blue better than expected, red worse. */
+.customer table.bars {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.bars th {
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.customer .bars td.track {
+  position: relative;
+  width: 60%;
+  padding: 0;
+}
+
+.bars .track::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 50%;
+  border-left: 1px solid #8c959f;
+}
+
+.bars .bar {
+  position: absolute;
+  top: 50%;
+  height: 14px;
+  transform: translateY(-50%);
+}
+
+.bars .bar.right {
+  left: 50%;
+  border-radius: 0 4px 4px 0;
+}
+
+.bars .bar.left {
+  right: 50%;
+  border-radius: 4px 0 0 4px;
+}
+
+.bars .better,
+.legend .better {
+  background: #2a78d6;
+}
+
+.bars .worse,
+.legend .worse {
+  background: #e34948;
+}
+
+.bars .amount {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.legend .key {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 2px;
+  vertical-align: -0.05em;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* The history chart at a reading width: an SVG's text grows with it. */
+.customer .line-chart {
+  max-width: 42rem;
+}
+
+.orders td {
+  white-space: nowrap;
+}
+
+.customer tr.picked td {
+  background: #eef4fc;
 }
