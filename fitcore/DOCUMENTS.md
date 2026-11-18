@@ -25,6 +25,7 @@ One per event received, written by the API: an event as received, and what it go
 | `result.scores.fit` | number | 0 to 1 | Overall fit |
 | `result.scores.churn_risk` | number | 0 to 1 | Chance of no order in the next 30 days |
 | `result.scores.quadrant` | string | one of `lovemark`, `brand`, `fad`, `product` | Love-matrix quadrant, from the model's lines (D5) |
+| `result.drivers` | list of strings | or null | The inputs that moved that order's fit most, biggest first (at most 3); null if no score changed |
 | `result.model_version` | string |  | The model that scored it |
 
 ## `customers/{customer_id}`
@@ -67,6 +68,16 @@ One per scoring of an order, written by the API: one scoring of one order.
 | `scores.fit` | number | 0 to 1 | Overall fit |
 | `churn_risk` | number | 0 to 1 | The order's churn risk |
 | `quadrant` | string | one of `lovemark`, `brand`, `fad`, `product` | The order's quadrant |
+| `contributions` | map | keys respect, love, convenience, trust, fit, churn_risk | Each input's share of how far each score sits from an order exactly as expected (every gap 0); a score's eight add up to that distance (T115) |
+| `contributions.{key}.x1` | number | -1 to 1 | Speed vs promise |
+| `contributions.{key}.x2` | number | -1 to 1 | App ease |
+| `contributions.{key}.x3` | number | -1 to 1 | Fee load |
+| `contributions.{key}.x4` | number | -1 to 1 | Order fidelity |
+| `contributions.{key}.x5` | number | -1 to 1 | Courier conduct |
+| `contributions.{key}.x6` | number | -1 to 1 | Food and selection |
+| `contributions.{key}.x7` | number | -1 to 1 | Personalization and delight |
+| `contributions.{key}.x8` | number | -1 to 1 | Recovery handling |
+| `drivers` | list of strings |  | The inputs that moved fit most, up or down, biggest first (at most 3) |
 | `model_version` | string |  | The model that scored it |
 
 ## `orders/{order_id}`

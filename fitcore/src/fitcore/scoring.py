@@ -30,6 +30,10 @@ simulator does; x1 is judged against the promise. Each order is scored on
 what was measured for that order alone: an input it has not measured counts
 as 0, "as expected" (T202: this beat carrying the last gap forward). The
 customer's scores are those of their latest order.
+
+Every scoring is also explained (T316): explain() splits each score's
+distance from an order exactly as expected across the eight inputs
+(fitcore.model.attributions, T115), and names fit's top drivers.
 """
 
 from collections.abc import Mapping
@@ -42,7 +46,15 @@ import numpy as np
 
 from fitcore import expectations
 from fitcore.features import INPUTS, input_gap
-from fitcore.model import QUADRANTS, ModelParams, forward, outcomes, quadrant
+from fitcore.model import (
+    QUADRANTS,
+    SCORES,
+    ModelParams,
+    attributions,
+    forward,
+    outcomes,
+    quadrant,
+)
 from fitcore.schemas import RATINGS
 
 # The population's usual value of x2..x8: a new customer's expectation, in
@@ -59,6 +71,9 @@ PRIORS: Mapping[str, float] = MappingProxyType(
         "x8": 4.0,  # recovery score, 1 to 5
     }
 )
+
+# How many of fit's drivers each scoring names (T316).
+DRIVERS = 3
 
 # Event types that always name their order: order_placed opens it, and the
 # others need it to exist already.
@@ -98,6 +113,21 @@ class Scores:
 
     def to_dict(self) -> dict[str, float | str]:
         return asdict(self)
+
+
+@dataclass(frozen=True)
+class Explanation:
+    """How one order's inputs moved its scores away from an order exactly as
+    expected, every gap 0 (fitcore.model.attributions, T115).
+
+    contributions: by score (fitcore.model.SCORES), then by input (INPUTS),
+    all 48, zeros included; a score's eight add up to its change. drivers:
+    the inputs that moved fit most, up or down, biggest first: at most
+    DRIVERS, fewer when fewer inputs moved fit at all.
+    """
+
+    contributions: dict[str, dict[str, float]]
+    drivers: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -179,12 +209,18 @@ class Applied:
 
     customer: the customer afterwards (always saved). order: the order the
     event created or changed (its gaps or its record), None if none. scored:
-    that order's new scores, None if no score changed.
+    that order's new scores, None if no score changed. explained: how its
+    inputs moved them (T316), exactly when scored is not None.
     """
 
     customer: Customer
     order: Order | None
     scored: Scores | None
+    explained: Explanation | None = None
+
+    def __post_init__(self) -> None:
+        if (self.scored is None) != (self.explained is None):
+            raise ValueError("scored and explained go together")
 
 
 def measures(event: Mapping[str, Any]) -> dict[str, float]:
@@ -225,20 +261,43 @@ def order_id_for(event: Mapping[str, Any], customer: Customer) -> str | None:
     return None
 
 
+def _row(gaps: Mapping[str, float]) -> np.ndarray:
+    """One order's gaps as a 1 x 8 row; an input missing from gaps is 0."""
+    unknown = set(gaps) - set(INPUTS)
+    if unknown:
+        raise ValueError(f"unknown inputs in gaps: {sorted(unknown)}")
+    return np.array([[gaps.get(key, 0.0) for key in INPUTS]], dtype=np.float64)
+
+
 def score(params: ModelParams, gaps: Mapping[str, float]) -> Scores:
     """The scores for one order's gaps; an input missing from gaps counts as 0.
 
     The quadrant uses the model's own lines (D5).
     """
-    unknown = set(gaps) - set(INPUTS)
-    if unknown:
-        raise ValueError(f"unknown inputs in gaps: {sorted(unknown)}")
-    row = np.array([[gaps.get(key, 0.0) for key in INPUTS]], dtype=np.float64)
-    latents = forward(params, row)[0]
+    latents = forward(params, _row(gaps))[0]
     churn = outcomes(params, latents[-1:]).churn[0]
     respect, love, convenience, trust, fit = (float(value) for value in latents)
     place = quadrant(params, respect, love)
     return Scores(respect, love, convenience, trust, fit, float(churn), place)
+
+
+def explain(params: ModelParams, gaps: Mapping[str, float]) -> Explanation:
+    """How one order's gaps moved its scores (T316); an input missing from
+    gaps counts as 0, as score() counts it.
+
+    Fit's drivers go by the size of their contribution, up or down; a tie
+    keeps the inputs' order, and an input that did not move fit is left out.
+    """
+    split = attributions(params, _row(gaps))[0]
+    contributions = {
+        name: dict(zip(INPUTS, (float(value) for value in split[k]), strict=True))
+        for k, name in enumerate(SCORES)
+    }
+    fit = contributions["fit"]
+    moved = sorted(
+        (key for key in INPUTS if fit[key] != 0.0), key=lambda k: -abs(fit[k])
+    )
+    return Explanation(contributions, tuple(moved[:DRIVERS]))
 
 
 def _minutes(span: timedelta) -> float:
@@ -327,12 +386,14 @@ def apply_event(
 
     changed: Order | None = None
     scored: Scores | None = None
+    explained: Explanation | None = None
     if order is not None:
         record = _record(event, order)
         if gaps or record or kind == "order_placed":
             changed = replace(order, gaps={**order.gaps, **gaps}, **record)
         if changed is not None and (gaps or kind == "order_placed"):
             scored = score(params, changed.gaps)
+            explained = explain(params, changed.gaps)
     latest_scores = customer.scores
     if scored is not None and changed is not None and changed.order_id == latest_id:
         latest_scores = scored
@@ -346,4 +407,5 @@ def apply_event(
         ),
         order=changed,
         scored=scored,
+        explained=explained,
     )

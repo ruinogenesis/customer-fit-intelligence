@@ -14,8 +14,8 @@ ids; timestamps carry a timezone (Firestore keeps them in UTC); money is
 whole satang. Scores are between 0 and 1.
 
 Fields that later tasks add are not here yet; each task adds its own:
-consent flags and the holdout bucket on customers (T610, T503), the top
-drivers on score entries (T316), and an expiry time on events (T305).
+consent flags and the holdout bucket on customers (T610, T503), and an
+expiry time on events (T305).
 
 customer_document and order_document (and their inverses) convert
 fitcore.scoring's Customer and Order, for the API and for Cloud Functions.
@@ -30,7 +30,7 @@ from marshmallow import Schema, ValidationError, fields, validate, validates_sch
 
 from fitcore.expectations import Baseline
 from fitcore.features import INPUTS
-from fitcore.model import LATENTS, QUADRANTS
+from fitcore.model import LATENTS, QUADRANTS, SCORES
 from fitcore.schemas import (
     ACTION_RESULTS,
     ARMS,
@@ -42,7 +42,7 @@ from fitcore.schemas import (
     StrictSchema,
     check_id,
 )
-from fitcore.scoring import PRIORS, Customer, Issue, Order, Scores
+from fitcore.scoring import DRIVERS, PRIORS, Customer, Issue, Order, Scores
 
 ROLES: tuple[str, ...] = ("admin", "analyst", "viewer")
 MODEL_STATUSES: tuple[str, ...] = ("candidate", "live", "retired")
@@ -105,6 +105,30 @@ def _unit(description: str, *, allow_none: bool = False) -> fields.Float:
     )
 
 
+def _share(description: str) -> fields.Float:
+    """A contribution to a score: between -1 and 1, as scores are 0 to 1."""
+    return fields.Float(
+        required=True,
+        validate=validate.Range(min=-1, max=1),
+        metadata={"description": description},
+    )
+
+
+def _distinct(names: list[str]) -> None:
+    if len(set(names)) != len(names):
+        raise ValidationError("Each input at most once.")
+
+
+def _drivers(description: str, *, allow_none: bool = False) -> fields.List:
+    return fields.List(
+        fields.String(validate=validate.OneOf(INPUTS)),
+        required=True,
+        allow_none=allow_none,
+        validate=[validate.Length(max=DRIVERS), _distinct],
+        metadata={"description": description},
+    )
+
+
 def _flag(description: str) -> StrictBoolean:
     return StrictBoolean(required=True, metadata={"description": description})
 
@@ -147,6 +171,24 @@ class ScoresSchema(LatentsSchema):
     quadrant = _choice(QUADRANTS, "Love-matrix quadrant, from the model's lines (D5)")
 
 
+class InputSharesSchema(StrictSchema):
+    """Each input's contribution to one score (fitcore.model.attributions)."""
+
+    x1 = _share("Speed vs promise")
+    x2 = _share("App ease")
+    x3 = _share("Fee load")
+    x4 = _share("Order fidelity")
+    x5 = _share("Courier conduct")
+    x6 = _share("Food and selection")
+    x7 = _share("Personalization and delight")
+    x8 = _share("Recovery handling")
+
+
+def _covers_every_score(value: Mapping[str, Any]) -> None:
+    if set(value) != set(SCORES):
+        raise ValidationError(f"Must cover exactly {', '.join(SCORES)}.")
+
+
 class EventResultSchema(StrictSchema):
     """What POST /events answered for an event."""
 
@@ -158,6 +200,11 @@ class EventResultSchema(StrictSchema):
     order_id = _id("The order this event re-scored; null if none", allow_none=True)
     scores = _nested(
         ScoresSchema, "That order's new scores; null if none changed", allow_none=True
+    )
+    drivers = _drivers(
+        f"The inputs that moved that order's fit most, biggest first (at most "
+        f"{DRIVERS}); null if no score changed",
+        allow_none=True,
     )
     model_version = _text("The model that scored it")
 
@@ -259,6 +306,21 @@ class ScoreEntryDocument(StrictSchema):
     scores = _nested(LatentsSchema, "The order's latents")
     churn_risk = _unit("The order's churn risk")
     quadrant = _choice(QUADRANTS, "The order's quadrant")
+    contributions = fields.Dict(
+        required=True,
+        keys=fields.String(validate=validate.OneOf(SCORES)),
+        values=fields.Nested(InputSharesSchema),
+        validate=_covers_every_score,
+        metadata={
+            "description": "Each input's share of how far each score sits from an "
+            "order exactly as expected (every gap 0); a score's eight add up to that "
+            "distance (T115)",
+            "keys": ", ".join(SCORES),
+        },
+    )
+    drivers = _drivers(
+        f"The inputs that moved fit most, up or down, biggest first (at most {DRIVERS})"
+    )
     model_version = _text("The model that scored it")
 
 

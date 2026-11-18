@@ -60,13 +60,14 @@ def receive(event: dict[str, Any], db: Reader) -> tuple[dict[str, Any], Applied 
         applied = apply_event(model.params, event, customer, order)
     except EventConflict as err:
         abort(409, description=str(err))
-    scored = applied.scored
+    scored, explained = applied.scored, applied.explained
     result = {
         "event_id": event["event_id"],
         "customer_id": customer_id,
         "duplicate": False,
         "order_id": applied.order.order_id if scored and applied.order else None,
         "scores": None if scored is None else scored.to_dict(),
+        "drivers": None if explained is None else list(explained.drivers),
         "model_version": model.version,
     }
     return result, applied
