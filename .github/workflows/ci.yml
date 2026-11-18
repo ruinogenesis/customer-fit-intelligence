@@ -137,10 +137,16 @@ jobs:
         run: docker build --tag cfi-api .
 
       - name: Start it as Cloud Run would
-        # Cloud Run sets PORT. CI has no Firestore, so the in-memory store.
-        run: docker run --detach --name api --publish 8080:8080 --env PORT=8080 --env CFI_STORE=memory cfi-api
+        # Cloud Run sets PORT. CI has no Firestore or registry, so the
+        # in-memory store and the reference model as a file (T310).
+        run: >-
+          docker run --detach --name api --publish 8080:8080 --env PORT=8080
+          --env CFI_STORE=memory
+          --volume "$PWD/notebooks/results/t112_model.json:/models/t112_model.json:ro"
+          --env CFI_MODEL_PATH=/models/t112_model.json --env CFI_MODEL_VERSION=t112-sim
+          cfi-api
 
-      - name: Health answers, with the model from the image
+      - name: Health answers, with the model it was given
         run: |
           for _ in $(seq 30); do
             curl --silent --fail http://127.0.0.1:8080/api/v1/health && break
@@ -237,7 +243,7 @@ jobs:
           --project "$PROJECT" --region "$REGION"
           --service-account cfi-api@cfi-dev-th26.iam.gserviceaccount.com
           --min-instances 0 --max-instances 2 --cpu 1 --memory 512Mi
-          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes,CFI_HISTORY=bigquery"
+          --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes,CFI_HISTORY=bigquery,CFI_REGISTRY=gcs"
           --set-secrets CFI_WRITE_KEY=cfi-write-key:latest
 
       - name: Set up Node (for the Firebase CLI)
@@ -257,7 +263,8 @@ jobs:
           grep -q "$GITHUB_SHA" /tmp/image.txt
           curl --silent --fail --retry 5 --retry-all-errors \
             https://cfi-dev-th26.web.app/api/v1/health | tee /tmp/health.json
-          grep -q '"model_version":"t112-sim"' /tmp/health.json
+          # Whichever version the registry has live (T310), but one.
+          grep -q '"model_version":"' /tmp/health.json
           curl --silent --output /dev/null --write-out '%{http_code}\n' \
             --retry 5 --retry-all-errors --request POST \
             https://cfi-dev-th26.web.app/api/v1/score | tee /tmp/score.txt

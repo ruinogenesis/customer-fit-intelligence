@@ -23,12 +23,16 @@ Browser is what the dashboard's read endpoints need (T311): one customer,
 pages of customers, of a customer's scores and of their orders, and the
 customers per quadrant. Both stores answer from the same documents, so the
 API answers the same from either.
+
+The model registry lives in the store too (T310, cfi_api.registry): a
+Reader finds the live version, inside an event's own unit of work, and a
+Store lists, adds and promotes versions.
 """
 
 import copy
 import threading
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from typing import Any, NamedTuple, Protocol
 
@@ -37,6 +41,13 @@ from fitcore.model import LATENTS, QUADRANTS
 from fitcore.scoring import Applied, Customer, Explanation, Order, Scores
 
 from cfi_api.export import OutboxEntry, outbox_document, outbox_entry
+from cfi_api.registry import (
+    LIVE,
+    ModelEntry,
+    UnknownVersion,
+    entry_from_document,
+    model_document,
+)
 
 # Where a list resumes: the sort key of the previous page's last document.
 # Customers go riskiest first, then by id; scores and orders newest first.
@@ -141,6 +152,10 @@ class Reader(Protocol):
 
     def find_order(self, order_id: str) -> Order | None: ...
 
+    def find_live_model(self) -> ModelEntry | None:
+        """The registry's live version, or None if no version is live (T310)."""
+        ...
+
 
 # One event's work: read what it needs through the Reader, and answer the
 # result and what changed (None: nothing to save). It must only read, as a
@@ -230,6 +245,40 @@ class Store(Reader, Browser, Protocol):
         """Delete event_id's outbox entry: Pub/Sub has every message in it."""
         ...
 
+    def list_models(self) -> list[ModelEntry]:
+        """Every registered version, newest first (T310)."""
+        ...
+
+    def add_model(self, entry: ModelEntry) -> None:
+        """Register a version. Raises ValueError if it is already registered."""
+        ...
+
+    def promote_model(self, version: str, now: datetime) -> ModelEntry:
+        """Make version live and retire the live one before it, as one unit;
+        the live version stays as it is. Raises UnknownVersion."""
+        ...
+
+
+def promoted(
+    entries: dict[str, ModelEntry], version: str, now: datetime
+) -> list[ModelEntry]:
+    """The entries promoting version changes: it, now live, and the version
+    live before it, now retired. Nothing when it is live already."""
+    if version not in entries:
+        raise UnknownVersion(version)
+    if entries[version].status == LIVE:
+        return []
+    changed = [
+        replace(entry, status="retired")
+        for entry in entries.values()
+        if entry.status == LIVE
+    ]
+    return [*changed, replace(entries[version], status=LIVE, promoted_at=now)]
+
+
+def newest_first(entries: list[ModelEntry]) -> list[ModelEntry]:
+    return sorted(entries, key=lambda e: (e.created_at, e.version), reverse=True)
+
 
 def _copied(record: EventRecord) -> EventRecord:
     return EventRecord(copy.deepcopy(record.event), copy.deepcopy(record.result))
@@ -305,6 +354,15 @@ class MemoryStore:
 
     def find_order(self, order_id: str) -> Order | None:
         return self.orders.get(order_id)
+
+    def find_live_model(self) -> ModelEntry | None:
+        # No lock, as the other finds: handle() calls work under the lock.
+        live = [
+            entry_from_document(document)
+            for path, document in list(self.documents.items())
+            if path.startswith("models/") and document["status"] == LIVE
+        ]
+        return live[0] if live else None
 
     def handle(self, event: dict[str, Any], work: Work) -> Handled:
         entry = None
@@ -403,3 +461,32 @@ class MemoryStore:
         for doc in customers:
             counts[doc["quadrant"]] += 1
         return counts
+
+    # --- The model registry (T310) ---
+
+    def _models(self) -> list[ModelEntry]:
+        found = self._found(lambda path, _: path.startswith("models/"))
+        return [entry_from_document(document) for document in found]
+
+    def list_models(self) -> list[ModelEntry]:
+        return newest_first(self._models())
+
+    def add_model(self, entry: ModelEntry) -> None:
+        document = model_document(entry)
+        with self._lock:
+            if f"models/{entry.version}" in self.documents:
+                raise ValueError(f"{entry.version} is already registered")
+            self.documents[f"models/{entry.version}"] = _as_firestore(document)
+
+    def promote_model(self, version: str, now: datetime) -> ModelEntry:
+        with self._lock:
+            entries = {
+                doc["version"]: entry_from_document(doc)
+                for path, doc in self.documents.items()
+                if path.startswith("models/")
+            }
+            for entry in promoted(entries, version, now):
+                self.documents[f"models/{entry.version}"] = _as_firestore(
+                    model_document(entry)
+                )
+            return entry_from_document(self.documents[f"models/{version}"])

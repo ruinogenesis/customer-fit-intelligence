@@ -142,6 +142,7 @@ One per model version, written by the training pipeline: a model version in the 
 | `version` | id |  | The model version |
 | `status` | string | one of `candidate`, `live`, `retired` | Only one version is live at a time |
 | `path` | string |  | Its model.json in Cloud Storage; model_card.md sits next to it |
+| `sha256` | string |  | model.json's SHA-256, checked before it is used |
 | `metrics` | map |  | Held-out metrics by name, such as churn_auc |
 | `created_at` | timestamp |  | When it was trained |
 | `promoted_at` | timestamp | or null | When it last went live; null if never |

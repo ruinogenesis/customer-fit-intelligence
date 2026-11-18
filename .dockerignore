@@ -6,6 +6,5 @@
 !api/pyproject.toml
 !api/README.md
 !api/src
-!notebooks/results/t112_model.json
 **/__pycache__
 **/.DS_Store

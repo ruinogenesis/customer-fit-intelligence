@@ -1,7 +1,6 @@
-"""What the app runs with, set up once in create_app: the model, the store,
-the publisher and the history."""
+"""What the app runs with, set up once in create_app: the model (from a
+file, or from the registry), the store, the publisher and the history."""
 
-from dataclasses import dataclass
 from pathlib import Path
 
 from fitcore.model import ModelParams
@@ -9,15 +8,10 @@ from flask import current_app
 
 from cfi_api.export import Publisher, PubSubPublisher
 from cfi_api.history import BigQueryHistory, History
-from cfi_api.store import MemoryStore, Store
+from cfi_api.registry import GcsFiles, LiveModel, MemoryFiles, Models
+from cfi_api.store import MemoryStore, Reader, Store
 
-
-@dataclass(frozen=True)
-class LiveModel:
-    """The model the API scores with, and the version it reports."""
-
-    params: ModelParams
-    version: str
+__all__ = ["LiveModel"]
 
 
 def load_model(path: str | None, version: object) -> LiveModel | None:
@@ -64,6 +58,19 @@ def make_publisher(topic: str | None, project: str | None) -> Publisher | None:
     return PubSubPublisher(project, topic)
 
 
+def make_models(kind: str | None, project: str | None) -> Models | None:
+    """The registry's models (T310): files in Cloud Storage for "gcs", in
+    memory for "memory" (tests), or None for None: the model comes from
+    MODEL_PATH then. Raises ValueError for any other kind."""
+    if kind is None:
+        return None
+    if kind == "gcs":
+        return Models(GcsFiles(project))
+    if kind == "memory":
+        return Models(MemoryFiles())
+    raise ValueError(f"REGISTRY must be 'gcs', 'memory' or unset, got {kind!r}")
+
+
 def make_history(kind: str | None, project: str | None) -> History | None:
     """A BigQueryHistory in project for "bigquery", or None for None.
 
@@ -79,10 +86,35 @@ def make_history(kind: str | None, project: str | None) -> History | None:
     raise ValueError(f"HISTORY must be 'bigquery' or unset, got {kind!r}")
 
 
-def live_model() -> LiveModel | None:
-    """The current app's model, or None when it has none."""
-    model: LiveModel | None = current_app.extensions["cfi_model"]
-    return model
+def live_model(db: Reader | None = None) -> LiveModel | None:
+    """The model to score with, or None if there is none.
+
+    Without a registry: MODEL_PATH's. With one: its live version, read
+    through db (the store, if not given), so an event reads it inside its
+    own unit of work. Raises BadModel if that version's file will not load.
+    """
+    models: Models | None = current_app.extensions["cfi_models"]
+    if models is None:
+        model: LiveModel | None = current_app.extensions["cfi_model"]
+        return model
+    entry = (db if db is not None else store()).find_live_model()
+    return None if entry is None else models.load(entry)
+
+
+def live_version() -> str | None:
+    """The live model's version, without loading it."""
+    models: Models | None = current_app.extensions["cfi_models"]
+    if models is None:
+        model: LiveModel | None = current_app.extensions["cfi_model"]
+        return None if model is None else model.version
+    entry = store().find_live_model()
+    return None if entry is None else entry.version
+
+
+def registry() -> Models | None:
+    """The current app's registry models, or None without a registry."""
+    models: Models | None = current_app.extensions["cfi_models"]
+    return models
 
 
 def store() -> Store:

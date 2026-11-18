@@ -10,6 +10,8 @@ Settings come from `CFI_*` environment variables (the prefix is dropped):
 
 - `CFI_MODEL_PATH` and `CFI_MODEL_VERSION`: the model.json to score with
   and its version; set both or neither. Without a model, `/events` answers 503.
+- `CFI_REGISTRY`: `gcs` scores with the model registry's live version
+  instead (T310, below); not with `CFI_MODEL_PATH`.
 - `CFI_STORE`: `memory` (the default; lost when the server stops) or `firestore`.
 - `CFI_PROJECT`: the Google Cloud project, for Firestore and sign-in
   tokens, such as `demo-cfi` for the emulators; unset, the environment's.
@@ -61,6 +63,25 @@ Run it locally with the reference model, from the repo root:
   `excess` compares each group with all those orders, and `drivers` names
   the inputs worse there than overall, worst first. Groups with fewer than
   `min_orders` (5) orders are left out; the worst `limit` (50) come first.
+- Models (T310): `GET /api/v1/models` lists every version in the registry
+  with its status (candidate, live or retired) and metrics; `POST
+  /api/v1/models/{version}/promote` (admins) makes one live, after checking
+  that its file loads, and retires the one before. Promoting an older version
+  rolls back. Each event reads the live version inside its own transaction,
+  so the next event on every instance uses it, with no redeploy. Admins add
+  versions from the command line, which runs as they do, with Application
+  Default Credentials, as `cfi_api.roles` does (below):
+
+      python -m cfi_api.registry --project cfi-dev-th26 register t112-sim \
+          notebooks/results/t112_model.json \
+          --card notebooks/results/t112_model_card.md --bucket cfi-dev-th26-models \
+          --trained 2026-11-14 --metric churn_auc=0.789 --metric reorder_auc=0.711
+      python -m cfi_api.registry --project cfi-dev-th26 promote t112-sim
+      python -m cfi_api.registry --project cfi-dev-th26 list
+
+  The files go to `gs://BUCKET/models/VERSION/` (`model.json` and
+  `model_card.md`), and `models/VERSION` in Firestore keeps the model.json's
+  SHA-256, which every instance checks before it uses the file.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
@@ -104,9 +125,10 @@ against the table `ACCESS` in `src/cfi_api/access.py`:
 | Request | Who may |
 | --- | --- |
 | `GET /health`, `/docs`, `/openapi.json` | anyone |
-| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers` | every staff role |
+| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers`, `/models` | every staff role |
 | `POST /score` | analysts and admins |
 | `POST /events` | admins, and the ordering app with the integration key |
+| `POST /models/{version}/promote` | admins |
 | anything the table does not list | admins |
 
 Staff send a Firebase ID token as `Authorization: Bearer <token>`. Its
@@ -136,10 +158,12 @@ The API runs on Cloud Run as the service `cfi-api` in `cfi-dev-th26`, region
 `asia-southeast3`, next to Firestore. Firebase Hosting sends every `/api/**`
 request to it (`firebase.json`, T205), so it answers on the Hosting domain
 too: https://cfi-dev-th26.web.app/api/v1/health. The image comes from the
-`Dockerfile` at the repo root, and `.dockerignore` lets in only fitcore, the
-API and the model, `notebooks/results/t112_model.json`. The service runs as
-the service account `cfi-api`, which may only read and write Firestore,
-read the secret `cfi-write-key` and publish to the topic `raw-changes`.
+`Dockerfile` at the repo root, and `.dockerignore` lets in only fitcore and
+the API: the model comes from the registry (`CFI_REGISTRY=gcs`, T310). The
+service runs as the service account `cfi-api`, which may only read and write
+Firestore, read the secret `cfi-write-key`, publish to the topic
+`raw-changes`, read BigQuery's `features` and `raw`, and read the models
+bucket.
 
 The service is public, because Hosting can only reach a service that takes
 calls without Google credentials. So the API checks its callers itself
@@ -221,3 +245,8 @@ One-time setup of a project (dev: T204, T205 and T208):
 14. Drivers (T315): grant `cfi-api` `roles/bigquery.dataViewer` on the
     dataset `raw` too (`GRANT ... ON SCHEMA raw`). It already reads the same
     documents in Firestore.
+15. Model registry (T310), before the first deploy with `CFI_REGISTRY=gcs`:
+    create the bucket `PROJECT-models` in `asia-southeast3` with uniform
+    access and public access prevention, grant `cfi-api`
+    `roles/storage.objectViewer` on it, then register and promote the
+    first version (above). Until a version is live, `/events` answers 503.

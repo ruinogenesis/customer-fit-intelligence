@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint
 from marshmallow import Schema, fields
 
-from cfi_api.runtime import live_model
+from cfi_api.runtime import live_version
 
 blp = Blueprint("health", __name__, description="Liveness and the live model")
 
@@ -23,8 +23,4 @@ class Health(MethodView):
     @blp.response(200, HealthSchema)
     def get(self) -> dict[str, str | None]:
         """Liveness check plus the live model version."""
-        model = live_model()
-        return {
-            "status": "ok",
-            "model_version": None if model is None else model.version,
-        }
+        return {"status": "ok", "model_version": live_version()}

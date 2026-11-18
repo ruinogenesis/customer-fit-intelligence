@@ -21,6 +21,7 @@ from flask_smorest import abort as abort_with
 from cfi_api.access import ACCESS
 from cfi_api.errors import ErrorSchema
 from cfi_api.export import export
+from cfi_api.registry import BadModel
 from cfi_api.runtime import live_model, publisher, store
 from cfi_api.store import Busy, Reader
 
@@ -43,7 +44,10 @@ def receive(event: dict[str, Any], db: Reader) -> tuple[dict[str, Any], Applied 
     Aborts with 503 without a model, and 409 for an event that does not fit
     what is stored or reuses an event_id for a different event.
     """
-    model = live_model()
+    try:
+        model = live_model(db)
+    except BadModel as err:
+        abort(503, description=f"The live model cannot be loaded: {err}")
     if model is None:
         abort(503, description="No model is loaded, so events cannot be scored.")
     stored = db.find_event(event["event_id"])
