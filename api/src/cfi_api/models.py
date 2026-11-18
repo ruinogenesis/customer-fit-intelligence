@@ -1,6 +1,7 @@
-"""GET /models and POST /models/{version}/promote: the model registry (T310).
+"""GET /models, a version's card and POST /models/{version}/promote (T310).
 
-Every staff role sees the versions; only admins promote. Promoting checks
+Every staff role sees the versions and their model cards (T407); only
+admins promote. Promoting checks
 that the version's file loads before it goes live, and the next event on
 every instance is scored by it (cfi_api.model_registry). Rolling back is
 promoting an older version.
@@ -10,7 +11,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from fitcore.documents import ModelDocument
-from flask import abort
+from flask import Response, abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
 from marshmallow import Schema, fields
@@ -22,6 +23,7 @@ from cfi_api.model_registry import (
     BadModel,
     Models,
     UnknownVersion,
+    card_path,
     model_document,
     promote,
 )
@@ -59,6 +61,36 @@ class ModelList(MethodView):
         """Every model version, newest first, with its status and metrics."""
         _registry()
         return {"models": [model_document(e) for e in store().list_models()]}
+
+
+@blp.route("/models/<string:version>/card")
+class ModelCard(MethodView):
+    @blp.doc(
+        responses={
+            "200": {
+                "description": "The version's model_card.md",
+                "content": {"text/markdown": {"schema": {"type": "string"}}},
+            }
+        }
+    )
+    @blp.alt_response(401, schema=ErrorSchema, description=UNSIGNED)
+    @blp.alt_response(403, schema=ErrorSchema, description=NOT_STAFF)
+    @blp.alt_response(
+        404, schema=ErrorSchema, description="No such version, or it has no card"
+    )
+    @blp.alt_response(503, schema=ErrorSchema, description=NO_REGISTRY)
+    @blp.doc(security=ACCESS["models.ModelCard", "GET"].security)
+    def get(self, version: str) -> Any:
+        """A version's model card, as markdown (fitcore.card)."""
+        models = _registry()
+        entry = next((e for e in store().list_models() if e.version == version), None)
+        if entry is None:
+            abort(404, description=f"No model version {version}.")
+        try:
+            card = models.files.read(card_path(entry.path))
+        except FileNotFoundError:
+            abort(404, description=f"{version} has no model card.")
+        return Response(card, content_type="text/markdown; charset=utf-8")
 
 
 @blp.route("/models/<string:version>/promote")

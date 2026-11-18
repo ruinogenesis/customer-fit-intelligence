@@ -107,7 +107,9 @@ class BadModel(ValueError):
 class Files(Protocol):
     """Where model files are kept, by gs:// path."""
 
-    def read(self, path: str) -> bytes: ...
+    def read(self, path: str) -> bytes:
+        """The file's bytes; raises FileNotFoundError if there is none."""
+        ...
 
     def write(self, path: str, data: bytes, content_type: str) -> None: ...
 
@@ -137,8 +139,13 @@ class GcsFiles:
         return self._client.bucket(name)
 
     def read(self, path: str) -> bytes:
+        from google.api_core.exceptions import NotFound
+
         bucket, name = _split(path)
-        data: bytes = self._bucket(bucket).blob(name).download_as_bytes()
+        try:
+            data: bytes = self._bucket(bucket).blob(name).download_as_bytes()
+        except NotFound as err:
+            raise FileNotFoundError(path) from err
         return data
 
     def write(self, path: str, data: bytes, content_type: str) -> None:

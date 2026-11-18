@@ -1,54 +1,21 @@
 // T401: sign-in, then a shell whose screens say what each role may do.
-import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { createMemoryRouter } from "react-router";
 import { afterEach, expect, test } from "vitest";
 
 import { App } from "../src/App";
-import { SignInError, signInMessage, type AuthService, type Session } from "../src/auth";
 import type { Role } from "../src/roles";
+import { FakeApi, FakeAuth } from "./fakes";
 
 afterEach(cleanup);
 
-/** Firebase Auth's stand-in: accounts by email, and a session to report. */
-class FakeAuth implements AuthService {
-  signedIn: Session | null = null;
-  private listener: ((session: Session | null) => void) | null = null;
-  private accounts: Record<string, { password: string; role: Role | null }>;
-
-  constructor(accounts: Record<string, { password: string; role: Role | null }> = {}) {
-    this.accounts = accounts;
-  }
-
-  watch(callback: (session: Session | null) => void): () => void {
-    this.listener = callback;
-    return () => {
-      this.listener = null;
-    };
-  }
-
-  /** What Firebase says when the page loads. */
-  answer(session: Session | null): void {
-    act(() => this.listener?.(session));
-  }
-
-  async signIn(email: string, password: string): Promise<void> {
-    const account = this.accounts[email];
-    if (account === undefined || account.password !== password) {
-      throw new SignInError(signInMessage("auth/invalid-credential"));
-    }
-    this.signedIn = { email, role: account.role };
-    this.listener?.(this.signedIn);
-  }
-
-  async signOut(): Promise<void> {
-    this.signedIn = null;
-    this.listener?.(null);
-  }
-}
-
 function open(auth: FakeAuth, path = "/") {
   render(
-    <App auth={auth} createRouter={(routes) => createMemoryRouter(routes, { initialEntries: [path] })} />,
+    <App
+      auth={auth}
+      api={new FakeApi()}
+      createRouter={(routes) => createMemoryRouter(routes, { initialEntries: [path] })}
+    />,
   );
 }
 
@@ -97,24 +64,28 @@ test("signing in opens the overview, with every screen in the nav", async () => 
   expect(screen.getByRole("banner").textContent).toContain("ana@example.com analyst");
 });
 
-test("a viewer reads the models screen but may not promote", () => {
-  signedInAs("viewer", "/models");
-  expect(screen.getByRole("heading", { level: 1, name: "Models" })).toBeTruthy();
+test("a viewer reads the drivers screen; acting on customers is for analysts up", () => {
+  signedInAs("viewer", "/drivers");
+  expect(screen.getByText("Main action: Hand an operational fix to the right owner.")).toBeTruthy();
+  fireEvent.click(screen.getByRole("link", { name: "Customers" }));
   expect(
-    screen.getByText("Read-only for you: only admins can promote or roll back."),
+    screen.getByText(
+      "Read-only for you: only analysts and admins can trigger an action by hand.",
+    ),
   ).toBeTruthy();
 });
 
-test("an analyst may act on customers, but not promote models", () => {
+test("an analyst may act on customers, but not on automations", () => {
   signedInAs("analyst", "/customers");
   expect(screen.getByText("Main action: Trigger an action by hand.")).toBeTruthy();
-  fireEvent.click(screen.getByRole("link", { name: "Models" }));
+  fireEvent.click(screen.getByRole("link", { name: "Automations" }));
   expect(screen.getByText(/Read-only for you: only admins/)).toBeTruthy();
 });
 
-test("an admin may promote models", () => {
+test("the models screen is its own page (T407)", async () => {
   signedInAs("admin", "/models");
-  expect(screen.getByText("Main action: Promote or roll back.")).toBeTruthy();
+  expect(await screen.findByRole("heading", { level: 1, name: "Models" })).toBeTruthy();
+  expect(await screen.findByRole("button", { name: "Promote t310-check" })).toBeTruthy();
 });
 
 test("an account with no role gets no access, and can sign out", () => {
