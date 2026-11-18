@@ -173,7 +173,8 @@ body {
 /* Overview (T402) */
 
 .overview h2,
-.customer h2 {
+.customer h2,
+.matrix h2 {
   margin-top: 2rem;
   font-size: 1.1rem;
 }
@@ -295,7 +296,8 @@ body {
 
 .overview table,
 .customers table,
-.customer table {
+.customer table,
+.matrix table {
   border-collapse: collapse;
   background: #fff;
 }
@@ -305,7 +307,9 @@ body {
 .customers th,
 .customers td,
 .customer th,
-.customer td {
+.customer td,
+.matrix th,
+.matrix td {
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid #d0d7de;
   text-align: left;
@@ -463,4 +467,126 @@ body {
 
 .customer tr.picked td {
   background: #eef4fc;
+}
+
+/* The love matrix (T403) */
+
+.matrix-plot {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.matrix-plot .plot {
+  fill: none;
+  stroke: #c3c2b7;
+}
+
+.matrix-plot .midline {
+  stroke: #c3c2b7;
+  stroke-dasharray: 4 4;
+}
+
+.matrix-plot .quadrant {
+  fill: #52514e;
+  font-weight: 600;
+}
+
+.matrix-plot .tick text,
+.matrix-plot .axis {
+  fill: #57606a;
+}
+
+.matrix-plot .axis {
+  text-anchor: middle;
+}
+
+/* Everyone in the series blue; at risk in the critical red, larger and on
+   top (dataviz skill: emphasis, named in the legend), each with a 2px
+   surface ring. A dot glides when its customer moves. */
+.matrix-plot .dot {
+  fill: #2a78d6;
+  stroke: #fff;
+  stroke-width: 2;
+  cursor: pointer;
+  transition:
+    transform 0.6s ease,
+    opacity 0.2s;
+}
+
+.matrix-plot .dot.at-risk {
+  fill: #d03b3b;
+}
+
+.matrix-plot .dot.faded {
+  opacity: 0.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matrix-plot .dot {
+    transition: none;
+  }
+}
+
+.legend .key.customer,
+.legend .key.at-risk {
+  border-radius: 50%;
+}
+
+.legend .key.customer {
+  background: #2a78d6;
+}
+
+.legend .key.at-risk {
+  background: #d03b3b;
+}
+
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.picker button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.picker button[aria-pressed="true"] {
+  border-color: #1f2328;
+  background: #1f2328;
+  color: #fff;
+}
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.days button[aria-pressed="true"] {
+  font-weight: 600;
+}
+
+.matrix .note {
+  color: #57606a;
+  font-size: 0.85em;
+}
+
+.movement td.stayed {
+  color: #57606a;
+}
+
+.movement td.moved {
+  background: #eef4fc;
+  font-weight: 600;
 }

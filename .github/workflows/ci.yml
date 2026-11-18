@@ -133,7 +133,6 @@ jobs:
         working-directory: dashboard
 
       - name: Test
-        # Vitest for the app, Node's own runner for the legacy matrix (T206).
         run: npm test
         working-directory: dashboard
 

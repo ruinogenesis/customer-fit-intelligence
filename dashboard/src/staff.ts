@@ -2,6 +2,7 @@
 import { createContext, use } from "react";
 
 import type { Api } from "./api";
+import type { CustomerFeed } from "./feed";
 import type { Role } from "./roles";
 
 export interface Staff {
@@ -9,6 +10,8 @@ export interface Staff {
   role: Role;
   signOut: () => void;
   api: Api;
+  /** Every customer, live (T403). */
+  feed: CustomerFeed;
 }
 
 export const StaffContext = createContext<Staff | null>(null);

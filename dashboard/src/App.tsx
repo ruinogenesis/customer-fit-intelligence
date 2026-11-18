@@ -12,6 +12,7 @@ import {
 
 import { httpApi, type Api } from "./api";
 import { SignInError, type AuthService, type Session } from "./auth";
+import { firestoreFeed, type CustomerFeed } from "./feed";
 import { atLeast, SCREENS, whoMay, type Screen } from "./roles";
 import { StaffContext, useStaff } from "./staff";
 
@@ -21,6 +22,7 @@ type Router = ReturnType<typeof createBrowserRouter>;
  * its own libraries); the rest show what they will hold (ScreenPage). */
 const PAGES: Record<string, ComponentType> = {
   overview: lazy(async () => ({ default: (await import("./OverviewPage")).OverviewPage })),
+  matrix: lazy(async () => ({ default: (await import("./MatrixPage")).MatrixPage })),
   customers: lazy(async () => ({ default: (await import("./CustomersPage")).CustomersPage })),
   models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
 };
@@ -57,11 +59,14 @@ export const routes: RouteObject[] = [
 export function App({
   auth,
   api,
+  feed = firestoreFeed,
   createRouter = createBrowserRouter,
 }: {
   auth: AuthService;
   /** The API as the signed-in person; by default over HTTP with their token. */
   api?: Api;
+  /** Every customer, live; by default from Firestore. */
+  feed?: CustomerFeed;
   createRouter?: (routes: RouteObject[]) => Router;
 }) {
   // undefined until Firebase says whether someone is signed in.
@@ -75,7 +80,7 @@ export function App({
   const signOut = () => void auth.signOut();
   if (session.role === null) return <NoAccess email={session.email} signOut={signOut} />;
   return (
-    <StaffContext value={{ email: session.email, role: session.role, signOut, api: client }}>
+    <StaffContext value={{ email: session.email, role: session.role, signOut, api: client, feed }}>
       <RouterProvider router={router} />
     </StaffContext>
   );

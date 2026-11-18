@@ -47,7 +47,7 @@ below). `npm run dev` uses the emulators' demo project instead.
 Node 24, from `dashboard/`:
 
     npm ci            # the packages exactly as package-lock.json pins them
-    npm test          # Vitest (tests/*.test.ts[x]) and the legacy matrix tests
+    npm test          # Vitest (tests/*.test.ts[x])
     npm run lint      # oxlint
     npm run build     # type-check (tsc -b), then build dist/
 
@@ -84,8 +84,12 @@ Register the dashboard as a web app, so Hosting can serve its config:
 
     firebase apps:create WEB "CFI dashboard" --project cfi-dev-th26
 
-## legacy/ (T206)
+## The live customer feed (T403)
 
-The first, no-build love matrix: live dots from the Firestore emulator. It
-is no longer served; T403 brings the matrix into the app, starting from
-`legacy/matrix.js` and its tests (`tests/matrix.test.js`, Node's own runner).
+The love matrix watches every customer through a Firestore listener
+(`src/feed.ts`, `src/firestoreFeed.ts`), as the signed-in staff member:
+firestore.rules lets every staff role read customers (T304). Firestore's SDK
+loads only when the matrix opens. It costs one read per customer when the
+matrix opens, then one per customer that changes. `npm run dev` points it at
+the Firestore emulator (port 8080), so run that with `--only auth,firestore`
+as above.
