@@ -20,6 +20,7 @@ FILES = {path.name: path.read_text() for path in sorted(ROOT.glob("bigquery/*.sq
 QUERIES = {
     "cfi_api.history.MOVEMENT": history.MOVEMENT,
     "cfi_api.history.DRIVERS": history.DRIVERS,
+    "cfi_api.history.TREND": history.TREND,
 }
 SOURCES = FILES | QUERIES
 

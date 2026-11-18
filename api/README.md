@@ -59,6 +59,13 @@ Run it locally with the reference model, from the repo root:
   Score history is indexed on `at` alone (T317): `firestore.indexes.json`
   leaves every other field of a score entry out, as nothing queries it in
   Firestore; BigQuery's `raw.scores` answers questions across scorings.
+- Overview (T402): `GET /api/v1/overview` is now: customers per quadrant,
+  the scored customers' average fit and churn risk, and how many are at or
+  above `at_risk` (default 0.1). Each number is a Firestore aggregation,
+  billed by index entries read (a read per 1,000), so the dashboard asks
+  every 30 seconds. `GET /api/v1/overview/trend` gives the same for each
+  Bangkok day, `days` long (default 28, at most 90) and ending on `to`
+  (default yesterday), from `features.daily` (needs `CFI_HISTORY`).
 - Movement (T313): `GET /api/v1/matrix?from=2026-10-01&to=2026-11-17` adds
   `movement`: the customers scored by the end of `to`, by their quadrant at
   the end of `from` (or `unscored`), then at the end of `to`. Days are
@@ -135,7 +142,7 @@ against the table `ACCESS` in `src/cfi_api/access.py`:
 | Request | Who may |
 | --- | --- |
 | `GET /health`, `/docs`, `/openapi.json` | anyone |
-| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/drivers`, `/models` and `/models/{version}/card` | every staff role |
+| `GET /customers`, `/customers/{id}` and its `/scores` and `/orders`, `/matrix`, `/overview` and `/overview/trend`, `/drivers`, `/models` and `/models/{version}/card` | every staff role |
 | `POST /score` | analysts and admins |
 | `POST /events` | admins, and the ordering app with the integration key |
 | `POST /models/{version}/promote` | admins |
