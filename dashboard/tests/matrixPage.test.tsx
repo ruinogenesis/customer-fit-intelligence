@@ -320,7 +320,7 @@ const ON_THE_LINE: FeedCustomer[] = [
   customer("c-h", 0.3, 0.8, "fad", 0.3),
 ];
 
-test("customers with Love as expected sit on a pale band, without rings", async () => {
+test("customers with Love as expected sit on a shaded band, without rings", async () => {
   const { feed, api } = await open("/matrix", withLiveModel());
   feed.send(ON_THE_LINE);
   expect(api.asked("/models/live")).toBe(1);
@@ -333,7 +333,7 @@ test("customers with Love as expected sit on a pale band, without rings", async 
     { id: "c-h", className: "dot at-risk as-expected", r: "6", transform: "translate(214.4px, 161.6px)" },
   ]);
   expect(document.querySelectorAll(".legend")[1]?.textContent).toBe(
-    " on the pale band: Love not measured on their latest order (3), so it scores as expected. Respect still moves them across.",
+    " on the shaded band: Love not measured on their latest order (3), so it scores as expected. Respect still moves them across.",
   );
   expect(screen.getByRole("img").getAttribute("aria-label")).toContain(
     ", 3 with Love not measured on their latest order, on one band.",

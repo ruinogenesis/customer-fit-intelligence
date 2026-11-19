@@ -4,7 +4,7 @@
 // their profile (T404). The arrow keys move through the dots (T409). Below,
 // how customers moved between quadrants from one day to another (GET /matrix,
 // T313). Customers whose latest order measured nothing that moves Love sit on
-// one pale band, the live model's as-expected Love (T410).
+// one shaded band, the live model's as-expected Love (T410).
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
 
@@ -173,7 +173,7 @@ function Now({
       </p>
       {asExpected.size > 0 && (
         <p className="legend">
-          <span className="key as-expected" /> on the pale band: Love not measured on their
+          <span className="key as-expected" /> on the shaded band: Love not measured on their
           latest order ({whole(asExpected.size)}), so it scores as expected. Respect still moves
           them across.
         </p>
