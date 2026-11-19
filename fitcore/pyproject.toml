@@ -19,6 +19,8 @@ dev = [
 lab = ["ipykernel>=6", "pandas>=2", "matplotlib>=3.8", "semopy>=2.3,<3"]
 # training only (Colab, the training job, CI); the API never installs it
 train = ["torch>=2.14,<3"]
+# the paper's comparisons (T802): BG/NBD's fit, and the notebook's baselines
+paper = ["scipy>=1.13,<2", "scikit-learn>=1.5,<2", "pandas>=2"]
 
 [tool.hatch.version]
 path = "src/fitcore/__init__.py"
@@ -43,4 +45,9 @@ warn_unused_ignores = true
 # torch is treated as untyped there. The tests check the network instead.
 [[tool.mypy.overrides]]
 module = ["torch", "torch.*"]
+ignore_missing_imports = true
+
+# Likewise scipy (the paper extra), which fitcore.baselines imports lazily.
+[[tool.mypy.overrides]]
+module = ["scipy", "scipy.*"]
 ignore_missing_imports = true
