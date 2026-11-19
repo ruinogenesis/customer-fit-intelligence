@@ -9,8 +9,10 @@ It reads notebooks/results and writes fig_*.pdf beside this file: small data
 with the T112 model (t112_model.json), planted couriers found in the top
 three (t804_drivers.csv), Olist review by days early or late
 (t805_review_by_gap.csv) and the profile likelihood of kappa
-(t805_kappa_profile.csv). The text is set in TeX Gyre Termes when it is
-installed, else in STIX, which comes with matplotlib.
+(t805_kappa_profile.csv), with its 95% interval between grid points. It also
+cuts Fig. 8's two panels, fig_dash_*.png, from the dev screenshots
+shot_matrix.png and shot_drivers.png. The text is set in TeX Gyre Termes when
+it is installed, else in STIX, which comes with matplotlib.
 """
 
 import sys
@@ -19,6 +21,7 @@ from pathlib import Path
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
+from PIL import Image
 
 OUT = Path(__file__).resolve().parent
 RESULTS = (
@@ -200,7 +203,7 @@ EXAMPLE = {"x1": -6.0, "x2": 10.0, "x3": -0.01, "x5": 0.5, "x6": -0.5}
 NAMES = {
     "x1": "$x_1$ speed: 6 min late",
     "x2": "$x_2$ app ease: 10 s faster",
-    "x3": "$x_3$ fee load: 1 point higher",
+    "x3": "$x_3$ fee load: +1% of basket",
     "x4": "$x_4$ fidelity: not measured",
     "x5": "$x_5$ courier: +0.5 star",
     "x6": "$x_6$ food: \u22120.5 star",
@@ -263,28 +266,45 @@ def example() -> None:
 LR_95 = 3.841458820694124 / 2.0
 
 
+def lr_interval(kappa: pd.Series, drop: pd.Series) -> tuple[float, float]:
+    """Where the log-likelihood drop crosses LR_95 on each side of the best kappa,
+    by linear interpolation between the profiled grid points (T809)."""
+    x, y = kappa.to_numpy(), drop.to_numpy()
+    best = int(y.argmin())
+    left = next(i for i in range(best, 0, -1) if y[i - 1] > LR_95)
+    right = next(i for i in range(best, len(y) - 1) if y[i + 1] > LR_95)
+    low = x[left - 1] + (x[left] - x[left - 1]) * (y[left - 1] - LR_95) / (
+        y[left - 1] - y[left]
+    )
+    high = x[right] + (x[right + 1] - x[right]) * (LR_95 - y[right]) / (
+        y[right + 1] - y[right]
+    )
+    return float(low), float(high)
+
+
 def kappa_profile() -> None:
     k = pd.read_csv(RESULTS / "t805_kappa_profile.csv")
     fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 1.75), sharey=True)
     panels = (
-        ("delivery", "Lateness", (1.0, 13.0)),
-        ("fee", "Fee load", (0.0, 1.6)),
+        ("delivery", "Lateness", (1.0, 13.0), ".1f"),
+        ("fee", "Fee load", (0.0, 1.6), ".2f"),
     )
-    for ax, (kind, title, (lo, hi)) in zip(axes, panels, strict=True):
+    for ax, (kind, title, (lo, hi), f) in zip(axes, panels, strict=True):
         frame(ax)
         g = k[k.kind == kind].sort_values("kappa")
         g = g[(g.kappa >= lo) & (g.kappa <= hi)]
         drop = g.train_nll - g.train_nll.min()
         best = float(g.kappa.iloc[int(drop.to_numpy().argmin())])
-        inside = g.kappa[drop <= LR_95]
-        ax.axvspan(inside.min(), inside.max(), color=ACCENT, alpha=0.12, lw=0)
+        low, high = lr_interval(g.kappa, drop)
+        print(f"{kind}: kappa {best:.2f}, 95% interval {low:.3f} to {high:.3f}")
+        ax.axvspan(low, high, color=ACCENT, alpha=0.12, lw=0)
         ax.axvline(1.0, color=QUIET, linestyle=":", linewidth=0.8)
         ax.axhline(LR_95, color=QUIET, linestyle="--", linewidth=0.6)
         ax.plot(g.kappa, drop, color=ACCENT, linewidth=1.3)
         ax.set_ylim(0, 25)
         ax.set_xlim(lo, hi)
         ax.set_title(
-            f"{title}: $\\kappa$ = {best:g} ({inside.min():g} to {inside.max():g})",
+            f"{title}: $\\kappa$ = {best:{f}} ({low:{f}} to {high:{f}})",
             fontsize=7.5,
             color=INK,
         )
@@ -336,7 +356,7 @@ def small_data() -> None:
             )
         ax.set_xscale("log", base=2)
         ax.set_xticks(list(m.index))
-        ax.set_xticklabels([str(c) for c in m.index], fontsize=7)
+        ax.set_xticklabels([f"{c:,}" for c in m.index], fontsize=7)
         ax.minorticks_off()
         ax.set_title(title, fontsize=7.5, color=INK)
         ax.set_xlabel("Training customers")
@@ -358,10 +378,28 @@ def small_data() -> None:
     plt.close(fig)
 
 
+def dashboard() -> None:
+    """Fig. 8's two panels, cut from the dev screenshots (T809): the matrix's
+    plot without its legend, which the caption carries, and the drivers page's
+    bars over its worst-first table, without the page's controls."""
+    Image.open(OUT / "shot_matrix.png").crop((0, 60, 985, 1030)).save(
+        OUT / "fig_dash_matrix.png"
+    )
+    page = Image.open(OUT / "shot_drivers.png").convert("RGB")
+    bars, table = page.crop((0, 395, 1090, 945)), page.crop((0, 1082, 1360, 1360))
+    gap = 40
+    panel = Image.new("RGB", (table.width, bars.height + gap + table.height))
+    panel.paste(page.getpixel((1500, 300)), (0, 0, panel.width, panel.height))
+    panel.paste(bars, (0, 0))
+    panel.paste(table, (0, bars.height + gap))
+    panel.save(OUT / "fig_dash_drivers.png")
+
+
 if __name__ == "__main__":
+    dashboard()
     small_data()
     drivers()
     olist()
     example()
     kappa_profile()
-    print(f"wrote 5 figures to {OUT}")
+    print(f"wrote 6 figures to {OUT}")

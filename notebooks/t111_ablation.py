@@ -7,14 +7,15 @@
 # compare the held-out data loss: heads + items + behaviours, no L2. A path
 # earns its place if dropping it makes the held-out loss worse in every seed.
 #
-# Two kappa choices are tested the same way. "kappa per input" is compared
-# with one shared kappa for all eight inputs; "asymmetry" with no asymmetry at
-# all (every kappa fixed at 1). Each earns its place if the full model beats
-# the simpler version in every seed.
+# The full model is CFI as it is used: one kappa shared by all eight inputs
+# (T114). "asymmetry" retrains it with no asymmetry at all (kappa fixed at 1),
+# so it earns its place if the full model is better in every seed. "kappa per
+# input" goes the other way: it retrains with a kappa for each input, a richer
+# model, which would earn its place if it were better in every seed.
 #
-# Since T114 the model shares one kappa by default. This notebook still
-# trains its full model with a kappa per input (shared_kappa=False), as when
-# its results were saved, so the comparison above stays meaningful.
+# T809: until then this notebook's full model had a kappa per input, so the
+# paper's Table III showed changes from a model other than the one it
+# describes. Now every change is from the shared-kappa model.
 #
 # Saves notebooks/results/t111_ablation.csv.
 
@@ -27,6 +28,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 from fitcore.dataset import TrainingSet, from_simulation, split_by_customer
+from fitcore.features import INPUTS
 from fitcore.model import PATHS
 from fitcore.sim_behaviour import simulate_behaviour
 from fitcore.sim_orders import simulate_orders, simulate_profiles
@@ -60,11 +62,11 @@ def held_out(model: FitModel, test: TrainingSet) -> dict[str, float]:
     return terms | {"total": sum(terms.values())}
 
 
-def shared_kappa(model: FitModel) -> FitModel:
-    """A copy whose eight kappas are one, starting at the mean of theirs."""
+def kappa_per_input(model: FitModel) -> FitModel:
+    """A copy with a kappa for each input, each starting at the shared one."""
     variant = copy.deepcopy(model)
     gaps = variant.network.gaps
-    gaps.theta = nn.Parameter(gaps.theta.detach().mean().reshape(1))
+    gaps.theta = nn.Parameter(gaps.theta.detach().expand(len(INPUTS)).clone())
     return variant
 
 
@@ -82,7 +84,7 @@ def drop(path_index: int) -> Callable[[FitModel], FitModel]:
 
 VARIANTS: dict[str, Callable[[FitModel], FitModel]] = {
     **{path.name: drop(i) for i, path in enumerate(PATHS)},
-    "kappa per input (vs one shared)": shared_kappa,
+    "kappa per input (vs one shared)": kappa_per_input,
     "asymmetry (vs kappa = 1)": no_asymmetry,
 }
 
@@ -91,7 +93,7 @@ rows = []
 for seed in SEEDS:
     start = time.perf_counter()
     train, test = population(seed)
-    full = FitModel.for_training_set(train, shared_kappa=False)
+    full = FitModel.for_training_set(train)
     assert fit_model(full, train).converged, f"seed {seed}: full model"
     base = held_out(full, test)
     rows += [(seed, "full model", measure, value) for measure, value in base.items()]
@@ -104,7 +106,7 @@ for seed in SEEDS:
         f"seed {seed}: {len(VARIANTS) + 1} models in {time.perf_counter() - start:.0f} s"
     )
 
-# %% How much worse the held-out total gets without each path or kappa choice
+# %% How the held-out total changes with each variant: worse is positive
 results = pd.DataFrame(rows, columns=COLUMNS)
 full_loss = results[results["variant"] == "full model"].set_index(["seed", "measure"])
 changes = results[results["variant"] != "full model"].copy()
@@ -118,6 +120,9 @@ total = changes[changes["measure"] == "total"].groupby("variant", sort=False)
 table = total["increase"].agg(["min", "mean", "max"])
 table["worse_in"] = total["increase"].apply(lambda d: int((d > 0).sum()))
 table["earns_its_place"] = table["worse_in"] == len(SEEDS)
+# The richer kappa earns its place the other way round: better in every seed.
+richer = "kappa per input (vs one shared)"
+table.loc[richer, "earns_its_place"] = table.loc[richer, "worse_in"] == 0
 kept = int(table.loc[[path.name for path in PATHS], "earns_its_place"].sum())
 print(f"paths that earn their place (worse in all {len(SEEDS)} seeds): {kept} of 15")
 table.round(4)

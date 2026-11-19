@@ -46,6 +46,8 @@
 
 \newcommand{\runin}[1]{\textit{#1}\hspace{0.4em}}
 \setlist{leftmargin=1.4em,itemsep=1pt,topsep=2pt}
+\raggedbottom
+\hyphenation{Respect Lovemark Lovemarks}
 
 \begin{document}
 
@@ -62,7 +64,7 @@ Relationships in Food Delivery\par}
 \end{center}
 }]
 
-\noindent\textbf{\textit{Abstract}---Churn models tell a delivery business who may leave, but rarely why. Customer Fit Intelligence (CFI) is a theory-constrained neural network that turns every order into eight expectation gaps and lets marketing theory fix how they combine: the gaps feed Respect and Love, the axes of Roberts' love matrix, then Trust and Convenience, then a single Fit score that drives reorders, churn and the Net Promoter Score. Fifteen allowed paths, positive weights and a steeper response to shortfalls leave 21 parameters between an order and its Fit, few enough to explain every score with exact Shapley values. In five simulated populations of 2,000 customers with known ground truth, CFI predicts churn (AUC 0.798) as well as logistic regression, gradient boosting and an unconstrained network on the same inputs, recovers the hidden states ($r \geq 0.97$), and with purchase history comes within 0.004 AUC of a model that knows the true Fit. It holds up when the simulated world breaks its theory, matches with 100 customers what other models reach with 1,600, shrugs off label noise that costs a flexible network 0.032 AUC, and its driver ranking finds the problems planted at restaurants and couriers. On 95,824 real orders, a day late costs seven times what a day early earns. CFI runs as a production service with a dashboard, and we report its latency and cost.}
+\noindent\textbf{\textit{Abstract}---Churn models tell a delivery business who may leave, but rarely why. Customer Fit Intelligence (CFI) is a theory-constrained neural network that turns every order into eight expectation gaps and lets marketing theory fix how they combine: the gaps feed Respect and Love, the axes of Roberts' love matrix, then Trust and Convenience, then a single Fit score that drives reorders, churn and the 0-to-10 answer behind the Net Promoter Score. Fifteen allowed paths, positive weights and a steeper response to shortfalls leave 21 parameters between an order and its Fit, so every score runs through named states whose directions are fixed, and with eight inputs each score's Shapley values are computed exactly. In five simulated populations of 2,000 customers with known ground truth, CFI predicts churn (AUC 0.798, or 0.740 from what today's events measure) as well as logistic regression, gradient boosting and an unconstrained network on the same inputs, recovers the hidden states ($r \geq 0.97$), and with purchase history comes within 0.004 AUC of a model that knows the true Fit. It holds up when the simulated world breaks its theory, matches with 100 customers the churn AUC other models reach with 1,600, shrugs off label noise that costs a flexible network 0.032 AUC, and its driver ranking finds the problems planted at restaurants and couriers. On 95,824 real e-commerce orders, a day late costs seven times what a day early earns. CFI runs as a cloud service, deployed for development on simulated customers, with a dashboard, and we report its latency and cost.}
 
 \vspace{6pt}
 \noindent\textbf{\textit{Index Terms}---churn prediction, interpretable machine learning, theory-guided neural networks, Shapley values, customer relationship management, food delivery.}
@@ -71,13 +73,13 @@ Relationships in Food Delivery\par}
 
 A food-delivery customer who stops ordering rarely says why. Churn models can say who is likely to leave, often well, but are judged on who and seldom asked why \cite{neslin2006}; models built on purchase history alone, such as BG/NBD \cite{fader2005}, forecast repeat purchases with no view of the service a customer received. A business that wants to keep customers needs both: an early and accurate risk, and the reason behind it, for one order, one restaurant or one courier.
 
-Customer Fit Intelligence (CFI) is a small neural network whose structure comes from marketing theory and whose strengths come from data. It turns each order into eight expectation gaps, how much better or worse than expected the speed, ease, fees, accuracy, courier, food, personalisation and support were \cite{oliver1980}, and lets theory fix how those gaps may combine: which states each may move, in which direction, and with shortfalls weighing more than equal surpluses \cite{mittal1998}. The states are the axes of Roberts' love matrix, Respect and Love \cite{roberts2004}, and from them Trust, Convenience and finally Fit, which drives reorders, churn and the Net Promoter Score \cite{reichheld2003}.
+Customer Fit Intelligence (CFI) is a small neural network whose structure comes from marketing theory and whose strengths come from data. It turns each order into eight expectation gaps, how much better or worse than expected the speed, ease, fees, accuracy, courier, food, personalisation and support were \cite{oliver1980}, and lets theory fix how those gaps may combine: which states each may move, in which direction, and with shortfalls weighing more than equal surpluses \cite{mittal1998}. The states are the axes of Roberts' love matrix, Respect and Love \cite{roberts2004}, and from them Trust, Convenience and finally Fit, which drives reorders, churn and the answer behind the Net Promoter Score \cite{reichheld2003}.
 
-Constraining a network this way raises two questions. Does it cost accuracy against models free to learn any function of the same inputs? And are the states it names real, or labels on arbitrary features? Real data with known answers does not exist, so we answer both on a simulator with known ground truth \cite{morris2019}, test what real data can test on 95,824 public orders \cite{olist2018}, and run the whole system as a service. Our contributions are four:
+Constraining a network this way raises two questions. Does it cost accuracy against models free to learn any function of the same inputs? And are the states it names real, or labels on arbitrary features? Real data with known answers does not exist, so we answer both on a simulator with known ground truth \cite{morris2019}, test what real data can test on 95,824 public e-commerce orders \cite{olist2018}, and run the whole system as a service. Our contributions are four:
 \begin{enumerate}
-\item CFI, a theory-constrained network with 15 allowed paths and 21 parameters from gaps to Fit, whose explanations are exact Shapley values over 256 coalitions rather than estimates \cite{lundberg2017}.
+\item CFI, a theory-constrained network with 15 allowed paths and 21 parameters from gaps to Fit, whose hidden units are named states with fixed directions, each score explained by exact Shapley values over 256 coalitions \cite{lundberg2017}.
 \item A simulation study in five populations of 2,000 customers: CFI predicts churn and reorders as well as unconstrained models on the same inputs, recovers the hidden states, holds up when the world breaks its theory or data are scarce, and finds problems planted at restaurants and couriers.
-\item A test on real orders: a late delivery costs seven times what an early one earns, as the asymmetry predicts, though not every input behaves this way.
+\item A test on real e-commerce orders: a late delivery costs seven times what an early one earns, as the asymmetry predicts, though the fee load's asymmetry runs the other way.
 \item A running system, from event ingestion through transactional scoring and a model registry to a dashboard, with its latency and cost measured.
 \end{enumerate}
 Section~\ref{sec:theory} sets out the theory, Section~\ref{sec:data} the data, Section~\ref{sec:model} the model, Section~\ref{sec:experiments} the experiments and Section~\ref{sec:system} the system; Section~\ref{sec:discussion} discusses limitations.
@@ -86,17 +88,17 @@ Section~\ref{sec:theory} sets out the theory, Section~\ref{sec:data} the data, S
 
 CFI turns every order into eight expectation gaps, and lets theory decide how those gaps may combine. Four ideas set its structure.
 
-\runin{Gaps, not levels.} Satisfaction follows the gap between what happened and what the customer expected, not the level of performance itself \cite{oliver1980}. Every CFI input is such a gap, signed so that positive always means better than expected: delivery minutes against the promised time, and every other measure against the customer's own running baseline (Section~\ref{sec:data}).
+\runin{Gaps against expectations.} Satisfaction depends on the gap between what happened and what the customer expected \cite{oliver1980}, not only on the level of performance. Every CFI input is such a gap, signed so that positive always means better than expected: delivery minutes against the promised time, and every other measure against the customer's own running baseline (Section~\ref{sec:data}).
 
 \runin{Asymmetry.} A shortfall lowers satisfaction and repurchase more than an equal surplus raises them \cite{mittal1998}. Each gap $d$ passes through $g(d) = d$ when $d \geq 0$ and $\kappa d$ when $d < 0$, with $\kappa \geq 1$ learned from data.
 
-\runin{Relational states.} Roberts places a brand on two axes: Respect, earned by performance, and Love, earned by emotional connection \cite{roberts2004}. High on both is a Lovemark; high on Respect alone a Brand; high on Love alone a Fad; low on both a Product. CFI scores every customer on the same two axes. Trust grows from both \cite{morgan1994}, and convenience from the time and effort a service saves \cite{berry2002}. Together they form Fit: how well the service suits this customer. Fit drives three observable outcomes: reordering, churn and the Net Promoter Score (NPS) \cite{reichheld2003}.
+\runin{Relational states.} Roberts places a brand on two axes: Respect, earned by performance, and Love, earned by emotional connection \cite{roberts2004}. High on both is a Lovemark; high on Respect alone a Brand; high on Love alone a Fad; low on both a Product. CFI scores every customer on the same two axes. Trust, central to relationship marketing \cite{morgan1994}, grows from both, and Convenience from the time and effort a service saves \cite{berry2002}. Together they form Fit: how well the service suits this customer. Fit drives three observable outcomes: reordering, churn and the 0-to-10 likelihood-to-recommend answer behind the Net Promoter Score (the NPS answer) \cite{reichheld2003}.
 
-\runin{Models that explain.} Churn models are usually judged by lift and AUC alone \cite{neslin2006}, and buy-till-you-die models such as BG/NBD forecast repeat purchases from frequency and recency without saying why a customer drifts \cite{fader2005}. Gradient boosting \cite{friedman2001} and unconstrained neural networks predict well but explain only after the fact, through approximations such as SHAP \cite{lundberg2017}. For decisions about people, Rudin argues for models that are interpretable by construction \cite{rudin2019}, and theory-guided data science fixes a model's structure from domain knowledge while learning only its strengths from data \cite{karpatne2017}. CFI takes that route: a neural network whose connections and signs come from the theory above, small enough that its explanations are exact Shapley values rather than estimates.
+\runin{Models that explain.} Churn models are usually judged by lift and AUC alone \cite{neslin2006}, and buy-till-you-die models such as BG/NBD forecast repeat purchases from frequency and recency without saying why a customer drifts \cite{fader2005}. Gradient boosting \cite{friedman2001} and unconstrained neural networks predict well and can be explained after the fact with Shapley values \cite{lundberg2017}, but only through features that have no names and no guaranteed signs. For decisions about people, Rudin argues for models that are interpretable by construction \cite{rudin2019}, and theory-guided data science fixes a model's structure from domain knowledge while learning only its strengths from data \cite{karpatne2017}. CFI takes that route: a neural network whose connections and signs come from the theory above, so its hidden units are the named states, and each input's contribution to every one of them is computed exactly.
 
 \section{Data}\label{sec:data}
 
-CFI learns from the events an ordering app already sends, turned into eight gaps per order, three outcome labels and a sparse survey.
+CFI learns from the events an ordering app already sends, turned into eight gaps per order, two outcome labels and sparse survey answers.
 
 \runin{Events.} Event schema v1 defines eleven event types: nine describe the customer journey (an order placed, delivered or gone wrong, a rating, an app session, a recommendation shown or clicked, a support case, a survey answer) and two record automated actions. Every event is checked against its schema on arrival; one that fails is refused, never stored.
 
@@ -121,19 +123,19 @@ Input & Name & Measured from \\
 $x_1$ & Speed vs promise & promised minus actual delivery minutes \\
 $x_2$ & App ease & seconds from app open to checkout \\
 $x_3$ & Fee load & fees divided by basket value \\
-$x_4$ & Order fidelity & share of items right (not yet in v1 events) \\
+$x_4$ & Order fidelity & share of items right (no item counts in v1 events) \\
 $x_5$ & Courier conduct & courier rating, 1 to 5 \\
 $x_6$ & Food \& selection & food rating, 1 to 5 \\
-$x_7$ & Personalisation & recommendation hits (not yet in v1 events) \\
+$x_7$ & Personalisation & recommendation hits (no hit rate from v1 events) \\
 $x_8$ & Recovery handling & support-case satisfaction, 1 to 5 \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\columnwidth}{\footnotesize $x_1$ is a gap against the promise; $x_2$ to $x_8$ against the customer's own baseline. Times and costs ($x_1$ to $x_3$) are signed so that less is better.}
+\par\smallskip\parbox{\columnwidth}{\footnotesize $x_1$ is a gap against the promise; $x_2$ to $x_8$ against the customer's own baseline. For times and costs ($x_1$ to $x_3$) less is better, so their sign is flipped.}
 \end{table}
 
-\runin{Outcomes and anchors.} Each order gets two labels from the order history that follows it: reorder within 14 days, and churn when 30 days pass with no new order; a label whose window runs past the data stays unknown. After some orders the app asks one rotating question: the NPS (0 to 10) or a 1-to-7 item for one of the four states. Each state also has one or two behaviours: favourites saved and the share of orders without a promotion for Love, the average rating for Respect, trying new restaurants and saving a payment method for Trust, and time to checkout for Convenience.
+\runin{Outcomes and anchors.} Each order gets two labels from the order history that follows it: reorder within 14 days, and churn when 30 days pass with no new order; a label whose window runs past the data stays unknown. After some orders the app asks one rotating question: the NPS question (0 to 10) or a 1-to-7 item for one of the four states. Each state also has one or two behaviours: favourites saved and the share of orders without a promotion for Love, the average rating for Respect, trying new restaurants and saving a payment method for Trust, and time to checkout for Convenience.
 
-\runin{Simulated populations.} Real customer data is not yet available, so the study uses a simulator with known ground truth \cite{morris2019}. Its hidden model has the same connections as CFI, positive weights and a separate $\kappa$ per input (mean 1.96). Each population has 2,000 customers ordering over 180 days from 1 January 2026, from 40 restaurants and 60 couriers. Order frequency varies across customers around 7 days, about one order in ten goes wrong, 30\% of orders are rated, and every order that went wrong is rated. Five populations (seeds 2026 to 2030) are each split 80/20 by customer; in the main one, 1,600 customers (35,707 orders) train the model and 400 (8,520 orders) are held out. For the driver tests, the simulator can plant problems: 80\% of one kind of incident sent to a few named restaurants or couriers, with every gap unchanged. Section~\ref{sec:olist} tests the gap and asymmetry ideas on real orders from the public Olist dataset \cite{olist2018}.
+\runin{Simulated populations.} Real customer data is not yet available, so the study uses a simulator with known ground truth \cite{morris2019}. Its hidden model has the same connections as CFI, positive weights and a separate $\kappa$ per input (mean 1.96). Each population has 2,000 customers ordering over 180 days from 1 January 2026, from 40 restaurants and 60 couriers. Order frequency varies across customers around 7 days, about one order in ten goes wrong, 30\% of orders are rated, and every order that went wrong is rated. Five populations (seeds 2026 to 2030) are each split 80/20 by customer; in the main one, 1,600 customers (35,707 orders) train the model and 400 (8,520 orders) are held out. For the driver tests, the simulator can plant problems: 80\% of one kind of incident moved to a few named restaurants or couriers, so only where incidents happen changes, not how many. Section~\ref{sec:olist} tests the gap and asymmetry ideas on real orders from the public Olist dataset \cite{olist2018}.
 
 \section{Model}\label{sec:model}
 
@@ -141,28 +143,27 @@ CFI is a three-layer neural network whose 15 connections are fixed by theory and
 
 \begin{figure}[t]
 \centering
-\resizebox{\columnwidth}{!}{%
-\begin{tikzpicture}[
-  >={Stealth[length=4pt]}, font=\footnotesize,
+\begin{tikzpicture}[x=0.62cm, y=0.62cm,
+  >={Stealth[length=3.5pt]}, font=\footnotesize,
   inp/.style={anchor=east, inner sep=1pt},
-  st/.style={draw=black!70, rounded corners=2pt, fill=black!4, minimum width=1.75cm, minimum height=0.55cm, inner sep=2pt},
-  fit/.style={st, fill=blue!10, draw=blue!60!black},
+  st/.style={draw=black!70, rounded corners=2pt, fill=black!4, minimum width=1.5cm, minimum height=0.5cm, inner sep=2pt},
+  fit/.style={st, fill=blue!10, draw=blue!60!black, minimum width=0.9cm},
   head/.style={anchor=west, inner sep=1pt},
   link/.style={->, draw=black!65, line width=0.5pt},
   headarrow/.style={->, draw=black!55, dashed, line width=0.5pt}]
-\node[inp] (x2) at (0, 2.52) {$x_2$ app ease};
-\node[inp] (x3) at (0, 1.80) {$x_3$ fee load};
-\node[inp] (x1) at (0, 1.08) {$x_1$ speed};
-\node[inp] (x4) at (0, 0.36) {$x_4$ fidelity};
-\node[inp] (x5) at (0,-0.36) {$x_5$ courier};
-\node[inp] (x6) at (0,-1.08) {$x_6$ food};
-\node[inp] (x7) at (0,-1.80) {$x_7$ personalisation};
-\node[inp] (x8) at (0,-2.52) {$x_8$ recovery};
-\node[st] (R) at (2.6, 0.15) {Respect};
-\node[st] (L) at (2.6,-1.80) {Love};
-\node[st] (C) at (4.9, 1.55) {Convenience};
-\node[st] (T) at (4.9,-0.85) {Trust};
-\node[fit] (F) at (7.0, 0.35) {Fit};
+\node[inp] (x2) at (0, 3.5) {$x_2$ app ease};
+\node[inp] (x3) at (0, 2.5) {$x_3$ fee load};
+\node[inp] (x1) at (0, 1.5) {$x_1$ speed};
+\node[inp] (x4) at (0, 0.5) {$x_4$ fidelity};
+\node[inp] (x5) at (0,-0.5) {$x_5$ courier};
+\node[inp] (x6) at (0,-1.5) {$x_6$ food};
+\node[inp] (x7) at (0,-2.5) {$x_7$ personalisation};
+\node[inp] (x8) at (0,-3.5) {$x_8$ recovery};
+\node[st] (R) at (2.6, 0.2) {Respect};
+\node[st] (L) at (2.6,-2.5) {Love};
+\node[st] (C) at (4.95, 2.2) {Convenience};
+\node[st] (T) at (4.95,-1.2) {Trust};
+\node[fit] (F) at (6.85, 0.5) {Fit};
 \foreach \s in {x1,x4,x5,x6} \draw[link] (\s.east) -- (R.west);
 \foreach \s in {x6,x7,x8} \draw[link] (\s.east) -- (L.west);
 \foreach \s in {x1,x2,x3} \draw[link] (\s.east) -- (C.west);
@@ -171,16 +172,16 @@ CFI is a three-layer neural network whose 15 connections are fixed by theory and
 \draw[link] (L) -- (T);
 \draw[link] (C) -- (F);
 \draw[link] (T) -- (F);
-\node[head] (h1) at (8.45, 1.15) {Reorder 14 d};
-\node[head] (h2) at (8.45, 0.35) {Churn 30 d};
-\node[head] (h3) at (8.45,-0.45) {NPS};
+\node[head] (h1) at (8.55, 1.5) {Reorder};
+\node[head] (h2) at (8.55, 0.5) {Churn};
+\node[head] (h3) at (8.55,-0.5) {NPS};
 \foreach \h in {h1,h2,h3} \draw[headarrow] (F.east) -- (\h.west);
-\node[font=\scriptsize, text=black!60] at (0.0, 3.05) [anchor=east] {gaps};
-\node[font=\scriptsize, text=black!60] at (2.6, 3.05) {layer 1};
-\node[font=\scriptsize, text=black!60] at (4.9, 3.05) {layer 2};
-\node[font=\scriptsize, text=black!60] at (7.0, 3.05) {layer 3};
-\end{tikzpicture}}
-\caption{The CFI network. Solid arrows are the 15 paths the theory allows; dashed arrows are the outcome heads. Each state is also anchored by its survey item and one or two behaviours (not drawn).}\label{fig:network}
+\node[font=\scriptsize, text=black!60] at (0.0, 4.35) [anchor=east] {gaps};
+\node[font=\scriptsize, text=black!60] at (2.6, 4.35) {layer 1};
+\node[font=\scriptsize, text=black!60] at (4.95, 4.35) {layer 2};
+\node[font=\scriptsize, text=black!60] at (6.85, 4.35) {layer 3};
+\end{tikzpicture}
+\caption{The CFI network. Solid arrows are the 15 paths the theory allows; dashed arrows are the outcome heads (reorder within 14 days, churn within 30 days, the NPS answer). Each state is also anchored by its survey item and one or two behaviours (not drawn).}\label{fig:network}
 \end{figure}
 
 \runin{Structure.} Each gap passes through the asymmetric transform, with one $\kappa$ shared by all eight inputs, and is divided by a fixed scale $s_i$, its root mean square on the training set:
@@ -195,23 +196,23 @@ Layer 1 reads the gaps and gives Respect and Love; layer 2 reads Respect, Love a
 
 \runin{Outcome heads.} Fit drives three heads with positive slopes: the chance of a reorder within 14 days rises with Fit and the chance of churn within 30 days falls (both logistic), and the NPS answer follows a cumulative-logit model with ten ordered cuts \cite{mccullagh1980}.
 
-\runin{Anchors.} A latent state needs a scale. Each state's 1-to-7 survey item is its marker: $P(\text{answer} \leq k) = \sigma(s(k/7 - \text{state}))$, with the thresholds fixed at $k/7$ so that a neutral answer sits near 0.5 and only the slope $s > 0$ is learned. Each standardised behaviour follows $a + b \times$ the customer's mean state, with $b > 0$.
+\runin{Anchors.} A latent state needs a scale. Each state's 1-to-7 survey item is its marker: $P(\text{answer} \leq k) = \sigma(\lambda(k/7 - \text{state}))$, with the thresholds fixed at $k/7$ so that a neutral answer sits near 0.5 and only the slope $\lambda > 0$ is learned. Each standardised behaviour follows $c + b \times$ the customer's mean state, with $b > 0$.
 
 \runin{Training.} The loss adds the cross-entropy (CE) of the two binary heads, the ordinal negative log-likelihood (NLL) of NPS and the items, and the squared error (SE) of the behaviours, each averaged over the rows where it is observed, plus an L2 penalty on every slope $\beta$:
 \begin{multline}
 \mathcal{L} = \overline{\mathrm{CE}}_{\mathrm{reorder}} + \overline{\mathrm{CE}}_{\mathrm{churn}} + \overline{\mathrm{NLL}}_{\mathrm{NPS}} \\
 + \overline{\mathrm{NLL}}_{\mathrm{items}} + \overline{\mathrm{SE}}_{\mathrm{behav}} + 10^{-4}\textstyle\sum \beta^2.
 \end{multline}
-Full-batch L-BFGS runs in float64 until the loss stops changing. The learned numbers are exported as model.json, and the production API scores with a NumPy copy of the forward pass that matches the PyTorch network to about $10^{-16}$, so serving never needs PyTorch.
+Full-batch L-BFGS runs in float64 until the loss stops changing. The learned numbers are exported as model.json, and the API scores with a NumPy copy of the forward pass that matches the PyTorch network to about $10^{-16}$, so serving never needs PyTorch.
 
 \runin{Exact explanations.} For a score $f$ and an order's gaps $x$, input $i$'s contribution is its Shapley value, with an order exactly as expected (every gap 0) as the baseline \cite{lundberg2017}:
 \begin{gather}
 \phi_i = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|!\,(7-|S|)!}{8!} \left[ f(x_{S \cup \{i\}}) - f(x_S) \right], \\
 \textstyle\sum_{i=1}^{8} \phi_i = f(x) - f(0).
 \end{gather}
-Here $x_S$ keeps the gaps in $S$ and sets the others to 0. With eight inputs there are only $2^8 = 256$ coalitions, so CFI computes every contribution exactly, for six scores (the five states and churn risk) of every scored order, instead of estimating it by sampling. The contributions add up to the score's distance from an as-expected order, which is what the dashboard draws.
+Here $N$ is the set of eight inputs, and $x_S$ keeps the gaps in $S$ and sets the others to 0. With eight inputs there are only $2^8 = 256$ coalitions, so CFI computes every contribution exactly, for six scores (the five states and churn risk) of every scored order, instead of estimating it by sampling. Any model of the same eight inputs could be explained exactly this way; what CFI adds is that the contributions run through named states with fixed signs. The contributions add up to the score's distance from an as-expected order, which is what the dashboard draws.
 
-\runin{Quadrants.} Respect and Love place each customer in one of Roberts' four quadrants \cite{roberts2004}; Section~\ref{sec:discussion} discusses where the dividing lines belong.
+\runin{Quadrants.} Respect and Love place each customer in one of Roberts' four quadrants \cite{roberts2004}, split at 0.5 on each axis, where the survey anchors put a neutral answer; Section~\ref{sec:discussion} discusses that choice.
 
 \section{Experiments}\label{sec:experiments}
 
@@ -219,10 +220,10 @@ On one order's gaps, CFI predicts churn and reorders as well as unconstrained mo
 
 \subsection{Setup}
 
-The study follows the ADEMP plan for simulation studies \cite{morris2019}. \textit{Aim:} does fixing the structure cost accuracy, and are the named states real? \textit{Data:} the five simulated populations of Section~\ref{sec:data}, each split 80/20 by customer. \textit{Estimands:} each order's chance of churn within 30 days and of a reorder within 14; the five states; each customer's quadrant. \textit{Methods:} CFI and eight comparators (Table~\ref{tab:prediction}). On the same eight gaps: logistic regression, gradient boosting \cite{friedman2001} and an unconstrained network (two hidden layers of 16, trained by L-BFGS like CFI, its L2 penalty chosen on a fifth of the training customers; since its optimiser runs to its step limit, its AUC varies by up to 0.003 between machines). On purchase history alone: the order rate, and BG/NBD \cite{fader2005} fitted on the training customers. On both: gradient boosting, and CFI's Fit with the same history in a logistic regression. A ceiling replaces Fit with the simulator's true Fit, which no model sees. \textit{Performance:} AUC, log loss and expected calibration error on held-out customers' orders, as mean (standard deviation) over the five populations.
+The study follows the ADEMP plan for simulation studies \cite{morris2019}. \textit{Aim:} does fixing the structure cost accuracy, and are the named states real? \textit{Data:} the five simulated populations of Section~\ref{sec:data}, each split 80/20 by customer. \textit{Estimands:} each order's chance of churn within 30 days and of a reorder within 14; the five states; each customer's quadrant. \textit{Methods:} CFI and eight comparators (Table~\ref{tab:prediction}). On the same eight gaps: logistic regression on the raw gaps, gradient boosting \cite{friedman2001} (scikit-learn's HistGradientBoosting, default settings) and an unconstrained network (two hidden layers of 16, trained by L-BFGS like CFI, its L2 penalty chosen on a fifth of the training customers; since its optimiser runs to its step limit, its AUC varies by up to 0.003 between machines). On purchase history alone: the order rate, and BG/NBD \cite{fader2005} fitted on the training customers. On both: gradient boosting, and CFI's Fit with the same history in a logistic regression. A ceiling replaces Fit with the simulator's true Fit, which no model sees. \textit{Performance:} AUC, log loss and expected calibration error (ten equal-width bins) on held-out customers' orders, as mean (standard deviation) over the five populations.
 
 \begin{table}[t]
-\caption{Held-out Prediction}\label{tab:prediction}
+\caption{Held-Out Prediction}\label{tab:prediction}
 \centering\footnotesize
 \setlength{\tabcolsep}{3.2pt}
 \begin{tabular}{@{}l c c c c@{}}
@@ -232,18 +233,18 @@ The study follows the ADEMP plan for simulation studies \cite{morris2019}. \text
 Model & AUC & Log loss & AUC & Log loss \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{One order's gaps}} \\
-\textbf{CFI (15 paths)} & \textbf{0.798} (.012) & \textbf{0.143} & \textbf{0.723} (.010) & \textbf{0.333} \\
-Logistic regression & 0.796 (.017) & 0.144 & 0.718 (.009) & 0.335 \\
-Unconstrained network & 0.794 (.016) & 0.143 & 0.719 (.007) & 0.334 \\
-Gradient boosting & 0.780 (.013) & 0.147 & 0.713 (.008) & 0.337 \\
+\textbf{CFI (15 paths)} & \textbf{0.798} (0.012) & \textbf{0.143} & \textbf{0.723} (0.010) & \textbf{0.333} \\
+Logistic regression & 0.796 (0.017) & 0.144 & 0.718 (0.009) & 0.335 \\
+Unconstrained network & 0.794 (0.016) & 0.143 & 0.719 (0.007) & 0.334 \\
+Gradient boosting & 0.780 (0.013) & 0.147 & 0.713 (0.008) & 0.337 \\
 \multicolumn{5}{@{}l}{\textit{History only}} \\
-BG/NBD & 0.665 (.025) & 0.162 & 0.682 (.013) & 0.348 \\
-Order rate & 0.647 (.028) & 0.162 & 0.676 (.015) & 0.348 \\
+BG/NBD & 0.665 (0.025) & 0.162 & 0.682 (0.013) & 0.348 \\
+Order rate & 0.647 (0.028) & 0.162 & 0.676 (0.015) & 0.348 \\
 \multicolumn{5}{@{}l}{\textit{Gaps and history}} \\
-\textbf{CFI Fit + history} & \textbf{0.812} (.012) & \textbf{0.139} & \textbf{0.768} (.011) & \textbf{0.317} \\
-Gradient boosting & 0.791 (.010) & 0.145 & 0.760 (.011) & 0.321 \\
+\textbf{CFI Fit + history} & \textbf{0.812} (0.012) & \textbf{0.139} & \textbf{0.768} (0.011) & \textbf{0.317} \\
+Gradient boosting & 0.791 (0.010) & 0.145 & 0.760 (0.011) & 0.321 \\
 \multicolumn{5}{@{}l}{\textit{Ceiling}} \\
-True Fit + history & 0.816 (.013) & 0.139 & 0.771 (.012) & 0.316 \\
+True Fit + history & 0.816 (0.013) & 0.139 & 0.771 (0.012) & 0.316 \\
 \bottomrule
 \end{tabular}
 \par\smallskip\parbox{\columnwidth}{\footnotesize Mean (standard deviation) over five populations of 2,000 customers. History: the order rate, whether it is a first order, and the days since the previous one.}
@@ -251,13 +252,13 @@ True Fit + history & 0.816 (.013) & 0.139 & 0.771 (.012) & 0.316 \\
 
 \subsection{Prediction}
 
-With the same inputs, the theory costs nothing. CFI's churn AUC (0.798) matches logistic regression (0.796) and the unconstrained network (0.794), and beats gradient boosting (0.780) in all five populations; for reorders it leads all three in every population. History alone is much weaker: BG/NBD reaches 0.665 for churn. With the same history added, CFI's one Fit score reaches 0.812, within 0.004 of the ceiling, and beats gradient boosting on gaps and history in all five populations, by 0.021 for churn and 0.008 for reorders. Fit therefore carries almost everything the true state knows. CFI is also well calibrated (expected calibration error 0.004 for churn, 0.009 for reorders); only the riskiest 1\% of orders, predicted at 20 to 30\%, churn more often than predicted (31\%).
+With the same inputs, the theory costs nothing. CFI's churn AUC (0.798) matches logistic regression (0.796) and the unconstrained network (0.794), and beats gradient boosting (0.780) in all five populations; for reorders it leads all three in every population. History alone is much weaker, partly by construction, since the simulator drives every outcome from Fit: BG/NBD reaches 0.665 for churn. With the same history added, CFI's one Fit score reaches 0.812, within 0.004 of the ceiling, and beats gradient boosting on gaps and history in all five populations, by 0.021 for churn and 0.008 for reorders. Fit therefore carries almost everything the true state knows. CFI is also well calibrated (expected calibration error 0.004 for churn, 0.009 for reorders); only the riskiest 1\% of orders churn more often than predicted (31\% against 21\%).
 
 \subsection{Recovery and Structure}
 
-The learned states track the hidden ones: across the five populations, each state's Pearson correlation with its true value is 0.973 to 0.990, and a structural equation model fitted to customer averages gives all 15 paths their expected positive sign. Each path also earns its place: retraining without any one of them worsens held-out loss in all five populations. Asymmetry earns its place in all five as well, but a separate $\kappa$ per input does not (better in four of five), so CFI shares one $\kappa$. It learns 1.55 on average, below the simulator's mean of 1.96, so shortfalls are somewhat understated; this is itself a misspecification, since the simulator gives each input its own $\kappa$ (1.2 to 3.0).
+The learned states track the hidden ones: across the five populations, each state's Pearson correlation with its true value is 0.973 to 0.990, and in a separate population of 5,000 customers, a structural equation model fitted to customer averages gives each of the 15 paths its expected positive sign. Each path also earns its place: retraining CFI without any one of them worsens held-out loss in all five populations. Asymmetry earns its place in all five as well; a $\kappa$ per input helps in only four of five, so CFI shares one $\kappa$. It learns 1.55 on average, below the simulator's mean of 1.96, so shortfalls are somewhat understated; this is itself a misspecification, since the simulator gives each input its own $\kappa$ (1.2 to 3.0).
 
-Table~\ref{tab:learned} shows what the model live on the development service learned, beside what each path is worth. Every weight is positive by construction, and none collapsed to zero. The paths that matter most run from food and recovery to Love and from speed to Respect; Fit leans on Trust more than on Convenience (3.68 against 2.09), as the simulator's own Fit does (5 against 3).
+Table~\ref{tab:learned} shows what the model live on the development service learned from the 1,600 training customers of the main population, beside what each path is worth. Every weight is positive by construction, and none collapsed to zero. The paths that matter most run from food and recovery to Love and from speed to Respect; Fit leans on Trust more than on Convenience (3.68 against 2.09), as the simulator's own Fit does (5 against 3).
 
 \begin{table}[t]
 \caption{What CFI Learned}\label{tab:learned}
@@ -265,29 +266,29 @@ Table~\ref{tab:learned} shows what the model live on the development service lea
 \setlength{\tabcolsep}{5pt}
 \begin{tabular}{@{}l l r r@{}}
 \toprule
-State & reads & Weight & $\Delta$ loss \\
+State & Reads & Weight & $\Delta$ loss \\
 \midrule
-Respect & $x_1$ speed & 0.52 & 0.444 \\
- & $x_4$ order fidelity & 0.40 & 0.233 \\
- & $x_5$ courier conduct & 0.27 & 0.118 \\
- & $x_6$ food & 0.43 & 0.220 \\
-Love & $x_6$ food & 0.63 & 0.653 \\
- & $x_7$ personalisation & 0.38 & 0.180 \\
- & $x_8$ recovery & 0.57 & 0.452 \\
-Convenience & Respect & 2.72 & 0.057 \\
- & $x_1$ speed & 0.47 & 0.052 \\
- & $x_2$ app ease & 0.39 & 0.086 \\
+Respect & $x_1$ speed & 0.52 & 0.442 \\
+ & $x_4$ order fidelity & 0.40 & 0.230 \\
+ & $x_5$ courier conduct & 0.27 & 0.119 \\
+ & $x_6$ food & 0.43 & 0.217 \\
+Love & $x_6$ food & 0.63 & 0.649 \\
+ & $x_7$ personalisation & 0.38 & 0.172 \\
+ & $x_8$ recovery & 0.57 & 0.448 \\
+Convenience & Respect & 2.72 & 0.056 \\
+ & $x_1$ speed & 0.47 & 0.059 \\
+ & $x_2$ app ease & 0.39 & 0.088 \\
  & $x_3$ fee load & 0.56 & 0.256 \\
-Trust & Respect & 4.00 & 0.255 \\
- & Love & 2.77 & 0.213 \\
-Fit & Convenience & 2.09 & 0.038 \\
- & Trust & 3.68 & 0.065 \\
+Trust & Respect & 4.00 & 0.252 \\
+ & Love & 2.77 & 0.211 \\
+Fit & Convenience & 2.09 & 0.039 \\
+ & Trust & 3.68 & 0.066 \\
 \midrule
-\multicolumn{2}{@{}l}{Asymmetry ($\kappa = 1.60$, against 1)} & & 0.042 \\
-\multicolumn{2}{@{}l}{A $\kappa$ per input, against one shared} & & 0.007$^\ast$ \\
+\multicolumn{2}{@{}l}{Asymmetry ($\kappa = 1.60$, against 1)} & & 0.035 \\
+\multicolumn{2}{@{}l}{A $\kappa$ per input, against one shared} & & $-$0.007$^\ast$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\columnwidth}{\footnotesize Weights: the model live on the development service, on scaled gaps $z_i$ in layer 1. $\Delta$ loss: rise in held-out loss when the path is removed and the model retrained, mean over five populations; it rises in all five for every path and for asymmetry. $^\ast$Rises in four of five.}
+\par\smallskip\parbox{\columnwidth}{\footnotesize Weights: the model live on the development service, on scaled gaps $z_i$ in layer 1. $\Delta$ loss: change in held-out loss (about 11.9) when the path or the asymmetry is removed and the model retrained, mean over five populations; it rises in all five for every path and for asymmetry. $^\ast$Change when each input gets its own $\kappa$: lower in four of five.}
 \end{table}
 
 \subsection{Robustness}\label{sec:robust}
@@ -315,7 +316,7 @@ Noisy labels & 0.791 & \textbf{0.754} & 0.717 & \textbf{0.702} & 0.983 & 0.984 &
 \par\smallskip\parbox{\columnwidth}{\footnotesize Means over three populations. Net: the tuned unconstrained network on the same eight gaps. Recovery: each learned state's Pearson correlation with the true one, per order.}
 \end{table}
 
-Prediction barely moves (Table~\ref{tab:robust}). Where the theory is wrong, CFI loses on average 0.002 AUC to the best of the three comparators (missing paths), and it matches or beats them under a flipped sign and an interaction, staying within 0.009 of the true Fit throughout. The cost shows instead in the state the error touches: with Love's missing path, Love's recovery falls from 0.985 to 0.899, and with the flipped sign Respect's falls to 0.929, while Fit stays at 0.966 or above. Weak anchors barely matter, since outcomes and behaviours still fix each state's scale. Noisy labels separate the models most. CFI's churn AUC does not move (0.791), while the unconstrained network falls from 0.786 to 0.754 and gradient boosting from 0.773 to 0.752: 21 constrained parameters cannot fit flipped labels that a flexible model learns.
+Prediction barely moves (Table~\ref{tab:robust}). Where the theory is wrong, CFI loses on average 0.002 AUC to the best comparator in each population (missing paths; not all shown), and it matches or beats them under a flipped sign and an interaction, staying within 0.009 of the true Fit throughout. The cost shows instead in the state the error touches: with Love's missing path, Love's recovery falls from 0.985 to 0.899, and with the flipped sign Respect's falls to 0.929, while Fit stays at 0.966 or above. Weak anchors barely matter, since outcomes and behaviours still fix each state's scale. Noisy labels separate the models most. CFI's churn AUC does not move (0.791), while the unconstrained network falls from 0.786 to 0.754 and gradient boosting from 0.773 to 0.752. Logistic regression barely moves either (0.786 to 0.784): what resists the noise is low capacity, which the constraints give a neural network.
 
 \runin{Small data.} A model with its structure fixed should also need less data. Trained on a random 100, 200, 400 or 800 of the 1,600 training customers and judged on the same held-out customers (Fig.~\ref{fig:small}), CFI loses little. With 100 customers (about 2,300 orders) its churn AUC is 0.787, more than logistic regression or the network reach with all 1,600 (0.786), and its states still track the truth (mean $r$ 0.96 to 0.97). Its lead over the better of the two is 0.015 for churn and 0.010 for reorders at 100 customers on average, against 0.002 and 0.001 at 1,600.
 
@@ -327,7 +328,7 @@ Prediction barely moves (Table~\ref{tab:robust}). Where the theory is wrong, CFI
 
 \subsection{Explanations and Drivers}\label{sec:drivers}
 
-Fig.~\ref{fig:example} shows what CFI says about one order, as the dashboard draws it. The order came 6 minutes late, the food was rated half a star below this customer's usual, the fees were a point higher, and the app and courier did slightly better than usual. Fit falls from 0.742, for an order exactly as expected, to 0.309, and churn risk rises from 1.0\% to 6.7\%; the food and the lateness carry most of the fall.
+Fig.~\ref{fig:example} shows what CFI says about one order, as the dashboard draws it. The order came 6 minutes late, the food was rated half a star below this customer's usual, the fee load was a percentage point of the basket higher, and the app and courier did slightly better than usual. Fit falls from 0.742, for an order exactly as expected, to 0.309, and churn risk rises from 1.0\% to 6.7\%; the food and the lateness carry most of the fall.
 
 \begin{figure}[t]
 \centering
@@ -335,9 +336,9 @@ Fig.~\ref{fig:example} shows what CFI says about one order, as the dashboard dra
 \caption{One order's contributions to Fit (Shapley values against an as-expected order), from the model live on the development service. They add up exactly to the change in Fit.}\label{fig:example}
 \end{figure}
 
-Every contribution CFI reports is exact. In all 670,639 scorings of the driver replays below, the eight contributions to each of the six scores add up to the score's distance from an as-expected order to within $3 \times 10^{-15}$. The API computes them with the same NumPy code as the notebooks, and replaying 4,744 events (validation, expectation updates, scoring and all 256 coalitions for six scores) takes 0.56 ms per event on one CPU core.
+Every contribution CFI reports is exact. In all 670,639 scorings of the driver replays below, the eight contributions to each of the six scores add up to the score's distance from an as-expected order to floating-point precision (the replay stops if any misses by $10^{-12}$). The API computes them with the same NumPy code as the notebooks.
 
-An exact explanation is useful only if it points at the right cause. GET /drivers averages each input's contribution to Fit over a restaurant's or courier's orders, subtracts that input's average over all orders (the excess), and ranks groups by their most negative excess. To test it, the simulator planted trouble in 20 populations at each of four sizes, 50 to 400 customers over 90 days (about 660 to 5,100 orders): 80\% of late orders went to two of the 40 restaurants, 80\% of cold food to a third, and 80\% of rude couriers to three of the 60 couriers. Every event was replayed through the scoring code the API runs.
+An exact explanation is useful only if it points at the right cause. GET /drivers averages each input's contribution to Fit over a restaurant's or courier's orders, subtracts that input's average over all orders (the excess), and ranks groups by their most negative excess. To test it, the simulator planted trouble in 20 populations at each of four sizes, 50 to 400 customers over 90 days (about 660 to 5,130 orders): 80\% of late orders went to two of the 40 restaurants, 80\% of cold food to a third, and 80\% of rude couriers to three of the 60 couriers. Every event was replayed through the scoring code the API runs.
 
 \begin{figure}[t]
 \centering
@@ -345,11 +346,11 @@ An exact explanation is useful only if it points at the right cause. GET /driver
 \caption{Share of the three worst-ranked couriers that are planted, by population size, under three rankings; mean of 20 populations. By chance it would be 3 in 60.}\label{fig:drivers}
 \end{figure}
 
-Restaurants are easy: the three planted kitchens take 98\% of the top three places at 100 customers and all of them from 200. Couriers are harder, because rudeness moves only the courier rating, and only on rated orders. Here the excess earns its place (Fig.~\ref{fig:drivers}). Ranked by it, 97\% of the top three couriers are planted at 5,100 orders, against 85\% when ranked by lowest average Fit and 12\% by the raw contribution, since lateness drags every courier alike. The excess also names the cause. Each planted group's first driver is its planted input (speed for the late kitchens, food for the cold one, courier conduct for the rude couriers) in every population from 200 customers on, and in 80 to 100\% of them below that. The raw contribution names courier conduct for only about half of the rude couriers.
+Restaurants are easy: the three planted kitchens take 98\% of the top three places at 100 customers and all of them from 200. Couriers are harder, because rudeness moves only the courier rating, and only on rated orders. With enough data the excess earns its place (Fig.~\ref{fig:drivers}): ranked by it, 97\% of the top three couriers are planted at 400 customers, against 85\% by lowest average Fit and 12\% by the raw contribution, since lateness drags every courier alike; below 200 customers, lowest average Fit does as well or better. The excess also names the cause. Each planted group's first driver is its planted input (speed for the late kitchens, food for the cold one, courier conduct for the rude couriers) in every population from 200 customers on, and in 70 to 100\% of them below that. The raw contribution names courier conduct for only about half of the rude couriers.
 
 \subsection{Measurement and the Matrix}\label{sec:matrix}
 
-What v1 events can measure costs CFI 0.058 AUC for churn (0.740) and 0.048 for reorders (0.674): $x_4$ and $x_7$ are never measured, and $x_5$, $x_6$ and $x_8$ only on rated orders and incidents. It also blurs the love matrix. With every input measured, each held-out customer's latest quadrant matches the true quadrant 95\% of the time (sd 1\%). Measured as events measure, 75\% match, and Lovemarks swell from 56\% to 77\% of customers, because an order with no rating scores ``as expected'' (love 0.83, respect 0.90), deep in the Lovemark quadrant. Carrying each input's last measured gap forward is worse still (65\%): stale gaps misplace more customers than neutral ones. Even so, the quadrants still sort risk: 30-day churn runs 3.1\% in Lovemark, 9.4\% in Brand, 14.2\% in Fad and 21.5\% in Product (Table~\ref{tab:matrix}). Carried-forward gaps blunt that ordering too: churn in Product falls to 11.2\%, close to Fad's.
+Measured as v1 events measure, CFI's churn AUC falls from 0.798 to 0.740 and its reorder AUC from 0.723 to 0.674 (retrained on event-measured gaps without the $x_4$ and $x_7$ paths; the comparators were not rerun this way): $x_4$ and $x_7$ are never measured, and $x_5$, $x_6$ and $x_8$ only on rated orders and incidents. It also blurs the love matrix. With every input measured, each held-out customer's latest quadrant matches the true quadrant 95\% of the time (sd 1\%). Measured as events measure, 75\% match, and Lovemarks swell from 56\% to 77\% of customers, because an order with no rating scores ``as expected'' (Love 0.83, Respect 0.90), deep in the Lovemark quadrant. Carrying each input's last measured gap forward is worse still (65\%): stale gaps misplace more customers than neutral ones. Even so, the quadrants still sort risk: 30-day churn runs 3.1\% in Lovemark, 9.4\% in Brand, 14.2\% in Fad and 21.5\% in Product (Table~\ref{tab:matrix}). Carried-forward gaps blunt that ordering too: churn in Product falls to 11.2\%, close to Fad's.
 
 \begin{table}[t]
 \caption{The Love Matrix Under Three Measurement Rules}\label{tab:matrix}
@@ -369,7 +370,7 @@ Carried forward & 65 & 61 (3.2) & 17 (3.9) & 11 (10.6) & 11 (11.2) \\
 
 \subsection{Real Orders}\label{sec:olist}
 
-A simulation cannot show that real customers judge gaps the way the theory says. The public Olist dataset \cite{olist2018} can, for the speed input: 95,824 delivered Brazilian e-commerce orders, each with a promised delivery date and a 1-to-5 review. Its gap is the days an order arrived before (positive) or after (negative) its promise, as $x_1$ is. A cumulative-logit model of the review \cite{mccullagh1980} on $g_\kappa(\text{gap})$, with $\kappa$ profiled by likelihood, gives $\kappa = 7.0$ (95\% likelihood-ratio interval 6.5 to 7.5; Fig.~\ref{fig:kappa}): a day late costs seven times what a day early earns. On a held-out fifth of customers, the asymmetric gap explains reviews better than the symmetric one (log-likelihood gain per order 0.048 against 0.032), and added to the delivery time it beats the delivery time alone (0.060 against 0.052): customers judge the broken promise as well as the wait.
+A simulation cannot show that real customers judge gaps the way the theory says. The public Olist dataset \cite{olist2018} can, for the speed input: 95,824 delivered Brazilian e-commerce orders, each with a promised delivery date and a 1-to-5 review (Fig.~\ref{fig:olist}). Its gap is the days an order arrived before (positive) or after (negative) its promise, as $x_1$ is. A cumulative-logit model of the review \cite{mccullagh1980} on $g_\kappa(\text{gap})$, with $\kappa$ profiled by likelihood, gives $\kappa = 7.0$ (95\% likelihood-ratio interval 6.3 to 7.7; Fig.~\ref{fig:kappa}): a day late costs seven times what a day early earns. On a held-out fifth of customers, the asymmetric gap explains reviews better than the symmetric one (log-likelihood gain per order over a model with no inputs, 0.048 against 0.032). Delivery time alone explains more than either gap (0.052), but adding the gap to it does better still (0.060): customers judge the broken promise as well as the wait.
 
 \begin{figure}[t]
 \centering
@@ -383,7 +384,7 @@ A simulation cannot show that real customers judge gaps the way the theory says.
 \caption{Profile likelihood of $\kappa$ on Olist, every other parameter refitted at each value; the shading is the 95\% likelihood-ratio interval (drop below 1.92, dashed). Lateness is strongly asymmetric; the fee load leans the other way.}\label{fig:kappa}
 \end{figure}
 
-Two findings temper this. Reviews saturate (Fig.~\ref{fig:olist}): they fall to about 1.7 stars within a week past the promise and stay there, and level off near 4.3 for early orders, which a linear index cannot follow but CFI's sigmoid layers can. And the asymmetry is not universal: for the fee load (freight over price, against the typical order's), $\kappa$ is 0.15 (0.1 to 0.25), and the fee adds almost nothing (a gain of 0.0002 per order). Olist cannot test the churn head: only 3\% of its customers buy again, and a late first order lowers that only from 3.1\% to 2.8\% ($p = 0.18$).
+Two findings temper this. Reviews saturate (Fig.~\ref{fig:olist}): they fall to about 1.7 stars within a week past the promise and stay there, and level off near 4.3 for early orders, which a linear index cannot follow but CFI's sigmoid layers can. And the asymmetry is not universal: for the fee load (freight over price, against the typical order's), $\kappa$ is 0.15 (0.07 to 0.27), a reversed asymmetry: a fee below the usual pleases more than one above it displeases. The fee adds almost nothing, though (a gain of 0.0002 per order). Olist cannot test the churn head: only 3\% of its customers buy again, and a late first order lowers that only from 3.1\% to 2.8\% ($p = 0.18$).
 
 \section{System and Dashboard}\label{sec:system}
 
@@ -438,19 +439,19 @@ CFI runs as a working service on Google Cloud, so every number a business user s
 \end{algorithmic}
 \end{algorithm}
 
-\runin{Models.} Each trained version is registered with its model.json, the file's SHA-256 and a model card that states its data, metrics and limits. One version is live. Promoting another, or rolling back, changes one document that every event reads inside its own transaction, so no event is scored by a half-switched model. A golden replay keeps research and service in step: in continuous integration, a fixed log of 795 events goes through the API on the Firestore emulator, and every answer must match fitcore's own replay of the same log.
+\runin{Models.} Each trained version is registered with its model.json, the file's SHA-256 and a model card that states its data, metrics and limits. One version is live. Promoting another, or rolling back, changes one document that every event reads inside its own transaction, so no event is scored by a half-switched model. A golden replay keeps research and service in step: in continuous integration, a fixed log of 795 events goes through the API on the Firestore emulator, and every answer must match the research code's own replay of the same log (fitcore, the Python package the notebooks and the API share).
 
 \begin{figure*}[t]
 \centering
-\begin{subfigure}[b]{0.475\textwidth}\centering
-\shot{2.88in}{shot_matrix.png}
+\begin{subfigure}[b]{0.37\textwidth}\centering
+\shot{2.62in}{fig_dash_matrix.png}
 \caption{The love matrix}\label{fig:dash-matrix}
 \end{subfigure}\hfill
-\begin{subfigure}[b]{0.505\textwidth}\centering
-\shot{2.88in}{shot_drivers.png}
-\caption{Drivers by courier, worst first}\label{fig:dash-drivers}
+\begin{subfigure}[b]{0.6\textwidth}\centering
+\shot{2.62in}{fig_dash_drivers.png}
+\caption{Drivers by courier}\label{fig:dash-drivers}
 \end{subfigure}
-\caption{Two pages of the dashboard on the development service (223 simulated customers, 1,633 orders). (a) Each dot is a customer at their latest order, red if churn risk is 10\% or more; the shaded band at Love 0.83 holds the 122 customers whose latest order measured nothing that feeds Love. (b) Two of the three couriers planted as rude, courier-00 and courier-02, rank first and second, with courier conduct among the inputs that pull their Fit down most.}\label{fig:dashboard}
+\caption{Two pages of the dashboard on the development service (223 simulated customers, 1,633 orders). (a) Each dot is a customer at their latest order, red if churn risk is 10\% or more; the shaded band at Love 0.83 holds the 122 customers whose latest order measured nothing that feeds Love. (b) Each input's average contribution to Fit over every order (top), and couriers worst first by their most negative excess (bottom). Two of the three couriers planted as rude rank first and second; courier conduct is courier-02's first driver and courier-00's second, after speed.}\label{fig:dashboard}
 \end{figure*}
 
 \runin{Dashboard.} A React dashboard on Firebase Hosting serves signed-in staff, by role (Fig.~\ref{fig:dashboard}). It shows average Fit, churn risk and the customers at risk, live and by day; the love matrix, with each quadrant's customers now and how they moved since a chosen day; each customer's scores over time, with the contributions behind every order; the drivers of Section~\ref{sec:drivers}, by restaurant or courier over any span of days; and the model registry with each version's card. The matrix does not hide what events cannot measure: a customer whose latest order measured nothing that feeds Love sits on a marked band at Love's as-expected value, counted in the legend (122 of 223 customers on the development service), rather than in a line of dots that looks like a finding. Every page passes automated accessibility checks (axe-core), has a keyboard path through its charts, and follows the system's light or dark theme.
@@ -477,9 +478,9 @@ From the app, through Hosting & 416 ms & 592 ms & 715 ms \\
 
 \section{Discussion and Limitations}\label{sec:discussion}
 
-\runin{What simulation can show.} The simulator shares CFI's connections, so the recovery of Sections~\ref{sec:experiments}-B and \ref{sec:experiments}-C shows that the method finds a structure that is there, not that real customers have it. Section~\ref{sec:robust} narrows the gap: when the world breaks the theory, prediction holds and the error surfaces in the state it touches. Only real data can say which assumptions hold, and so far real data has tested one input: speed, on Olist, where the asymmetry is strong. Olist also shows two things the simulator assumed away. Reviews saturate, and the fee load shows no asymmetry at all ($\kappa = 0.15$). Each input's $\kappa$ should therefore be estimated rather than assumed once real orders arrive; in simulation, a single shared $\kappa$ (1.55 learned, against a mean of 1.96) already understates shortfalls.
+\runin{What simulation can show.} The simulator shares CFI's connections, so the recovery of Section~\ref{sec:experiments}-C shows that the method finds a structure that is there, not that real customers have it. Section~\ref{sec:robust} narrows the gap: when the world breaks the theory, prediction holds and the error surfaces in the state it touches. Only real data can say which assumptions hold, and so far real data has tested one input: speed, on Olist, where the asymmetry is strong. Olist also shows two things the simulator assumed away. Reviews saturate, and the fee load's asymmetry runs the other way ($\kappa = 0.15$), which CFI's $\kappa = 1 + \operatorname{softplus}(\theta)$ cannot represent. Each input's $\kappa$ should therefore be estimated, with room below 1, once real orders arrive; in simulation, a single shared $\kappa$ (1.55 learned, against a mean of 1.96) already understates shortfalls. Gaps also adapt: a customer used to slow deliveries stops being disappointed by them, and the level itself, which on Olist explains reviews as well as the gap does, is not an input.
 
-\runin{Measurement.} CFI is only as good as what events measure. Two inputs, order fidelity and personalisation, are not in v1 events, and ratings arrive on a minority of orders. Scoring an unmeasured input as expected keeps the model honest about what it does not know, but crowds customers into the Lovemark quadrant where an unrated order lands (Section~\ref{sec:matrix}). We keep the quadrant lines at 0.5, where the survey anchors put a neutral answer; what should change is what is measured and shown: item-level accuracy and recommendation outcomes in the events, and scores marked by how many of their inputs were measured. The matrix already marks the simplest case, customers whose Love was not measured at all (Fig.~\ref{fig:dash-matrix}).
+\runin{Measurement.} CFI is only as good as what events measure. Two inputs, order fidelity and personalisation, are not in v1 events, and ratings arrive on a minority of orders. Scoring an unmeasured input as expected keeps the model honest about what it does not know, but crowds customers into the Lovemark quadrant where an unrated order lands (Section~\ref{sec:matrix}). We keep the quadrant lines at 0.5; what should change is what is measured and shown: item-level accuracy and recommendation outcomes in the events, and scores marked by how many of their inputs were measured. The matrix already marks the simplest case, customers whose Love was not measured at all (Fig.~\ref{fig:dash-matrix}).
 
 \runin{Explanation is not causation.} Contributions are exact for the model, not causal for the customer. A driver says which gap moved this customer's Fit in CFI, not that fixing it will win the customer back. That needs controlled experiments, for which schema v1 already defines the action and outcome events, before any action is automated.
 
@@ -487,26 +488,26 @@ From the app, through Hosting & 416 ms & 592 ms & 715 ms \\
 
 \section{Conclusion and Future Work}
 
-Fixing a network's structure from theory cost CFI nothing in prediction in our study. In return it gave exact explanations, states that match the hidden truth, resistance to label noise, and driver rankings that find the problems planted at restaurants and couriers. On real orders the theory's asymmetry is large for speed and absent for fees. Next, CFI will be trained on its first months of real orders, with $\kappa$ estimated per input and a saturating response; events will carry the two inputs they do not yet measure; and driver-led actions will be tested in controlled experiments before any is automated.
+Fixing a network's structure from theory cost CFI nothing in prediction in our study. In return its hidden units are named states with fixed directions that match the hidden truth, every score is explained exactly through them, label noise that misleads a flexible network leaves it unmoved, and its driver rankings find the problems planted at restaurants and couriers. On real orders the theory's asymmetry is large for speed, and reversed but negligible for fees. Next, CFI will be trained on its first months of real orders, with $\kappa$ estimated per input and allowed below 1, and a saturating response; events will carry the two inputs they do not yet measure; and driver-led actions will be tested in controlled experiments before any is automated.
 
 \footnotesize
 \begin{thebibliography}{15}
 \setlength{\itemsep}{1pt}
-\bibitem{berry2002} L.~L. Berry, K.~Seiders and D.~Grewal, ``Understanding service convenience,'' \textit{Journal of Marketing}, vol.~66, no.~3, pp.~1--17, 2002.
-\bibitem{fader2005} P.~S. Fader, B.~G.~S. Hardie and K.~L. Lee, ```Counting your customers' the easy way: An alternative to the Pareto/NBD model,'' \textit{Marketing Science}, vol.~24, no.~2, pp.~275--284, 2005.
-\bibitem{friedman2001} J.~H. Friedman, ``Greedy function approximation: A gradient boosting machine,'' \textit{Annals of Statistics}, vol.~29, no.~5, pp.~1189--1232, 2001.
-\bibitem{karpatne2017} A.~Karpatne \textit{et al.}, ``Theory-guided data science: A new paradigm for scientific discovery from data,'' \textit{IEEE Transactions on Knowledge and Data Engineering}, vol.~29, no.~10, pp.~2318--2331, 2017.
-\bibitem{lundberg2017} S.~M. Lundberg and S.-I. Lee, ``A unified approach to interpreting model predictions,'' in \textit{Advances in Neural Information Processing Systems 30}, 2017, pp.~4765--4774.
-\bibitem{mccullagh1980} P.~McCullagh, ``Regression models for ordinal data,'' \textit{Journal of the Royal Statistical Society: Series B}, vol.~42, no.~2, pp.~109--142, 1980.
-\bibitem{mittal1998} V.~Mittal, W.~T. Ross and P.~M. Baldasare, ``The asymmetric impact of negative and positive attribute-level performance on overall satisfaction and repurchase intentions,'' \textit{Journal of Marketing}, vol.~62, no.~1, pp.~33--47, 1998.
-\bibitem{morgan1994} R.~M. Morgan and S.~D. Hunt, ``The commitment-trust theory of relationship marketing,'' \textit{Journal of Marketing}, vol.~58, no.~3, pp.~20--38, 1994.
-\bibitem{morris2019} T.~P. Morris, I.~R. White and M.~J. Crowther, ``Using simulation studies to evaluate statistical methods,'' \textit{Statistics in Medicine}, vol.~38, no.~11, pp.~2074--2102, 2019.
-\bibitem{neslin2006} S.~A. Neslin, S.~Gupta, W.~Kamakura, J.~Lu and C.~H. Mason, ``Defection detection: Measuring and understanding the predictive accuracy of customer churn models,'' \textit{Journal of Marketing Research}, vol.~43, no.~2, pp.~204--211, 2006.
-\bibitem{olist2018} Olist, ``Brazilian e-commerce public dataset by Olist,'' Kaggle, 2018. [Online]. Available: \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce}
+\bibitem{neslin2006} S.~A. Neslin, S.~Gupta, W.~Kamakura, J.~Lu, and C.~H. Mason, ``Defection detection: Measuring and understanding the predictive accuracy of customer churn models,'' \textit{Journal of Marketing Research}, vol.~43, no.~2, pp.~204--211, 2006.
+\bibitem{fader2005} P.~S. Fader, B.~G.~S. Hardie, and K.~L. Lee, ```Counting your customers' the easy way: An alternative to the Pareto/NBD model,'' \textit{Marketing Science}, vol.~24, no.~2, pp.~275--284, 2005.
 \bibitem{oliver1980} R.~L. Oliver, ``A cognitive model of the antecedents and consequences of satisfaction decisions,'' \textit{Journal of Marketing Research}, vol.~17, no.~4, pp.~460--469, 1980.
-\bibitem{reichheld2003} F.~F. Reichheld, ``The one number you need to grow,'' \textit{Harvard Business Review}, vol.~81, no.~12, pp.~46--54, 2003.
+\bibitem{mittal1998} V.~Mittal, W.~T. Ross, and P.~M. Baldasare, ``The asymmetric impact of negative and positive attribute-level performance on overall satisfaction and repurchase intentions,'' \textit{Journal of Marketing}, vol.~62, no.~1, pp.~33--47, 1998.
 \bibitem{roberts2004} K.~Roberts, \textit{Lovemarks: The Future Beyond Brands}. New York, NY, USA: powerHouse Books, 2004.
+\bibitem{reichheld2003} F.~F. Reichheld, ``The one number you need to grow,'' \textit{Harvard Business Review}, vol.~81, no.~12, pp.~46--54, 2003.
+\bibitem{morris2019} T.~P. Morris, I.~R. White, and M.~J. Crowther, ``Using simulation studies to evaluate statistical methods,'' \textit{Statistics in Medicine}, vol.~38, no.~11, pp.~2074--2102, 2019.
+\bibitem{olist2018} Olist, ``Brazilian e-commerce public dataset by Olist,'' Kaggle, 2018. [Online]. Available: \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce} (accessed Nov. 2026).
+\bibitem{lundberg2017} S.~M. Lundberg and S.-I. Lee, ``A unified approach to interpreting model predictions,'' in \textit{Advances in Neural Information Processing Systems 30}, 2017, pp.~4765--4774.
+\bibitem{morgan1994} R.~M. Morgan and S.~D. Hunt, ``The commitment-trust theory of relationship marketing,'' \textit{Journal of Marketing}, vol.~58, no.~3, pp.~20--38, 1994.
+\bibitem{berry2002} L.~L. Berry, K.~Seiders, and D.~Grewal, ``Understanding service convenience,'' \textit{Journal of Marketing}, vol.~66, no.~3, pp.~1--17, 2002.
+\bibitem{friedman2001} J.~H. Friedman, ``Greedy function approximation: A gradient boosting machine,'' \textit{Annals of Statistics}, vol.~29, no.~5, pp.~1189--1232, 2001.
 \bibitem{rudin2019} C.~Rudin, ``Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead,'' \textit{Nature Machine Intelligence}, vol.~1, no.~5, pp.~206--215, 2019.
+\bibitem{karpatne2017} A.~Karpatne \textit{et al.}, ``Theory-guided data science: A new paradigm for scientific discovery from data,'' \textit{IEEE Transactions on Knowledge and Data Engineering}, vol.~29, no.~10, pp.~2318--2331, 2017.
+\bibitem{mccullagh1980} P.~McCullagh, ``Regression models for ordinal data,'' \textit{Journal of the Royal Statistical Society: Series B}, vol.~42, no.~2, pp.~109--127, 1980.
 \end{thebibliography}
 
 \end{document}
