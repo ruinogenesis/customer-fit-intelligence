@@ -32,3 +32,6 @@ node_modules/
 
 # Generated data: recreate it from the seed
 /data/
+
+# Downloaded public data (T805's Olist files): fetched by each user, never committed
+/notebooks/data/
