@@ -1,0 +1,25 @@
+part,measure,value
+events,count,743
+events,orders,209
+per event,reads,4
+per event,writes,4.98116
+per event,deletes,2
+per event,messages,3.98116
+per event,bigquery bytes,4445.64
+per order,bigquery bytes,15804.3
+ms in this process,p50,1.06842
+ms in this process,p95,1.19348
+ms in this process,p99,1.42631
+ms in this process,max,11.2047
+ms in this process,mean,1.09214
+ms from here,p50,415.702
+ms from here,p95,592.283
+ms from here,p99,714.773
+ms from here,max,1048.56
+ms from here,mean,432.112
+ms in cloud run,p50,175.471
+ms in cloud run,p95,207.908
+ms in cloud run,p99,262.841
+ms in cloud run,max,701.77
+ms in cloud run,mean,181.413
+ms in cloud run,logged,743
