@@ -1,22 +1,81 @@
+/* Colours (T409): every colour in the dashboard is one of these, light and
+   dark at once; light-dark() picks by color-scheme. Without a choice the
+   system setting decides; the switch in the header sets data-theme on
+   <html> (src/theme.ts). tests/contrast.test.ts checks each text and mark
+   against the backgrounds it sits on, in both themes. Dark steps follow the
+   dataviz skill's palette (chart surface #1a1a19). */
 :root {
+  color-scheme: light dark;
+  --page: light-dark(#f6f7f9, #0d0d0d);
+  --surface: light-dark(#fff, #1a1a19);
+  --ink: light-dark(#1f2328, #f0efec);
+  --ink-muted: light-dark(#57606a, #c3c2b7);
+  --link: light-dark(#1c5cab, #86b6ef);
+  --line: light-dark(#d0d7de, #383835);
+  --grid: light-dark(#e4e2dd, #2c2c2a);
+  --frame: light-dark(#c3c2b7, #4a4945);
+  --rule: light-dark(#6e7781, #898781);
+  --focus: light-dark(#2a78d6, #3987e5);
+  --series: light-dark(#2a78d6, #3987e5);
+  --worse: light-dark(#e34948, #e66767);
+  --critical: #d03b3b;
+  --tint: light-dark(#eef4fc, #1d2b3f);
+  --badge: light-dark(#ddf4ff, #1d3550);
+  --pill: light-dark(#f0efec, #383835);
+  --pill-live: light-dark(#e5f4e4, #1e3a1e);
+  --caution: light-dark(#f9eeda, #3d3220);
+  --success: light-dark(#1a7f37, #3fb950);
+  --danger: light-dark(#b42318, #f47067);
+
   font-family: system-ui, sans-serif;
-  color: #1f2328;
-  background: #f6f7f9;
+  color: var(--ink);
+  background: var(--page);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
 }
 
-.status {
+a {
+  color: var(--link);
+}
+
+/* One focus ring for everything a keyboard reaches. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.startup {
   padding: 2rem;
+}
+
+.skip {
+  position: absolute;
+  top: -10rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.skip:focus {
+  top: 0.5rem;
 }
 
 .sign-in {
   max-width: 22rem;
   margin: 10vh auto;
   padding: 2rem;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
 }
 
@@ -31,7 +90,7 @@ body {
 }
 
 [role="alert"] {
-  color: #b42318;
+  color: var(--danger);
   margin: 0;
 }
 
@@ -48,8 +107,8 @@ body {
   gap: 1rem;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  background: #fff;
-  border-bottom: 1px solid #d0d7de;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
 }
 
 .shell header .who {
@@ -59,7 +118,7 @@ body {
 .role {
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: #ddf4ff;
+  background: var(--badge);
   font-size: 0.85em;
 }
 
@@ -79,7 +138,7 @@ body {
 }
 
 .shell nav a.active {
-  background: #fff;
+  background: var(--surface);
   font-weight: 600;
 }
 
@@ -88,12 +147,17 @@ body {
   padding: 1.5rem 2rem;
 }
 
+/* The skip link's target: no ring around the whole page. */
+.shell main:focus {
+  outline: none;
+}
+
 .read-only {
-  color: #57606a;
+  color: var(--ink-muted);
 }
 
 .soon {
-  color: #57606a;
+  color: var(--ink-muted);
   font-size: 0.9em;
 }
 
@@ -109,13 +173,13 @@ body {
 .models table {
   border-collapse: collapse;
   width: 100%;
-  background: #fff;
+  background: var(--surface);
 }
 
 .models th,
 .models td {
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #d0d7de;
+  border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
 }
@@ -138,24 +202,24 @@ body {
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
   font-size: 0.85em;
-  background: #f0efec;
+  background: var(--pill);
 }
 
 .status.live {
-  background: #e5f4e4;
+  background: var(--pill-live);
   font-weight: 600;
 }
 
 .status.retired {
-  color: #57606a;
+  color: var(--ink-muted);
 }
 
 .notice {
-  color: #1a7f37;
+  color: var(--success);
 }
 
 .confirm td {
-  background: #f9eeda;
+  background: var(--caution);
 }
 
 .confirm button {
@@ -181,7 +245,7 @@ body {
 }
 
 .updated {
-  color: #57606a;
+  color: var(--ink-muted);
   font-size: 0.9em;
 }
 
@@ -193,13 +257,13 @@ body {
 
 .tile {
   padding: 0.75rem 1rem;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
 }
 
 .tile .label,
 .tile .note {
-  color: #57606a;
+  color: var(--ink-muted);
   font-size: 0.85em;
 }
 
@@ -214,10 +278,13 @@ body {
   gap: 0.75rem;
 }
 
+/* Charts stop growing at 36rem: an SVG's text grows with its width, and
+   past that it would outgrow the page's text (T409). */
 .line-chart {
+  max-width: 36rem;
   margin: 0;
   padding: 0.75rem 1rem;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
 }
 
@@ -236,41 +303,36 @@ body {
   font-size: 11px;
 }
 
-.line-chart svg:focus-visible {
-  outline: 2px solid #2a78d6;
-  outline-offset: 2px;
-}
-
 .line-chart .tick line {
-  stroke: #e4e2dd;
+  stroke: var(--grid);
   stroke-width: 1;
 }
 
 .line-chart text {
-  fill: #57606a;
+  fill: var(--ink-muted);
 }
 
 .line-chart text.end {
-  fill: #1f2328;
+  fill: var(--ink);
   font-weight: 600;
 }
 
 .line-chart .series {
   fill: none;
-  stroke: #2a78d6;
+  stroke: var(--series);
   stroke-width: 2;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
 .line-chart .dot {
-  fill: #2a78d6;
-  stroke: #fff;
+  fill: var(--series);
+  stroke: var(--surface);
   stroke-width: 2;
 }
 
 .line-chart .crosshair {
-  stroke: #8c959f;
+  stroke: var(--rule);
   stroke-width: 1;
 }
 
@@ -279,8 +341,8 @@ body {
   top: 0;
   transform: translateX(-50%);
   padding: 0.25rem 0.5rem;
-  background: #fff;
-  border: 1px solid #d0d7de;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 0.85em;
   white-space: nowrap;
@@ -288,7 +350,7 @@ body {
 }
 
 .line-chart .tooltip span {
-  color: #57606a;
+  color: var(--ink-muted);
 }
 
 .overview details {
@@ -301,7 +363,7 @@ body {
 .matrix table,
 .drivers table {
   border-collapse: collapse;
-  background: #fff;
+  background: var(--surface);
 }
 
 .overview th,
@@ -315,7 +377,7 @@ body {
 .drivers th,
 .drivers td {
   padding: 0.4rem 0.75rem;
-  border-bottom: 1px solid #d0d7de;
+  border-bottom: 1px solid var(--line);
   text-align: left;
   font-variant-numeric: tabular-nums;
 }
@@ -341,16 +403,17 @@ body {
 .score-tabs button {
   margin: 0;
   padding: 0.3rem 0.75rem;
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #fff;
+  background: var(--surface);
+  color: var(--ink);
   cursor: pointer;
 }
 
 .score-tabs button[aria-pressed="true"] {
-  border-color: #1f2328;
-  background: #1f2328;
-  color: #fff;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--surface);
 }
 
 .stepper {
@@ -386,7 +449,7 @@ body {
 .customer .note,
 .drivers .note,
 .legend {
-  color: #57606a;
+  color: var(--ink-muted);
   font-size: 0.85em;
 }
 
@@ -414,7 +477,7 @@ table.bars {
   top: 4px;
   bottom: 4px;
   left: 50%;
-  border-left: 1px solid #8c959f;
+  border-left: 1px solid var(--rule);
 }
 
 .bars .bar {
@@ -436,12 +499,12 @@ table.bars {
 
 .bars .better,
 .legend .better {
-  background: #2a78d6;
+  background: var(--series);
 }
 
 .bars .worse,
 .legend .worse {
-  background: #e34948;
+  background: var(--worse);
 }
 
 .bars .amount {
@@ -461,17 +524,12 @@ table.bars {
   overflow-x: auto;
 }
 
-/* The history chart at a reading width: an SVG's text grows with it. */
-.customer .line-chart {
-  max-width: 42rem;
-}
-
 .orders td {
   white-space: nowrap;
 }
 
 .customer tr.picked td {
-  background: #eef4fc;
+  background: var(--tint);
 }
 
 /* The love matrix (T403) */
@@ -481,29 +539,29 @@ table.bars {
   width: 100%;
   max-width: 40rem;
   aspect-ratio: 1;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
   font-size: 14px;
 }
 
 .matrix-plot .plot {
   fill: none;
-  stroke: #c3c2b7;
+  stroke: var(--frame);
 }
 
 .matrix-plot .midline {
-  stroke: #c3c2b7;
+  stroke: var(--frame);
   stroke-dasharray: 4 4;
 }
 
 .matrix-plot .quadrant {
-  fill: #52514e;
+  fill: var(--ink-muted);
   font-weight: 600;
 }
 
 .matrix-plot .tick text,
 .matrix-plot .axis {
-  fill: #57606a;
+  fill: var(--ink-muted);
 }
 
 .matrix-plot .axis {
@@ -514,8 +572,8 @@ table.bars {
    top (dataviz skill: emphasis, named in the legend), each with a 2px
    surface ring. A dot glides when its customer moves. */
 .matrix-plot .dot {
-  fill: #2a78d6;
-  stroke: #fff;
+  fill: var(--series);
+  stroke: var(--surface);
   stroke-width: 2;
   cursor: pointer;
   transition:
@@ -524,11 +582,24 @@ table.bars {
 }
 
 .matrix-plot .dot.at-risk {
-  fill: #d03b3b;
+  fill: var(--critical);
 }
 
 .matrix-plot .dot.faded {
   opacity: 0.2;
+}
+
+/* The keyboard's place on the plot (T409). */
+.matrix-plot .spot-ring {
+  fill: none;
+  stroke: var(--focus);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.spot-info {
+  min-height: 1.5em;
+  margin: 0.5rem 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -543,11 +614,11 @@ table.bars {
 }
 
 .legend .key.customer {
-  background: #2a78d6;
+  background: var(--series);
 }
 
 .legend .key.at-risk {
-  background: #d03b3b;
+  background: var(--critical);
 }
 
 .picker {
@@ -559,16 +630,17 @@ table.bars {
 
 .picker button {
   padding: 0.4rem 0.9rem;
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--surface);
+  color: var(--ink);
   cursor: pointer;
 }
 
 .picker button[aria-pressed="true"] {
-  border-color: #1f2328;
-  background: #1f2328;
-  color: #fff;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--surface);
 }
 
 .days {
@@ -583,16 +655,16 @@ table.bars {
 }
 
 .matrix .note {
-  color: #57606a;
+  color: var(--ink-muted);
   font-size: 0.85em;
 }
 
 .movement td.stayed {
-  color: #57606a;
+  color: var(--ink-muted);
 }
 
 .movement td.moved {
-  background: #eef4fc;
+  background: var(--tint);
   font-weight: 600;
 }
 
@@ -606,7 +678,7 @@ table.bars {
   padding: 0;
   border: 0;
   background: none;
-  color: LinkText;
+  color: var(--link);
   font: inherit;
   text-decoration: underline;
   cursor: pointer;
@@ -616,7 +688,7 @@ table.bars {
 .drivers tr.picked > th,
 .drivers tr.picked > td,
 .drivers tr.detail > td {
-  background: #eef4fc;
+  background: var(--tint);
 }
 
 .drivers tr.detail > td {

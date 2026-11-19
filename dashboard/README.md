@@ -52,6 +52,23 @@ build: on Hosting the app fetches the project's own from
 `/__/firebase/init.json`, which needs a registered web app (one-time setup
 below). `npm run dev` uses the emulators' demo project instead.
 
+## Themes and keyboard (T409)
+
+Every colour is a variable at the top of `src/styles.css`, light and dark at
+once (`light-dark()`). The Theme switch in the header (System, Light, Dark)
+is kept in this browser; System follows the computer's setting, and
+`index.html` applies a kept choice before the first paint.
+`tests/contrast.test.ts` fails if a colour is written anywhere else, or if
+text falls under 4.5:1 or a mark under 3:1 on its background, in either
+theme.
+
+Everything works from the keyboard, with one focus ring throughout; Skip to
+content is the first Tab stop. On the love matrix the arrow keys move a ring
+between customers, Page Up and Page Down go through every one in order, and
+Enter opens one (or lists the customers on a spot several share). Each
+screen's tests run axe-core (`tests/axe.ts`) against WCAG 2.2 A and AA;
+colour contrast is left to the contrast test, since jsdom draws nothing.
+
 ## Work on it
 
 Node 24, from `dashboard/`:

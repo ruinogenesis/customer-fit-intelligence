@@ -7,6 +7,7 @@ import { afterEach, expect, test } from "vitest";
 import { ApiError } from "../src/api";
 import { App } from "../src/App";
 import type { Role } from "../src/roles";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth } from "./fakes";
 
 afterEach(cleanup);
@@ -76,6 +77,30 @@ test("cancelling promotes nothing", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   expect(screen.queryByRole("button", { name: "Make t310-check live" })).toBeNull();
   expect(api.calls).toEqual(["GET /models"]);
+});
+
+test("the confirm step takes focus; Cancel or Escape hands it back to the button that asked", async () => {
+  await modelsAs("admin");
+  const promote = screen.getByRole("button", { name: "Promote t310-check" });
+  fireEvent.click(promote);
+  expect(promote.getAttribute("aria-expanded")).toBe("true");
+  const confirm = screen.getByRole("button", { name: "Make t310-check live" });
+  expect(document.activeElement).toBe(confirm);
+  expect(confirm.getAttribute("aria-describedby")).toBe("confirm-t310-check");
+  expect(document.getElementById("confirm-t310-check")?.textContent).toMatch(/^Make t310-check live\?/);
+  fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+  expect(document.activeElement).toBe(promote);
+  expect(promote.getAttribute("aria-expanded")).toBe("false");
+  fireEvent.click(promote);
+  fireEvent.keyDown(screen.getByRole("button", { name: "Make t310-check live" }), { key: "Escape" });
+  expect(screen.queryByRole("button", { name: "Make t310-check live" })).toBeNull();
+  expect(document.activeElement).toBe(promote);
+});
+
+test("axe finds nothing on the models screen, with a confirm step open", async () => {
+  await modelsAs("admin");
+  fireEvent.click(screen.getByRole("button", { name: "Promote t310-check" }));
+  expect(await violations()).toEqual([]);
 });
 
 test("rolling back is promoting a retired version", async () => {

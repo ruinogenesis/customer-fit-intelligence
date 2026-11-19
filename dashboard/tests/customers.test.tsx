@@ -23,6 +23,7 @@ import {
   type Scoring,
 } from "../src/customers";
 import type { Role } from "../src/roles";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth } from "./fakes";
 
 const ID = "sim404-000001";
@@ -281,6 +282,11 @@ test("the list is riskiest first, a page at a time, each customer a link to thei
   expect(screen.queryByRole("button", { name: "Load more" })).toBeNull();
 });
 
+test("axe finds nothing on the customers list (T409)", async () => {
+  await open("/customers");
+  expect(await violations()).toEqual([]);
+});
+
 test("the quadrant filter asks the API for that quadrant only", async () => {
   const api = await open("/customers");
   fireEvent.change(screen.getByLabelText(/Quadrant/), { target: { value: "fad" } });
@@ -337,6 +343,13 @@ test("the latest scoring's fit splits exactly from as expected, input by input",
     { input: "Personalization & delight", amount: "0.000", bar: null },
     { input: "Recovery handling", amount: "0.000", bar: null },
   ]);
+});
+
+test("axe finds nothing on a profile, in either view (T409)", async () => {
+  await open(PROFILE);
+  expect(await violations()).toEqual([]);
+  fireEvent.click(screen.getByLabelText("What changed since the scoring before"));
+  expect(await violations()).toEqual([]);
 });
 
 test("churn risk splits in percentage points, and a part that raises it is worse", async () => {

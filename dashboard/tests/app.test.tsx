@@ -1,13 +1,19 @@
 // T401: sign-in, then a shell whose screens say what each role may do.
+// T409: a theme switch, a skip link, and nothing axe can find.
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { createMemoryRouter } from "react-router";
 import { afterEach, expect, test } from "vitest";
 
 import { App } from "../src/App";
 import type { Role } from "../src/roles";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth } from "./fakes";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  localStorage.clear();
+  delete document.documentElement.dataset.theme;
+});
 
 function open(auth: FakeAuth, path = "/") {
   render(
@@ -114,4 +120,51 @@ test("signing out returns to the sign-in form", () => {
   signedInAs("admin");
   fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
   expect(screen.getByRole("button", { name: "Sign in" })).toBeTruthy();
+});
+
+// --- T409 ---
+
+test("the theme switch shows Light or Dark at once and keeps it; System forgets", () => {
+  signedInAs("viewer", "/automations");
+  const theme = screen.getByLabelText("Theme") as HTMLSelectElement;
+  expect(theme.value).toBe("system");
+  expect([...theme.options].map((o) => o.textContent)).toEqual(["System", "Light", "Dark"]);
+  fireEvent.change(theme, { target: { value: "dark" } });
+  expect(document.documentElement.dataset.theme).toBe("dark");
+  expect(localStorage.getItem("cfi-theme")).toBe("dark");
+  fireEvent.change(theme, { target: { value: "system" } });
+  expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+  expect(localStorage.getItem("cfi-theme")).toBeNull();
+});
+
+test("the switch starts on the kept choice", () => {
+  localStorage.setItem("cfi-theme", "light");
+  signedInAs("viewer", "/automations");
+  expect((screen.getByLabelText("Theme") as HTMLSelectElement).value).toBe("light");
+});
+
+test("Skip to content is the first stop, and moves focus past the header and nav", () => {
+  signedInAs("viewer", "/automations");
+  const skip = screen.getByRole("link", { name: "Skip to content" });
+  const reachable = document.querySelectorAll("a[href], button, select, input, [tabindex='0']");
+  expect(reachable[0]).toBe(skip);
+  fireEvent.click(skip);
+  expect(document.activeElement).toBe(screen.getByRole("main"));
+});
+
+test("axe finds nothing on the sign-in form, with an error showing", async () => {
+  const auth = new FakeAuth({ "ana@example.com": { password: "right", role: "analyst" } });
+  open(auth);
+  auth.answer(null);
+  signInWith("ana@example.com", "wrong");
+  await screen.findByRole("alert");
+  expect(await violations()).toEqual([]);
+});
+
+test("axe finds nothing on the no-access page or in the shell", async () => {
+  signedInAs(null);
+  expect(await violations()).toEqual([]);
+  cleanup();
+  signedInAs("analyst", "/automations");
+  expect(await violations()).toEqual([]);
 });

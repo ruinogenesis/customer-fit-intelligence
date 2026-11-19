@@ -15,6 +15,7 @@ import { SignInError, type AuthService, type Session } from "./auth";
 import { firestoreFeed, type CustomerFeed } from "./feed";
 import { atLeast, SCREENS, whoMay, type Screen } from "./roles";
 import { StaffContext, useStaff } from "./staff";
+import { chooseTheme, keptTheme, THEME_NAMES, THEMES, type Theme } from "./theme";
 
 type Router = ReturnType<typeof createBrowserRouter>;
 
@@ -76,7 +77,7 @@ export function App({
   const [client] = useState(() => api ?? httpApi(() => auth.token()));
   useEffect(() => auth.watch(setSession), [auth]);
 
-  if (session === undefined) return <p className="status">Loading…</p>;
+  if (session === undefined) return <p className="startup">Loading…</p>;
   if (session === null) return <SignIn auth={auth} />;
   const signOut = () => void auth.signOut();
   if (session.role === null) return <NoAccess email={session.email} signOut={signOut} />;
@@ -144,11 +145,22 @@ function Shell() {
   const { email, role, signOut } = useStaff();
   return (
     <div className="shell">
+      <a
+        className="skip"
+        href="#main"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById("main")?.focus();
+        }}
+      >
+        Skip to content
+      </a>
       <header>
         <strong>Customer Fit Intelligence</strong>
         <span className="who">
           {email} <span className="role">{role}</span>
         </span>
+        <ThemeSwitch />
         <button type="button" onClick={signOut}>
           Sign out
         </button>
@@ -160,10 +172,34 @@ function Shell() {
           </NavLink>
         ))}
       </nav>
-      <main>
+      <main id="main" tabIndex={-1}>
         <Outlet />
       </main>
     </div>
+  );
+}
+
+/** System, Light or Dark (T409), kept in this browser. */
+function ThemeSwitch() {
+  const [theme, setTheme] = useState<Theme>(() => keptTheme());
+  return (
+    <label className="theme">
+      Theme{" "}
+      <select
+        value={theme}
+        onChange={(event) => {
+          const chosen = event.target.value as Theme;
+          chooseTheme(chosen);
+          setTheme(chosen);
+        }}
+      >
+        {THEMES.map((option) => (
+          <option key={option} value={option}>
+            {THEME_NAMES[option]}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 

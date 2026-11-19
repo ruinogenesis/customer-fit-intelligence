@@ -75,14 +75,90 @@ export function countByQuadrant(dots: readonly Dot[]): QuadrantCounts {
   return counts;
 }
 
-/** Which customers the list shows: a quadrant, a least churn risk, or both. */
+/**
+ * Which customers the list shows: a quadrant, a least churn risk, or both;
+ * or the customers on one spot, picked by keyboard (T409).
+ */
 export interface Selection {
   quadrant: Quadrant | null;
   minChurn: number;
+  ids?: readonly string[] | null;
 }
 
-export function matches(dot: Dot, { quadrant, minChurn }: Selection): boolean {
+export function matches(dot: Dot, { quadrant, minChurn, ids }: Selection): boolean {
+  if (ids) return ids.includes(dot.id);
   return (quadrant === null || dot.quadrant === quadrant) && dot.churn >= minChurn;
+}
+
+// --- Moving through the dots by keyboard (T409) ---
+
+/** The customers drawn at one exact place: one, or several whose scores match. */
+export interface Spot {
+  key: string;
+  x: number;
+  y: number;
+  /** By id. */
+  dots: Dot[];
+}
+
+/** Every spot, in reading order: top to bottom, then left to right. */
+export function spotsOf(dots: readonly Dot[]): Spot[] {
+  const spots = new Map<string, Spot>();
+  for (const dot of dots) {
+    const key = `${dot.x},${dot.y}`;
+    const spot = spots.get(key) ?? { key, x: dot.x, y: dot.y, dots: [] };
+    spot.dots.push(dot);
+    spots.set(key, spot);
+  }
+  for (const spot of spots.values()) spot.dots.sort((a, b) => a.id.localeCompare(b.id));
+  return [...spots.values()].sort((a, b) => a.y - b.y || a.x - b.x);
+}
+
+export const ARROWS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"] as const;
+export type Arrow = (typeof ARROWS)[number];
+
+/**
+ * The spot an arrow key moves to: the nearest within 45 degrees of the
+ * arrow's direction, sideways distance counting double; null at the edge.
+ * On dev-like data the arrows reach all 175 spots, about 11 presses apart on
+ * average; but on some layouts a spot is never anyone's nearest (T409 found
+ * 20 of 300 random layouts leaving up to 5% unreached). Page Up and Page
+ * Down step through every spot in reading order, so none is ever out of
+ * reach.
+ */
+export function nextSpot(spots: readonly Spot[], from: Spot, arrow: Arrow): Spot | null {
+  let best: { score: number; spot: Spot } | null = null;
+  for (const spot of spots) {
+    const dx = spot.x - from.x;
+    const dy = spot.y - from.y;
+    const [ahead, aside] = {
+      ArrowRight: [dx, dy],
+      ArrowLeft: [-dx, dy],
+      ArrowDown: [dy, dx],
+      ArrowUp: [-dy, dx],
+    }[arrow];
+    if (ahead <= 0 || Math.abs(aside) > ahead) continue;
+    const score = ahead + 2 * Math.abs(aside);
+    if (best === null || score < best.score) best = { score, spot };
+  }
+  return best?.spot ?? null;
+}
+
+/** The spot nearest a place: where focus goes when its spot moves away. */
+export function nearestSpot(spots: readonly Spot[], x: number, y: number): Spot | null {
+  let best: Spot | null = null;
+  for (const spot of spots) {
+    if (best === null || Math.hypot(spot.x - x, spot.y - y) < Math.hypot(best.x - x, best.y - y)) {
+      best = spot;
+    }
+  }
+  return best;
+}
+
+/** A place on the plot as scores: Respect across, Love up. */
+export function scoresAt(x: number, y: number): { respect: number; love: number } {
+  const side = SIZE - 2 * MARGIN;
+  return { respect: (x - MARGIN) / side, love: (SIZE - y - MARGIN) / side };
 }
 
 export const NOT_SCORED = "unscored";

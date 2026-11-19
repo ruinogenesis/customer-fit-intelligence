@@ -1,4 +1,5 @@
-// T206, in the app since T403: the love matrix's geometry, dots and counts.
+// T206, in the app since T403: the love matrix's geometry, dots and counts;
+// moving through its spots by keyboard (T409).
 import { expect, test } from "vitest";
 
 import {
@@ -10,8 +11,13 @@ import {
   MARGIN,
   matches,
   moveTotals,
+  nearestSpot,
+  nextSpot,
+  scoresAt,
   SIZE,
+  spotsOf,
   toDot,
+  type Dot,
   type FeedCustomer,
   type Movement,
 } from "../src/matrix";
@@ -62,6 +68,94 @@ test("a group is a quadrant, a least churn risk, or both", () => {
   expect(matches(dot, { quadrant: "fad", minChurn: AT_RISK })).toBe(true);
   expect(matches(dot, { quadrant: "brand", minChurn: 0 })).toBe(false);
   expect(matches(dot, { quadrant: "fad", minChurn: 0.2 })).toBe(false);
+});
+
+test("a group can be the customers on one spot, whatever else is picked", () => {
+  const dot = toDot(customer("c", 0.2, 0.8, "fad", 0.12))!;
+  expect(matches(dot, { quadrant: null, minChurn: 0, ids: ["c", "d"] })).toBe(true);
+  expect(matches(dot, { quadrant: "fad", minChurn: 0, ids: ["d"] })).toBe(false);
+  expect(matches(dot, { quadrant: "fad", minChurn: 0, ids: null })).toBe(true);
+});
+
+// --- Spots, for the keyboard (T409) ---
+
+function dotAt(id: string, respect: number, love: number): Dot {
+  return toDot(customer(id, respect, love, "lovemark"))!;
+}
+
+//   love
+//   0.9   a           b
+//   0.5   c   d+e     f        (d and e share a spot)
+//   0.1   g
+//         0.1 0.5     0.9  respect
+const DOTS = [
+  dotAt("f", 0.9, 0.5),
+  dotAt("e", 0.5, 0.5),
+  dotAt("a", 0.1, 0.9),
+  dotAt("g", 0.1, 0.1),
+  dotAt("d", 0.5, 0.5),
+  dotAt("b", 0.9, 0.9),
+  dotAt("c", 0.1, 0.5),
+];
+
+const names = (spot: { dots: Dot[] } | null) => spot?.dots.map((d) => d.id).join("+") ?? null;
+
+test("spots are the places dots are drawn, in reading order; a shared one holds its customers by id", () => {
+  expect(spotsOf(DOTS).map(names)).toEqual(["a", "b", "c", "d+e", "f", "g"]);
+  expect(spotsOf([])).toEqual([]);
+});
+
+test("an arrow moves to the nearest spot within 45 degrees of its direction", () => {
+  const spots = spotsOf(DOTS);
+  const at = (id: string) => spots.find((s) => s.dots.some((d) => d.id === id))!;
+  expect(names(nextSpot(spots, at("c"), "ArrowRight"))).toBe("d+e");
+  expect(names(nextSpot(spots, at("d"), "ArrowRight"))).toBe("f");
+  expect(names(nextSpot(spots, at("d"), "ArrowLeft"))).toBe("c");
+  expect(names(nextSpot(spots, at("c"), "ArrowUp"))).toBe("a");
+  expect(names(nextSpot(spots, at("c"), "ArrowDown"))).toBe("g");
+  // From a, b is straight across and d+e at 45 degrees: the straight one is nearer.
+  expect(names(nextSpot(spots, at("a"), "ArrowRight"))).toBe("b");
+  // d+e is up and to the left of f, at 45 degrees exactly: still in reach.
+  expect(names(nextSpot(spots, at("f"), "ArrowLeft"))).toBe("d+e");
+});
+
+test("at an edge an arrow finds nothing", () => {
+  const spots = spotsOf(DOTS);
+  const a = spots[0]!;
+  expect(nextSpot(spots, a, "ArrowUp")).toBeNull();
+  expect(nextSpot(spots, a, "ArrowLeft")).toBeNull();
+  expect(nextSpot(spots.slice(0, 1), a, "ArrowDown")).toBeNull();
+});
+
+test("every spot can be reached with the arrows from any other", () => {
+  const spots = spotsOf(DOTS);
+  for (const start of spots) {
+    const seen = new Set([start.key]);
+    const queue = [start];
+    while (queue.length > 0) {
+      const spot = queue.shift()!;
+      for (const arrow of ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"] as const) {
+        const next = nextSpot(spots, spot, arrow);
+        if (next !== null && !seen.has(next.key)) {
+          seen.add(next.key);
+          queue.push(next);
+        }
+      }
+    }
+    expect(seen.size).toBe(spots.length);
+  }
+});
+
+test("when a spot's customers move away, the nearest spot takes over", () => {
+  const spots = spotsOf(DOTS);
+  expect(names(nearestSpot(spots, along(0.52), SIZE - along(0.5)))).toBe("d+e");
+  expect(nearestSpot([], 0, 0)).toBeNull();
+});
+
+test("a place on the plot reads back as its scores", () => {
+  const { respect, love } = scoresAt(along(0.25), SIZE - along(0.75));
+  expect(respect).toBeCloseTo(0.25, 10);
+  expect(love).toBeCloseTo(0.75, 10);
 });
 
 test("movement totals: stayed, moved to another quadrant, scored for the first time", () => {
