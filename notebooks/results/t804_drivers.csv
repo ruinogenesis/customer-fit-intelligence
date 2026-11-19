@@ -1,0 +1,3121 @@
+size,seed,orders,by,method,measure,group,value
+50,2026,658,,,scorings with exact splits,,2259.000000
+50,2026,658,restaurant,,groups ranked,,40.000000
+50,2026,658,restaurant,excess,precision at 3,,1.000000
+50,2026,658,restaurant,fit,precision at 3,,0.666667
+50,2026,658,restaurant,drag,precision at 3,,1.000000
+50,2026,658,restaurant,excess,rank,rest-00,3.000000
+50,2026,658,restaurant,fit,rank,rest-00,5.000000
+50,2026,658,restaurant,drag,rank,rest-00,2.000000
+50,2026,658,restaurant,excess,right first driver,rest-00,1.000000
+50,2026,658,restaurant,drag,right first driver,rest-00,1.000000
+50,2026,658,restaurant,excess,rank,rest-01,1.000000
+50,2026,658,restaurant,fit,rank,rest-01,1.000000
+50,2026,658,restaurant,drag,rank,rest-01,1.000000
+50,2026,658,restaurant,excess,right first driver,rest-01,1.000000
+50,2026,658,restaurant,drag,right first driver,rest-01,1.000000
+50,2026,658,restaurant,excess,rank,rest-02,2.000000
+50,2026,658,restaurant,fit,rank,rest-02,2.000000
+50,2026,658,restaurant,drag,rank,rest-02,3.000000
+50,2026,658,restaurant,excess,right first driver,rest-02,1.000000
+50,2026,658,restaurant,drag,right first driver,rest-02,1.000000
+50,2026,658,courier,,groups ranked,,59.000000
+50,2026,658,courier,excess,precision at 3,,0.666667
+50,2026,658,courier,fit,precision at 3,,0.666667
+50,2026,658,courier,drag,precision at 3,,0.333333
+50,2026,658,courier,excess,rank,courier-00,1.000000
+50,2026,658,courier,fit,rank,courier-00,1.000000
+50,2026,658,courier,drag,rank,courier-00,1.000000
+50,2026,658,courier,excess,right first driver,courier-00,0.000000
+50,2026,658,courier,drag,right first driver,courier-00,0.000000
+50,2026,658,courier,excess,rank,courier-01,30.000000
+50,2026,658,courier,fit,rank,courier-01,43.000000
+50,2026,658,courier,drag,rank,courier-01,48.000000
+50,2026,658,courier,excess,right first driver,courier-01,1.000000
+50,2026,658,courier,drag,right first driver,courier-01,0.000000
+50,2026,658,courier,excess,rank,courier-02,2.000000
+50,2026,658,courier,fit,rank,courier-02,2.000000
+50,2026,658,courier,drag,rank,courier-02,4.000000
+50,2026,658,courier,excess,right first driver,courier-02,1.000000
+50,2026,658,courier,drag,right first driver,courier-02,0.000000
+50,2027,679,,,scorings with exact splits,,2358.000000
+50,2027,679,restaurant,,groups ranked,,40.000000
+50,2027,679,restaurant,excess,precision at 3,,1.000000
+50,2027,679,restaurant,fit,precision at 3,,0.666667
+50,2027,679,restaurant,drag,precision at 3,,1.000000
+50,2027,679,restaurant,excess,rank,rest-00,2.000000
+50,2027,679,restaurant,fit,rank,rest-00,2.000000
+50,2027,679,restaurant,drag,rank,rest-00,2.000000
+50,2027,679,restaurant,excess,right first driver,rest-00,1.000000
+50,2027,679,restaurant,drag,right first driver,rest-00,1.000000
+50,2027,679,restaurant,excess,rank,rest-01,3.000000
+50,2027,679,restaurant,fit,rank,rest-01,6.000000
+50,2027,679,restaurant,drag,rank,rest-01,3.000000
+50,2027,679,restaurant,excess,right first driver,rest-01,1.000000
+50,2027,679,restaurant,drag,right first driver,rest-01,1.000000
+50,2027,679,restaurant,excess,rank,rest-02,1.000000
+50,2027,679,restaurant,fit,rank,rest-02,1.000000
+50,2027,679,restaurant,drag,rank,rest-02,1.000000
+50,2027,679,restaurant,excess,right first driver,rest-02,1.000000
+50,2027,679,restaurant,drag,right first driver,rest-02,1.000000
+50,2027,679,courier,,groups ranked,,59.000000
+50,2027,679,courier,excess,precision at 3,,0.666667
+50,2027,679,courier,fit,precision at 3,,0.333333
+50,2027,679,courier,drag,precision at 3,,0.333333
+50,2027,679,courier,excess,rank,courier-00,11.000000
+50,2027,679,courier,fit,rank,courier-00,8.000000
+50,2027,679,courier,drag,rank,courier-00,17.000000
+50,2027,679,courier,excess,right first driver,courier-00,1.000000
+50,2027,679,courier,drag,right first driver,courier-00,0.000000
+50,2027,679,courier,excess,rank,courier-01,3.000000
+50,2027,679,courier,fit,rank,courier-01,7.000000
+50,2027,679,courier,drag,rank,courier-01,26.000000
+50,2027,679,courier,excess,right first driver,courier-01,1.000000
+50,2027,679,courier,drag,right first driver,courier-01,1.000000
+50,2027,679,courier,excess,rank,courier-02,2.000000
+50,2027,679,courier,fit,rank,courier-02,3.000000
+50,2027,679,courier,drag,rank,courier-02,2.000000
+50,2027,679,courier,excess,right first driver,courier-02,0.000000
+50,2027,679,courier,drag,right first driver,courier-02,0.000000
+50,2028,690,,,scorings with exact splits,,2408.000000
+50,2028,690,restaurant,,groups ranked,,40.000000
+50,2028,690,restaurant,excess,precision at 3,,0.666667
+50,2028,690,restaurant,fit,precision at 3,,1.000000
+50,2028,690,restaurant,drag,precision at 3,,0.666667
+50,2028,690,restaurant,excess,rank,rest-00,2.000000
+50,2028,690,restaurant,fit,rank,rest-00,3.000000
+50,2028,690,restaurant,drag,rank,rest-00,2.000000
+50,2028,690,restaurant,excess,right first driver,rest-00,1.000000
+50,2028,690,restaurant,drag,right first driver,rest-00,1.000000
+50,2028,690,restaurant,excess,rank,rest-01,4.000000
+50,2028,690,restaurant,fit,rank,rest-01,2.000000
+50,2028,690,restaurant,drag,rank,rest-01,4.000000
+50,2028,690,restaurant,excess,right first driver,rest-01,1.000000
+50,2028,690,restaurant,drag,right first driver,rest-01,1.000000
+50,2028,690,restaurant,excess,rank,rest-02,1.000000
+50,2028,690,restaurant,fit,rank,rest-02,1.000000
+50,2028,690,restaurant,drag,rank,rest-02,1.000000
+50,2028,690,restaurant,excess,right first driver,rest-02,1.000000
+50,2028,690,restaurant,drag,right first driver,rest-02,1.000000
+50,2028,690,courier,,groups ranked,,59.000000
+50,2028,690,courier,excess,precision at 3,,0.666667
+50,2028,690,courier,fit,precision at 3,,0.666667
+50,2028,690,courier,drag,precision at 3,,0.333333
+50,2028,690,courier,excess,rank,courier-00,5.000000
+50,2028,690,courier,fit,rank,courier-00,4.000000
+50,2028,690,courier,drag,rank,courier-00,15.000000
+50,2028,690,courier,excess,right first driver,courier-00,1.000000
+50,2028,690,courier,drag,right first driver,courier-00,1.000000
+50,2028,690,courier,excess,rank,courier-01,1.000000
+50,2028,690,courier,fit,rank,courier-01,2.000000
+50,2028,690,courier,drag,rank,courier-01,1.000000
+50,2028,690,courier,excess,right first driver,courier-01,1.000000
+50,2028,690,courier,drag,right first driver,courier-01,1.000000
+50,2028,690,courier,excess,rank,courier-02,3.000000
+50,2028,690,courier,fit,rank,courier-02,1.000000
+50,2028,690,courier,drag,rank,courier-02,8.000000
+50,2028,690,courier,excess,right first driver,courier-02,1.000000
+50,2028,690,courier,drag,right first driver,courier-02,0.000000
+50,2029,689,,,scorings with exact splits,,2384.000000
+50,2029,689,restaurant,,groups ranked,,40.000000
+50,2029,689,restaurant,excess,precision at 3,,0.666667
+50,2029,689,restaurant,fit,precision at 3,,0.666667
+50,2029,689,restaurant,drag,precision at 3,,0.666667
+50,2029,689,restaurant,excess,rank,rest-00,4.000000
+50,2029,689,restaurant,fit,rank,rest-00,3.000000
+50,2029,689,restaurant,drag,rank,rest-00,4.000000
+50,2029,689,restaurant,excess,right first driver,rest-00,1.000000
+50,2029,689,restaurant,drag,right first driver,rest-00,1.000000
+50,2029,689,restaurant,excess,rank,rest-01,2.000000
+50,2029,689,restaurant,fit,rank,rest-01,7.000000
+50,2029,689,restaurant,drag,rank,rest-01,2.000000
+50,2029,689,restaurant,excess,right first driver,rest-01,1.000000
+50,2029,689,restaurant,drag,right first driver,rest-01,1.000000
+50,2029,689,restaurant,excess,rank,rest-02,1.000000
+50,2029,689,restaurant,fit,rank,rest-02,2.000000
+50,2029,689,restaurant,drag,rank,rest-02,1.000000
+50,2029,689,restaurant,excess,right first driver,rest-02,1.000000
+50,2029,689,restaurant,drag,right first driver,rest-02,1.000000
+50,2029,689,courier,,groups ranked,,58.000000
+50,2029,689,courier,excess,precision at 3,,0.666667
+50,2029,689,courier,fit,precision at 3,,0.666667
+50,2029,689,courier,drag,precision at 3,,0.000000
+50,2029,689,courier,excess,rank,courier-00,2.000000
+50,2029,689,courier,fit,rank,courier-00,1.000000
+50,2029,689,courier,drag,rank,courier-00,5.000000
+50,2029,689,courier,excess,right first driver,courier-00,0.000000
+50,2029,689,courier,drag,right first driver,courier-00,0.000000
+50,2029,689,courier,excess,rank,courier-01,9.000000
+50,2029,689,courier,fit,rank,courier-01,5.000000
+50,2029,689,courier,drag,rank,courier-01,25.000000
+50,2029,689,courier,excess,right first driver,courier-01,1.000000
+50,2029,689,courier,drag,right first driver,courier-01,0.000000
+50,2029,689,courier,excess,rank,courier-02,1.000000
+50,2029,689,courier,fit,rank,courier-02,3.000000
+50,2029,689,courier,drag,rank,courier-02,8.000000
+50,2029,689,courier,excess,right first driver,courier-02,1.000000
+50,2029,689,courier,drag,right first driver,courier-02,1.000000
+50,2030,542,,,scorings with exact splits,,1890.000000
+50,2030,542,restaurant,,groups ranked,,40.000000
+50,2030,542,restaurant,excess,precision at 3,,1.000000
+50,2030,542,restaurant,fit,precision at 3,,1.000000
+50,2030,542,restaurant,drag,precision at 3,,1.000000
+50,2030,542,restaurant,excess,rank,rest-00,2.000000
+50,2030,542,restaurant,fit,rank,rest-00,2.000000
+50,2030,542,restaurant,drag,rank,rest-00,2.000000
+50,2030,542,restaurant,excess,right first driver,rest-00,1.000000
+50,2030,542,restaurant,drag,right first driver,rest-00,1.000000
+50,2030,542,restaurant,excess,rank,rest-01,3.000000
+50,2030,542,restaurant,fit,rank,rest-01,3.000000
+50,2030,542,restaurant,drag,rank,rest-01,3.000000
+50,2030,542,restaurant,excess,right first driver,rest-01,1.000000
+50,2030,542,restaurant,drag,right first driver,rest-01,1.000000
+50,2030,542,restaurant,excess,rank,rest-02,1.000000
+50,2030,542,restaurant,fit,rank,rest-02,1.000000
+50,2030,542,restaurant,drag,rank,rest-02,1.000000
+50,2030,542,restaurant,excess,right first driver,rest-02,1.000000
+50,2030,542,restaurant,drag,right first driver,rest-02,1.000000
+50,2030,542,courier,,groups ranked,,57.000000
+50,2030,542,courier,excess,precision at 3,,0.000000
+50,2030,542,courier,fit,precision at 3,,0.666667
+50,2030,542,courier,drag,precision at 3,,0.000000
+50,2030,542,courier,excess,rank,courier-00,38.000000
+50,2030,542,courier,fit,rank,courier-00,8.000000
+50,2030,542,courier,drag,rank,courier-00,39.000000
+50,2030,542,courier,excess,right first driver,courier-00,1.000000
+50,2030,542,courier,drag,right first driver,courier-00,0.000000
+50,2030,542,courier,excess,rank,courier-01,7.000000
+50,2030,542,courier,fit,rank,courier-01,1.000000
+50,2030,542,courier,drag,rank,courier-01,16.000000
+50,2030,542,courier,excess,right first driver,courier-01,1.000000
+50,2030,542,courier,drag,right first driver,courier-01,0.000000
+50,2030,542,courier,excess,rank,courier-02,4.000000
+50,2030,542,courier,fit,rank,courier-02,3.000000
+50,2030,542,courier,drag,rank,courier-02,11.000000
+50,2030,542,courier,excess,right first driver,courier-02,1.000000
+50,2030,542,courier,drag,right first driver,courier-02,1.000000
+50,2031,567,,,scorings with exact splits,,1948.000000
+50,2031,567,restaurant,,groups ranked,,40.000000
+50,2031,567,restaurant,excess,precision at 3,,0.666667
+50,2031,567,restaurant,fit,precision at 3,,0.666667
+50,2031,567,restaurant,drag,precision at 3,,0.666667
+50,2031,567,restaurant,excess,rank,rest-00,18.000000
+50,2031,567,restaurant,fit,rank,rest-00,12.000000
+50,2031,567,restaurant,drag,rank,rest-00,10.000000
+50,2031,567,restaurant,excess,right first driver,rest-00,1.000000
+50,2031,567,restaurant,drag,right first driver,rest-00,1.000000
+50,2031,567,restaurant,excess,rank,rest-01,1.000000
+50,2031,567,restaurant,fit,rank,rest-01,1.000000
+50,2031,567,restaurant,drag,rank,rest-01,1.000000
+50,2031,567,restaurant,excess,right first driver,rest-01,1.000000
+50,2031,567,restaurant,drag,right first driver,rest-01,1.000000
+50,2031,567,restaurant,excess,rank,rest-02,2.000000
+50,2031,567,restaurant,fit,rank,rest-02,2.000000
+50,2031,567,restaurant,drag,rank,rest-02,2.000000
+50,2031,567,restaurant,excess,right first driver,rest-02,1.000000
+50,2031,567,restaurant,drag,right first driver,rest-02,1.000000
+50,2031,567,courier,,groups ranked,,58.000000
+50,2031,567,courier,excess,precision at 3,,0.333333
+50,2031,567,courier,fit,precision at 3,,0.333333
+50,2031,567,courier,drag,precision at 3,,0.333333
+50,2031,567,courier,excess,rank,courier-00,51.000000
+50,2031,567,courier,fit,rank,courier-00,52.000000
+50,2031,567,courier,drag,rank,courier-00,54.000000
+50,2031,567,courier,excess,right first driver,courier-00,1.000000
+50,2031,567,courier,drag,right first driver,courier-00,0.000000
+50,2031,567,courier,excess,rank,courier-01,4.000000
+50,2031,567,courier,fit,rank,courier-01,1.000000
+50,2031,567,courier,drag,rank,courier-01,2.000000
+50,2031,567,courier,excess,right first driver,courier-01,0.000000
+50,2031,567,courier,drag,right first driver,courier-01,0.000000
+50,2031,567,courier,excess,rank,courier-02,2.000000
+50,2031,567,courier,fit,rank,courier-02,6.000000
+50,2031,567,courier,drag,rank,courier-02,13.000000
+50,2031,567,courier,excess,right first driver,courier-02,1.000000
+50,2031,567,courier,drag,right first driver,courier-02,1.000000
+50,2032,707,,,scorings with exact splits,,2454.000000
+50,2032,707,restaurant,,groups ranked,,40.000000
+50,2032,707,restaurant,excess,precision at 3,,0.333333
+50,2032,707,restaurant,fit,precision at 3,,0.333333
+50,2032,707,restaurant,drag,precision at 3,,0.333333
+50,2032,707,restaurant,excess,rank,rest-00,4.000000
+50,2032,707,restaurant,fit,rank,rest-00,9.000000
+50,2032,707,restaurant,drag,rank,rest-00,3.000000
+50,2032,707,restaurant,excess,right first driver,rest-00,1.000000
+50,2032,707,restaurant,drag,right first driver,rest-00,1.000000
+50,2032,707,restaurant,excess,rank,rest-01,5.000000
+50,2032,707,restaurant,fit,rank,rest-01,4.000000
+50,2032,707,restaurant,drag,rank,rest-01,5.000000
+50,2032,707,restaurant,excess,right first driver,rest-01,1.000000
+50,2032,707,restaurant,drag,right first driver,rest-01,1.000000
+50,2032,707,restaurant,excess,rank,rest-02,1.000000
+50,2032,707,restaurant,fit,rank,rest-02,1.000000
+50,2032,707,restaurant,drag,rank,rest-02,4.000000
+50,2032,707,restaurant,excess,right first driver,rest-02,1.000000
+50,2032,707,restaurant,drag,right first driver,rest-02,1.000000
+50,2032,707,courier,,groups ranked,,60.000000
+50,2032,707,courier,excess,precision at 3,,0.333333
+50,2032,707,courier,fit,precision at 3,,0.333333
+50,2032,707,courier,drag,precision at 3,,0.000000
+50,2032,707,courier,excess,rank,courier-00,6.000000
+50,2032,707,courier,fit,rank,courier-00,1.000000
+50,2032,707,courier,drag,rank,courier-00,17.000000
+50,2032,707,courier,excess,right first driver,courier-00,1.000000
+50,2032,707,courier,drag,right first driver,courier-00,0.000000
+50,2032,707,courier,excess,rank,courier-01,2.000000
+50,2032,707,courier,fit,rank,courier-01,4.000000
+50,2032,707,courier,drag,rank,courier-01,11.000000
+50,2032,707,courier,excess,right first driver,courier-01,1.000000
+50,2032,707,courier,drag,right first driver,courier-01,1.000000
+50,2032,707,courier,excess,rank,courier-02,8.000000
+50,2032,707,courier,fit,rank,courier-02,12.000000
+50,2032,707,courier,drag,rank,courier-02,19.000000
+50,2032,707,courier,excess,right first driver,courier-02,1.000000
+50,2032,707,courier,drag,right first driver,courier-02,1.000000
+50,2033,666,,,scorings with exact splits,,2297.000000
+50,2033,666,restaurant,,groups ranked,,40.000000
+50,2033,666,restaurant,excess,precision at 3,,1.000000
+50,2033,666,restaurant,fit,precision at 3,,1.000000
+50,2033,666,restaurant,drag,precision at 3,,1.000000
+50,2033,666,restaurant,excess,rank,rest-00,3.000000
+50,2033,666,restaurant,fit,rank,rest-00,3.000000
+50,2033,666,restaurant,drag,rank,rest-00,2.000000
+50,2033,666,restaurant,excess,right first driver,rest-00,1.000000
+50,2033,666,restaurant,drag,right first driver,rest-00,1.000000
+50,2033,666,restaurant,excess,rank,rest-01,2.000000
+50,2033,666,restaurant,fit,rank,rest-01,2.000000
+50,2033,666,restaurant,drag,rank,rest-01,1.000000
+50,2033,666,restaurant,excess,right first driver,rest-01,1.000000
+50,2033,666,restaurant,drag,right first driver,rest-01,1.000000
+50,2033,666,restaurant,excess,rank,rest-02,1.000000
+50,2033,666,restaurant,fit,rank,rest-02,1.000000
+50,2033,666,restaurant,drag,rank,rest-02,3.000000
+50,2033,666,restaurant,excess,right first driver,rest-02,1.000000
+50,2033,666,restaurant,drag,right first driver,rest-02,1.000000
+50,2033,666,courier,,groups ranked,,59.000000
+50,2033,666,courier,excess,precision at 3,,0.333333
+50,2033,666,courier,fit,precision at 3,,0.333333
+50,2033,666,courier,drag,precision at 3,,0.000000
+50,2033,666,courier,excess,rank,courier-00,44.000000
+50,2033,666,courier,fit,rank,courier-00,26.000000
+50,2033,666,courier,drag,rank,courier-00,49.000000
+50,2033,666,courier,excess,right first driver,courier-00,0.000000
+50,2033,666,courier,drag,right first driver,courier-00,0.000000
+50,2033,666,courier,excess,rank,courier-01,7.000000
+50,2033,666,courier,fit,rank,courier-01,8.000000
+50,2033,666,courier,drag,rank,courier-01,23.000000
+50,2033,666,courier,excess,right first driver,courier-01,1.000000
+50,2033,666,courier,drag,right first driver,courier-01,1.000000
+50,2033,666,courier,excess,rank,courier-02,2.000000
+50,2033,666,courier,fit,rank,courier-02,1.000000
+50,2033,666,courier,drag,rank,courier-02,12.000000
+50,2033,666,courier,excess,right first driver,courier-02,1.000000
+50,2033,666,courier,drag,right first driver,courier-02,1.000000
+50,2034,605,,,scorings with exact splits,,2071.000000
+50,2034,605,restaurant,,groups ranked,,40.000000
+50,2034,605,restaurant,excess,precision at 3,,0.666667
+50,2034,605,restaurant,fit,precision at 3,,0.666667
+50,2034,605,restaurant,drag,precision at 3,,0.666667
+50,2034,605,restaurant,excess,rank,rest-00,2.000000
+50,2034,605,restaurant,fit,rank,rest-00,3.000000
+50,2034,605,restaurant,drag,rank,rest-00,2.000000
+50,2034,605,restaurant,excess,right first driver,rest-00,1.000000
+50,2034,605,restaurant,drag,right first driver,rest-00,1.000000
+50,2034,605,restaurant,excess,rank,rest-01,4.000000
+50,2034,605,restaurant,fit,rank,rest-01,8.000000
+50,2034,605,restaurant,drag,rank,rest-01,4.000000
+50,2034,605,restaurant,excess,right first driver,rest-01,1.000000
+50,2034,605,restaurant,drag,right first driver,rest-01,1.000000
+50,2034,605,restaurant,excess,rank,rest-02,1.000000
+50,2034,605,restaurant,fit,rank,rest-02,2.000000
+50,2034,605,restaurant,drag,rank,rest-02,1.000000
+50,2034,605,restaurant,excess,right first driver,rest-02,1.000000
+50,2034,605,restaurant,drag,right first driver,rest-02,1.000000
+50,2034,605,courier,,groups ranked,,57.000000
+50,2034,605,courier,excess,precision at 3,,0.333333
+50,2034,605,courier,fit,precision at 3,,0.333333
+50,2034,605,courier,drag,precision at 3,,0.000000
+50,2034,605,courier,excess,rank,courier-00,18.000000
+50,2034,605,courier,fit,rank,courier-00,3.000000
+50,2034,605,courier,drag,rank,courier-00,17.000000
+50,2034,605,courier,excess,right first driver,courier-00,1.000000
+50,2034,605,courier,drag,right first driver,courier-00,0.000000
+50,2034,605,courier,excess,rank,courier-01,45.000000
+50,2034,605,courier,fit,rank,courier-01,35.000000
+50,2034,605,courier,drag,rank,courier-01,43.000000
+50,2034,605,courier,excess,right first driver,courier-01,0.000000
+50,2034,605,courier,drag,right first driver,courier-01,0.000000
+50,2034,605,courier,excess,rank,courier-02,2.000000
+50,2034,605,courier,fit,rank,courier-02,14.000000
+50,2034,605,courier,drag,rank,courier-02,9.000000
+50,2034,605,courier,excess,right first driver,courier-02,1.000000
+50,2034,605,courier,drag,right first driver,courier-02,1.000000
+50,2035,735,,,scorings with exact splits,,2570.000000
+50,2035,735,restaurant,,groups ranked,,40.000000
+50,2035,735,restaurant,excess,precision at 3,,0.666667
+50,2035,735,restaurant,fit,precision at 3,,0.666667
+50,2035,735,restaurant,drag,precision at 3,,0.666667
+50,2035,735,restaurant,excess,rank,rest-00,2.000000
+50,2035,735,restaurant,fit,rank,rest-00,2.000000
+50,2035,735,restaurant,drag,rank,rest-00,2.000000
+50,2035,735,restaurant,excess,right first driver,rest-00,1.000000
+50,2035,735,restaurant,drag,right first driver,rest-00,1.000000
+50,2035,735,restaurant,excess,rank,rest-01,4.000000
+50,2035,735,restaurant,fit,rank,rest-01,11.000000
+50,2035,735,restaurant,drag,rank,rest-01,4.000000
+50,2035,735,restaurant,excess,right first driver,rest-01,1.000000
+50,2035,735,restaurant,drag,right first driver,rest-01,1.000000
+50,2035,735,restaurant,excess,rank,rest-02,1.000000
+50,2035,735,restaurant,fit,rank,rest-02,1.000000
+50,2035,735,restaurant,drag,rank,rest-02,1.000000
+50,2035,735,restaurant,excess,right first driver,rest-02,1.000000
+50,2035,735,restaurant,drag,right first driver,rest-02,1.000000
+50,2035,735,courier,,groups ranked,,59.000000
+50,2035,735,courier,excess,precision at 3,,0.333333
+50,2035,735,courier,fit,precision at 3,,0.333333
+50,2035,735,courier,drag,precision at 3,,0.000000
+50,2035,735,courier,excess,rank,courier-00,24.000000
+50,2035,735,courier,fit,rank,courier-00,19.000000
+50,2035,735,courier,drag,rank,courier-00,30.000000
+50,2035,735,courier,excess,right first driver,courier-00,1.000000
+50,2035,735,courier,drag,right first driver,courier-00,0.000000
+50,2035,735,courier,excess,rank,courier-01,3.000000
+50,2035,735,courier,fit,rank,courier-01,2.000000
+50,2035,735,courier,drag,rank,courier-01,6.000000
+50,2035,735,courier,excess,right first driver,courier-01,1.000000
+50,2035,735,courier,drag,right first driver,courier-01,0.000000
+50,2035,735,courier,excess,rank,courier-02,22.000000
+50,2035,735,courier,fit,rank,courier-02,47.000000
+50,2035,735,courier,drag,rank,courier-02,49.000000
+50,2035,735,courier,excess,right first driver,courier-02,1.000000
+50,2035,735,courier,drag,right first driver,courier-02,1.000000
+50,2036,626,,,scorings with exact splits,,2139.000000
+50,2036,626,restaurant,,groups ranked,,40.000000
+50,2036,626,restaurant,excess,precision at 3,,0.666667
+50,2036,626,restaurant,fit,precision at 3,,0.666667
+50,2036,626,restaurant,drag,precision at 3,,0.666667
+50,2036,626,restaurant,excess,rank,rest-00,2.000000
+50,2036,626,restaurant,fit,rank,rest-00,1.000000
+50,2036,626,restaurant,drag,rank,rest-00,1.000000
+50,2036,626,restaurant,excess,right first driver,rest-00,1.000000
+50,2036,626,restaurant,drag,right first driver,rest-00,1.000000
+50,2036,626,restaurant,excess,rank,rest-01,4.000000
+50,2036,626,restaurant,fit,rank,rest-01,4.000000
+50,2036,626,restaurant,drag,rank,rest-01,3.000000
+50,2036,626,restaurant,excess,right first driver,rest-01,1.000000
+50,2036,626,restaurant,drag,right first driver,rest-01,1.000000
+50,2036,626,restaurant,excess,rank,rest-02,1.000000
+50,2036,626,restaurant,fit,rank,rest-02,3.000000
+50,2036,626,restaurant,drag,rank,rest-02,4.000000
+50,2036,626,restaurant,excess,right first driver,rest-02,1.000000
+50,2036,626,restaurant,drag,right first driver,rest-02,1.000000
+50,2036,626,courier,,groups ranked,,59.000000
+50,2036,626,courier,excess,precision at 3,,0.000000
+50,2036,626,courier,fit,precision at 3,,0.000000
+50,2036,626,courier,drag,precision at 3,,0.000000
+50,2036,626,courier,excess,rank,courier-00,17.000000
+50,2036,626,courier,fit,rank,courier-00,4.000000
+50,2036,626,courier,drag,rank,courier-00,27.000000
+50,2036,626,courier,excess,right first driver,courier-00,0.000000
+50,2036,626,courier,drag,right first driver,courier-00,0.000000
+50,2036,626,courier,excess,rank,courier-01,20.000000
+50,2036,626,courier,fit,rank,courier-01,20.000000
+50,2036,626,courier,drag,rank,courier-01,43.000000
+50,2036,626,courier,excess,right first driver,courier-01,0.000000
+50,2036,626,courier,drag,right first driver,courier-01,0.000000
+50,2036,626,courier,excess,rank,courier-02,6.000000
+50,2036,626,courier,fit,rank,courier-02,26.000000
+50,2036,626,courier,drag,rank,courier-02,37.000000
+50,2036,626,courier,excess,right first driver,courier-02,1.000000
+50,2036,626,courier,drag,right first driver,courier-02,1.000000
+50,2037,620,,,scorings with exact splits,,2143.000000
+50,2037,620,restaurant,,groups ranked,,40.000000
+50,2037,620,restaurant,excess,precision at 3,,0.666667
+50,2037,620,restaurant,fit,precision at 3,,0.666667
+50,2037,620,restaurant,drag,precision at 3,,0.666667
+50,2037,620,restaurant,excess,rank,rest-00,2.000000
+50,2037,620,restaurant,fit,rank,rest-00,3.000000
+50,2037,620,restaurant,drag,rank,rest-00,1.000000
+50,2037,620,restaurant,excess,right first driver,rest-00,1.000000
+50,2037,620,restaurant,drag,right first driver,rest-00,1.000000
+50,2037,620,restaurant,excess,rank,rest-01,17.000000
+50,2037,620,restaurant,fit,rank,rest-01,8.000000
+50,2037,620,restaurant,drag,rank,rest-01,9.000000
+50,2037,620,restaurant,excess,right first driver,rest-01,1.000000
+50,2037,620,restaurant,drag,right first driver,rest-01,1.000000
+50,2037,620,restaurant,excess,rank,rest-02,1.000000
+50,2037,620,restaurant,fit,rank,rest-02,1.000000
+50,2037,620,restaurant,drag,rank,rest-02,2.000000
+50,2037,620,restaurant,excess,right first driver,rest-02,1.000000
+50,2037,620,restaurant,drag,right first driver,rest-02,1.000000
+50,2037,620,courier,,groups ranked,,60.000000
+50,2037,620,courier,excess,precision at 3,,0.666667
+50,2037,620,courier,fit,precision at 3,,0.333333
+50,2037,620,courier,drag,precision at 3,,0.000000
+50,2037,620,courier,excess,rank,courier-00,42.000000
+50,2037,620,courier,fit,rank,courier-00,30.000000
+50,2037,620,courier,drag,rank,courier-00,24.000000
+50,2037,620,courier,excess,right first driver,courier-00,1.000000
+50,2037,620,courier,drag,right first driver,courier-00,0.000000
+50,2037,620,courier,excess,rank,courier-01,2.000000
+50,2037,620,courier,fit,rank,courier-01,8.000000
+50,2037,620,courier,drag,rank,courier-01,12.000000
+50,2037,620,courier,excess,right first driver,courier-01,1.000000
+50,2037,620,courier,drag,right first driver,courier-01,1.000000
+50,2037,620,courier,excess,rank,courier-02,1.000000
+50,2037,620,courier,fit,rank,courier-02,1.000000
+50,2037,620,courier,drag,rank,courier-02,5.000000
+50,2037,620,courier,excess,right first driver,courier-02,1.000000
+50,2037,620,courier,drag,right first driver,courier-02,1.000000
+50,2038,668,,,scorings with exact splits,,2294.000000
+50,2038,668,restaurant,,groups ranked,,40.000000
+50,2038,668,restaurant,excess,precision at 3,,0.666667
+50,2038,668,restaurant,fit,precision at 3,,0.666667
+50,2038,668,restaurant,drag,precision at 3,,0.666667
+50,2038,668,restaurant,excess,rank,rest-00,3.000000
+50,2038,668,restaurant,fit,rank,rest-00,2.000000
+50,2038,668,restaurant,drag,rank,rest-00,3.000000
+50,2038,668,restaurant,excess,right first driver,rest-00,1.000000
+50,2038,668,restaurant,drag,right first driver,rest-00,1.000000
+50,2038,668,restaurant,excess,rank,rest-01,2.000000
+50,2038,668,restaurant,fit,rank,rest-01,4.000000
+50,2038,668,restaurant,drag,rank,rest-01,2.000000
+50,2038,668,restaurant,excess,right first driver,rest-01,1.000000
+50,2038,668,restaurant,drag,right first driver,rest-01,1.000000
+50,2038,668,restaurant,excess,rank,rest-02,4.000000
+50,2038,668,restaurant,fit,rank,rest-02,3.000000
+50,2038,668,restaurant,drag,rank,rest-02,12.000000
+50,2038,668,restaurant,excess,right first driver,rest-02,1.000000
+50,2038,668,restaurant,drag,right first driver,rest-02,1.000000
+50,2038,668,courier,,groups ranked,,57.000000
+50,2038,668,courier,excess,precision at 3,,0.333333
+50,2038,668,courier,fit,precision at 3,,0.333333
+50,2038,668,courier,drag,precision at 3,,0.000000
+50,2038,668,courier,excess,rank,courier-00,9.000000
+50,2038,668,courier,fit,rank,courier-00,4.000000
+50,2038,668,courier,drag,rank,courier-00,20.000000
+50,2038,668,courier,excess,right first driver,courier-00,1.000000
+50,2038,668,courier,drag,right first driver,courier-00,0.000000
+50,2038,668,courier,excess,rank,courier-01,3.000000
+50,2038,668,courier,fit,rank,courier-01,2.000000
+50,2038,668,courier,drag,rank,courier-01,5.000000
+50,2038,668,courier,excess,right first driver,courier-01,0.000000
+50,2038,668,courier,drag,right first driver,courier-01,0.000000
+50,2038,668,courier,excess,rank,courier-02,42.000000
+50,2038,668,courier,fit,rank,courier-02,32.000000
+50,2038,668,courier,drag,rank,courier-02,23.000000
+50,2038,668,courier,excess,right first driver,courier-02,1.000000
+50,2038,668,courier,drag,right first driver,courier-02,0.000000
+50,2039,774,,,scorings with exact splits,,2656.000000
+50,2039,774,restaurant,,groups ranked,,40.000000
+50,2039,774,restaurant,excess,precision at 3,,0.666667
+50,2039,774,restaurant,fit,precision at 3,,0.666667
+50,2039,774,restaurant,drag,precision at 3,,1.000000
+50,2039,774,restaurant,excess,rank,rest-00,1.000000
+50,2039,774,restaurant,fit,rank,rest-00,1.000000
+50,2039,774,restaurant,drag,rank,rest-00,1.000000
+50,2039,774,restaurant,excess,right first driver,rest-00,1.000000
+50,2039,774,restaurant,drag,right first driver,rest-00,1.000000
+50,2039,774,restaurant,excess,rank,rest-01,4.000000
+50,2039,774,restaurant,fit,rank,rest-01,5.000000
+50,2039,774,restaurant,drag,rank,rest-01,3.000000
+50,2039,774,restaurant,excess,right first driver,rest-01,1.000000
+50,2039,774,restaurant,drag,right first driver,rest-01,1.000000
+50,2039,774,restaurant,excess,rank,rest-02,2.000000
+50,2039,774,restaurant,fit,rank,rest-02,2.000000
+50,2039,774,restaurant,drag,rank,rest-02,2.000000
+50,2039,774,restaurant,excess,right first driver,rest-02,1.000000
+50,2039,774,restaurant,drag,right first driver,rest-02,1.000000
+50,2039,774,courier,,groups ranked,,60.000000
+50,2039,774,courier,excess,precision at 3,,0.666667
+50,2039,774,courier,fit,precision at 3,,0.666667
+50,2039,774,courier,drag,precision at 3,,0.333333
+50,2039,774,courier,excess,rank,courier-00,33.000000
+50,2039,774,courier,fit,rank,courier-00,12.000000
+50,2039,774,courier,drag,rank,courier-00,42.000000
+50,2039,774,courier,excess,right first driver,courier-00,0.000000
+50,2039,774,courier,drag,right first driver,courier-00,0.000000
+50,2039,774,courier,excess,rank,courier-01,2.000000
+50,2039,774,courier,fit,rank,courier-01,3.000000
+50,2039,774,courier,drag,rank,courier-01,14.000000
+50,2039,774,courier,excess,right first driver,courier-01,1.000000
+50,2039,774,courier,drag,right first driver,courier-01,1.000000
+50,2039,774,courier,excess,rank,courier-02,1.000000
+50,2039,774,courier,fit,rank,courier-02,1.000000
+50,2039,774,courier,drag,rank,courier-02,1.000000
+50,2039,774,courier,excess,right first driver,courier-02,1.000000
+50,2039,774,courier,drag,right first driver,courier-02,0.000000
+50,2040,614,,,scorings with exact splits,,2153.000000
+50,2040,614,restaurant,,groups ranked,,40.000000
+50,2040,614,restaurant,excess,precision at 3,,0.666667
+50,2040,614,restaurant,fit,precision at 3,,0.666667
+50,2040,614,restaurant,drag,precision at 3,,0.666667
+50,2040,614,restaurant,excess,rank,rest-00,2.000000
+50,2040,614,restaurant,fit,rank,rest-00,3.000000
+50,2040,614,restaurant,drag,rank,rest-00,2.000000
+50,2040,614,restaurant,excess,right first driver,rest-00,1.000000
+50,2040,614,restaurant,drag,right first driver,rest-00,1.000000
+50,2040,614,restaurant,excess,rank,rest-01,8.000000
+50,2040,614,restaurant,fit,rank,rest-01,10.000000
+50,2040,614,restaurant,drag,rank,rest-01,6.000000
+50,2040,614,restaurant,excess,right first driver,rest-01,1.000000
+50,2040,614,restaurant,drag,right first driver,rest-01,1.000000
+50,2040,614,restaurant,excess,rank,rest-02,1.000000
+50,2040,614,restaurant,fit,rank,rest-02,2.000000
+50,2040,614,restaurant,drag,rank,rest-02,1.000000
+50,2040,614,restaurant,excess,right first driver,rest-02,1.000000
+50,2040,614,restaurant,drag,right first driver,rest-02,1.000000
+50,2040,614,courier,,groups ranked,,60.000000
+50,2040,614,courier,excess,precision at 3,,0.000000
+50,2040,614,courier,fit,precision at 3,,0.333333
+50,2040,614,courier,drag,precision at 3,,0.000000
+50,2040,614,courier,excess,rank,courier-00,4.000000
+50,2040,614,courier,fit,rank,courier-00,6.000000
+50,2040,614,courier,drag,rank,courier-00,11.000000
+50,2040,614,courier,excess,right first driver,courier-00,1.000000
+50,2040,614,courier,drag,right first driver,courier-00,1.000000
+50,2040,614,courier,excess,rank,courier-01,9.000000
+50,2040,614,courier,fit,rank,courier-01,3.000000
+50,2040,614,courier,drag,rank,courier-01,23.000000
+50,2040,614,courier,excess,right first driver,courier-01,1.000000
+50,2040,614,courier,drag,right first driver,courier-01,0.000000
+50,2040,614,courier,excess,rank,courier-02,10.000000
+50,2040,614,courier,fit,rank,courier-02,7.000000
+50,2040,614,courier,drag,rank,courier-02,16.000000
+50,2040,614,courier,excess,right first driver,courier-02,1.000000
+50,2040,614,courier,drag,right first driver,courier-02,0.000000
+50,2041,651,,,scorings with exact splits,,2224.000000
+50,2041,651,restaurant,,groups ranked,,40.000000
+50,2041,651,restaurant,excess,precision at 3,,0.666667
+50,2041,651,restaurant,fit,precision at 3,,0.666667
+50,2041,651,restaurant,drag,precision at 3,,0.666667
+50,2041,651,restaurant,excess,rank,rest-00,4.000000
+50,2041,651,restaurant,fit,rank,rest-00,5.000000
+50,2041,651,restaurant,drag,rank,rest-00,4.000000
+50,2041,651,restaurant,excess,right first driver,rest-00,1.000000
+50,2041,651,restaurant,drag,right first driver,rest-00,1.000000
+50,2041,651,restaurant,excess,rank,rest-01,2.000000
+50,2041,651,restaurant,fit,rank,rest-01,2.000000
+50,2041,651,restaurant,drag,rank,rest-01,1.000000
+50,2041,651,restaurant,excess,right first driver,rest-01,1.000000
+50,2041,651,restaurant,drag,right first driver,rest-01,1.000000
+50,2041,651,restaurant,excess,rank,rest-02,1.000000
+50,2041,651,restaurant,fit,rank,rest-02,1.000000
+50,2041,651,restaurant,drag,rank,rest-02,3.000000
+50,2041,651,restaurant,excess,right first driver,rest-02,1.000000
+50,2041,651,restaurant,drag,right first driver,rest-02,1.000000
+50,2041,651,courier,,groups ranked,,60.000000
+50,2041,651,courier,excess,precision at 3,,0.666667
+50,2041,651,courier,fit,precision at 3,,0.666667
+50,2041,651,courier,drag,precision at 3,,0.000000
+50,2041,651,courier,excess,rank,courier-00,17.000000
+50,2041,651,courier,fit,rank,courier-00,17.000000
+50,2041,651,courier,drag,rank,courier-00,23.000000
+50,2041,651,courier,excess,right first driver,courier-00,0.000000
+50,2041,651,courier,drag,right first driver,courier-00,0.000000
+50,2041,651,courier,excess,rank,courier-01,3.000000
+50,2041,651,courier,fit,rank,courier-01,2.000000
+50,2041,651,courier,drag,rank,courier-01,12.000000
+50,2041,651,courier,excess,right first driver,courier-01,1.000000
+50,2041,651,courier,drag,right first driver,courier-01,1.000000
+50,2041,651,courier,excess,rank,courier-02,2.000000
+50,2041,651,courier,fit,rank,courier-02,1.000000
+50,2041,651,courier,drag,rank,courier-02,8.000000
+50,2041,651,courier,excess,right first driver,courier-02,1.000000
+50,2041,651,courier,drag,right first driver,courier-02,1.000000
+50,2042,716,,,scorings with exact splits,,2464.000000
+50,2042,716,restaurant,,groups ranked,,40.000000
+50,2042,716,restaurant,excess,precision at 3,,0.666667
+50,2042,716,restaurant,fit,precision at 3,,0.333333
+50,2042,716,restaurant,drag,precision at 3,,0.666667
+50,2042,716,restaurant,excess,rank,rest-00,1.000000
+50,2042,716,restaurant,fit,rank,rest-00,1.000000
+50,2042,716,restaurant,drag,rank,rest-00,1.000000
+50,2042,716,restaurant,excess,right first driver,rest-00,1.000000
+50,2042,716,restaurant,drag,right first driver,rest-00,1.000000
+50,2042,716,restaurant,excess,rank,rest-01,12.000000
+50,2042,716,restaurant,fit,rank,rest-01,13.000000
+50,2042,716,restaurant,drag,rank,rest-01,11.000000
+50,2042,716,restaurant,excess,right first driver,rest-01,1.000000
+50,2042,716,restaurant,drag,right first driver,rest-01,1.000000
+50,2042,716,restaurant,excess,rank,rest-02,2.000000
+50,2042,716,restaurant,fit,rank,rest-02,4.000000
+50,2042,716,restaurant,drag,rank,rest-02,2.000000
+50,2042,716,restaurant,excess,right first driver,rest-02,1.000000
+50,2042,716,restaurant,drag,right first driver,rest-02,1.000000
+50,2042,716,courier,,groups ranked,,58.000000
+50,2042,716,courier,excess,precision at 3,,0.333333
+50,2042,716,courier,fit,precision at 3,,0.333333
+50,2042,716,courier,drag,precision at 3,,0.333333
+50,2042,716,courier,excess,rank,courier-00,15.000000
+50,2042,716,courier,fit,rank,courier-00,25.000000
+50,2042,716,courier,drag,rank,courier-00,32.000000
+50,2042,716,courier,excess,right first driver,courier-00,1.000000
+50,2042,716,courier,drag,right first driver,courier-00,1.000000
+50,2042,716,courier,excess,rank,courier-01,32.000000
+50,2042,716,courier,fit,rank,courier-01,37.000000
+50,2042,716,courier,drag,rank,courier-01,48.000000
+50,2042,716,courier,excess,right first driver,courier-01,1.000000
+50,2042,716,courier,drag,right first driver,courier-01,0.000000
+50,2042,716,courier,excess,rank,courier-02,1.000000
+50,2042,716,courier,fit,rank,courier-02,1.000000
+50,2042,716,courier,drag,rank,courier-02,1.000000
+50,2042,716,courier,excess,right first driver,courier-02,1.000000
+50,2042,716,courier,drag,right first driver,courier-02,1.000000
+50,2043,666,,,scorings with exact splits,,2277.000000
+50,2043,666,restaurant,,groups ranked,,40.000000
+50,2043,666,restaurant,excess,precision at 3,,1.000000
+50,2043,666,restaurant,fit,precision at 3,,1.000000
+50,2043,666,restaurant,drag,precision at 3,,1.000000
+50,2043,666,restaurant,excess,rank,rest-00,2.000000
+50,2043,666,restaurant,fit,rank,rest-00,1.000000
+50,2043,666,restaurant,drag,rank,rest-00,1.000000
+50,2043,666,restaurant,excess,right first driver,rest-00,1.000000
+50,2043,666,restaurant,drag,right first driver,rest-00,1.000000
+50,2043,666,restaurant,excess,rank,rest-01,3.000000
+50,2043,666,restaurant,fit,rank,rest-01,3.000000
+50,2043,666,restaurant,drag,rank,rest-01,3.000000
+50,2043,666,restaurant,excess,right first driver,rest-01,1.000000
+50,2043,666,restaurant,drag,right first driver,rest-01,1.000000
+50,2043,666,restaurant,excess,rank,rest-02,1.000000
+50,2043,666,restaurant,fit,rank,rest-02,2.000000
+50,2043,666,restaurant,drag,rank,rest-02,2.000000
+50,2043,666,restaurant,excess,right first driver,rest-02,1.000000
+50,2043,666,restaurant,drag,right first driver,rest-02,1.000000
+50,2043,666,courier,,groups ranked,,60.000000
+50,2043,666,courier,excess,precision at 3,,0.333333
+50,2043,666,courier,fit,precision at 3,,0.666667
+50,2043,666,courier,drag,precision at 3,,0.333333
+50,2043,666,courier,excess,rank,courier-00,23.000000
+50,2043,666,courier,fit,rank,courier-00,22.000000
+50,2043,666,courier,drag,rank,courier-00,41.000000
+50,2043,666,courier,excess,right first driver,courier-00,1.000000
+50,2043,666,courier,drag,right first driver,courier-00,1.000000
+50,2043,666,courier,excess,rank,courier-01,4.000000
+50,2043,666,courier,fit,rank,courier-01,3.000000
+50,2043,666,courier,drag,rank,courier-01,16.000000
+50,2043,666,courier,excess,right first driver,courier-01,1.000000
+50,2043,666,courier,drag,right first driver,courier-01,1.000000
+50,2043,666,courier,excess,rank,courier-02,1.000000
+50,2043,666,courier,fit,rank,courier-02,1.000000
+50,2043,666,courier,drag,rank,courier-02,1.000000
+50,2043,666,courier,excess,right first driver,courier-02,1.000000
+50,2043,666,courier,drag,right first driver,courier-02,1.000000
+50,2044,609,,,scorings with exact splits,,2090.000000
+50,2044,609,restaurant,,groups ranked,,40.000000
+50,2044,609,restaurant,excess,precision at 3,,0.666667
+50,2044,609,restaurant,fit,precision at 3,,0.666667
+50,2044,609,restaurant,drag,precision at 3,,1.000000
+50,2044,609,restaurant,excess,rank,rest-00,4.000000
+50,2044,609,restaurant,fit,rank,rest-00,12.000000
+50,2044,609,restaurant,drag,rank,rest-00,3.000000
+50,2044,609,restaurant,excess,right first driver,rest-00,1.000000
+50,2044,609,restaurant,drag,right first driver,rest-00,1.000000
+50,2044,609,restaurant,excess,rank,rest-01,1.000000
+50,2044,609,restaurant,fit,rank,rest-01,1.000000
+50,2044,609,restaurant,drag,rank,rest-01,1.000000
+50,2044,609,restaurant,excess,right first driver,rest-01,1.000000
+50,2044,609,restaurant,drag,right first driver,rest-01,1.000000
+50,2044,609,restaurant,excess,rank,rest-02,2.000000
+50,2044,609,restaurant,fit,rank,rest-02,2.000000
+50,2044,609,restaurant,drag,rank,rest-02,2.000000
+50,2044,609,restaurant,excess,right first driver,rest-02,1.000000
+50,2044,609,restaurant,drag,right first driver,rest-02,1.000000
+50,2044,609,courier,,groups ranked,,56.000000
+50,2044,609,courier,excess,precision at 3,,0.000000
+50,2044,609,courier,fit,precision at 3,,0.000000
+50,2044,609,courier,drag,precision at 3,,0.000000
+50,2044,609,courier,excess,rank,courier-00,31.000000
+50,2044,609,courier,fit,rank,courier-00,18.000000
+50,2044,609,courier,drag,rank,courier-00,32.000000
+50,2044,609,courier,excess,right first driver,courier-00,1.000000
+50,2044,609,courier,drag,right first driver,courier-00,0.000000
+50,2044,609,courier,excess,rank,courier-01,16.000000
+50,2044,609,courier,fit,rank,courier-01,24.000000
+50,2044,609,courier,drag,rank,courier-01,29.000000
+50,2044,609,courier,excess,right first driver,courier-01,1.000000
+50,2044,609,courier,drag,right first driver,courier-01,1.000000
+50,2044,609,courier,excess,rank,courier-02,29.000000
+50,2044,609,courier,fit,rank,courier-02,31.000000
+50,2044,609,courier,drag,rank,courier-02,35.000000
+50,2044,609,courier,excess,right first driver,courier-02,1.000000
+50,2044,609,courier,drag,right first driver,courier-02,0.000000
+50,2045,688,,,scorings with exact splits,,2371.000000
+50,2045,688,restaurant,,groups ranked,,40.000000
+50,2045,688,restaurant,excess,precision at 3,,1.000000
+50,2045,688,restaurant,fit,precision at 3,,1.000000
+50,2045,688,restaurant,drag,precision at 3,,1.000000
+50,2045,688,restaurant,excess,rank,rest-00,3.000000
+50,2045,688,restaurant,fit,rank,rest-00,3.000000
+50,2045,688,restaurant,drag,rank,rest-00,3.000000
+50,2045,688,restaurant,excess,right first driver,rest-00,1.000000
+50,2045,688,restaurant,drag,right first driver,rest-00,1.000000
+50,2045,688,restaurant,excess,rank,rest-01,2.000000
+50,2045,688,restaurant,fit,rank,rest-01,2.000000
+50,2045,688,restaurant,drag,rank,rest-01,2.000000
+50,2045,688,restaurant,excess,right first driver,rest-01,1.000000
+50,2045,688,restaurant,drag,right first driver,rest-01,1.000000
+50,2045,688,restaurant,excess,rank,rest-02,1.000000
+50,2045,688,restaurant,fit,rank,rest-02,1.000000
+50,2045,688,restaurant,drag,rank,rest-02,1.000000
+50,2045,688,restaurant,excess,right first driver,rest-02,1.000000
+50,2045,688,restaurant,drag,right first driver,rest-02,1.000000
+50,2045,688,courier,,groups ranked,,60.000000
+50,2045,688,courier,excess,precision at 3,,0.333333
+50,2045,688,courier,fit,precision at 3,,0.666667
+50,2045,688,courier,drag,precision at 3,,0.333333
+50,2045,688,courier,excess,rank,courier-00,1.000000
+50,2045,688,courier,fit,rank,courier-00,2.000000
+50,2045,688,courier,drag,rank,courier-00,1.000000
+50,2045,688,courier,excess,right first driver,courier-00,1.000000
+50,2045,688,courier,drag,right first driver,courier-00,1.000000
+50,2045,688,courier,excess,rank,courier-01,32.000000
+50,2045,688,courier,fit,rank,courier-01,31.000000
+50,2045,688,courier,drag,rank,courier-01,27.000000
+50,2045,688,courier,excess,right first driver,courier-01,0.000000
+50,2045,688,courier,drag,right first driver,courier-01,0.000000
+50,2045,688,courier,excess,rank,courier-02,5.000000
+50,2045,688,courier,fit,rank,courier-02,1.000000
+50,2045,688,courier,drag,rank,courier-02,11.000000
+50,2045,688,courier,excess,right first driver,courier-02,1.000000
+50,2045,688,courier,drag,right first driver,courier-02,1.000000
+100,2026,1358,,,scorings with exact splits,,4683.000000
+100,2026,1358,restaurant,,groups ranked,,40.000000
+100,2026,1358,restaurant,excess,precision at 3,,0.666667
+100,2026,1358,restaurant,fit,precision at 3,,0.666667
+100,2026,1358,restaurant,drag,precision at 3,,0.666667
+100,2026,1358,restaurant,excess,rank,rest-00,5.000000
+100,2026,1358,restaurant,fit,rank,rest-00,10.000000
+100,2026,1358,restaurant,drag,rank,rest-00,4.000000
+100,2026,1358,restaurant,excess,right first driver,rest-00,1.000000
+100,2026,1358,restaurant,drag,right first driver,rest-00,1.000000
+100,2026,1358,restaurant,excess,rank,rest-01,2.000000
+100,2026,1358,restaurant,fit,rank,rest-01,2.000000
+100,2026,1358,restaurant,drag,rank,rest-01,1.000000
+100,2026,1358,restaurant,excess,right first driver,rest-01,1.000000
+100,2026,1358,restaurant,drag,right first driver,rest-01,1.000000
+100,2026,1358,restaurant,excess,rank,rest-02,1.000000
+100,2026,1358,restaurant,fit,rank,rest-02,1.000000
+100,2026,1358,restaurant,drag,rank,rest-02,2.000000
+100,2026,1358,restaurant,excess,right first driver,rest-02,1.000000
+100,2026,1358,restaurant,drag,right first driver,rest-02,1.000000
+100,2026,1358,courier,,groups ranked,,60.000000
+100,2026,1358,courier,excess,precision at 3,,0.666667
+100,2026,1358,courier,fit,precision at 3,,0.666667
+100,2026,1358,courier,drag,precision at 3,,0.666667
+100,2026,1358,courier,excess,rank,courier-00,5.000000
+100,2026,1358,courier,fit,rank,courier-00,2.000000
+100,2026,1358,courier,drag,rank,courier-00,3.000000
+100,2026,1358,courier,excess,right first driver,courier-00,1.000000
+100,2026,1358,courier,drag,right first driver,courier-00,0.000000
+100,2026,1358,courier,excess,rank,courier-01,2.000000
+100,2026,1358,courier,fit,rank,courier-01,5.000000
+100,2026,1358,courier,drag,rank,courier-01,6.000000
+100,2026,1358,courier,excess,right first driver,courier-01,1.000000
+100,2026,1358,courier,drag,right first driver,courier-01,1.000000
+100,2026,1358,courier,excess,rank,courier-02,1.000000
+100,2026,1358,courier,fit,rank,courier-02,1.000000
+100,2026,1358,courier,drag,rank,courier-02,1.000000
+100,2026,1358,courier,excess,right first driver,courier-02,1.000000
+100,2026,1358,courier,drag,right first driver,courier-02,1.000000
+100,2027,1337,,,scorings with exact splits,,4621.000000
+100,2027,1337,restaurant,,groups ranked,,40.000000
+100,2027,1337,restaurant,excess,precision at 3,,1.000000
+100,2027,1337,restaurant,fit,precision at 3,,1.000000
+100,2027,1337,restaurant,drag,precision at 3,,1.000000
+100,2027,1337,restaurant,excess,rank,rest-00,2.000000
+100,2027,1337,restaurant,fit,rank,rest-00,2.000000
+100,2027,1337,restaurant,drag,rank,rest-00,2.000000
+100,2027,1337,restaurant,excess,right first driver,rest-00,1.000000
+100,2027,1337,restaurant,drag,right first driver,rest-00,1.000000
+100,2027,1337,restaurant,excess,rank,rest-01,3.000000
+100,2027,1337,restaurant,fit,rank,rest-01,3.000000
+100,2027,1337,restaurant,drag,rank,rest-01,3.000000
+100,2027,1337,restaurant,excess,right first driver,rest-01,1.000000
+100,2027,1337,restaurant,drag,right first driver,rest-01,1.000000
+100,2027,1337,restaurant,excess,rank,rest-02,1.000000
+100,2027,1337,restaurant,fit,rank,rest-02,1.000000
+100,2027,1337,restaurant,drag,rank,rest-02,1.000000
+100,2027,1337,restaurant,excess,right first driver,rest-02,1.000000
+100,2027,1337,restaurant,drag,right first driver,rest-02,1.000000
+100,2027,1337,courier,,groups ranked,,60.000000
+100,2027,1337,courier,excess,precision at 3,,0.333333
+100,2027,1337,courier,fit,precision at 3,,0.333333
+100,2027,1337,courier,drag,precision at 3,,0.000000
+100,2027,1337,courier,excess,rank,courier-00,11.000000
+100,2027,1337,courier,fit,rank,courier-00,6.000000
+100,2027,1337,courier,drag,rank,courier-00,12.000000
+100,2027,1337,courier,excess,right first driver,courier-00,1.000000
+100,2027,1337,courier,drag,right first driver,courier-00,0.000000
+100,2027,1337,courier,excess,rank,courier-01,4.000000
+100,2027,1337,courier,fit,rank,courier-01,15.000000
+100,2027,1337,courier,drag,rank,courier-01,31.000000
+100,2027,1337,courier,excess,right first driver,courier-01,1.000000
+100,2027,1337,courier,drag,right first driver,courier-01,1.000000
+100,2027,1337,courier,excess,rank,courier-02,1.000000
+100,2027,1337,courier,fit,rank,courier-02,2.000000
+100,2027,1337,courier,drag,rank,courier-02,11.000000
+100,2027,1337,courier,excess,right first driver,courier-02,1.000000
+100,2027,1337,courier,drag,right first driver,courier-02,1.000000
+100,2028,1400,,,scorings with exact splits,,4835.000000
+100,2028,1400,restaurant,,groups ranked,,40.000000
+100,2028,1400,restaurant,excess,precision at 3,,1.000000
+100,2028,1400,restaurant,fit,precision at 3,,0.666667
+100,2028,1400,restaurant,drag,precision at 3,,1.000000
+100,2028,1400,restaurant,excess,rank,rest-00,3.000000
+100,2028,1400,restaurant,fit,rank,rest-00,15.000000
+100,2028,1400,restaurant,drag,rank,rest-00,3.000000
+100,2028,1400,restaurant,excess,right first driver,rest-00,1.000000
+100,2028,1400,restaurant,drag,right first driver,rest-00,1.000000
+100,2028,1400,restaurant,excess,rank,rest-01,2.000000
+100,2028,1400,restaurant,fit,rank,rest-01,2.000000
+100,2028,1400,restaurant,drag,rank,rest-01,2.000000
+100,2028,1400,restaurant,excess,right first driver,rest-01,1.000000
+100,2028,1400,restaurant,drag,right first driver,rest-01,1.000000
+100,2028,1400,restaurant,excess,rank,rest-02,1.000000
+100,2028,1400,restaurant,fit,rank,rest-02,1.000000
+100,2028,1400,restaurant,drag,rank,rest-02,1.000000
+100,2028,1400,restaurant,excess,right first driver,rest-02,1.000000
+100,2028,1400,restaurant,drag,right first driver,rest-02,1.000000
+100,2028,1400,courier,,groups ranked,,60.000000
+100,2028,1400,courier,excess,precision at 3,,1.000000
+100,2028,1400,courier,fit,precision at 3,,0.666667
+100,2028,1400,courier,drag,precision at 3,,0.000000
+100,2028,1400,courier,excess,rank,courier-00,2.000000
+100,2028,1400,courier,fit,rank,courier-00,1.000000
+100,2028,1400,courier,drag,rank,courier-00,13.000000
+100,2028,1400,courier,excess,right first driver,courier-00,1.000000
+100,2028,1400,courier,drag,right first driver,courier-00,1.000000
+100,2028,1400,courier,excess,rank,courier-01,1.000000
+100,2028,1400,courier,fit,rank,courier-01,8.000000
+100,2028,1400,courier,drag,rank,courier-01,5.000000
+100,2028,1400,courier,excess,right first driver,courier-01,1.000000
+100,2028,1400,courier,drag,right first driver,courier-01,1.000000
+100,2028,1400,courier,excess,rank,courier-02,3.000000
+100,2028,1400,courier,fit,rank,courier-02,2.000000
+100,2028,1400,courier,drag,rank,courier-02,8.000000
+100,2028,1400,courier,excess,right first driver,courier-02,1.000000
+100,2028,1400,courier,drag,right first driver,courier-02,0.000000
+100,2029,1284,,,scorings with exact splits,,4480.000000
+100,2029,1284,restaurant,,groups ranked,,40.000000
+100,2029,1284,restaurant,excess,precision at 3,,1.000000
+100,2029,1284,restaurant,fit,precision at 3,,0.666667
+100,2029,1284,restaurant,drag,precision at 3,,1.000000
+100,2029,1284,restaurant,excess,rank,rest-00,3.000000
+100,2029,1284,restaurant,fit,rank,rest-00,4.000000
+100,2029,1284,restaurant,drag,rank,rest-00,3.000000
+100,2029,1284,restaurant,excess,right first driver,rest-00,1.000000
+100,2029,1284,restaurant,drag,right first driver,rest-00,1.000000
+100,2029,1284,restaurant,excess,rank,rest-01,2.000000
+100,2029,1284,restaurant,fit,rank,rest-01,3.000000
+100,2029,1284,restaurant,drag,rank,rest-01,2.000000
+100,2029,1284,restaurant,excess,right first driver,rest-01,1.000000
+100,2029,1284,restaurant,drag,right first driver,rest-01,1.000000
+100,2029,1284,restaurant,excess,rank,rest-02,1.000000
+100,2029,1284,restaurant,fit,rank,rest-02,1.000000
+100,2029,1284,restaurant,drag,rank,rest-02,1.000000
+100,2029,1284,restaurant,excess,right first driver,rest-02,1.000000
+100,2029,1284,restaurant,drag,right first driver,rest-02,1.000000
+100,2029,1284,courier,,groups ranked,,60.000000
+100,2029,1284,courier,excess,precision at 3,,1.000000
+100,2029,1284,courier,fit,precision at 3,,0.666667
+100,2029,1284,courier,drag,precision at 3,,0.000000
+100,2029,1284,courier,excess,rank,courier-00,2.000000
+100,2029,1284,courier,fit,rank,courier-00,9.000000
+100,2029,1284,courier,drag,rank,courier-00,19.000000
+100,2029,1284,courier,excess,right first driver,courier-00,1.000000
+100,2029,1284,courier,drag,right first driver,courier-00,1.000000
+100,2029,1284,courier,excess,rank,courier-01,3.000000
+100,2029,1284,courier,fit,rank,courier-01,1.000000
+100,2029,1284,courier,drag,rank,courier-01,14.000000
+100,2029,1284,courier,excess,right first driver,courier-01,1.000000
+100,2029,1284,courier,drag,right first driver,courier-01,0.000000
+100,2029,1284,courier,excess,rank,courier-02,1.000000
+100,2029,1284,courier,fit,rank,courier-02,3.000000
+100,2029,1284,courier,drag,rank,courier-02,11.000000
+100,2029,1284,courier,excess,right first driver,courier-02,1.000000
+100,2029,1284,courier,drag,right first driver,courier-02,1.000000
+100,2030,1169,,,scorings with exact splits,,4061.000000
+100,2030,1169,restaurant,,groups ranked,,40.000000
+100,2030,1169,restaurant,excess,precision at 3,,1.000000
+100,2030,1169,restaurant,fit,precision at 3,,1.000000
+100,2030,1169,restaurant,drag,precision at 3,,1.000000
+100,2030,1169,restaurant,excess,rank,rest-00,2.000000
+100,2030,1169,restaurant,fit,rank,rest-00,2.000000
+100,2030,1169,restaurant,drag,rank,rest-00,2.000000
+100,2030,1169,restaurant,excess,right first driver,rest-00,1.000000
+100,2030,1169,restaurant,drag,right first driver,rest-00,1.000000
+100,2030,1169,restaurant,excess,rank,rest-01,3.000000
+100,2030,1169,restaurant,fit,rank,rest-01,3.000000
+100,2030,1169,restaurant,drag,rank,rest-01,3.000000
+100,2030,1169,restaurant,excess,right first driver,rest-01,1.000000
+100,2030,1169,restaurant,drag,right first driver,rest-01,1.000000
+100,2030,1169,restaurant,excess,rank,rest-02,1.000000
+100,2030,1169,restaurant,fit,rank,rest-02,1.000000
+100,2030,1169,restaurant,drag,rank,rest-02,1.000000
+100,2030,1169,restaurant,excess,right first driver,rest-02,1.000000
+100,2030,1169,restaurant,drag,right first driver,rest-02,1.000000
+100,2030,1169,courier,,groups ranked,,60.000000
+100,2030,1169,courier,excess,precision at 3,,1.000000
+100,2030,1169,courier,fit,precision at 3,,0.666667
+100,2030,1169,courier,drag,precision at 3,,0.000000
+100,2030,1169,courier,excess,rank,courier-00,3.000000
+100,2030,1169,courier,fit,rank,courier-00,4.000000
+100,2030,1169,courier,drag,rank,courier-00,19.000000
+100,2030,1169,courier,excess,right first driver,courier-00,1.000000
+100,2030,1169,courier,drag,right first driver,courier-00,1.000000
+100,2030,1169,courier,excess,rank,courier-01,2.000000
+100,2030,1169,courier,fit,rank,courier-01,1.000000
+100,2030,1169,courier,drag,rank,courier-01,9.000000
+100,2030,1169,courier,excess,right first driver,courier-01,1.000000
+100,2030,1169,courier,drag,right first driver,courier-01,0.000000
+100,2030,1169,courier,excess,rank,courier-02,1.000000
+100,2030,1169,courier,fit,rank,courier-02,2.000000
+100,2030,1169,courier,drag,rank,courier-02,4.000000
+100,2030,1169,courier,excess,right first driver,courier-02,1.000000
+100,2030,1169,courier,drag,right first driver,courier-02,1.000000
+100,2031,1182,,,scorings with exact splits,,4074.000000
+100,2031,1182,restaurant,,groups ranked,,40.000000
+100,2031,1182,restaurant,excess,precision at 3,,1.000000
+100,2031,1182,restaurant,fit,precision at 3,,0.666667
+100,2031,1182,restaurant,drag,precision at 3,,1.000000
+100,2031,1182,restaurant,excess,rank,rest-00,3.000000
+100,2031,1182,restaurant,fit,rank,rest-00,6.000000
+100,2031,1182,restaurant,drag,rank,rest-00,3.000000
+100,2031,1182,restaurant,excess,right first driver,rest-00,1.000000
+100,2031,1182,restaurant,drag,right first driver,rest-00,1.000000
+100,2031,1182,restaurant,excess,rank,rest-01,2.000000
+100,2031,1182,restaurant,fit,rank,rest-01,2.000000
+100,2031,1182,restaurant,drag,rank,rest-01,1.000000
+100,2031,1182,restaurant,excess,right first driver,rest-01,1.000000
+100,2031,1182,restaurant,drag,right first driver,rest-01,1.000000
+100,2031,1182,restaurant,excess,rank,rest-02,1.000000
+100,2031,1182,restaurant,fit,rank,rest-02,1.000000
+100,2031,1182,restaurant,drag,rank,rest-02,2.000000
+100,2031,1182,restaurant,excess,right first driver,rest-02,1.000000
+100,2031,1182,restaurant,drag,right first driver,rest-02,1.000000
+100,2031,1182,courier,,groups ranked,,60.000000
+100,2031,1182,courier,excess,precision at 3,,0.333333
+100,2031,1182,courier,fit,precision at 3,,0.666667
+100,2031,1182,courier,drag,precision at 3,,0.000000
+100,2031,1182,courier,excess,rank,courier-00,22.000000
+100,2031,1182,courier,fit,rank,courier-00,19.000000
+100,2031,1182,courier,drag,rank,courier-00,31.000000
+100,2031,1182,courier,excess,right first driver,courier-00,1.000000
+100,2031,1182,courier,drag,right first driver,courier-00,0.000000
+100,2031,1182,courier,excess,rank,courier-01,5.000000
+100,2031,1182,courier,fit,rank,courier-01,1.000000
+100,2031,1182,courier,drag,rank,courier-01,7.000000
+100,2031,1182,courier,excess,right first driver,courier-01,1.000000
+100,2031,1182,courier,drag,right first driver,courier-01,0.000000
+100,2031,1182,courier,excess,rank,courier-02,1.000000
+100,2031,1182,courier,fit,rank,courier-02,2.000000
+100,2031,1182,courier,drag,rank,courier-02,12.000000
+100,2031,1182,courier,excess,right first driver,courier-02,1.000000
+100,2031,1182,courier,drag,right first driver,courier-02,1.000000
+100,2032,1583,,,scorings with exact splits,,5502.000000
+100,2032,1583,restaurant,,groups ranked,,40.000000
+100,2032,1583,restaurant,excess,precision at 3,,1.000000
+100,2032,1583,restaurant,fit,precision at 3,,1.000000
+100,2032,1583,restaurant,drag,precision at 3,,1.000000
+100,2032,1583,restaurant,excess,rank,rest-00,2.000000
+100,2032,1583,restaurant,fit,rank,rest-00,3.000000
+100,2032,1583,restaurant,drag,rank,rest-00,2.000000
+100,2032,1583,restaurant,excess,right first driver,rest-00,1.000000
+100,2032,1583,restaurant,drag,right first driver,rest-00,1.000000
+100,2032,1583,restaurant,excess,rank,rest-01,3.000000
+100,2032,1583,restaurant,fit,rank,rest-01,2.000000
+100,2032,1583,restaurant,drag,rank,rest-01,3.000000
+100,2032,1583,restaurant,excess,right first driver,rest-01,1.000000
+100,2032,1583,restaurant,drag,right first driver,rest-01,1.000000
+100,2032,1583,restaurant,excess,rank,rest-02,1.000000
+100,2032,1583,restaurant,fit,rank,rest-02,1.000000
+100,2032,1583,restaurant,drag,rank,rest-02,1.000000
+100,2032,1583,restaurant,excess,right first driver,rest-02,1.000000
+100,2032,1583,restaurant,drag,right first driver,rest-02,1.000000
+100,2032,1583,courier,,groups ranked,,60.000000
+100,2032,1583,courier,excess,precision at 3,,0.666667
+100,2032,1583,courier,fit,precision at 3,,0.666667
+100,2032,1583,courier,drag,precision at 3,,0.333333
+100,2032,1583,courier,excess,rank,courier-00,4.000000
+100,2032,1583,courier,fit,rank,courier-00,2.000000
+100,2032,1583,courier,drag,rank,courier-00,24.000000
+100,2032,1583,courier,excess,right first driver,courier-00,1.000000
+100,2032,1583,courier,drag,right first driver,courier-00,1.000000
+100,2032,1583,courier,excess,rank,courier-01,1.000000
+100,2032,1583,courier,fit,rank,courier-01,1.000000
+100,2032,1583,courier,drag,rank,courier-01,1.000000
+100,2032,1583,courier,excess,right first driver,courier-01,1.000000
+100,2032,1583,courier,drag,right first driver,courier-01,1.000000
+100,2032,1583,courier,excess,rank,courier-02,3.000000
+100,2032,1583,courier,fit,rank,courier-02,13.000000
+100,2032,1583,courier,drag,rank,courier-02,18.000000
+100,2032,1583,courier,excess,right first driver,courier-02,1.000000
+100,2032,1583,courier,drag,right first driver,courier-02,1.000000
+100,2033,1353,,,scorings with exact splits,,4717.000000
+100,2033,1353,restaurant,,groups ranked,,40.000000
+100,2033,1353,restaurant,excess,precision at 3,,1.000000
+100,2033,1353,restaurant,fit,precision at 3,,1.000000
+100,2033,1353,restaurant,drag,precision at 3,,1.000000
+100,2033,1353,restaurant,excess,rank,rest-00,3.000000
+100,2033,1353,restaurant,fit,rank,rest-00,3.000000
+100,2033,1353,restaurant,drag,rank,rest-00,2.000000
+100,2033,1353,restaurant,excess,right first driver,rest-00,1.000000
+100,2033,1353,restaurant,drag,right first driver,rest-00,1.000000
+100,2033,1353,restaurant,excess,rank,rest-01,2.000000
+100,2033,1353,restaurant,fit,rank,rest-01,2.000000
+100,2033,1353,restaurant,drag,rank,rest-01,1.000000
+100,2033,1353,restaurant,excess,right first driver,rest-01,1.000000
+100,2033,1353,restaurant,drag,right first driver,rest-01,1.000000
+100,2033,1353,restaurant,excess,rank,rest-02,1.000000
+100,2033,1353,restaurant,fit,rank,rest-02,1.000000
+100,2033,1353,restaurant,drag,rank,rest-02,3.000000
+100,2033,1353,restaurant,excess,right first driver,rest-02,1.000000
+100,2033,1353,restaurant,drag,right first driver,rest-02,1.000000
+100,2033,1353,courier,,groups ranked,,60.000000
+100,2033,1353,courier,excess,precision at 3,,0.333333
+100,2033,1353,courier,fit,precision at 3,,0.333333
+100,2033,1353,courier,drag,precision at 3,,0.000000
+100,2033,1353,courier,excess,rank,courier-00,11.000000
+100,2033,1353,courier,fit,rank,courier-00,6.000000
+100,2033,1353,courier,drag,rank,courier-00,14.000000
+100,2033,1353,courier,excess,right first driver,courier-00,1.000000
+100,2033,1353,courier,drag,right first driver,courier-00,0.000000
+100,2033,1353,courier,excess,rank,courier-01,5.000000
+100,2033,1353,courier,fit,rank,courier-01,15.000000
+100,2033,1353,courier,drag,rank,courier-01,42.000000
+100,2033,1353,courier,excess,right first driver,courier-01,1.000000
+100,2033,1353,courier,drag,right first driver,courier-01,1.000000
+100,2033,1353,courier,excess,rank,courier-02,1.000000
+100,2033,1353,courier,fit,rank,courier-02,1.000000
+100,2033,1353,courier,drag,rank,courier-02,27.000000
+100,2033,1353,courier,excess,right first driver,courier-02,1.000000
+100,2033,1353,courier,drag,right first driver,courier-02,1.000000
+100,2034,1298,,,scorings with exact splits,,4438.000000
+100,2034,1298,restaurant,,groups ranked,,40.000000
+100,2034,1298,restaurant,excess,precision at 3,,1.000000
+100,2034,1298,restaurant,fit,precision at 3,,0.666667
+100,2034,1298,restaurant,drag,precision at 3,,1.000000
+100,2034,1298,restaurant,excess,rank,rest-00,2.000000
+100,2034,1298,restaurant,fit,rank,rest-00,3.000000
+100,2034,1298,restaurant,drag,rank,rest-00,2.000000
+100,2034,1298,restaurant,excess,right first driver,rest-00,1.000000
+100,2034,1298,restaurant,drag,right first driver,rest-00,1.000000
+100,2034,1298,restaurant,excess,rank,rest-01,3.000000
+100,2034,1298,restaurant,fit,rank,rest-01,4.000000
+100,2034,1298,restaurant,drag,rank,rest-01,3.000000
+100,2034,1298,restaurant,excess,right first driver,rest-01,1.000000
+100,2034,1298,restaurant,drag,right first driver,rest-01,1.000000
+100,2034,1298,restaurant,excess,rank,rest-02,1.000000
+100,2034,1298,restaurant,fit,rank,rest-02,1.000000
+100,2034,1298,restaurant,drag,rank,rest-02,1.000000
+100,2034,1298,restaurant,excess,right first driver,rest-02,1.000000
+100,2034,1298,restaurant,drag,right first driver,rest-02,1.000000
+100,2034,1298,courier,,groups ranked,,60.000000
+100,2034,1298,courier,excess,precision at 3,,0.333333
+100,2034,1298,courier,fit,precision at 3,,0.333333
+100,2034,1298,courier,drag,precision at 3,,0.000000
+100,2034,1298,courier,excess,rank,courier-00,5.000000
+100,2034,1298,courier,fit,rank,courier-00,1.000000
+100,2034,1298,courier,drag,rank,courier-00,24.000000
+100,2034,1298,courier,excess,right first driver,courier-00,1.000000
+100,2034,1298,courier,drag,right first driver,courier-00,0.000000
+100,2034,1298,courier,excess,rank,courier-01,19.000000
+100,2034,1298,courier,fit,rank,courier-01,32.000000
+100,2034,1298,courier,drag,rank,courier-01,43.000000
+100,2034,1298,courier,excess,right first driver,courier-01,0.000000
+100,2034,1298,courier,drag,right first driver,courier-01,0.000000
+100,2034,1298,courier,excess,rank,courier-02,3.000000
+100,2034,1298,courier,fit,rank,courier-02,5.000000
+100,2034,1298,courier,drag,rank,courier-02,13.000000
+100,2034,1298,courier,excess,right first driver,courier-02,1.000000
+100,2034,1298,courier,drag,right first driver,courier-02,1.000000
+100,2035,1312,,,scorings with exact splits,,4582.000000
+100,2035,1312,restaurant,,groups ranked,,40.000000
+100,2035,1312,restaurant,excess,precision at 3,,1.000000
+100,2035,1312,restaurant,fit,precision at 3,,1.000000
+100,2035,1312,restaurant,drag,precision at 3,,1.000000
+100,2035,1312,restaurant,excess,rank,rest-00,2.000000
+100,2035,1312,restaurant,fit,rank,rest-00,2.000000
+100,2035,1312,restaurant,drag,rank,rest-00,2.000000
+100,2035,1312,restaurant,excess,right first driver,rest-00,1.000000
+100,2035,1312,restaurant,drag,right first driver,rest-00,1.000000
+100,2035,1312,restaurant,excess,rank,rest-01,3.000000
+100,2035,1312,restaurant,fit,rank,rest-01,3.000000
+100,2035,1312,restaurant,drag,rank,rest-01,3.000000
+100,2035,1312,restaurant,excess,right first driver,rest-01,1.000000
+100,2035,1312,restaurant,drag,right first driver,rest-01,1.000000
+100,2035,1312,restaurant,excess,rank,rest-02,1.000000
+100,2035,1312,restaurant,fit,rank,rest-02,1.000000
+100,2035,1312,restaurant,drag,rank,rest-02,1.000000
+100,2035,1312,restaurant,excess,right first driver,rest-02,1.000000
+100,2035,1312,restaurant,drag,right first driver,rest-02,1.000000
+100,2035,1312,courier,,groups ranked,,60.000000
+100,2035,1312,courier,excess,precision at 3,,0.666667
+100,2035,1312,courier,fit,precision at 3,,0.333333
+100,2035,1312,courier,drag,precision at 3,,0.333333
+100,2035,1312,courier,excess,rank,courier-00,12.000000
+100,2035,1312,courier,fit,rank,courier-00,21.000000
+100,2035,1312,courier,drag,rank,courier-00,14.000000
+100,2035,1312,courier,excess,right first driver,courier-00,1.000000
+100,2035,1312,courier,drag,right first driver,courier-00,0.000000
+100,2035,1312,courier,excess,rank,courier-01,3.000000
+100,2035,1312,courier,fit,rank,courier-01,2.000000
+100,2035,1312,courier,drag,rank,courier-01,3.000000
+100,2035,1312,courier,excess,right first driver,courier-01,1.000000
+100,2035,1312,courier,drag,right first driver,courier-01,0.000000
+100,2035,1312,courier,excess,rank,courier-02,2.000000
+100,2035,1312,courier,fit,rank,courier-02,31.000000
+100,2035,1312,courier,drag,rank,courier-02,40.000000
+100,2035,1312,courier,excess,right first driver,courier-02,1.000000
+100,2035,1312,courier,drag,right first driver,courier-02,1.000000
+100,2036,1263,,,scorings with exact splits,,4327.000000
+100,2036,1263,restaurant,,groups ranked,,40.000000
+100,2036,1263,restaurant,excess,precision at 3,,1.000000
+100,2036,1263,restaurant,fit,precision at 3,,1.000000
+100,2036,1263,restaurant,drag,precision at 3,,1.000000
+100,2036,1263,restaurant,excess,rank,rest-00,3.000000
+100,2036,1263,restaurant,fit,rank,rest-00,2.000000
+100,2036,1263,restaurant,drag,rank,rest-00,2.000000
+100,2036,1263,restaurant,excess,right first driver,rest-00,1.000000
+100,2036,1263,restaurant,drag,right first driver,rest-00,1.000000
+100,2036,1263,restaurant,excess,rank,rest-01,2.000000
+100,2036,1263,restaurant,fit,rank,rest-01,3.000000
+100,2036,1263,restaurant,drag,rank,rest-01,1.000000
+100,2036,1263,restaurant,excess,right first driver,rest-01,1.000000
+100,2036,1263,restaurant,drag,right first driver,rest-01,1.000000
+100,2036,1263,restaurant,excess,rank,rest-02,1.000000
+100,2036,1263,restaurant,fit,rank,rest-02,1.000000
+100,2036,1263,restaurant,drag,rank,rest-02,3.000000
+100,2036,1263,restaurant,excess,right first driver,rest-02,1.000000
+100,2036,1263,restaurant,drag,right first driver,rest-02,1.000000
+100,2036,1263,courier,,groups ranked,,60.000000
+100,2036,1263,courier,excess,precision at 3,,0.333333
+100,2036,1263,courier,fit,precision at 3,,0.333333
+100,2036,1263,courier,drag,precision at 3,,0.333333
+100,2036,1263,courier,excess,rank,courier-00,4.000000
+100,2036,1263,courier,fit,rank,courier-00,1.000000
+100,2036,1263,courier,drag,rank,courier-00,3.000000
+100,2036,1263,courier,excess,right first driver,courier-00,1.000000
+100,2036,1263,courier,drag,right first driver,courier-00,0.000000
+100,2036,1263,courier,excess,rank,courier-01,10.000000
+100,2036,1263,courier,fit,rank,courier-01,5.000000
+100,2036,1263,courier,drag,rank,courier-01,37.000000
+100,2036,1263,courier,excess,right first driver,courier-01,1.000000
+100,2036,1263,courier,drag,right first driver,courier-01,0.000000
+100,2036,1263,courier,excess,rank,courier-02,2.000000
+100,2036,1263,courier,fit,rank,courier-02,10.000000
+100,2036,1263,courier,drag,rank,courier-02,29.000000
+100,2036,1263,courier,excess,right first driver,courier-02,1.000000
+100,2036,1263,courier,drag,right first driver,courier-02,1.000000
+100,2037,1256,,,scorings with exact splits,,4356.000000
+100,2037,1256,restaurant,,groups ranked,,40.000000
+100,2037,1256,restaurant,excess,precision at 3,,1.000000
+100,2037,1256,restaurant,fit,precision at 3,,1.000000
+100,2037,1256,restaurant,drag,precision at 3,,1.000000
+100,2037,1256,restaurant,excess,rank,rest-00,2.000000
+100,2037,1256,restaurant,fit,rank,rest-00,2.000000
+100,2037,1256,restaurant,drag,rank,rest-00,2.000000
+100,2037,1256,restaurant,excess,right first driver,rest-00,1.000000
+100,2037,1256,restaurant,drag,right first driver,rest-00,1.000000
+100,2037,1256,restaurant,excess,rank,rest-01,3.000000
+100,2037,1256,restaurant,fit,rank,rest-01,3.000000
+100,2037,1256,restaurant,drag,rank,rest-01,3.000000
+100,2037,1256,restaurant,excess,right first driver,rest-01,1.000000
+100,2037,1256,restaurant,drag,right first driver,rest-01,1.000000
+100,2037,1256,restaurant,excess,rank,rest-02,1.000000
+100,2037,1256,restaurant,fit,rank,rest-02,1.000000
+100,2037,1256,restaurant,drag,rank,rest-02,1.000000
+100,2037,1256,restaurant,excess,right first driver,rest-02,1.000000
+100,2037,1256,restaurant,drag,right first driver,rest-02,1.000000
+100,2037,1256,courier,,groups ranked,,60.000000
+100,2037,1256,courier,excess,precision at 3,,0.666667
+100,2037,1256,courier,fit,precision at 3,,0.666667
+100,2037,1256,courier,drag,precision at 3,,0.000000
+100,2037,1256,courier,excess,rank,courier-00,30.000000
+100,2037,1256,courier,fit,rank,courier-00,17.000000
+100,2037,1256,courier,drag,rank,courier-00,14.000000
+100,2037,1256,courier,excess,right first driver,courier-00,0.000000
+100,2037,1256,courier,drag,right first driver,courier-00,0.000000
+100,2037,1256,courier,excess,rank,courier-01,1.000000
+100,2037,1256,courier,fit,rank,courier-01,2.000000
+100,2037,1256,courier,drag,rank,courier-01,7.000000
+100,2037,1256,courier,excess,right first driver,courier-01,1.000000
+100,2037,1256,courier,drag,right first driver,courier-01,1.000000
+100,2037,1256,courier,excess,rank,courier-02,2.000000
+100,2037,1256,courier,fit,rank,courier-02,3.000000
+100,2037,1256,courier,drag,rank,courier-02,12.000000
+100,2037,1256,courier,excess,right first driver,courier-02,1.000000
+100,2037,1256,courier,drag,right first driver,courier-02,1.000000
+100,2038,1234,,,scorings with exact splits,,4281.000000
+100,2038,1234,restaurant,,groups ranked,,40.000000
+100,2038,1234,restaurant,excess,precision at 3,,1.000000
+100,2038,1234,restaurant,fit,precision at 3,,1.000000
+100,2038,1234,restaurant,drag,precision at 3,,1.000000
+100,2038,1234,restaurant,excess,rank,rest-00,2.000000
+100,2038,1234,restaurant,fit,rank,rest-00,1.000000
+100,2038,1234,restaurant,drag,rank,rest-00,1.000000
+100,2038,1234,restaurant,excess,right first driver,rest-00,1.000000
+100,2038,1234,restaurant,drag,right first driver,rest-00,1.000000
+100,2038,1234,restaurant,excess,rank,rest-01,3.000000
+100,2038,1234,restaurant,fit,rank,rest-01,3.000000
+100,2038,1234,restaurant,drag,rank,rest-01,2.000000
+100,2038,1234,restaurant,excess,right first driver,rest-01,1.000000
+100,2038,1234,restaurant,drag,right first driver,rest-01,1.000000
+100,2038,1234,restaurant,excess,rank,rest-02,1.000000
+100,2038,1234,restaurant,fit,rank,rest-02,2.000000
+100,2038,1234,restaurant,drag,rank,rest-02,3.000000
+100,2038,1234,restaurant,excess,right first driver,rest-02,1.000000
+100,2038,1234,restaurant,drag,right first driver,rest-02,1.000000
+100,2038,1234,courier,,groups ranked,,60.000000
+100,2038,1234,courier,excess,precision at 3,,0.000000
+100,2038,1234,courier,fit,precision at 3,,0.666667
+100,2038,1234,courier,drag,precision at 3,,0.000000
+100,2038,1234,courier,excess,rank,courier-00,6.000000
+100,2038,1234,courier,fit,rank,courier-00,3.000000
+100,2038,1234,courier,drag,rank,courier-00,16.000000
+100,2038,1234,courier,excess,right first driver,courier-00,1.000000
+100,2038,1234,courier,drag,right first driver,courier-00,0.000000
+100,2038,1234,courier,excess,rank,courier-01,4.000000
+100,2038,1234,courier,fit,rank,courier-01,1.000000
+100,2038,1234,courier,drag,rank,courier-01,11.000000
+100,2038,1234,courier,excess,right first driver,courier-01,0.000000
+100,2038,1234,courier,drag,right first driver,courier-01,0.000000
+100,2038,1234,courier,excess,rank,courier-02,53.000000
+100,2038,1234,courier,fit,rank,courier-02,42.000000
+100,2038,1234,courier,drag,rank,courier-02,38.000000
+100,2038,1234,courier,excess,right first driver,courier-02,0.000000
+100,2038,1234,courier,drag,right first driver,courier-02,0.000000
+100,2039,1242,,,scorings with exact splits,,4270.000000
+100,2039,1242,restaurant,,groups ranked,,40.000000
+100,2039,1242,restaurant,excess,precision at 3,,1.000000
+100,2039,1242,restaurant,fit,precision at 3,,0.666667
+100,2039,1242,restaurant,drag,precision at 3,,1.000000
+100,2039,1242,restaurant,excess,rank,rest-00,2.000000
+100,2039,1242,restaurant,fit,rank,rest-00,1.000000
+100,2039,1242,restaurant,drag,rank,rest-00,1.000000
+100,2039,1242,restaurant,excess,right first driver,rest-00,1.000000
+100,2039,1242,restaurant,drag,right first driver,rest-00,1.000000
+100,2039,1242,restaurant,excess,rank,rest-01,3.000000
+100,2039,1242,restaurant,fit,rank,rest-01,4.000000
+100,2039,1242,restaurant,drag,rank,rest-01,3.000000
+100,2039,1242,restaurant,excess,right first driver,rest-01,1.000000
+100,2039,1242,restaurant,drag,right first driver,rest-01,1.000000
+100,2039,1242,restaurant,excess,rank,rest-02,1.000000
+100,2039,1242,restaurant,fit,rank,rest-02,2.000000
+100,2039,1242,restaurant,drag,rank,rest-02,2.000000
+100,2039,1242,restaurant,excess,right first driver,rest-02,1.000000
+100,2039,1242,restaurant,drag,right first driver,rest-02,1.000000
+100,2039,1242,courier,,groups ranked,,60.000000
+100,2039,1242,courier,excess,precision at 3,,0.666667
+100,2039,1242,courier,fit,precision at 3,,0.666667
+100,2039,1242,courier,drag,precision at 3,,0.333333
+100,2039,1242,courier,excess,rank,courier-00,22.000000
+100,2039,1242,courier,fit,rank,courier-00,20.000000
+100,2039,1242,courier,drag,rank,courier-00,48.000000
+100,2039,1242,courier,excess,right first driver,courier-00,1.000000
+100,2039,1242,courier,drag,right first driver,courier-00,0.000000
+100,2039,1242,courier,excess,rank,courier-01,1.000000
+100,2039,1242,courier,fit,rank,courier-01,2.000000
+100,2039,1242,courier,drag,rank,courier-01,6.000000
+100,2039,1242,courier,excess,right first driver,courier-01,1.000000
+100,2039,1242,courier,drag,right first driver,courier-01,1.000000
+100,2039,1242,courier,excess,rank,courier-02,2.000000
+100,2039,1242,courier,fit,rank,courier-02,1.000000
+100,2039,1242,courier,drag,rank,courier-02,1.000000
+100,2039,1242,courier,excess,right first driver,courier-02,0.000000
+100,2039,1242,courier,drag,right first driver,courier-02,0.000000
+100,2040,1241,,,scorings with exact splits,,4318.000000
+100,2040,1241,restaurant,,groups ranked,,40.000000
+100,2040,1241,restaurant,excess,precision at 3,,1.000000
+100,2040,1241,restaurant,fit,precision at 3,,1.000000
+100,2040,1241,restaurant,drag,precision at 3,,1.000000
+100,2040,1241,restaurant,excess,rank,rest-00,3.000000
+100,2040,1241,restaurant,fit,rank,rest-00,3.000000
+100,2040,1241,restaurant,drag,rank,rest-00,3.000000
+100,2040,1241,restaurant,excess,right first driver,rest-00,1.000000
+100,2040,1241,restaurant,drag,right first driver,rest-00,1.000000
+100,2040,1241,restaurant,excess,rank,rest-01,2.000000
+100,2040,1241,restaurant,fit,rank,rest-01,2.000000
+100,2040,1241,restaurant,drag,rank,rest-01,1.000000
+100,2040,1241,restaurant,excess,right first driver,rest-01,1.000000
+100,2040,1241,restaurant,drag,right first driver,rest-01,1.000000
+100,2040,1241,restaurant,excess,rank,rest-02,1.000000
+100,2040,1241,restaurant,fit,rank,rest-02,1.000000
+100,2040,1241,restaurant,drag,rank,rest-02,2.000000
+100,2040,1241,restaurant,excess,right first driver,rest-02,1.000000
+100,2040,1241,restaurant,drag,right first driver,rest-02,1.000000
+100,2040,1241,courier,,groups ranked,,60.000000
+100,2040,1241,courier,excess,precision at 3,,0.666667
+100,2040,1241,courier,fit,precision at 3,,1.000000
+100,2040,1241,courier,drag,precision at 3,,0.333333
+100,2040,1241,courier,excess,rank,courier-00,2.000000
+100,2040,1241,courier,fit,rank,courier-00,2.000000
+100,2040,1241,courier,drag,rank,courier-00,20.000000
+100,2040,1241,courier,excess,right first driver,courier-00,1.000000
+100,2040,1241,courier,drag,right first driver,courier-00,1.000000
+100,2040,1241,courier,excess,rank,courier-01,5.000000
+100,2040,1241,courier,fit,rank,courier-01,3.000000
+100,2040,1241,courier,drag,rank,courier-01,24.000000
+100,2040,1241,courier,excess,right first driver,courier-01,1.000000
+100,2040,1241,courier,drag,right first driver,courier-01,0.000000
+100,2040,1241,courier,excess,rank,courier-02,3.000000
+100,2040,1241,courier,fit,rank,courier-02,1.000000
+100,2040,1241,courier,drag,rank,courier-02,1.000000
+100,2040,1241,courier,excess,right first driver,courier-02,0.000000
+100,2040,1241,courier,drag,right first driver,courier-02,0.000000
+100,2041,1313,,,scorings with exact splits,,4537.000000
+100,2041,1313,restaurant,,groups ranked,,40.000000
+100,2041,1313,restaurant,excess,precision at 3,,1.000000
+100,2041,1313,restaurant,fit,precision at 3,,1.000000
+100,2041,1313,restaurant,drag,precision at 3,,1.000000
+100,2041,1313,restaurant,excess,rank,rest-00,3.000000
+100,2041,1313,restaurant,fit,rank,rest-00,3.000000
+100,2041,1313,restaurant,drag,rank,rest-00,3.000000
+100,2041,1313,restaurant,excess,right first driver,rest-00,1.000000
+100,2041,1313,restaurant,drag,right first driver,rest-00,1.000000
+100,2041,1313,restaurant,excess,rank,rest-01,2.000000
+100,2041,1313,restaurant,fit,rank,rest-01,2.000000
+100,2041,1313,restaurant,drag,rank,rest-01,2.000000
+100,2041,1313,restaurant,excess,right first driver,rest-01,1.000000
+100,2041,1313,restaurant,drag,right first driver,rest-01,1.000000
+100,2041,1313,restaurant,excess,rank,rest-02,1.000000
+100,2041,1313,restaurant,fit,rank,rest-02,1.000000
+100,2041,1313,restaurant,drag,rank,rest-02,1.000000
+100,2041,1313,restaurant,excess,right first driver,rest-02,1.000000
+100,2041,1313,restaurant,drag,right first driver,rest-02,1.000000
+100,2041,1313,courier,,groups ranked,,60.000000
+100,2041,1313,courier,excess,precision at 3,,0.666667
+100,2041,1313,courier,fit,precision at 3,,0.666667
+100,2041,1313,courier,drag,precision at 3,,0.000000
+100,2041,1313,courier,excess,rank,courier-00,8.000000
+100,2041,1313,courier,fit,rank,courier-00,6.000000
+100,2041,1313,courier,drag,rank,courier-00,30.000000
+100,2041,1313,courier,excess,right first driver,courier-00,1.000000
+100,2041,1313,courier,drag,right first driver,courier-00,0.000000
+100,2041,1313,courier,excess,rank,courier-01,3.000000
+100,2041,1313,courier,fit,rank,courier-01,1.000000
+100,2041,1313,courier,drag,rank,courier-01,22.000000
+100,2041,1313,courier,excess,right first driver,courier-01,1.000000
+100,2041,1313,courier,drag,right first driver,courier-01,1.000000
+100,2041,1313,courier,excess,rank,courier-02,1.000000
+100,2041,1313,courier,fit,rank,courier-02,3.000000
+100,2041,1313,courier,drag,rank,courier-02,8.000000
+100,2041,1313,courier,excess,right first driver,courier-02,1.000000
+100,2041,1313,courier,drag,right first driver,courier-02,1.000000
+100,2042,1475,,,scorings with exact splits,,5084.000000
+100,2042,1475,restaurant,,groups ranked,,40.000000
+100,2042,1475,restaurant,excess,precision at 3,,1.000000
+100,2042,1475,restaurant,fit,precision at 3,,1.000000
+100,2042,1475,restaurant,drag,precision at 3,,1.000000
+100,2042,1475,restaurant,excess,rank,rest-00,2.000000
+100,2042,1475,restaurant,fit,rank,rest-00,2.000000
+100,2042,1475,restaurant,drag,rank,rest-00,2.000000
+100,2042,1475,restaurant,excess,right first driver,rest-00,1.000000
+100,2042,1475,restaurant,drag,right first driver,rest-00,1.000000
+100,2042,1475,restaurant,excess,rank,rest-01,3.000000
+100,2042,1475,restaurant,fit,rank,rest-01,3.000000
+100,2042,1475,restaurant,drag,rank,rest-01,3.000000
+100,2042,1475,restaurant,excess,right first driver,rest-01,1.000000
+100,2042,1475,restaurant,drag,right first driver,rest-01,1.000000
+100,2042,1475,restaurant,excess,rank,rest-02,1.000000
+100,2042,1475,restaurant,fit,rank,rest-02,1.000000
+100,2042,1475,restaurant,drag,rank,rest-02,1.000000
+100,2042,1475,restaurant,excess,right first driver,rest-02,1.000000
+100,2042,1475,restaurant,drag,right first driver,rest-02,1.000000
+100,2042,1475,courier,,groups ranked,,60.000000
+100,2042,1475,courier,excess,precision at 3,,0.333333
+100,2042,1475,courier,fit,precision at 3,,0.333333
+100,2042,1475,courier,drag,precision at 3,,0.333333
+100,2042,1475,courier,excess,rank,courier-00,6.000000
+100,2042,1475,courier,fit,rank,courier-00,6.000000
+100,2042,1475,courier,drag,rank,courier-00,32.000000
+100,2042,1475,courier,excess,right first driver,courier-00,1.000000
+100,2042,1475,courier,drag,right first driver,courier-00,0.000000
+100,2042,1475,courier,excess,rank,courier-01,20.000000
+100,2042,1475,courier,fit,rank,courier-01,36.000000
+100,2042,1475,courier,drag,rank,courier-01,54.000000
+100,2042,1475,courier,excess,right first driver,courier-01,1.000000
+100,2042,1475,courier,drag,right first driver,courier-01,1.000000
+100,2042,1475,courier,excess,rank,courier-02,1.000000
+100,2042,1475,courier,fit,rank,courier-02,1.000000
+100,2042,1475,courier,drag,rank,courier-02,2.000000
+100,2042,1475,courier,excess,right first driver,courier-02,1.000000
+100,2042,1475,courier,drag,right first driver,courier-02,1.000000
+100,2043,1316,,,scorings with exact splits,,4528.000000
+100,2043,1316,restaurant,,groups ranked,,40.000000
+100,2043,1316,restaurant,excess,precision at 3,,1.000000
+100,2043,1316,restaurant,fit,precision at 3,,1.000000
+100,2043,1316,restaurant,drag,precision at 3,,1.000000
+100,2043,1316,restaurant,excess,rank,rest-00,2.000000
+100,2043,1316,restaurant,fit,rank,rest-00,2.000000
+100,2043,1316,restaurant,drag,rank,rest-00,2.000000
+100,2043,1316,restaurant,excess,right first driver,rest-00,1.000000
+100,2043,1316,restaurant,drag,right first driver,rest-00,1.000000
+100,2043,1316,restaurant,excess,rank,rest-01,3.000000
+100,2043,1316,restaurant,fit,rank,rest-01,3.000000
+100,2043,1316,restaurant,drag,rank,rest-01,3.000000
+100,2043,1316,restaurant,excess,right first driver,rest-01,1.000000
+100,2043,1316,restaurant,drag,right first driver,rest-01,1.000000
+100,2043,1316,restaurant,excess,rank,rest-02,1.000000
+100,2043,1316,restaurant,fit,rank,rest-02,1.000000
+100,2043,1316,restaurant,drag,rank,rest-02,1.000000
+100,2043,1316,restaurant,excess,right first driver,rest-02,1.000000
+100,2043,1316,restaurant,drag,right first driver,rest-02,1.000000
+100,2043,1316,courier,,groups ranked,,60.000000
+100,2043,1316,courier,excess,precision at 3,,0.666667
+100,2043,1316,courier,fit,precision at 3,,0.666667
+100,2043,1316,courier,drag,precision at 3,,0.333333
+100,2043,1316,courier,excess,rank,courier-00,11.000000
+100,2043,1316,courier,fit,rank,courier-00,20.000000
+100,2043,1316,courier,drag,rank,courier-00,38.000000
+100,2043,1316,courier,excess,right first driver,courier-00,1.000000
+100,2043,1316,courier,drag,right first driver,courier-00,0.000000
+100,2043,1316,courier,excess,rank,courier-01,3.000000
+100,2043,1316,courier,fit,rank,courier-01,3.000000
+100,2043,1316,courier,drag,rank,courier-01,17.000000
+100,2043,1316,courier,excess,right first driver,courier-01,1.000000
+100,2043,1316,courier,drag,right first driver,courier-01,1.000000
+100,2043,1316,courier,excess,rank,courier-02,1.000000
+100,2043,1316,courier,fit,rank,courier-02,1.000000
+100,2043,1316,courier,drag,rank,courier-02,2.000000
+100,2043,1316,courier,excess,right first driver,courier-02,1.000000
+100,2043,1316,courier,drag,right first driver,courier-02,1.000000
+100,2044,1254,,,scorings with exact splits,,4333.000000
+100,2044,1254,restaurant,,groups ranked,,40.000000
+100,2044,1254,restaurant,excess,precision at 3,,1.000000
+100,2044,1254,restaurant,fit,precision at 3,,0.666667
+100,2044,1254,restaurant,drag,precision at 3,,1.000000
+100,2044,1254,restaurant,excess,rank,rest-00,3.000000
+100,2044,1254,restaurant,fit,rank,rest-00,4.000000
+100,2044,1254,restaurant,drag,rank,rest-00,3.000000
+100,2044,1254,restaurant,excess,right first driver,rest-00,1.000000
+100,2044,1254,restaurant,drag,right first driver,rest-00,1.000000
+100,2044,1254,restaurant,excess,rank,rest-01,2.000000
+100,2044,1254,restaurant,fit,rank,rest-01,2.000000
+100,2044,1254,restaurant,drag,rank,rest-01,1.000000
+100,2044,1254,restaurant,excess,right first driver,rest-01,1.000000
+100,2044,1254,restaurant,drag,right first driver,rest-01,1.000000
+100,2044,1254,restaurant,excess,rank,rest-02,1.000000
+100,2044,1254,restaurant,fit,rank,rest-02,1.000000
+100,2044,1254,restaurant,drag,rank,rest-02,2.000000
+100,2044,1254,restaurant,excess,right first driver,rest-02,1.000000
+100,2044,1254,restaurant,drag,right first driver,rest-02,1.000000
+100,2044,1254,courier,,groups ranked,,60.000000
+100,2044,1254,courier,excess,precision at 3,,0.333333
+100,2044,1254,courier,fit,precision at 3,,0.333333
+100,2044,1254,courier,drag,precision at 3,,0.000000
+100,2044,1254,courier,excess,rank,courier-00,43.000000
+100,2044,1254,courier,fit,rank,courier-00,31.000000
+100,2044,1254,courier,drag,rank,courier-00,45.000000
+100,2044,1254,courier,excess,right first driver,courier-00,1.000000
+100,2044,1254,courier,drag,right first driver,courier-00,0.000000
+100,2044,1254,courier,excess,rank,courier-01,7.000000
+100,2044,1254,courier,fit,rank,courier-01,10.000000
+100,2044,1254,courier,drag,rank,courier-01,14.000000
+100,2044,1254,courier,excess,right first driver,courier-01,1.000000
+100,2044,1254,courier,drag,right first driver,courier-01,0.000000
+100,2044,1254,courier,excess,rank,courier-02,1.000000
+100,2044,1254,courier,fit,rank,courier-02,3.000000
+100,2044,1254,courier,drag,rank,courier-02,8.000000
+100,2044,1254,courier,excess,right first driver,courier-02,1.000000
+100,2044,1254,courier,drag,right first driver,courier-02,1.000000
+100,2045,1316,,,scorings with exact splits,,4537.000000
+100,2045,1316,restaurant,,groups ranked,,40.000000
+100,2045,1316,restaurant,excess,precision at 3,,1.000000
+100,2045,1316,restaurant,fit,precision at 3,,1.000000
+100,2045,1316,restaurant,drag,precision at 3,,1.000000
+100,2045,1316,restaurant,excess,rank,rest-00,3.000000
+100,2045,1316,restaurant,fit,rank,rest-00,3.000000
+100,2045,1316,restaurant,drag,rank,rest-00,3.000000
+100,2045,1316,restaurant,excess,right first driver,rest-00,1.000000
+100,2045,1316,restaurant,drag,right first driver,rest-00,1.000000
+100,2045,1316,restaurant,excess,rank,rest-01,2.000000
+100,2045,1316,restaurant,fit,rank,rest-01,2.000000
+100,2045,1316,restaurant,drag,rank,rest-01,2.000000
+100,2045,1316,restaurant,excess,right first driver,rest-01,1.000000
+100,2045,1316,restaurant,drag,right first driver,rest-01,1.000000
+100,2045,1316,restaurant,excess,rank,rest-02,1.000000
+100,2045,1316,restaurant,fit,rank,rest-02,1.000000
+100,2045,1316,restaurant,drag,rank,rest-02,1.000000
+100,2045,1316,restaurant,excess,right first driver,rest-02,1.000000
+100,2045,1316,restaurant,drag,right first driver,rest-02,1.000000
+100,2045,1316,courier,,groups ranked,,60.000000
+100,2045,1316,courier,excess,precision at 3,,0.666667
+100,2045,1316,courier,fit,precision at 3,,0.666667
+100,2045,1316,courier,drag,precision at 3,,0.333333
+100,2045,1316,courier,excess,rank,courier-00,1.000000
+100,2045,1316,courier,fit,rank,courier-00,1.000000
+100,2045,1316,courier,drag,rank,courier-00,2.000000
+100,2045,1316,courier,excess,right first driver,courier-00,1.000000
+100,2045,1316,courier,drag,right first driver,courier-00,1.000000
+100,2045,1316,courier,excess,rank,courier-01,27.000000
+100,2045,1316,courier,fit,rank,courier-01,26.000000
+100,2045,1316,courier,drag,rank,courier-01,32.000000
+100,2045,1316,courier,excess,right first driver,courier-01,1.000000
+100,2045,1316,courier,drag,right first driver,courier-01,0.000000
+100,2045,1316,courier,excess,rank,courier-02,2.000000
+100,2045,1316,courier,fit,rank,courier-02,3.000000
+100,2045,1316,courier,drag,rank,courier-02,7.000000
+100,2045,1316,courier,excess,right first driver,courier-02,1.000000
+100,2045,1316,courier,drag,right first driver,courier-02,1.000000
+200,2026,2645,,,scorings with exact splits,,9154.000000
+200,2026,2645,restaurant,,groups ranked,,40.000000
+200,2026,2645,restaurant,excess,precision at 3,,1.000000
+200,2026,2645,restaurant,fit,precision at 3,,1.000000
+200,2026,2645,restaurant,drag,precision at 3,,1.000000
+200,2026,2645,restaurant,excess,rank,rest-00,3.000000
+200,2026,2645,restaurant,fit,rank,rest-00,3.000000
+200,2026,2645,restaurant,drag,rank,rest-00,3.000000
+200,2026,2645,restaurant,excess,right first driver,rest-00,1.000000
+200,2026,2645,restaurant,drag,right first driver,rest-00,1.000000
+200,2026,2645,restaurant,excess,rank,rest-01,2.000000
+200,2026,2645,restaurant,fit,rank,rest-01,2.000000
+200,2026,2645,restaurant,drag,rank,rest-01,1.000000
+200,2026,2645,restaurant,excess,right first driver,rest-01,1.000000
+200,2026,2645,restaurant,drag,right first driver,rest-01,1.000000
+200,2026,2645,restaurant,excess,rank,rest-02,1.000000
+200,2026,2645,restaurant,fit,rank,rest-02,1.000000
+200,2026,2645,restaurant,drag,rank,rest-02,2.000000
+200,2026,2645,restaurant,excess,right first driver,rest-02,1.000000
+200,2026,2645,restaurant,drag,right first driver,rest-02,1.000000
+200,2026,2645,courier,,groups ranked,,60.000000
+200,2026,2645,courier,excess,precision at 3,,1.000000
+200,2026,2645,courier,fit,precision at 3,,1.000000
+200,2026,2645,courier,drag,precision at 3,,0.333333
+200,2026,2645,courier,excess,rank,courier-00,3.000000
+200,2026,2645,courier,fit,rank,courier-00,1.000000
+200,2026,2645,courier,drag,rank,courier-00,3.000000
+200,2026,2645,courier,excess,right first driver,courier-00,1.000000
+200,2026,2645,courier,drag,right first driver,courier-00,0.000000
+200,2026,2645,courier,excess,rank,courier-01,2.000000
+200,2026,2645,courier,fit,rank,courier-01,3.000000
+200,2026,2645,courier,drag,rank,courier-01,13.000000
+200,2026,2645,courier,excess,right first driver,courier-01,1.000000
+200,2026,2645,courier,drag,right first driver,courier-01,0.000000
+200,2026,2645,courier,excess,rank,courier-02,1.000000
+200,2026,2645,courier,fit,rank,courier-02,2.000000
+200,2026,2645,courier,drag,rank,courier-02,5.000000
+200,2026,2645,courier,excess,right first driver,courier-02,1.000000
+200,2026,2645,courier,drag,right first driver,courier-02,1.000000
+200,2027,2620,,,scorings with exact splits,,9066.000000
+200,2027,2620,restaurant,,groups ranked,,40.000000
+200,2027,2620,restaurant,excess,precision at 3,,1.000000
+200,2027,2620,restaurant,fit,precision at 3,,1.000000
+200,2027,2620,restaurant,drag,precision at 3,,1.000000
+200,2027,2620,restaurant,excess,rank,rest-00,3.000000
+200,2027,2620,restaurant,fit,rank,rest-00,3.000000
+200,2027,2620,restaurant,drag,rank,rest-00,3.000000
+200,2027,2620,restaurant,excess,right first driver,rest-00,1.000000
+200,2027,2620,restaurant,drag,right first driver,rest-00,1.000000
+200,2027,2620,restaurant,excess,rank,rest-01,2.000000
+200,2027,2620,restaurant,fit,rank,rest-01,2.000000
+200,2027,2620,restaurant,drag,rank,rest-01,1.000000
+200,2027,2620,restaurant,excess,right first driver,rest-01,1.000000
+200,2027,2620,restaurant,drag,right first driver,rest-01,1.000000
+200,2027,2620,restaurant,excess,rank,rest-02,1.000000
+200,2027,2620,restaurant,fit,rank,rest-02,1.000000
+200,2027,2620,restaurant,drag,rank,rest-02,2.000000
+200,2027,2620,restaurant,excess,right first driver,rest-02,1.000000
+200,2027,2620,restaurant,drag,right first driver,rest-02,1.000000
+200,2027,2620,courier,,groups ranked,,60.000000
+200,2027,2620,courier,excess,precision at 3,,1.000000
+200,2027,2620,courier,fit,precision at 3,,0.666667
+200,2027,2620,courier,drag,precision at 3,,0.000000
+200,2027,2620,courier,excess,rank,courier-00,3.000000
+200,2027,2620,courier,fit,rank,courier-00,2.000000
+200,2027,2620,courier,drag,rank,courier-00,32.000000
+200,2027,2620,courier,excess,right first driver,courier-00,1.000000
+200,2027,2620,courier,drag,right first driver,courier-00,0.000000
+200,2027,2620,courier,excess,rank,courier-01,2.000000
+200,2027,2620,courier,fit,rank,courier-01,6.000000
+200,2027,2620,courier,drag,rank,courier-01,28.000000
+200,2027,2620,courier,excess,right first driver,courier-01,1.000000
+200,2027,2620,courier,drag,right first driver,courier-01,1.000000
+200,2027,2620,courier,excess,rank,courier-02,1.000000
+200,2027,2620,courier,fit,rank,courier-02,1.000000
+200,2027,2620,courier,drag,rank,courier-02,19.000000
+200,2027,2620,courier,excess,right first driver,courier-02,1.000000
+200,2027,2620,courier,drag,right first driver,courier-02,1.000000
+200,2028,2804,,,scorings with exact splits,,9648.000000
+200,2028,2804,restaurant,,groups ranked,,40.000000
+200,2028,2804,restaurant,excess,precision at 3,,1.000000
+200,2028,2804,restaurant,fit,precision at 3,,1.000000
+200,2028,2804,restaurant,drag,precision at 3,,1.000000
+200,2028,2804,restaurant,excess,rank,rest-00,2.000000
+200,2028,2804,restaurant,fit,rank,rest-00,3.000000
+200,2028,2804,restaurant,drag,rank,rest-00,2.000000
+200,2028,2804,restaurant,excess,right first driver,rest-00,1.000000
+200,2028,2804,restaurant,drag,right first driver,rest-00,1.000000
+200,2028,2804,restaurant,excess,rank,rest-01,3.000000
+200,2028,2804,restaurant,fit,rank,rest-01,2.000000
+200,2028,2804,restaurant,drag,rank,rest-01,3.000000
+200,2028,2804,restaurant,excess,right first driver,rest-01,1.000000
+200,2028,2804,restaurant,drag,right first driver,rest-01,1.000000
+200,2028,2804,restaurant,excess,rank,rest-02,1.000000
+200,2028,2804,restaurant,fit,rank,rest-02,1.000000
+200,2028,2804,restaurant,drag,rank,rest-02,1.000000
+200,2028,2804,restaurant,excess,right first driver,rest-02,1.000000
+200,2028,2804,restaurant,drag,right first driver,rest-02,1.000000
+200,2028,2804,courier,,groups ranked,,60.000000
+200,2028,2804,courier,excess,precision at 3,,1.000000
+200,2028,2804,courier,fit,precision at 3,,1.000000
+200,2028,2804,courier,drag,precision at 3,,0.000000
+200,2028,2804,courier,excess,rank,courier-00,3.000000
+200,2028,2804,courier,fit,rank,courier-00,3.000000
+200,2028,2804,courier,drag,rank,courier-00,24.000000
+200,2028,2804,courier,excess,right first driver,courier-00,1.000000
+200,2028,2804,courier,drag,right first driver,courier-00,1.000000
+200,2028,2804,courier,excess,rank,courier-01,2.000000
+200,2028,2804,courier,fit,rank,courier-01,2.000000
+200,2028,2804,courier,drag,rank,courier-01,19.000000
+200,2028,2804,courier,excess,right first driver,courier-01,1.000000
+200,2028,2804,courier,drag,right first driver,courier-01,0.000000
+200,2028,2804,courier,excess,rank,courier-02,1.000000
+200,2028,2804,courier,fit,rank,courier-02,1.000000
+200,2028,2804,courier,drag,rank,courier-02,8.000000
+200,2028,2804,courier,excess,right first driver,courier-02,1.000000
+200,2028,2804,courier,drag,right first driver,courier-02,0.000000
+200,2029,2479,,,scorings with exact splits,,8603.000000
+200,2029,2479,restaurant,,groups ranked,,40.000000
+200,2029,2479,restaurant,excess,precision at 3,,1.000000
+200,2029,2479,restaurant,fit,precision at 3,,1.000000
+200,2029,2479,restaurant,drag,precision at 3,,1.000000
+200,2029,2479,restaurant,excess,rank,rest-00,2.000000
+200,2029,2479,restaurant,fit,rank,rest-00,2.000000
+200,2029,2479,restaurant,drag,rank,rest-00,2.000000
+200,2029,2479,restaurant,excess,right first driver,rest-00,1.000000
+200,2029,2479,restaurant,drag,right first driver,rest-00,1.000000
+200,2029,2479,restaurant,excess,rank,rest-01,3.000000
+200,2029,2479,restaurant,fit,rank,rest-01,3.000000
+200,2029,2479,restaurant,drag,rank,rest-01,3.000000
+200,2029,2479,restaurant,excess,right first driver,rest-01,1.000000
+200,2029,2479,restaurant,drag,right first driver,rest-01,1.000000
+200,2029,2479,restaurant,excess,rank,rest-02,1.000000
+200,2029,2479,restaurant,fit,rank,rest-02,1.000000
+200,2029,2479,restaurant,drag,rank,rest-02,1.000000
+200,2029,2479,restaurant,excess,right first driver,rest-02,1.000000
+200,2029,2479,restaurant,drag,right first driver,rest-02,1.000000
+200,2029,2479,courier,,groups ranked,,60.000000
+200,2029,2479,courier,excess,precision at 3,,0.666667
+200,2029,2479,courier,fit,precision at 3,,0.333333
+200,2029,2479,courier,drag,precision at 3,,0.000000
+200,2029,2479,courier,excess,rank,courier-00,1.000000
+200,2029,2479,courier,fit,rank,courier-00,9.000000
+200,2029,2479,courier,drag,rank,courier-00,21.000000
+200,2029,2479,courier,excess,right first driver,courier-00,1.000000
+200,2029,2479,courier,drag,right first driver,courier-00,1.000000
+200,2029,2479,courier,excess,rank,courier-01,3.000000
+200,2029,2479,courier,fit,rank,courier-01,2.000000
+200,2029,2479,courier,drag,rank,courier-01,5.000000
+200,2029,2479,courier,excess,right first driver,courier-01,1.000000
+200,2029,2479,courier,drag,right first driver,courier-01,0.000000
+200,2029,2479,courier,excess,rank,courier-02,4.000000
+200,2029,2479,courier,fit,rank,courier-02,5.000000
+200,2029,2479,courier,drag,rank,courier-02,24.000000
+200,2029,2479,courier,excess,right first driver,courier-02,1.000000
+200,2029,2479,courier,drag,right first driver,courier-02,1.000000
+200,2030,2351,,,scorings with exact splits,,8229.000000
+200,2030,2351,restaurant,,groups ranked,,40.000000
+200,2030,2351,restaurant,excess,precision at 3,,1.000000
+200,2030,2351,restaurant,fit,precision at 3,,1.000000
+200,2030,2351,restaurant,drag,precision at 3,,1.000000
+200,2030,2351,restaurant,excess,rank,rest-00,2.000000
+200,2030,2351,restaurant,fit,rank,rest-00,3.000000
+200,2030,2351,restaurant,drag,rank,rest-00,2.000000
+200,2030,2351,restaurant,excess,right first driver,rest-00,1.000000
+200,2030,2351,restaurant,drag,right first driver,rest-00,1.000000
+200,2030,2351,restaurant,excess,rank,rest-01,3.000000
+200,2030,2351,restaurant,fit,rank,rest-01,2.000000
+200,2030,2351,restaurant,drag,rank,rest-01,3.000000
+200,2030,2351,restaurant,excess,right first driver,rest-01,1.000000
+200,2030,2351,restaurant,drag,right first driver,rest-01,1.000000
+200,2030,2351,restaurant,excess,rank,rest-02,1.000000
+200,2030,2351,restaurant,fit,rank,rest-02,1.000000
+200,2030,2351,restaurant,drag,rank,rest-02,1.000000
+200,2030,2351,restaurant,excess,right first driver,rest-02,1.000000
+200,2030,2351,restaurant,drag,right first driver,rest-02,1.000000
+200,2030,2351,courier,,groups ranked,,60.000000
+200,2030,2351,courier,excess,precision at 3,,1.000000
+200,2030,2351,courier,fit,precision at 3,,1.000000
+200,2030,2351,courier,drag,precision at 3,,0.333333
+200,2030,2351,courier,excess,rank,courier-00,2.000000
+200,2030,2351,courier,fit,rank,courier-00,1.000000
+200,2030,2351,courier,drag,rank,courier-00,12.000000
+200,2030,2351,courier,excess,right first driver,courier-00,1.000000
+200,2030,2351,courier,drag,right first driver,courier-00,0.000000
+200,2030,2351,courier,excess,rank,courier-01,3.000000
+200,2030,2351,courier,fit,rank,courier-01,3.000000
+200,2030,2351,courier,drag,rank,courier-01,8.000000
+200,2030,2351,courier,excess,right first driver,courier-01,1.000000
+200,2030,2351,courier,drag,right first driver,courier-01,0.000000
+200,2030,2351,courier,excess,rank,courier-02,1.000000
+200,2030,2351,courier,fit,rank,courier-02,2.000000
+200,2030,2351,courier,drag,rank,courier-02,1.000000
+200,2030,2351,courier,excess,right first driver,courier-02,1.000000
+200,2030,2351,courier,drag,right first driver,courier-02,1.000000
+200,2031,2501,,,scorings with exact splits,,8597.000000
+200,2031,2501,restaurant,,groups ranked,,40.000000
+200,2031,2501,restaurant,excess,precision at 3,,1.000000
+200,2031,2501,restaurant,fit,precision at 3,,1.000000
+200,2031,2501,restaurant,drag,precision at 3,,1.000000
+200,2031,2501,restaurant,excess,rank,rest-00,3.000000
+200,2031,2501,restaurant,fit,rank,rest-00,3.000000
+200,2031,2501,restaurant,drag,rank,rest-00,3.000000
+200,2031,2501,restaurant,excess,right first driver,rest-00,1.000000
+200,2031,2501,restaurant,drag,right first driver,rest-00,1.000000
+200,2031,2501,restaurant,excess,rank,rest-01,2.000000
+200,2031,2501,restaurant,fit,rank,rest-01,2.000000
+200,2031,2501,restaurant,drag,rank,rest-01,2.000000
+200,2031,2501,restaurant,excess,right first driver,rest-01,1.000000
+200,2031,2501,restaurant,drag,right first driver,rest-01,1.000000
+200,2031,2501,restaurant,excess,rank,rest-02,1.000000
+200,2031,2501,restaurant,fit,rank,rest-02,1.000000
+200,2031,2501,restaurant,drag,rank,rest-02,1.000000
+200,2031,2501,restaurant,excess,right first driver,rest-02,1.000000
+200,2031,2501,restaurant,drag,right first driver,rest-02,1.000000
+200,2031,2501,courier,,groups ranked,,60.000000
+200,2031,2501,courier,excess,precision at 3,,0.666667
+200,2031,2501,courier,fit,precision at 3,,1.000000
+200,2031,2501,courier,drag,precision at 3,,0.000000
+200,2031,2501,courier,excess,rank,courier-00,3.000000
+200,2031,2501,courier,fit,rank,courier-00,2.000000
+200,2031,2501,courier,drag,rank,courier-00,23.000000
+200,2031,2501,courier,excess,right first driver,courier-00,1.000000
+200,2031,2501,courier,drag,right first driver,courier-00,0.000000
+200,2031,2501,courier,excess,rank,courier-01,4.000000
+200,2031,2501,courier,fit,rank,courier-01,3.000000
+200,2031,2501,courier,drag,rank,courier-01,7.000000
+200,2031,2501,courier,excess,right first driver,courier-01,1.000000
+200,2031,2501,courier,drag,right first driver,courier-01,0.000000
+200,2031,2501,courier,excess,rank,courier-02,1.000000
+200,2031,2501,courier,fit,rank,courier-02,1.000000
+200,2031,2501,courier,drag,rank,courier-02,4.000000
+200,2031,2501,courier,excess,right first driver,courier-02,1.000000
+200,2031,2501,courier,drag,right first driver,courier-02,1.000000
+200,2032,2885,,,scorings with exact splits,,10016.000000
+200,2032,2885,restaurant,,groups ranked,,40.000000
+200,2032,2885,restaurant,excess,precision at 3,,1.000000
+200,2032,2885,restaurant,fit,precision at 3,,1.000000
+200,2032,2885,restaurant,drag,precision at 3,,1.000000
+200,2032,2885,restaurant,excess,rank,rest-00,2.000000
+200,2032,2885,restaurant,fit,rank,rest-00,3.000000
+200,2032,2885,restaurant,drag,rank,rest-00,2.000000
+200,2032,2885,restaurant,excess,right first driver,rest-00,1.000000
+200,2032,2885,restaurant,drag,right first driver,rest-00,1.000000
+200,2032,2885,restaurant,excess,rank,rest-01,3.000000
+200,2032,2885,restaurant,fit,rank,rest-01,2.000000
+200,2032,2885,restaurant,drag,rank,rest-01,3.000000
+200,2032,2885,restaurant,excess,right first driver,rest-01,1.000000
+200,2032,2885,restaurant,drag,right first driver,rest-01,1.000000
+200,2032,2885,restaurant,excess,rank,rest-02,1.000000
+200,2032,2885,restaurant,fit,rank,rest-02,1.000000
+200,2032,2885,restaurant,drag,rank,rest-02,1.000000
+200,2032,2885,restaurant,excess,right first driver,rest-02,1.000000
+200,2032,2885,restaurant,drag,right first driver,rest-02,1.000000
+200,2032,2885,courier,,groups ranked,,60.000000
+200,2032,2885,courier,excess,precision at 3,,1.000000
+200,2032,2885,courier,fit,precision at 3,,0.666667
+200,2032,2885,courier,drag,precision at 3,,0.333333
+200,2032,2885,courier,excess,rank,courier-00,3.000000
+200,2032,2885,courier,fit,rank,courier-00,2.000000
+200,2032,2885,courier,drag,rank,courier-00,30.000000
+200,2032,2885,courier,excess,right first driver,courier-00,1.000000
+200,2032,2885,courier,drag,right first driver,courier-00,1.000000
+200,2032,2885,courier,excess,rank,courier-01,1.000000
+200,2032,2885,courier,fit,rank,courier-01,1.000000
+200,2032,2885,courier,drag,rank,courier-01,1.000000
+200,2032,2885,courier,excess,right first driver,courier-01,1.000000
+200,2032,2885,courier,drag,right first driver,courier-01,1.000000
+200,2032,2885,courier,excess,rank,courier-02,2.000000
+200,2032,2885,courier,fit,rank,courier-02,5.000000
+200,2032,2885,courier,drag,rank,courier-02,18.000000
+200,2032,2885,courier,excess,right first driver,courier-02,1.000000
+200,2032,2885,courier,drag,right first driver,courier-02,1.000000
+200,2033,2723,,,scorings with exact splits,,9407.000000
+200,2033,2723,restaurant,,groups ranked,,40.000000
+200,2033,2723,restaurant,excess,precision at 3,,1.000000
+200,2033,2723,restaurant,fit,precision at 3,,1.000000
+200,2033,2723,restaurant,drag,precision at 3,,1.000000
+200,2033,2723,restaurant,excess,rank,rest-00,2.000000
+200,2033,2723,restaurant,fit,rank,rest-00,2.000000
+200,2033,2723,restaurant,drag,rank,rest-00,1.000000
+200,2033,2723,restaurant,excess,right first driver,rest-00,1.000000
+200,2033,2723,restaurant,drag,right first driver,rest-00,1.000000
+200,2033,2723,restaurant,excess,rank,rest-01,3.000000
+200,2033,2723,restaurant,fit,rank,rest-01,3.000000
+200,2033,2723,restaurant,drag,rank,rest-01,3.000000
+200,2033,2723,restaurant,excess,right first driver,rest-01,1.000000
+200,2033,2723,restaurant,drag,right first driver,rest-01,1.000000
+200,2033,2723,restaurant,excess,rank,rest-02,1.000000
+200,2033,2723,restaurant,fit,rank,rest-02,1.000000
+200,2033,2723,restaurant,drag,rank,rest-02,2.000000
+200,2033,2723,restaurant,excess,right first driver,rest-02,1.000000
+200,2033,2723,restaurant,drag,right first driver,rest-02,1.000000
+200,2033,2723,courier,,groups ranked,,60.000000
+200,2033,2723,courier,excess,precision at 3,,1.000000
+200,2033,2723,courier,fit,precision at 3,,0.666667
+200,2033,2723,courier,drag,precision at 3,,0.000000
+200,2033,2723,courier,excess,rank,courier-00,2.000000
+200,2033,2723,courier,fit,rank,courier-00,2.000000
+200,2033,2723,courier,drag,rank,courier-00,26.000000
+200,2033,2723,courier,excess,right first driver,courier-00,1.000000
+200,2033,2723,courier,drag,right first driver,courier-00,0.000000
+200,2033,2723,courier,excess,rank,courier-01,3.000000
+200,2033,2723,courier,fit,rank,courier-01,5.000000
+200,2033,2723,courier,drag,rank,courier-01,40.000000
+200,2033,2723,courier,excess,right first driver,courier-01,1.000000
+200,2033,2723,courier,drag,right first driver,courier-01,0.000000
+200,2033,2723,courier,excess,rank,courier-02,1.000000
+200,2033,2723,courier,fit,rank,courier-02,1.000000
+200,2033,2723,courier,drag,rank,courier-02,29.000000
+200,2033,2723,courier,excess,right first driver,courier-02,1.000000
+200,2033,2723,courier,drag,right first driver,courier-02,1.000000
+200,2034,2583,,,scorings with exact splits,,8869.000000
+200,2034,2583,restaurant,,groups ranked,,40.000000
+200,2034,2583,restaurant,excess,precision at 3,,1.000000
+200,2034,2583,restaurant,fit,precision at 3,,1.000000
+200,2034,2583,restaurant,drag,precision at 3,,1.000000
+200,2034,2583,restaurant,excess,rank,rest-00,3.000000
+200,2034,2583,restaurant,fit,rank,rest-00,3.000000
+200,2034,2583,restaurant,drag,rank,rest-00,3.000000
+200,2034,2583,restaurant,excess,right first driver,rest-00,1.000000
+200,2034,2583,restaurant,drag,right first driver,rest-00,1.000000
+200,2034,2583,restaurant,excess,rank,rest-01,2.000000
+200,2034,2583,restaurant,fit,rank,rest-01,2.000000
+200,2034,2583,restaurant,drag,rank,rest-01,2.000000
+200,2034,2583,restaurant,excess,right first driver,rest-01,1.000000
+200,2034,2583,restaurant,drag,right first driver,rest-01,1.000000
+200,2034,2583,restaurant,excess,rank,rest-02,1.000000
+200,2034,2583,restaurant,fit,rank,rest-02,1.000000
+200,2034,2583,restaurant,drag,rank,rest-02,1.000000
+200,2034,2583,restaurant,excess,right first driver,rest-02,1.000000
+200,2034,2583,restaurant,drag,right first driver,rest-02,1.000000
+200,2034,2583,courier,,groups ranked,,60.000000
+200,2034,2583,courier,excess,precision at 3,,0.333333
+200,2034,2583,courier,fit,precision at 3,,0.333333
+200,2034,2583,courier,drag,precision at 3,,0.000000
+200,2034,2583,courier,excess,rank,courier-00,4.000000
+200,2034,2583,courier,fit,rank,courier-00,2.000000
+200,2034,2583,courier,drag,rank,courier-00,31.000000
+200,2034,2583,courier,excess,right first driver,courier-00,1.000000
+200,2034,2583,courier,drag,right first driver,courier-00,0.000000
+200,2034,2583,courier,excess,rank,courier-01,6.000000
+200,2034,2583,courier,fit,rank,courier-01,23.000000
+200,2034,2583,courier,drag,rank,courier-01,49.000000
+200,2034,2583,courier,excess,right first driver,courier-01,1.000000
+200,2034,2583,courier,drag,right first driver,courier-01,1.000000
+200,2034,2583,courier,excess,rank,courier-02,2.000000
+200,2034,2583,courier,fit,rank,courier-02,5.000000
+200,2034,2583,courier,drag,rank,courier-02,14.000000
+200,2034,2583,courier,excess,right first driver,courier-02,1.000000
+200,2034,2583,courier,drag,right first driver,courier-02,0.000000
+200,2035,2549,,,scorings with exact splits,,8869.000000
+200,2035,2549,restaurant,,groups ranked,,40.000000
+200,2035,2549,restaurant,excess,precision at 3,,1.000000
+200,2035,2549,restaurant,fit,precision at 3,,1.000000
+200,2035,2549,restaurant,drag,precision at 3,,1.000000
+200,2035,2549,restaurant,excess,rank,rest-00,3.000000
+200,2035,2549,restaurant,fit,rank,rest-00,2.000000
+200,2035,2549,restaurant,drag,rank,rest-00,3.000000
+200,2035,2549,restaurant,excess,right first driver,rest-00,1.000000
+200,2035,2549,restaurant,drag,right first driver,rest-00,1.000000
+200,2035,2549,restaurant,excess,rank,rest-01,2.000000
+200,2035,2549,restaurant,fit,rank,rest-01,3.000000
+200,2035,2549,restaurant,drag,rank,rest-01,2.000000
+200,2035,2549,restaurant,excess,right first driver,rest-01,1.000000
+200,2035,2549,restaurant,drag,right first driver,rest-01,1.000000
+200,2035,2549,restaurant,excess,rank,rest-02,1.000000
+200,2035,2549,restaurant,fit,rank,rest-02,1.000000
+200,2035,2549,restaurant,drag,rank,rest-02,1.000000
+200,2035,2549,restaurant,excess,right first driver,rest-02,1.000000
+200,2035,2549,restaurant,drag,right first driver,rest-02,1.000000
+200,2035,2549,courier,,groups ranked,,60.000000
+200,2035,2549,courier,excess,precision at 3,,1.000000
+200,2035,2549,courier,fit,precision at 3,,0.666667
+200,2035,2549,courier,drag,precision at 3,,0.333333
+200,2035,2549,courier,excess,rank,courier-00,3.000000
+200,2035,2549,courier,fit,rank,courier-00,3.000000
+200,2035,2549,courier,drag,rank,courier-00,3.000000
+200,2035,2549,courier,excess,right first driver,courier-00,1.000000
+200,2035,2549,courier,drag,right first driver,courier-00,0.000000
+200,2035,2549,courier,excess,rank,courier-01,1.000000
+200,2035,2549,courier,fit,rank,courier-01,2.000000
+200,2035,2549,courier,drag,rank,courier-01,5.000000
+200,2035,2549,courier,excess,right first driver,courier-01,1.000000
+200,2035,2549,courier,drag,right first driver,courier-01,0.000000
+200,2035,2549,courier,excess,rank,courier-02,2.000000
+200,2035,2549,courier,fit,rank,courier-02,21.000000
+200,2035,2549,courier,drag,rank,courier-02,23.000000
+200,2035,2549,courier,excess,right first driver,courier-02,1.000000
+200,2035,2549,courier,drag,right first driver,courier-02,1.000000
+200,2036,2580,,,scorings with exact splits,,8892.000000
+200,2036,2580,restaurant,,groups ranked,,40.000000
+200,2036,2580,restaurant,excess,precision at 3,,1.000000
+200,2036,2580,restaurant,fit,precision at 3,,1.000000
+200,2036,2580,restaurant,drag,precision at 3,,1.000000
+200,2036,2580,restaurant,excess,rank,rest-00,2.000000
+200,2036,2580,restaurant,fit,rank,rest-00,3.000000
+200,2036,2580,restaurant,drag,rank,rest-00,2.000000
+200,2036,2580,restaurant,excess,right first driver,rest-00,1.000000
+200,2036,2580,restaurant,drag,right first driver,rest-00,1.000000
+200,2036,2580,restaurant,excess,rank,rest-01,3.000000
+200,2036,2580,restaurant,fit,rank,rest-01,2.000000
+200,2036,2580,restaurant,drag,rank,rest-01,3.000000
+200,2036,2580,restaurant,excess,right first driver,rest-01,1.000000
+200,2036,2580,restaurant,drag,right first driver,rest-01,1.000000
+200,2036,2580,restaurant,excess,rank,rest-02,1.000000
+200,2036,2580,restaurant,fit,rank,rest-02,1.000000
+200,2036,2580,restaurant,drag,rank,rest-02,1.000000
+200,2036,2580,restaurant,excess,right first driver,rest-02,1.000000
+200,2036,2580,restaurant,drag,right first driver,rest-02,1.000000
+200,2036,2580,courier,,groups ranked,,60.000000
+200,2036,2580,courier,excess,precision at 3,,0.666667
+200,2036,2580,courier,fit,precision at 3,,0.666667
+200,2036,2580,courier,drag,precision at 3,,0.000000
+200,2036,2580,courier,excess,rank,courier-00,2.000000
+200,2036,2580,courier,fit,rank,courier-00,1.000000
+200,2036,2580,courier,drag,rank,courier-00,11.000000
+200,2036,2580,courier,excess,right first driver,courier-00,1.000000
+200,2036,2580,courier,drag,right first driver,courier-00,0.000000
+200,2036,2580,courier,excess,rank,courier-01,4.000000
+200,2036,2580,courier,fit,rank,courier-01,11.000000
+200,2036,2580,courier,drag,rank,courier-01,50.000000
+200,2036,2580,courier,excess,right first driver,courier-01,1.000000
+200,2036,2580,courier,drag,right first driver,courier-01,0.000000
+200,2036,2580,courier,excess,rank,courier-02,1.000000
+200,2036,2580,courier,fit,rank,courier-02,3.000000
+200,2036,2580,courier,drag,rank,courier-02,4.000000
+200,2036,2580,courier,excess,right first driver,courier-02,1.000000
+200,2036,2580,courier,drag,right first driver,courier-02,1.000000
+200,2037,2575,,,scorings with exact splits,,8924.000000
+200,2037,2575,restaurant,,groups ranked,,40.000000
+200,2037,2575,restaurant,excess,precision at 3,,1.000000
+200,2037,2575,restaurant,fit,precision at 3,,1.000000
+200,2037,2575,restaurant,drag,precision at 3,,1.000000
+200,2037,2575,restaurant,excess,rank,rest-00,2.000000
+200,2037,2575,restaurant,fit,rank,rest-00,2.000000
+200,2037,2575,restaurant,drag,rank,rest-00,2.000000
+200,2037,2575,restaurant,excess,right first driver,rest-00,1.000000
+200,2037,2575,restaurant,drag,right first driver,rest-00,1.000000
+200,2037,2575,restaurant,excess,rank,rest-01,3.000000
+200,2037,2575,restaurant,fit,rank,rest-01,3.000000
+200,2037,2575,restaurant,drag,rank,rest-01,3.000000
+200,2037,2575,restaurant,excess,right first driver,rest-01,1.000000
+200,2037,2575,restaurant,drag,right first driver,rest-01,1.000000
+200,2037,2575,restaurant,excess,rank,rest-02,1.000000
+200,2037,2575,restaurant,fit,rank,rest-02,1.000000
+200,2037,2575,restaurant,drag,rank,rest-02,1.000000
+200,2037,2575,restaurant,excess,right first driver,rest-02,1.000000
+200,2037,2575,restaurant,drag,right first driver,rest-02,1.000000
+200,2037,2575,courier,,groups ranked,,60.000000
+200,2037,2575,courier,excess,precision at 3,,0.666667
+200,2037,2575,courier,fit,precision at 3,,0.666667
+200,2037,2575,courier,drag,precision at 3,,0.000000
+200,2037,2575,courier,excess,rank,courier-00,11.000000
+200,2037,2575,courier,fit,rank,courier-00,10.000000
+200,2037,2575,courier,drag,rank,courier-00,12.000000
+200,2037,2575,courier,excess,right first driver,courier-00,1.000000
+200,2037,2575,courier,drag,right first driver,courier-00,0.000000
+200,2037,2575,courier,excess,rank,courier-01,2.000000
+200,2037,2575,courier,fit,rank,courier-01,2.000000
+200,2037,2575,courier,drag,rank,courier-01,20.000000
+200,2037,2575,courier,excess,right first driver,courier-01,1.000000
+200,2037,2575,courier,drag,right first driver,courier-01,0.000000
+200,2037,2575,courier,excess,rank,courier-02,1.000000
+200,2037,2575,courier,fit,rank,courier-02,1.000000
+200,2037,2575,courier,drag,rank,courier-02,8.000000
+200,2037,2575,courier,excess,right first driver,courier-02,1.000000
+200,2037,2575,courier,drag,right first driver,courier-02,1.000000
+200,2038,2647,,,scorings with exact splits,,9201.000000
+200,2038,2647,restaurant,,groups ranked,,40.000000
+200,2038,2647,restaurant,excess,precision at 3,,1.000000
+200,2038,2647,restaurant,fit,precision at 3,,1.000000
+200,2038,2647,restaurant,drag,precision at 3,,1.000000
+200,2038,2647,restaurant,excess,rank,rest-00,2.000000
+200,2038,2647,restaurant,fit,rank,rest-00,2.000000
+200,2038,2647,restaurant,drag,rank,rest-00,2.000000
+200,2038,2647,restaurant,excess,right first driver,rest-00,1.000000
+200,2038,2647,restaurant,drag,right first driver,rest-00,1.000000
+200,2038,2647,restaurant,excess,rank,rest-01,3.000000
+200,2038,2647,restaurant,fit,rank,rest-01,3.000000
+200,2038,2647,restaurant,drag,rank,rest-01,3.000000
+200,2038,2647,restaurant,excess,right first driver,rest-01,1.000000
+200,2038,2647,restaurant,drag,right first driver,rest-01,1.000000
+200,2038,2647,restaurant,excess,rank,rest-02,1.000000
+200,2038,2647,restaurant,fit,rank,rest-02,1.000000
+200,2038,2647,restaurant,drag,rank,rest-02,1.000000
+200,2038,2647,restaurant,excess,right first driver,rest-02,1.000000
+200,2038,2647,restaurant,drag,right first driver,rest-02,1.000000
+200,2038,2647,courier,,groups ranked,,60.000000
+200,2038,2647,courier,excess,precision at 3,,0.666667
+200,2038,2647,courier,fit,precision at 3,,0.666667
+200,2038,2647,courier,drag,precision at 3,,0.000000
+200,2038,2647,courier,excess,rank,courier-00,1.000000
+200,2038,2647,courier,fit,rank,courier-00,2.000000
+200,2038,2647,courier,drag,rank,courier-00,19.000000
+200,2038,2647,courier,excess,right first driver,courier-00,1.000000
+200,2038,2647,courier,drag,right first driver,courier-00,1.000000
+200,2038,2647,courier,excess,rank,courier-01,3.000000
+200,2038,2647,courier,fit,rank,courier-01,1.000000
+200,2038,2647,courier,drag,rank,courier-01,20.000000
+200,2038,2647,courier,excess,right first driver,courier-01,1.000000
+200,2038,2647,courier,drag,right first driver,courier-01,0.000000
+200,2038,2647,courier,excess,rank,courier-02,21.000000
+200,2038,2647,courier,fit,rank,courier-02,26.000000
+200,2038,2647,courier,drag,rank,courier-02,28.000000
+200,2038,2647,courier,excess,right first driver,courier-02,1.000000
+200,2038,2647,courier,drag,right first driver,courier-02,0.000000
+200,2039,2389,,,scorings with exact splits,,8255.000000
+200,2039,2389,restaurant,,groups ranked,,40.000000
+200,2039,2389,restaurant,excess,precision at 3,,1.000000
+200,2039,2389,restaurant,fit,precision at 3,,1.000000
+200,2039,2389,restaurant,drag,precision at 3,,1.000000
+200,2039,2389,restaurant,excess,rank,rest-00,2.000000
+200,2039,2389,restaurant,fit,rank,rest-00,1.000000
+200,2039,2389,restaurant,drag,rank,rest-00,1.000000
+200,2039,2389,restaurant,excess,right first driver,rest-00,1.000000
+200,2039,2389,restaurant,drag,right first driver,rest-00,1.000000
+200,2039,2389,restaurant,excess,rank,rest-01,3.000000
+200,2039,2389,restaurant,fit,rank,rest-01,3.000000
+200,2039,2389,restaurant,drag,rank,rest-01,3.000000
+200,2039,2389,restaurant,excess,right first driver,rest-01,1.000000
+200,2039,2389,restaurant,drag,right first driver,rest-01,1.000000
+200,2039,2389,restaurant,excess,rank,rest-02,1.000000
+200,2039,2389,restaurant,fit,rank,rest-02,2.000000
+200,2039,2389,restaurant,drag,rank,rest-02,2.000000
+200,2039,2389,restaurant,excess,right first driver,rest-02,1.000000
+200,2039,2389,restaurant,drag,right first driver,rest-02,1.000000
+200,2039,2389,courier,,groups ranked,,60.000000
+200,2039,2389,courier,excess,precision at 3,,1.000000
+200,2039,2389,courier,fit,precision at 3,,0.666667
+200,2039,2389,courier,drag,precision at 3,,0.000000
+200,2039,2389,courier,excess,rank,courier-00,2.000000
+200,2039,2389,courier,fit,rank,courier-00,7.000000
+200,2039,2389,courier,drag,rank,courier-00,25.000000
+200,2039,2389,courier,excess,right first driver,courier-00,1.000000
+200,2039,2389,courier,drag,right first driver,courier-00,1.000000
+200,2039,2389,courier,excess,rank,courier-01,1.000000
+200,2039,2389,courier,fit,rank,courier-01,2.000000
+200,2039,2389,courier,drag,rank,courier-01,19.000000
+200,2039,2389,courier,excess,right first driver,courier-01,1.000000
+200,2039,2389,courier,drag,right first driver,courier-01,1.000000
+200,2039,2389,courier,excess,rank,courier-02,3.000000
+200,2039,2389,courier,fit,rank,courier-02,1.000000
+200,2039,2389,courier,drag,rank,courier-02,7.000000
+200,2039,2389,courier,excess,right first driver,courier-02,1.000000
+200,2039,2389,courier,drag,right first driver,courier-02,0.000000
+200,2040,2632,,,scorings with exact splits,,9103.000000
+200,2040,2632,restaurant,,groups ranked,,40.000000
+200,2040,2632,restaurant,excess,precision at 3,,1.000000
+200,2040,2632,restaurant,fit,precision at 3,,1.000000
+200,2040,2632,restaurant,drag,precision at 3,,1.000000
+200,2040,2632,restaurant,excess,rank,rest-00,3.000000
+200,2040,2632,restaurant,fit,rank,rest-00,3.000000
+200,2040,2632,restaurant,drag,rank,rest-00,3.000000
+200,2040,2632,restaurant,excess,right first driver,rest-00,1.000000
+200,2040,2632,restaurant,drag,right first driver,rest-00,1.000000
+200,2040,2632,restaurant,excess,rank,rest-01,2.000000
+200,2040,2632,restaurant,fit,rank,rest-01,2.000000
+200,2040,2632,restaurant,drag,rank,rest-01,1.000000
+200,2040,2632,restaurant,excess,right first driver,rest-01,1.000000
+200,2040,2632,restaurant,drag,right first driver,rest-01,1.000000
+200,2040,2632,restaurant,excess,rank,rest-02,1.000000
+200,2040,2632,restaurant,fit,rank,rest-02,1.000000
+200,2040,2632,restaurant,drag,rank,rest-02,2.000000
+200,2040,2632,restaurant,excess,right first driver,rest-02,1.000000
+200,2040,2632,restaurant,drag,right first driver,rest-02,1.000000
+200,2040,2632,courier,,groups ranked,,60.000000
+200,2040,2632,courier,excess,precision at 3,,1.000000
+200,2040,2632,courier,fit,precision at 3,,0.666667
+200,2040,2632,courier,drag,precision at 3,,0.333333
+200,2040,2632,courier,excess,rank,courier-00,1.000000
+200,2040,2632,courier,fit,rank,courier-00,1.000000
+200,2040,2632,courier,drag,rank,courier-00,2.000000
+200,2040,2632,courier,excess,right first driver,courier-00,1.000000
+200,2040,2632,courier,drag,right first driver,courier-00,1.000000
+200,2040,2632,courier,excess,rank,courier-01,3.000000
+200,2040,2632,courier,fit,rank,courier-01,2.000000
+200,2040,2632,courier,drag,rank,courier-01,16.000000
+200,2040,2632,courier,excess,right first driver,courier-01,1.000000
+200,2040,2632,courier,drag,right first driver,courier-01,1.000000
+200,2040,2632,courier,excess,rank,courier-02,2.000000
+200,2040,2632,courier,fit,rank,courier-02,4.000000
+200,2040,2632,courier,drag,rank,courier-02,9.000000
+200,2040,2632,courier,excess,right first driver,courier-02,1.000000
+200,2040,2632,courier,drag,right first driver,courier-02,1.000000
+200,2041,2620,,,scorings with exact splits,,9038.000000
+200,2041,2620,restaurant,,groups ranked,,40.000000
+200,2041,2620,restaurant,excess,precision at 3,,1.000000
+200,2041,2620,restaurant,fit,precision at 3,,1.000000
+200,2041,2620,restaurant,drag,precision at 3,,1.000000
+200,2041,2620,restaurant,excess,rank,rest-00,2.000000
+200,2041,2620,restaurant,fit,rank,rest-00,3.000000
+200,2041,2620,restaurant,drag,rank,rest-00,2.000000
+200,2041,2620,restaurant,excess,right first driver,rest-00,1.000000
+200,2041,2620,restaurant,drag,right first driver,rest-00,1.000000
+200,2041,2620,restaurant,excess,rank,rest-01,3.000000
+200,2041,2620,restaurant,fit,rank,rest-01,2.000000
+200,2041,2620,restaurant,drag,rank,rest-01,3.000000
+200,2041,2620,restaurant,excess,right first driver,rest-01,1.000000
+200,2041,2620,restaurant,drag,right first driver,rest-01,1.000000
+200,2041,2620,restaurant,excess,rank,rest-02,1.000000
+200,2041,2620,restaurant,fit,rank,rest-02,1.000000
+200,2041,2620,restaurant,drag,rank,rest-02,1.000000
+200,2041,2620,restaurant,excess,right first driver,rest-02,1.000000
+200,2041,2620,restaurant,drag,right first driver,rest-02,1.000000
+200,2041,2620,courier,,groups ranked,,60.000000
+200,2041,2620,courier,excess,precision at 3,,1.000000
+200,2041,2620,courier,fit,precision at 3,,0.666667
+200,2041,2620,courier,drag,precision at 3,,0.333333
+200,2041,2620,courier,excess,rank,courier-00,2.000000
+200,2041,2620,courier,fit,rank,courier-00,10.000000
+200,2041,2620,courier,drag,rank,courier-00,44.000000
+200,2041,2620,courier,excess,right first driver,courier-00,1.000000
+200,2041,2620,courier,drag,right first driver,courier-00,1.000000
+200,2041,2620,courier,excess,rank,courier-01,3.000000
+200,2041,2620,courier,fit,rank,courier-01,2.000000
+200,2041,2620,courier,drag,rank,courier-01,2.000000
+200,2041,2620,courier,excess,right first driver,courier-01,1.000000
+200,2041,2620,courier,drag,right first driver,courier-01,0.000000
+200,2041,2620,courier,excess,rank,courier-02,1.000000
+200,2041,2620,courier,fit,rank,courier-02,1.000000
+200,2041,2620,courier,drag,rank,courier-02,5.000000
+200,2041,2620,courier,excess,right first driver,courier-02,1.000000
+200,2041,2620,courier,drag,right first driver,courier-02,1.000000
+200,2042,2752,,,scorings with exact splits,,9530.000000
+200,2042,2752,restaurant,,groups ranked,,40.000000
+200,2042,2752,restaurant,excess,precision at 3,,1.000000
+200,2042,2752,restaurant,fit,precision at 3,,1.000000
+200,2042,2752,restaurant,drag,precision at 3,,1.000000
+200,2042,2752,restaurant,excess,rank,rest-00,2.000000
+200,2042,2752,restaurant,fit,rank,rest-00,2.000000
+200,2042,2752,restaurant,drag,rank,rest-00,2.000000
+200,2042,2752,restaurant,excess,right first driver,rest-00,1.000000
+200,2042,2752,restaurant,drag,right first driver,rest-00,1.000000
+200,2042,2752,restaurant,excess,rank,rest-01,3.000000
+200,2042,2752,restaurant,fit,rank,rest-01,3.000000
+200,2042,2752,restaurant,drag,rank,rest-01,3.000000
+200,2042,2752,restaurant,excess,right first driver,rest-01,1.000000
+200,2042,2752,restaurant,drag,right first driver,rest-01,1.000000
+200,2042,2752,restaurant,excess,rank,rest-02,1.000000
+200,2042,2752,restaurant,fit,rank,rest-02,1.000000
+200,2042,2752,restaurant,drag,rank,rest-02,1.000000
+200,2042,2752,restaurant,excess,right first driver,rest-02,1.000000
+200,2042,2752,restaurant,drag,right first driver,rest-02,1.000000
+200,2042,2752,courier,,groups ranked,,60.000000
+200,2042,2752,courier,excess,precision at 3,,1.000000
+200,2042,2752,courier,fit,precision at 3,,0.666667
+200,2042,2752,courier,drag,precision at 3,,0.333333
+200,2042,2752,courier,excess,rank,courier-00,3.000000
+200,2042,2752,courier,fit,rank,courier-00,2.000000
+200,2042,2752,courier,drag,rank,courier-00,10.000000
+200,2042,2752,courier,excess,right first driver,courier-00,1.000000
+200,2042,2752,courier,drag,right first driver,courier-00,0.000000
+200,2042,2752,courier,excess,rank,courier-01,2.000000
+200,2042,2752,courier,fit,rank,courier-01,7.000000
+200,2042,2752,courier,drag,rank,courier-01,19.000000
+200,2042,2752,courier,excess,right first driver,courier-01,1.000000
+200,2042,2752,courier,drag,right first driver,courier-01,1.000000
+200,2042,2752,courier,excess,rank,courier-02,1.000000
+200,2042,2752,courier,fit,rank,courier-02,1.000000
+200,2042,2752,courier,drag,rank,courier-02,1.000000
+200,2042,2752,courier,excess,right first driver,courier-02,1.000000
+200,2042,2752,courier,drag,right first driver,courier-02,1.000000
+200,2043,2419,,,scorings with exact splits,,8312.000000
+200,2043,2419,restaurant,,groups ranked,,40.000000
+200,2043,2419,restaurant,excess,precision at 3,,1.000000
+200,2043,2419,restaurant,fit,precision at 3,,1.000000
+200,2043,2419,restaurant,drag,precision at 3,,1.000000
+200,2043,2419,restaurant,excess,rank,rest-00,2.000000
+200,2043,2419,restaurant,fit,rank,rest-00,2.000000
+200,2043,2419,restaurant,drag,rank,rest-00,2.000000
+200,2043,2419,restaurant,excess,right first driver,rest-00,1.000000
+200,2043,2419,restaurant,drag,right first driver,rest-00,1.000000
+200,2043,2419,restaurant,excess,rank,rest-01,3.000000
+200,2043,2419,restaurant,fit,rank,rest-01,3.000000
+200,2043,2419,restaurant,drag,rank,rest-01,3.000000
+200,2043,2419,restaurant,excess,right first driver,rest-01,1.000000
+200,2043,2419,restaurant,drag,right first driver,rest-01,1.000000
+200,2043,2419,restaurant,excess,rank,rest-02,1.000000
+200,2043,2419,restaurant,fit,rank,rest-02,1.000000
+200,2043,2419,restaurant,drag,rank,rest-02,1.000000
+200,2043,2419,restaurant,excess,right first driver,rest-02,1.000000
+200,2043,2419,restaurant,drag,right first driver,rest-02,1.000000
+200,2043,2419,courier,,groups ranked,,60.000000
+200,2043,2419,courier,excess,precision at 3,,0.333333
+200,2043,2419,courier,fit,precision at 3,,0.333333
+200,2043,2419,courier,drag,precision at 3,,0.000000
+200,2043,2419,courier,excess,rank,courier-00,6.000000
+200,2043,2419,courier,fit,rank,courier-00,11.000000
+200,2043,2419,courier,drag,rank,courier-00,27.000000
+200,2043,2419,courier,excess,right first driver,courier-00,1.000000
+200,2043,2419,courier,drag,right first driver,courier-00,0.000000
+200,2043,2419,courier,excess,rank,courier-01,4.000000
+200,2043,2419,courier,fit,rank,courier-01,2.000000
+200,2043,2419,courier,drag,rank,courier-01,17.000000
+200,2043,2419,courier,excess,right first driver,courier-01,1.000000
+200,2043,2419,courier,drag,right first driver,courier-01,0.000000
+200,2043,2419,courier,excess,rank,courier-02,2.000000
+200,2043,2419,courier,fit,rank,courier-02,4.000000
+200,2043,2419,courier,drag,rank,courier-02,18.000000
+200,2043,2419,courier,excess,right first driver,courier-02,1.000000
+200,2043,2419,courier,drag,right first driver,courier-02,0.000000
+200,2044,2444,,,scorings with exact splits,,8496.000000
+200,2044,2444,restaurant,,groups ranked,,40.000000
+200,2044,2444,restaurant,excess,precision at 3,,1.000000
+200,2044,2444,restaurant,fit,precision at 3,,1.000000
+200,2044,2444,restaurant,drag,precision at 3,,1.000000
+200,2044,2444,restaurant,excess,rank,rest-00,3.000000
+200,2044,2444,restaurant,fit,rank,rest-00,3.000000
+200,2044,2444,restaurant,drag,rank,rest-00,3.000000
+200,2044,2444,restaurant,excess,right first driver,rest-00,1.000000
+200,2044,2444,restaurant,drag,right first driver,rest-00,1.000000
+200,2044,2444,restaurant,excess,rank,rest-01,2.000000
+200,2044,2444,restaurant,fit,rank,rest-01,2.000000
+200,2044,2444,restaurant,drag,rank,rest-01,2.000000
+200,2044,2444,restaurant,excess,right first driver,rest-01,1.000000
+200,2044,2444,restaurant,drag,right first driver,rest-01,1.000000
+200,2044,2444,restaurant,excess,rank,rest-02,1.000000
+200,2044,2444,restaurant,fit,rank,rest-02,1.000000
+200,2044,2444,restaurant,drag,rank,rest-02,1.000000
+200,2044,2444,restaurant,excess,right first driver,rest-02,1.000000
+200,2044,2444,restaurant,drag,right first driver,rest-02,1.000000
+200,2044,2444,courier,,groups ranked,,60.000000
+200,2044,2444,courier,excess,precision at 3,,0.666667
+200,2044,2444,courier,fit,precision at 3,,0.333333
+200,2044,2444,courier,drag,precision at 3,,0.000000
+200,2044,2444,courier,excess,rank,courier-00,2.000000
+200,2044,2444,courier,fit,rank,courier-00,17.000000
+200,2044,2444,courier,drag,rank,courier-00,31.000000
+200,2044,2444,courier,excess,right first driver,courier-00,1.000000
+200,2044,2444,courier,drag,right first driver,courier-00,1.000000
+200,2044,2444,courier,excess,rank,courier-01,1.000000
+200,2044,2444,courier,fit,rank,courier-01,1.000000
+200,2044,2444,courier,drag,rank,courier-01,16.000000
+200,2044,2444,courier,excess,right first driver,courier-01,1.000000
+200,2044,2444,courier,drag,right first driver,courier-01,0.000000
+200,2044,2444,courier,excess,rank,courier-02,4.000000
+200,2044,2444,courier,fit,rank,courier-02,11.000000
+200,2044,2444,courier,drag,rank,courier-02,37.000000
+200,2044,2444,courier,excess,right first driver,courier-02,1.000000
+200,2044,2444,courier,drag,right first driver,courier-02,0.000000
+200,2045,2589,,,scorings with exact splits,,8957.000000
+200,2045,2589,restaurant,,groups ranked,,40.000000
+200,2045,2589,restaurant,excess,precision at 3,,1.000000
+200,2045,2589,restaurant,fit,precision at 3,,1.000000
+200,2045,2589,restaurant,drag,precision at 3,,1.000000
+200,2045,2589,restaurant,excess,rank,rest-00,3.000000
+200,2045,2589,restaurant,fit,rank,rest-00,3.000000
+200,2045,2589,restaurant,drag,rank,rest-00,3.000000
+200,2045,2589,restaurant,excess,right first driver,rest-00,1.000000
+200,2045,2589,restaurant,drag,right first driver,rest-00,1.000000
+200,2045,2589,restaurant,excess,rank,rest-01,2.000000
+200,2045,2589,restaurant,fit,rank,rest-01,2.000000
+200,2045,2589,restaurant,drag,rank,rest-01,2.000000
+200,2045,2589,restaurant,excess,right first driver,rest-01,1.000000
+200,2045,2589,restaurant,drag,right first driver,rest-01,1.000000
+200,2045,2589,restaurant,excess,rank,rest-02,1.000000
+200,2045,2589,restaurant,fit,rank,rest-02,1.000000
+200,2045,2589,restaurant,drag,rank,rest-02,1.000000
+200,2045,2589,restaurant,excess,right first driver,rest-02,1.000000
+200,2045,2589,restaurant,drag,right first driver,rest-02,1.000000
+200,2045,2589,courier,,groups ranked,,60.000000
+200,2045,2589,courier,excess,precision at 3,,0.666667
+200,2045,2589,courier,fit,precision at 3,,0.666667
+200,2045,2589,courier,drag,precision at 3,,0.333333
+200,2045,2589,courier,excess,rank,courier-00,1.000000
+200,2045,2589,courier,fit,rank,courier-00,2.000000
+200,2045,2589,courier,drag,rank,courier-00,1.000000
+200,2045,2589,courier,excess,right first driver,courier-00,1.000000
+200,2045,2589,courier,drag,right first driver,courier-00,1.000000
+200,2045,2589,courier,excess,rank,courier-01,4.000000
+200,2045,2589,courier,fit,rank,courier-01,9.000000
+200,2045,2589,courier,drag,rank,courier-01,21.000000
+200,2045,2589,courier,excess,right first driver,courier-01,1.000000
+200,2045,2589,courier,drag,right first driver,courier-01,0.000000
+200,2045,2589,courier,excess,rank,courier-02,2.000000
+200,2045,2589,courier,fit,rank,courier-02,1.000000
+200,2045,2589,courier,drag,rank,courier-02,7.000000
+200,2045,2589,courier,excess,right first driver,courier-02,1.000000
+200,2045,2589,courier,drag,right first driver,courier-02,1.000000
+400,2026,5321,,,scorings with exact splits,,18405.000000
+400,2026,5321,restaurant,,groups ranked,,40.000000
+400,2026,5321,restaurant,excess,precision at 3,,1.000000
+400,2026,5321,restaurant,fit,precision at 3,,1.000000
+400,2026,5321,restaurant,drag,precision at 3,,1.000000
+400,2026,5321,restaurant,excess,rank,rest-00,3.000000
+400,2026,5321,restaurant,fit,rank,rest-00,3.000000
+400,2026,5321,restaurant,drag,rank,rest-00,3.000000
+400,2026,5321,restaurant,excess,right first driver,rest-00,1.000000
+400,2026,5321,restaurant,drag,right first driver,rest-00,1.000000
+400,2026,5321,restaurant,excess,rank,rest-01,2.000000
+400,2026,5321,restaurant,fit,rank,rest-01,2.000000
+400,2026,5321,restaurant,drag,rank,rest-01,2.000000
+400,2026,5321,restaurant,excess,right first driver,rest-01,1.000000
+400,2026,5321,restaurant,drag,right first driver,rest-01,1.000000
+400,2026,5321,restaurant,excess,rank,rest-02,1.000000
+400,2026,5321,restaurant,fit,rank,rest-02,1.000000
+400,2026,5321,restaurant,drag,rank,rest-02,1.000000
+400,2026,5321,restaurant,excess,right first driver,rest-02,1.000000
+400,2026,5321,restaurant,drag,right first driver,rest-02,1.000000
+400,2026,5321,courier,,groups ranked,,60.000000
+400,2026,5321,courier,excess,precision at 3,,1.000000
+400,2026,5321,courier,fit,precision at 3,,1.000000
+400,2026,5321,courier,drag,precision at 3,,0.000000
+400,2026,5321,courier,excess,rank,courier-00,2.000000
+400,2026,5321,courier,fit,rank,courier-00,2.000000
+400,2026,5321,courier,drag,rank,courier-00,17.000000
+400,2026,5321,courier,excess,right first driver,courier-00,1.000000
+400,2026,5321,courier,drag,right first driver,courier-00,0.000000
+400,2026,5321,courier,excess,rank,courier-01,3.000000
+400,2026,5321,courier,fit,rank,courier-01,3.000000
+400,2026,5321,courier,drag,rank,courier-01,25.000000
+400,2026,5321,courier,excess,right first driver,courier-01,1.000000
+400,2026,5321,courier,drag,right first driver,courier-01,0.000000
+400,2026,5321,courier,excess,rank,courier-02,1.000000
+400,2026,5321,courier,fit,rank,courier-02,1.000000
+400,2026,5321,courier,drag,rank,courier-02,9.000000
+400,2026,5321,courier,excess,right first driver,courier-02,1.000000
+400,2026,5321,courier,drag,right first driver,courier-02,1.000000
+400,2027,5126,,,scorings with exact splits,,17738.000000
+400,2027,5126,restaurant,,groups ranked,,40.000000
+400,2027,5126,restaurant,excess,precision at 3,,1.000000
+400,2027,5126,restaurant,fit,precision at 3,,1.000000
+400,2027,5126,restaurant,drag,precision at 3,,1.000000
+400,2027,5126,restaurant,excess,rank,rest-00,3.000000
+400,2027,5126,restaurant,fit,rank,rest-00,3.000000
+400,2027,5126,restaurant,drag,rank,rest-00,3.000000
+400,2027,5126,restaurant,excess,right first driver,rest-00,1.000000
+400,2027,5126,restaurant,drag,right first driver,rest-00,1.000000
+400,2027,5126,restaurant,excess,rank,rest-01,2.000000
+400,2027,5126,restaurant,fit,rank,rest-01,2.000000
+400,2027,5126,restaurant,drag,rank,rest-01,1.000000
+400,2027,5126,restaurant,excess,right first driver,rest-01,1.000000
+400,2027,5126,restaurant,drag,right first driver,rest-01,1.000000
+400,2027,5126,restaurant,excess,rank,rest-02,1.000000
+400,2027,5126,restaurant,fit,rank,rest-02,1.000000
+400,2027,5126,restaurant,drag,rank,rest-02,2.000000
+400,2027,5126,restaurant,excess,right first driver,rest-02,1.000000
+400,2027,5126,restaurant,drag,right first driver,rest-02,1.000000
+400,2027,5126,courier,,groups ranked,,60.000000
+400,2027,5126,courier,excess,precision at 3,,1.000000
+400,2027,5126,courier,fit,precision at 3,,0.666667
+400,2027,5126,courier,drag,precision at 3,,0.000000
+400,2027,5126,courier,excess,rank,courier-00,2.000000
+400,2027,5126,courier,fit,rank,courier-00,2.000000
+400,2027,5126,courier,drag,rank,courier-00,28.000000
+400,2027,5126,courier,excess,right first driver,courier-00,1.000000
+400,2027,5126,courier,drag,right first driver,courier-00,1.000000
+400,2027,5126,courier,excess,rank,courier-01,3.000000
+400,2027,5126,courier,fit,rank,courier-01,4.000000
+400,2027,5126,courier,drag,rank,courier-01,48.000000
+400,2027,5126,courier,excess,right first driver,courier-01,1.000000
+400,2027,5126,courier,drag,right first driver,courier-01,0.000000
+400,2027,5126,courier,excess,rank,courier-02,1.000000
+400,2027,5126,courier,fit,rank,courier-02,1.000000
+400,2027,5126,courier,drag,rank,courier-02,17.000000
+400,2027,5126,courier,excess,right first driver,courier-02,1.000000
+400,2027,5126,courier,drag,right first driver,courier-02,0.000000
+400,2028,5440,,,scorings with exact splits,,18762.000000
+400,2028,5440,restaurant,,groups ranked,,40.000000
+400,2028,5440,restaurant,excess,precision at 3,,1.000000
+400,2028,5440,restaurant,fit,precision at 3,,1.000000
+400,2028,5440,restaurant,drag,precision at 3,,1.000000
+400,2028,5440,restaurant,excess,rank,rest-00,2.000000
+400,2028,5440,restaurant,fit,rank,rest-00,2.000000
+400,2028,5440,restaurant,drag,rank,rest-00,2.000000
+400,2028,5440,restaurant,excess,right first driver,rest-00,1.000000
+400,2028,5440,restaurant,drag,right first driver,rest-00,1.000000
+400,2028,5440,restaurant,excess,rank,rest-01,3.000000
+400,2028,5440,restaurant,fit,rank,rest-01,3.000000
+400,2028,5440,restaurant,drag,rank,rest-01,3.000000
+400,2028,5440,restaurant,excess,right first driver,rest-01,1.000000
+400,2028,5440,restaurant,drag,right first driver,rest-01,1.000000
+400,2028,5440,restaurant,excess,rank,rest-02,1.000000
+400,2028,5440,restaurant,fit,rank,rest-02,1.000000
+400,2028,5440,restaurant,drag,rank,rest-02,1.000000
+400,2028,5440,restaurant,excess,right first driver,rest-02,1.000000
+400,2028,5440,restaurant,drag,right first driver,rest-02,1.000000
+400,2028,5440,courier,,groups ranked,,60.000000
+400,2028,5440,courier,excess,precision at 3,,1.000000
+400,2028,5440,courier,fit,precision at 3,,1.000000
+400,2028,5440,courier,drag,precision at 3,,0.000000
+400,2028,5440,courier,excess,rank,courier-00,3.000000
+400,2028,5440,courier,fit,rank,courier-00,3.000000
+400,2028,5440,courier,drag,rank,courier-00,28.000000
+400,2028,5440,courier,excess,right first driver,courier-00,1.000000
+400,2028,5440,courier,drag,right first driver,courier-00,0.000000
+400,2028,5440,courier,excess,rank,courier-01,1.000000
+400,2028,5440,courier,fit,rank,courier-01,2.000000
+400,2028,5440,courier,drag,rank,courier-01,13.000000
+400,2028,5440,courier,excess,right first driver,courier-01,1.000000
+400,2028,5440,courier,drag,right first driver,courier-01,0.000000
+400,2028,5440,courier,excess,rank,courier-02,2.000000
+400,2028,5440,courier,fit,rank,courier-02,1.000000
+400,2028,5440,courier,drag,rank,courier-02,8.000000
+400,2028,5440,courier,excess,right first driver,courier-02,1.000000
+400,2028,5440,courier,drag,right first driver,courier-02,0.000000
+400,2029,4908,,,scorings with exact splits,,17044.000000
+400,2029,4908,restaurant,,groups ranked,,40.000000
+400,2029,4908,restaurant,excess,precision at 3,,1.000000
+400,2029,4908,restaurant,fit,precision at 3,,1.000000
+400,2029,4908,restaurant,drag,precision at 3,,1.000000
+400,2029,4908,restaurant,excess,rank,rest-00,3.000000
+400,2029,4908,restaurant,fit,rank,rest-00,2.000000
+400,2029,4908,restaurant,drag,rank,rest-00,3.000000
+400,2029,4908,restaurant,excess,right first driver,rest-00,1.000000
+400,2029,4908,restaurant,drag,right first driver,rest-00,1.000000
+400,2029,4908,restaurant,excess,rank,rest-01,2.000000
+400,2029,4908,restaurant,fit,rank,rest-01,3.000000
+400,2029,4908,restaurant,drag,rank,rest-01,2.000000
+400,2029,4908,restaurant,excess,right first driver,rest-01,1.000000
+400,2029,4908,restaurant,drag,right first driver,rest-01,1.000000
+400,2029,4908,restaurant,excess,rank,rest-02,1.000000
+400,2029,4908,restaurant,fit,rank,rest-02,1.000000
+400,2029,4908,restaurant,drag,rank,rest-02,1.000000
+400,2029,4908,restaurant,excess,right first driver,rest-02,1.000000
+400,2029,4908,restaurant,drag,right first driver,rest-02,1.000000
+400,2029,4908,courier,,groups ranked,,60.000000
+400,2029,4908,courier,excess,precision at 3,,1.000000
+400,2029,4908,courier,fit,precision at 3,,0.666667
+400,2029,4908,courier,drag,precision at 3,,0.000000
+400,2029,4908,courier,excess,rank,courier-00,1.000000
+400,2029,4908,courier,fit,rank,courier-00,6.000000
+400,2029,4908,courier,drag,rank,courier-00,16.000000
+400,2029,4908,courier,excess,right first driver,courier-00,1.000000
+400,2029,4908,courier,drag,right first driver,courier-00,1.000000
+400,2029,4908,courier,excess,rank,courier-01,2.000000
+400,2029,4908,courier,fit,rank,courier-01,2.000000
+400,2029,4908,courier,drag,rank,courier-01,19.000000
+400,2029,4908,courier,excess,right first driver,courier-01,1.000000
+400,2029,4908,courier,drag,right first driver,courier-01,1.000000
+400,2029,4908,courier,excess,rank,courier-02,3.000000
+400,2029,4908,courier,fit,rank,courier-02,3.000000
+400,2029,4908,courier,drag,rank,courier-02,20.000000
+400,2029,4908,courier,excess,right first driver,courier-02,1.000000
+400,2029,4908,courier,drag,right first driver,courier-02,1.000000
+400,2030,4905,,,scorings with exact splits,,17122.000000
+400,2030,4905,restaurant,,groups ranked,,40.000000
+400,2030,4905,restaurant,excess,precision at 3,,1.000000
+400,2030,4905,restaurant,fit,precision at 3,,1.000000
+400,2030,4905,restaurant,drag,precision at 3,,1.000000
+400,2030,4905,restaurant,excess,rank,rest-00,3.000000
+400,2030,4905,restaurant,fit,rank,rest-00,3.000000
+400,2030,4905,restaurant,drag,rank,rest-00,3.000000
+400,2030,4905,restaurant,excess,right first driver,rest-00,1.000000
+400,2030,4905,restaurant,drag,right first driver,rest-00,1.000000
+400,2030,4905,restaurant,excess,rank,rest-01,2.000000
+400,2030,4905,restaurant,fit,rank,rest-01,2.000000
+400,2030,4905,restaurant,drag,rank,rest-01,2.000000
+400,2030,4905,restaurant,excess,right first driver,rest-01,1.000000
+400,2030,4905,restaurant,drag,right first driver,rest-01,1.000000
+400,2030,4905,restaurant,excess,rank,rest-02,1.000000
+400,2030,4905,restaurant,fit,rank,rest-02,1.000000
+400,2030,4905,restaurant,drag,rank,rest-02,1.000000
+400,2030,4905,restaurant,excess,right first driver,rest-02,1.000000
+400,2030,4905,restaurant,drag,right first driver,rest-02,1.000000
+400,2030,4905,courier,,groups ranked,,60.000000
+400,2030,4905,courier,excess,precision at 3,,1.000000
+400,2030,4905,courier,fit,precision at 3,,1.000000
+400,2030,4905,courier,drag,precision at 3,,0.000000
+400,2030,4905,courier,excess,rank,courier-00,3.000000
+400,2030,4905,courier,fit,rank,courier-00,2.000000
+400,2030,4905,courier,drag,rank,courier-00,11.000000
+400,2030,4905,courier,excess,right first driver,courier-00,1.000000
+400,2030,4905,courier,drag,right first driver,courier-00,0.000000
+400,2030,4905,courier,excess,rank,courier-01,2.000000
+400,2030,4905,courier,fit,rank,courier-01,3.000000
+400,2030,4905,courier,drag,rank,courier-01,9.000000
+400,2030,4905,courier,excess,right first driver,courier-01,1.000000
+400,2030,4905,courier,drag,right first driver,courier-01,0.000000
+400,2030,4905,courier,excess,rank,courier-02,1.000000
+400,2030,4905,courier,fit,rank,courier-02,1.000000
+400,2030,4905,courier,drag,rank,courier-02,4.000000
+400,2030,4905,courier,excess,right first driver,courier-02,1.000000
+400,2030,4905,courier,drag,right first driver,courier-02,1.000000
+400,2031,5126,,,scorings with exact splits,,17697.000000
+400,2031,5126,restaurant,,groups ranked,,40.000000
+400,2031,5126,restaurant,excess,precision at 3,,1.000000
+400,2031,5126,restaurant,fit,precision at 3,,1.000000
+400,2031,5126,restaurant,drag,precision at 3,,1.000000
+400,2031,5126,restaurant,excess,rank,rest-00,2.000000
+400,2031,5126,restaurant,fit,rank,rest-00,3.000000
+400,2031,5126,restaurant,drag,rank,rest-00,2.000000
+400,2031,5126,restaurant,excess,right first driver,rest-00,1.000000
+400,2031,5126,restaurant,drag,right first driver,rest-00,1.000000
+400,2031,5126,restaurant,excess,rank,rest-01,3.000000
+400,2031,5126,restaurant,fit,rank,rest-01,2.000000
+400,2031,5126,restaurant,drag,rank,rest-01,3.000000
+400,2031,5126,restaurant,excess,right first driver,rest-01,1.000000
+400,2031,5126,restaurant,drag,right first driver,rest-01,1.000000
+400,2031,5126,restaurant,excess,rank,rest-02,1.000000
+400,2031,5126,restaurant,fit,rank,rest-02,1.000000
+400,2031,5126,restaurant,drag,rank,rest-02,1.000000
+400,2031,5126,restaurant,excess,right first driver,rest-02,1.000000
+400,2031,5126,restaurant,drag,right first driver,rest-02,1.000000
+400,2031,5126,courier,,groups ranked,,60.000000
+400,2031,5126,courier,excess,precision at 3,,1.000000
+400,2031,5126,courier,fit,precision at 3,,1.000000
+400,2031,5126,courier,drag,precision at 3,,0.333333
+400,2031,5126,courier,excess,rank,courier-00,3.000000
+400,2031,5126,courier,fit,rank,courier-00,2.000000
+400,2031,5126,courier,drag,rank,courier-00,22.000000
+400,2031,5126,courier,excess,right first driver,courier-00,1.000000
+400,2031,5126,courier,drag,right first driver,courier-00,1.000000
+400,2031,5126,courier,excess,rank,courier-01,2.000000
+400,2031,5126,courier,fit,rank,courier-01,3.000000
+400,2031,5126,courier,drag,rank,courier-01,17.000000
+400,2031,5126,courier,excess,right first driver,courier-01,1.000000
+400,2031,5126,courier,drag,right first driver,courier-01,0.000000
+400,2031,5126,courier,excess,rank,courier-02,1.000000
+400,2031,5126,courier,fit,rank,courier-02,1.000000
+400,2031,5126,courier,drag,rank,courier-02,1.000000
+400,2031,5126,courier,excess,right first driver,courier-02,1.000000
+400,2031,5126,courier,drag,right first driver,courier-02,1.000000
+400,2032,5515,,,scorings with exact splits,,19131.000000
+400,2032,5515,restaurant,,groups ranked,,40.000000
+400,2032,5515,restaurant,excess,precision at 3,,1.000000
+400,2032,5515,restaurant,fit,precision at 3,,1.000000
+400,2032,5515,restaurant,drag,precision at 3,,1.000000
+400,2032,5515,restaurant,excess,rank,rest-00,2.000000
+400,2032,5515,restaurant,fit,rank,rest-00,2.000000
+400,2032,5515,restaurant,drag,rank,rest-00,2.000000
+400,2032,5515,restaurant,excess,right first driver,rest-00,1.000000
+400,2032,5515,restaurant,drag,right first driver,rest-00,1.000000
+400,2032,5515,restaurant,excess,rank,rest-01,3.000000
+400,2032,5515,restaurant,fit,rank,rest-01,3.000000
+400,2032,5515,restaurant,drag,rank,rest-01,3.000000
+400,2032,5515,restaurant,excess,right first driver,rest-01,1.000000
+400,2032,5515,restaurant,drag,right first driver,rest-01,1.000000
+400,2032,5515,restaurant,excess,rank,rest-02,1.000000
+400,2032,5515,restaurant,fit,rank,rest-02,1.000000
+400,2032,5515,restaurant,drag,rank,rest-02,1.000000
+400,2032,5515,restaurant,excess,right first driver,rest-02,1.000000
+400,2032,5515,restaurant,drag,right first driver,rest-02,1.000000
+400,2032,5515,courier,,groups ranked,,60.000000
+400,2032,5515,courier,excess,precision at 3,,1.000000
+400,2032,5515,courier,fit,precision at 3,,0.666667
+400,2032,5515,courier,drag,precision at 3,,0.333333
+400,2032,5515,courier,excess,rank,courier-00,3.000000
+400,2032,5515,courier,fit,rank,courier-00,6.000000
+400,2032,5515,courier,drag,rank,courier-00,51.000000
+400,2032,5515,courier,excess,right first driver,courier-00,1.000000
+400,2032,5515,courier,drag,right first driver,courier-00,1.000000
+400,2032,5515,courier,excess,rank,courier-01,1.000000
+400,2032,5515,courier,fit,rank,courier-01,1.000000
+400,2032,5515,courier,drag,rank,courier-01,3.000000
+400,2032,5515,courier,excess,right first driver,courier-01,1.000000
+400,2032,5515,courier,drag,right first driver,courier-01,1.000000
+400,2032,5515,courier,excess,rank,courier-02,2.000000
+400,2032,5515,courier,fit,rank,courier-02,2.000000
+400,2032,5515,courier,drag,rank,courier-02,14.000000
+400,2032,5515,courier,excess,right first driver,courier-02,1.000000
+400,2032,5515,courier,drag,right first driver,courier-02,1.000000
+400,2033,5247,,,scorings with exact splits,,18157.000000
+400,2033,5247,restaurant,,groups ranked,,40.000000
+400,2033,5247,restaurant,excess,precision at 3,,1.000000
+400,2033,5247,restaurant,fit,precision at 3,,1.000000
+400,2033,5247,restaurant,drag,precision at 3,,1.000000
+400,2033,5247,restaurant,excess,rank,rest-00,2.000000
+400,2033,5247,restaurant,fit,rank,rest-00,2.000000
+400,2033,5247,restaurant,drag,rank,rest-00,2.000000
+400,2033,5247,restaurant,excess,right first driver,rest-00,1.000000
+400,2033,5247,restaurant,drag,right first driver,rest-00,1.000000
+400,2033,5247,restaurant,excess,rank,rest-01,3.000000
+400,2033,5247,restaurant,fit,rank,rest-01,3.000000
+400,2033,5247,restaurant,drag,rank,rest-01,3.000000
+400,2033,5247,restaurant,excess,right first driver,rest-01,1.000000
+400,2033,5247,restaurant,drag,right first driver,rest-01,1.000000
+400,2033,5247,restaurant,excess,rank,rest-02,1.000000
+400,2033,5247,restaurant,fit,rank,rest-02,1.000000
+400,2033,5247,restaurant,drag,rank,rest-02,1.000000
+400,2033,5247,restaurant,excess,right first driver,rest-02,1.000000
+400,2033,5247,restaurant,drag,right first driver,rest-02,1.000000
+400,2033,5247,courier,,groups ranked,,60.000000
+400,2033,5247,courier,excess,precision at 3,,0.666667
+400,2033,5247,courier,fit,precision at 3,,0.666667
+400,2033,5247,courier,drag,precision at 3,,0.000000
+400,2033,5247,courier,excess,rank,courier-00,4.000000
+400,2033,5247,courier,fit,rank,courier-00,3.000000
+400,2033,5247,courier,drag,rank,courier-00,28.000000
+400,2033,5247,courier,excess,right first driver,courier-00,1.000000
+400,2033,5247,courier,drag,right first driver,courier-00,0.000000
+400,2033,5247,courier,excess,rank,courier-01,2.000000
+400,2033,5247,courier,fit,rank,courier-01,1.000000
+400,2033,5247,courier,drag,rank,courier-01,50.000000
+400,2033,5247,courier,excess,right first driver,courier-01,1.000000
+400,2033,5247,courier,drag,right first driver,courier-01,0.000000
+400,2033,5247,courier,excess,rank,courier-02,1.000000
+400,2033,5247,courier,fit,rank,courier-02,4.000000
+400,2033,5247,courier,drag,rank,courier-02,40.000000
+400,2033,5247,courier,excess,right first driver,courier-02,1.000000
+400,2033,5247,courier,drag,right first driver,courier-02,1.000000
+400,2034,4896,,,scorings with exact splits,,16824.000000
+400,2034,4896,restaurant,,groups ranked,,40.000000
+400,2034,4896,restaurant,excess,precision at 3,,1.000000
+400,2034,4896,restaurant,fit,precision at 3,,1.000000
+400,2034,4896,restaurant,drag,precision at 3,,1.000000
+400,2034,4896,restaurant,excess,rank,rest-00,3.000000
+400,2034,4896,restaurant,fit,rank,rest-00,3.000000
+400,2034,4896,restaurant,drag,rank,rest-00,3.000000
+400,2034,4896,restaurant,excess,right first driver,rest-00,1.000000
+400,2034,4896,restaurant,drag,right first driver,rest-00,1.000000
+400,2034,4896,restaurant,excess,rank,rest-01,2.000000
+400,2034,4896,restaurant,fit,rank,rest-01,2.000000
+400,2034,4896,restaurant,drag,rank,rest-01,2.000000
+400,2034,4896,restaurant,excess,right first driver,rest-01,1.000000
+400,2034,4896,restaurant,drag,right first driver,rest-01,1.000000
+400,2034,4896,restaurant,excess,rank,rest-02,1.000000
+400,2034,4896,restaurant,fit,rank,rest-02,1.000000
+400,2034,4896,restaurant,drag,rank,rest-02,1.000000
+400,2034,4896,restaurant,excess,right first driver,rest-02,1.000000
+400,2034,4896,restaurant,drag,right first driver,rest-02,1.000000
+400,2034,4896,courier,,groups ranked,,60.000000
+400,2034,4896,courier,excess,precision at 3,,1.000000
+400,2034,4896,courier,fit,precision at 3,,0.666667
+400,2034,4896,courier,drag,precision at 3,,0.000000
+400,2034,4896,courier,excess,rank,courier-00,1.000000
+400,2034,4896,courier,fit,rank,courier-00,1.000000
+400,2034,4896,courier,drag,rank,courier-00,21.000000
+400,2034,4896,courier,excess,right first driver,courier-00,1.000000
+400,2034,4896,courier,drag,right first driver,courier-00,1.000000
+400,2034,4896,courier,excess,rank,courier-01,3.000000
+400,2034,4896,courier,fit,rank,courier-01,10.000000
+400,2034,4896,courier,drag,rank,courier-01,37.000000
+400,2034,4896,courier,excess,right first driver,courier-01,1.000000
+400,2034,4896,courier,drag,right first driver,courier-01,1.000000
+400,2034,4896,courier,excess,rank,courier-02,2.000000
+400,2034,4896,courier,fit,rank,courier-02,3.000000
+400,2034,4896,courier,drag,rank,courier-02,12.000000
+400,2034,4896,courier,excess,right first driver,courier-02,1.000000
+400,2034,4896,courier,drag,right first driver,courier-02,0.000000
+400,2035,4956,,,scorings with exact splits,,17158.000000
+400,2035,4956,restaurant,,groups ranked,,40.000000
+400,2035,4956,restaurant,excess,precision at 3,,1.000000
+400,2035,4956,restaurant,fit,precision at 3,,1.000000
+400,2035,4956,restaurant,drag,precision at 3,,1.000000
+400,2035,4956,restaurant,excess,rank,rest-00,2.000000
+400,2035,4956,restaurant,fit,rank,rest-00,2.000000
+400,2035,4956,restaurant,drag,rank,rest-00,2.000000
+400,2035,4956,restaurant,excess,right first driver,rest-00,1.000000
+400,2035,4956,restaurant,drag,right first driver,rest-00,1.000000
+400,2035,4956,restaurant,excess,rank,rest-01,3.000000
+400,2035,4956,restaurant,fit,rank,rest-01,3.000000
+400,2035,4956,restaurant,drag,rank,rest-01,3.000000
+400,2035,4956,restaurant,excess,right first driver,rest-01,1.000000
+400,2035,4956,restaurant,drag,right first driver,rest-01,1.000000
+400,2035,4956,restaurant,excess,rank,rest-02,1.000000
+400,2035,4956,restaurant,fit,rank,rest-02,1.000000
+400,2035,4956,restaurant,drag,rank,rest-02,1.000000
+400,2035,4956,restaurant,excess,right first driver,rest-02,1.000000
+400,2035,4956,restaurant,drag,right first driver,rest-02,1.000000
+400,2035,4956,courier,,groups ranked,,60.000000
+400,2035,4956,courier,excess,precision at 3,,1.000000
+400,2035,4956,courier,fit,precision at 3,,1.000000
+400,2035,4956,courier,drag,precision at 3,,0.000000
+400,2035,4956,courier,excess,rank,courier-00,3.000000
+400,2035,4956,courier,fit,rank,courier-00,2.000000
+400,2035,4956,courier,drag,rank,courier-00,13.000000
+400,2035,4956,courier,excess,right first driver,courier-00,1.000000
+400,2035,4956,courier,drag,right first driver,courier-00,0.000000
+400,2035,4956,courier,excess,rank,courier-01,2.000000
+400,2035,4956,courier,fit,rank,courier-01,1.000000
+400,2035,4956,courier,drag,rank,courier-01,15.000000
+400,2035,4956,courier,excess,right first driver,courier-01,1.000000
+400,2035,4956,courier,drag,right first driver,courier-01,0.000000
+400,2035,4956,courier,excess,rank,courier-02,1.000000
+400,2035,4956,courier,fit,rank,courier-02,3.000000
+400,2035,4956,courier,drag,rank,courier-02,14.000000
+400,2035,4956,courier,excess,right first driver,courier-02,1.000000
+400,2035,4956,courier,drag,right first driver,courier-02,1.000000
+400,2036,5014,,,scorings with exact splits,,17345.000000
+400,2036,5014,restaurant,,groups ranked,,40.000000
+400,2036,5014,restaurant,excess,precision at 3,,1.000000
+400,2036,5014,restaurant,fit,precision at 3,,1.000000
+400,2036,5014,restaurant,drag,precision at 3,,1.000000
+400,2036,5014,restaurant,excess,rank,rest-00,2.000000
+400,2036,5014,restaurant,fit,rank,rest-00,2.000000
+400,2036,5014,restaurant,drag,rank,rest-00,2.000000
+400,2036,5014,restaurant,excess,right first driver,rest-00,1.000000
+400,2036,5014,restaurant,drag,right first driver,rest-00,1.000000
+400,2036,5014,restaurant,excess,rank,rest-01,3.000000
+400,2036,5014,restaurant,fit,rank,rest-01,3.000000
+400,2036,5014,restaurant,drag,rank,rest-01,3.000000
+400,2036,5014,restaurant,excess,right first driver,rest-01,1.000000
+400,2036,5014,restaurant,drag,right first driver,rest-01,1.000000
+400,2036,5014,restaurant,excess,rank,rest-02,1.000000
+400,2036,5014,restaurant,fit,rank,rest-02,1.000000
+400,2036,5014,restaurant,drag,rank,rest-02,1.000000
+400,2036,5014,restaurant,excess,right first driver,rest-02,1.000000
+400,2036,5014,restaurant,drag,right first driver,rest-02,1.000000
+400,2036,5014,courier,,groups ranked,,60.000000
+400,2036,5014,courier,excess,precision at 3,,1.000000
+400,2036,5014,courier,fit,precision at 3,,0.666667
+400,2036,5014,courier,drag,precision at 3,,0.000000
+400,2036,5014,courier,excess,rank,courier-00,2.000000
+400,2036,5014,courier,fit,rank,courier-00,1.000000
+400,2036,5014,courier,drag,rank,courier-00,11.000000
+400,2036,5014,courier,excess,right first driver,courier-00,1.000000
+400,2036,5014,courier,drag,right first driver,courier-00,0.000000
+400,2036,5014,courier,excess,rank,courier-01,3.000000
+400,2036,5014,courier,fit,rank,courier-01,7.000000
+400,2036,5014,courier,drag,rank,courier-01,40.000000
+400,2036,5014,courier,excess,right first driver,courier-01,1.000000
+400,2036,5014,courier,drag,right first driver,courier-01,1.000000
+400,2036,5014,courier,excess,rank,courier-02,1.000000
+400,2036,5014,courier,fit,rank,courier-02,2.000000
+400,2036,5014,courier,drag,rank,courier-02,6.000000
+400,2036,5014,courier,excess,right first driver,courier-02,1.000000
+400,2036,5014,courier,drag,right first driver,courier-02,1.000000
+400,2037,5127,,,scorings with exact splits,,17753.000000
+400,2037,5127,restaurant,,groups ranked,,40.000000
+400,2037,5127,restaurant,excess,precision at 3,,1.000000
+400,2037,5127,restaurant,fit,precision at 3,,1.000000
+400,2037,5127,restaurant,drag,precision at 3,,1.000000
+400,2037,5127,restaurant,excess,rank,rest-00,3.000000
+400,2037,5127,restaurant,fit,rank,rest-00,3.000000
+400,2037,5127,restaurant,drag,rank,rest-00,3.000000
+400,2037,5127,restaurant,excess,right first driver,rest-00,1.000000
+400,2037,5127,restaurant,drag,right first driver,rest-00,1.000000
+400,2037,5127,restaurant,excess,rank,rest-01,2.000000
+400,2037,5127,restaurant,fit,rank,rest-01,2.000000
+400,2037,5127,restaurant,drag,rank,rest-01,2.000000
+400,2037,5127,restaurant,excess,right first driver,rest-01,1.000000
+400,2037,5127,restaurant,drag,right first driver,rest-01,1.000000
+400,2037,5127,restaurant,excess,rank,rest-02,1.000000
+400,2037,5127,restaurant,fit,rank,rest-02,1.000000
+400,2037,5127,restaurant,drag,rank,rest-02,1.000000
+400,2037,5127,restaurant,excess,right first driver,rest-02,1.000000
+400,2037,5127,restaurant,drag,right first driver,rest-02,1.000000
+400,2037,5127,courier,,groups ranked,,60.000000
+400,2037,5127,courier,excess,precision at 3,,1.000000
+400,2037,5127,courier,fit,precision at 3,,1.000000
+400,2037,5127,courier,drag,precision at 3,,0.000000
+400,2037,5127,courier,excess,rank,courier-00,2.000000
+400,2037,5127,courier,fit,rank,courier-00,1.000000
+400,2037,5127,courier,drag,rank,courier-00,17.000000
+400,2037,5127,courier,excess,right first driver,courier-00,1.000000
+400,2037,5127,courier,drag,right first driver,courier-00,0.000000
+400,2037,5127,courier,excess,rank,courier-01,3.000000
+400,2037,5127,courier,fit,rank,courier-01,3.000000
+400,2037,5127,courier,drag,rank,courier-01,15.000000
+400,2037,5127,courier,excess,right first driver,courier-01,1.000000
+400,2037,5127,courier,drag,right first driver,courier-01,0.000000
+400,2037,5127,courier,excess,rank,courier-02,1.000000
+400,2037,5127,courier,fit,rank,courier-02,2.000000
+400,2037,5127,courier,drag,rank,courier-02,24.000000
+400,2037,5127,courier,excess,right first driver,courier-02,1.000000
+400,2037,5127,courier,drag,right first driver,courier-02,1.000000
+400,2038,5030,,,scorings with exact splits,,17417.000000
+400,2038,5030,restaurant,,groups ranked,,40.000000
+400,2038,5030,restaurant,excess,precision at 3,,1.000000
+400,2038,5030,restaurant,fit,precision at 3,,1.000000
+400,2038,5030,restaurant,drag,precision at 3,,1.000000
+400,2038,5030,restaurant,excess,rank,rest-00,2.000000
+400,2038,5030,restaurant,fit,rank,rest-00,2.000000
+400,2038,5030,restaurant,drag,rank,rest-00,2.000000
+400,2038,5030,restaurant,excess,right first driver,rest-00,1.000000
+400,2038,5030,restaurant,drag,right first driver,rest-00,1.000000
+400,2038,5030,restaurant,excess,rank,rest-01,3.000000
+400,2038,5030,restaurant,fit,rank,rest-01,3.000000
+400,2038,5030,restaurant,drag,rank,rest-01,3.000000
+400,2038,5030,restaurant,excess,right first driver,rest-01,1.000000
+400,2038,5030,restaurant,drag,right first driver,rest-01,1.000000
+400,2038,5030,restaurant,excess,rank,rest-02,1.000000
+400,2038,5030,restaurant,fit,rank,rest-02,1.000000
+400,2038,5030,restaurant,drag,rank,rest-02,1.000000
+400,2038,5030,restaurant,excess,right first driver,rest-02,1.000000
+400,2038,5030,restaurant,drag,right first driver,rest-02,1.000000
+400,2038,5030,courier,,groups ranked,,60.000000
+400,2038,5030,courier,excess,precision at 3,,0.666667
+400,2038,5030,courier,fit,precision at 3,,0.666667
+400,2038,5030,courier,drag,precision at 3,,0.000000
+400,2038,5030,courier,excess,rank,courier-00,1.000000
+400,2038,5030,courier,fit,rank,courier-00,2.000000
+400,2038,5030,courier,drag,rank,courier-00,6.000000
+400,2038,5030,courier,excess,right first driver,courier-00,1.000000
+400,2038,5030,courier,drag,right first driver,courier-00,1.000000
+400,2038,5030,courier,excess,rank,courier-01,2.000000
+400,2038,5030,courier,fit,rank,courier-01,1.000000
+400,2038,5030,courier,drag,rank,courier-01,12.000000
+400,2038,5030,courier,excess,right first driver,courier-01,1.000000
+400,2038,5030,courier,drag,right first driver,courier-01,0.000000
+400,2038,5030,courier,excess,rank,courier-02,5.000000
+400,2038,5030,courier,fit,rank,courier-02,6.000000
+400,2038,5030,courier,drag,rank,courier-02,14.000000
+400,2038,5030,courier,excess,right first driver,courier-02,1.000000
+400,2038,5030,courier,drag,right first driver,courier-02,0.000000
+400,2039,5154,,,scorings with exact splits,,17909.000000
+400,2039,5154,restaurant,,groups ranked,,40.000000
+400,2039,5154,restaurant,excess,precision at 3,,1.000000
+400,2039,5154,restaurant,fit,precision at 3,,1.000000
+400,2039,5154,restaurant,drag,precision at 3,,1.000000
+400,2039,5154,restaurant,excess,rank,rest-00,2.000000
+400,2039,5154,restaurant,fit,rank,rest-00,2.000000
+400,2039,5154,restaurant,drag,rank,rest-00,2.000000
+400,2039,5154,restaurant,excess,right first driver,rest-00,1.000000
+400,2039,5154,restaurant,drag,right first driver,rest-00,1.000000
+400,2039,5154,restaurant,excess,rank,rest-01,3.000000
+400,2039,5154,restaurant,fit,rank,rest-01,3.000000
+400,2039,5154,restaurant,drag,rank,rest-01,3.000000
+400,2039,5154,restaurant,excess,right first driver,rest-01,1.000000
+400,2039,5154,restaurant,drag,right first driver,rest-01,1.000000
+400,2039,5154,restaurant,excess,rank,rest-02,1.000000
+400,2039,5154,restaurant,fit,rank,rest-02,1.000000
+400,2039,5154,restaurant,drag,rank,rest-02,1.000000
+400,2039,5154,restaurant,excess,right first driver,rest-02,1.000000
+400,2039,5154,restaurant,drag,right first driver,rest-02,1.000000
+400,2039,5154,courier,,groups ranked,,60.000000
+400,2039,5154,courier,excess,precision at 3,,1.000000
+400,2039,5154,courier,fit,precision at 3,,1.000000
+400,2039,5154,courier,drag,precision at 3,,0.333333
+400,2039,5154,courier,excess,rank,courier-00,2.000000
+400,2039,5154,courier,fit,rank,courier-00,3.000000
+400,2039,5154,courier,drag,rank,courier-00,9.000000
+400,2039,5154,courier,excess,right first driver,courier-00,1.000000
+400,2039,5154,courier,drag,right first driver,courier-00,1.000000
+400,2039,5154,courier,excess,rank,courier-01,1.000000
+400,2039,5154,courier,fit,rank,courier-01,1.000000
+400,2039,5154,courier,drag,rank,courier-01,1.000000
+400,2039,5154,courier,excess,right first driver,courier-01,1.000000
+400,2039,5154,courier,drag,right first driver,courier-01,1.000000
+400,2039,5154,courier,excess,rank,courier-02,3.000000
+400,2039,5154,courier,fit,rank,courier-02,2.000000
+400,2039,5154,courier,drag,rank,courier-02,12.000000
+400,2039,5154,courier,excess,right first driver,courier-02,1.000000
+400,2039,5154,courier,drag,right first driver,courier-02,0.000000
+400,2040,5182,,,scorings with exact splits,,17957.000000
+400,2040,5182,restaurant,,groups ranked,,40.000000
+400,2040,5182,restaurant,excess,precision at 3,,1.000000
+400,2040,5182,restaurant,fit,precision at 3,,1.000000
+400,2040,5182,restaurant,drag,precision at 3,,1.000000
+400,2040,5182,restaurant,excess,rank,rest-00,3.000000
+400,2040,5182,restaurant,fit,rank,rest-00,2.000000
+400,2040,5182,restaurant,drag,rank,rest-00,3.000000
+400,2040,5182,restaurant,excess,right first driver,rest-00,1.000000
+400,2040,5182,restaurant,drag,right first driver,rest-00,1.000000
+400,2040,5182,restaurant,excess,rank,rest-01,2.000000
+400,2040,5182,restaurant,fit,rank,rest-01,3.000000
+400,2040,5182,restaurant,drag,rank,rest-01,2.000000
+400,2040,5182,restaurant,excess,right first driver,rest-01,1.000000
+400,2040,5182,restaurant,drag,right first driver,rest-01,1.000000
+400,2040,5182,restaurant,excess,rank,rest-02,1.000000
+400,2040,5182,restaurant,fit,rank,rest-02,1.000000
+400,2040,5182,restaurant,drag,rank,rest-02,1.000000
+400,2040,5182,restaurant,excess,right first driver,rest-02,1.000000
+400,2040,5182,restaurant,drag,right first driver,rest-02,1.000000
+400,2040,5182,courier,,groups ranked,,60.000000
+400,2040,5182,courier,excess,precision at 3,,1.000000
+400,2040,5182,courier,fit,precision at 3,,1.000000
+400,2040,5182,courier,drag,precision at 3,,0.333333
+400,2040,5182,courier,excess,rank,courier-00,1.000000
+400,2040,5182,courier,fit,rank,courier-00,1.000000
+400,2040,5182,courier,drag,rank,courier-00,2.000000
+400,2040,5182,courier,excess,right first driver,courier-00,1.000000
+400,2040,5182,courier,drag,right first driver,courier-00,1.000000
+400,2040,5182,courier,excess,rank,courier-01,3.000000
+400,2040,5182,courier,fit,rank,courier-01,2.000000
+400,2040,5182,courier,drag,rank,courier-01,8.000000
+400,2040,5182,courier,excess,right first driver,courier-01,1.000000
+400,2040,5182,courier,drag,right first driver,courier-01,1.000000
+400,2040,5182,courier,excess,rank,courier-02,2.000000
+400,2040,5182,courier,fit,rank,courier-02,3.000000
+400,2040,5182,courier,drag,rank,courier-02,4.000000
+400,2040,5182,courier,excess,right first driver,courier-02,1.000000
+400,2040,5182,courier,drag,right first driver,courier-02,1.000000
+400,2041,4975,,,scorings with exact splits,,17267.000000
+400,2041,4975,restaurant,,groups ranked,,40.000000
+400,2041,4975,restaurant,excess,precision at 3,,1.000000
+400,2041,4975,restaurant,fit,precision at 3,,1.000000
+400,2041,4975,restaurant,drag,precision at 3,,1.000000
+400,2041,4975,restaurant,excess,rank,rest-00,3.000000
+400,2041,4975,restaurant,fit,rank,rest-00,3.000000
+400,2041,4975,restaurant,drag,rank,rest-00,3.000000
+400,2041,4975,restaurant,excess,right first driver,rest-00,1.000000
+400,2041,4975,restaurant,drag,right first driver,rest-00,1.000000
+400,2041,4975,restaurant,excess,rank,rest-01,2.000000
+400,2041,4975,restaurant,fit,rank,rest-01,2.000000
+400,2041,4975,restaurant,drag,rank,rest-01,2.000000
+400,2041,4975,restaurant,excess,right first driver,rest-01,1.000000
+400,2041,4975,restaurant,drag,right first driver,rest-01,1.000000
+400,2041,4975,restaurant,excess,rank,rest-02,1.000000
+400,2041,4975,restaurant,fit,rank,rest-02,1.000000
+400,2041,4975,restaurant,drag,rank,rest-02,1.000000
+400,2041,4975,restaurant,excess,right first driver,rest-02,1.000000
+400,2041,4975,restaurant,drag,right first driver,rest-02,1.000000
+400,2041,4975,courier,,groups ranked,,60.000000
+400,2041,4975,courier,excess,precision at 3,,1.000000
+400,2041,4975,courier,fit,precision at 3,,1.000000
+400,2041,4975,courier,drag,precision at 3,,0.333333
+400,2041,4975,courier,excess,rank,courier-00,3.000000
+400,2041,4975,courier,fit,rank,courier-00,3.000000
+400,2041,4975,courier,drag,rank,courier-00,41.000000
+400,2041,4975,courier,excess,right first driver,courier-00,1.000000
+400,2041,4975,courier,drag,right first driver,courier-00,1.000000
+400,2041,4975,courier,excess,rank,courier-01,2.000000
+400,2041,4975,courier,fit,rank,courier-01,1.000000
+400,2041,4975,courier,drag,rank,courier-01,2.000000
+400,2041,4975,courier,excess,right first driver,courier-01,1.000000
+400,2041,4975,courier,drag,right first driver,courier-01,0.000000
+400,2041,4975,courier,excess,rank,courier-02,1.000000
+400,2041,4975,courier,fit,rank,courier-02,2.000000
+400,2041,4975,courier,drag,rank,courier-02,8.000000
+400,2041,4975,courier,excess,right first driver,courier-02,1.000000
+400,2041,4975,courier,drag,right first driver,courier-02,1.000000
+400,2042,5351,,,scorings with exact splits,,18626.000000
+400,2042,5351,restaurant,,groups ranked,,40.000000
+400,2042,5351,restaurant,excess,precision at 3,,1.000000
+400,2042,5351,restaurant,fit,precision at 3,,1.000000
+400,2042,5351,restaurant,drag,precision at 3,,1.000000
+400,2042,5351,restaurant,excess,rank,rest-00,2.000000
+400,2042,5351,restaurant,fit,rank,rest-00,2.000000
+400,2042,5351,restaurant,drag,rank,rest-00,2.000000
+400,2042,5351,restaurant,excess,right first driver,rest-00,1.000000
+400,2042,5351,restaurant,drag,right first driver,rest-00,1.000000
+400,2042,5351,restaurant,excess,rank,rest-01,3.000000
+400,2042,5351,restaurant,fit,rank,rest-01,3.000000
+400,2042,5351,restaurant,drag,rank,rest-01,3.000000
+400,2042,5351,restaurant,excess,right first driver,rest-01,1.000000
+400,2042,5351,restaurant,drag,right first driver,rest-01,1.000000
+400,2042,5351,restaurant,excess,rank,rest-02,1.000000
+400,2042,5351,restaurant,fit,rank,rest-02,1.000000
+400,2042,5351,restaurant,drag,rank,rest-02,1.000000
+400,2042,5351,restaurant,excess,right first driver,rest-02,1.000000
+400,2042,5351,restaurant,drag,right first driver,rest-02,1.000000
+400,2042,5351,courier,,groups ranked,,60.000000
+400,2042,5351,courier,excess,precision at 3,,1.000000
+400,2042,5351,courier,fit,precision at 3,,0.666667
+400,2042,5351,courier,drag,precision at 3,,0.333333
+400,2042,5351,courier,excess,rank,courier-00,3.000000
+400,2042,5351,courier,fit,rank,courier-00,2.000000
+400,2042,5351,courier,drag,rank,courier-00,24.000000
+400,2042,5351,courier,excess,right first driver,courier-00,1.000000
+400,2042,5351,courier,drag,right first driver,courier-00,0.000000
+400,2042,5351,courier,excess,rank,courier-01,2.000000
+400,2042,5351,courier,fit,rank,courier-01,4.000000
+400,2042,5351,courier,drag,rank,courier-01,6.000000
+400,2042,5351,courier,excess,right first driver,courier-01,1.000000
+400,2042,5351,courier,drag,right first driver,courier-01,1.000000
+400,2042,5351,courier,excess,rank,courier-02,1.000000
+400,2042,5351,courier,fit,rank,courier-02,1.000000
+400,2042,5351,courier,drag,rank,courier-02,1.000000
+400,2042,5351,courier,excess,right first driver,courier-02,1.000000
+400,2042,5351,courier,drag,right first driver,courier-02,1.000000
+400,2043,5100,,,scorings with exact splits,,17564.000000
+400,2043,5100,restaurant,,groups ranked,,40.000000
+400,2043,5100,restaurant,excess,precision at 3,,1.000000
+400,2043,5100,restaurant,fit,precision at 3,,1.000000
+400,2043,5100,restaurant,drag,precision at 3,,1.000000
+400,2043,5100,restaurant,excess,rank,rest-00,2.000000
+400,2043,5100,restaurant,fit,rank,rest-00,2.000000
+400,2043,5100,restaurant,drag,rank,rest-00,2.000000
+400,2043,5100,restaurant,excess,right first driver,rest-00,1.000000
+400,2043,5100,restaurant,drag,right first driver,rest-00,1.000000
+400,2043,5100,restaurant,excess,rank,rest-01,3.000000
+400,2043,5100,restaurant,fit,rank,rest-01,3.000000
+400,2043,5100,restaurant,drag,rank,rest-01,3.000000
+400,2043,5100,restaurant,excess,right first driver,rest-01,1.000000
+400,2043,5100,restaurant,drag,right first driver,rest-01,1.000000
+400,2043,5100,restaurant,excess,rank,rest-02,1.000000
+400,2043,5100,restaurant,fit,rank,rest-02,1.000000
+400,2043,5100,restaurant,drag,rank,rest-02,1.000000
+400,2043,5100,restaurant,excess,right first driver,rest-02,1.000000
+400,2043,5100,restaurant,drag,right first driver,rest-02,1.000000
+400,2043,5100,courier,,groups ranked,,60.000000
+400,2043,5100,courier,excess,precision at 3,,1.000000
+400,2043,5100,courier,fit,precision at 3,,0.666667
+400,2043,5100,courier,drag,precision at 3,,0.000000
+400,2043,5100,courier,excess,rank,courier-00,3.000000
+400,2043,5100,courier,fit,rank,courier-00,4.000000
+400,2043,5100,courier,drag,rank,courier-00,24.000000
+400,2043,5100,courier,excess,right first driver,courier-00,1.000000
+400,2043,5100,courier,drag,right first driver,courier-00,0.000000
+400,2043,5100,courier,excess,rank,courier-01,2.000000
+400,2043,5100,courier,fit,rank,courier-01,2.000000
+400,2043,5100,courier,drag,rank,courier-01,29.000000
+400,2043,5100,courier,excess,right first driver,courier-01,1.000000
+400,2043,5100,courier,drag,right first driver,courier-01,0.000000
+400,2043,5100,courier,excess,rank,courier-02,1.000000
+400,2043,5100,courier,fit,rank,courier-02,1.000000
+400,2043,5100,courier,drag,rank,courier-02,14.000000
+400,2043,5100,courier,excess,right first driver,courier-02,1.000000
+400,2043,5100,courier,drag,right first driver,courier-02,1.000000
+400,2044,5006,,,scorings with exact splits,,17340.000000
+400,2044,5006,restaurant,,groups ranked,,40.000000
+400,2044,5006,restaurant,excess,precision at 3,,1.000000
+400,2044,5006,restaurant,fit,precision at 3,,1.000000
+400,2044,5006,restaurant,drag,precision at 3,,1.000000
+400,2044,5006,restaurant,excess,rank,rest-00,3.000000
+400,2044,5006,restaurant,fit,rank,rest-00,3.000000
+400,2044,5006,restaurant,drag,rank,rest-00,3.000000
+400,2044,5006,restaurant,excess,right first driver,rest-00,1.000000
+400,2044,5006,restaurant,drag,right first driver,rest-00,1.000000
+400,2044,5006,restaurant,excess,rank,rest-01,2.000000
+400,2044,5006,restaurant,fit,rank,rest-01,2.000000
+400,2044,5006,restaurant,drag,rank,rest-01,2.000000
+400,2044,5006,restaurant,excess,right first driver,rest-01,1.000000
+400,2044,5006,restaurant,drag,right first driver,rest-01,1.000000
+400,2044,5006,restaurant,excess,rank,rest-02,1.000000
+400,2044,5006,restaurant,fit,rank,rest-02,1.000000
+400,2044,5006,restaurant,drag,rank,rest-02,1.000000
+400,2044,5006,restaurant,excess,right first driver,rest-02,1.000000
+400,2044,5006,restaurant,drag,right first driver,rest-02,1.000000
+400,2044,5006,courier,,groups ranked,,60.000000
+400,2044,5006,courier,excess,precision at 3,,1.000000
+400,2044,5006,courier,fit,precision at 3,,1.000000
+400,2044,5006,courier,drag,precision at 3,,0.000000
+400,2044,5006,courier,excess,rank,courier-00,3.000000
+400,2044,5006,courier,fit,rank,courier-00,3.000000
+400,2044,5006,courier,drag,rank,courier-00,19.000000
+400,2044,5006,courier,excess,right first driver,courier-00,1.000000
+400,2044,5006,courier,drag,right first driver,courier-00,1.000000
+400,2044,5006,courier,excess,rank,courier-01,1.000000
+400,2044,5006,courier,fit,rank,courier-01,1.000000
+400,2044,5006,courier,drag,rank,courier-01,10.000000
+400,2044,5006,courier,excess,right first driver,courier-01,1.000000
+400,2044,5006,courier,drag,right first driver,courier-01,1.000000
+400,2044,5006,courier,excess,rank,courier-02,2.000000
+400,2044,5006,courier,fit,rank,courier-02,2.000000
+400,2044,5006,courier,drag,rank,courier-02,15.000000
+400,2044,5006,courier,excess,right first driver,courier-02,1.000000
+400,2044,5006,courier,drag,right first driver,courier-02,1.000000
+400,2045,5268,,,scorings with exact splits,,18243.000000
+400,2045,5268,restaurant,,groups ranked,,40.000000
+400,2045,5268,restaurant,excess,precision at 3,,1.000000
+400,2045,5268,restaurant,fit,precision at 3,,1.000000
+400,2045,5268,restaurant,drag,precision at 3,,1.000000
+400,2045,5268,restaurant,excess,rank,rest-00,3.000000
+400,2045,5268,restaurant,fit,rank,rest-00,3.000000
+400,2045,5268,restaurant,drag,rank,rest-00,3.000000
+400,2045,5268,restaurant,excess,right first driver,rest-00,1.000000
+400,2045,5268,restaurant,drag,right first driver,rest-00,1.000000
+400,2045,5268,restaurant,excess,rank,rest-01,2.000000
+400,2045,5268,restaurant,fit,rank,rest-01,2.000000
+400,2045,5268,restaurant,drag,rank,rest-01,2.000000
+400,2045,5268,restaurant,excess,right first driver,rest-01,1.000000
+400,2045,5268,restaurant,drag,right first driver,rest-01,1.000000
+400,2045,5268,restaurant,excess,rank,rest-02,1.000000
+400,2045,5268,restaurant,fit,rank,rest-02,1.000000
+400,2045,5268,restaurant,drag,rank,rest-02,1.000000
+400,2045,5268,restaurant,excess,right first driver,rest-02,1.000000
+400,2045,5268,restaurant,drag,right first driver,rest-02,1.000000
+400,2045,5268,courier,,groups ranked,,60.000000
+400,2045,5268,courier,excess,precision at 3,,1.000000
+400,2045,5268,courier,fit,precision at 3,,1.000000
+400,2045,5268,courier,drag,precision at 3,,0.333333
+400,2045,5268,courier,excess,rank,courier-00,2.000000
+400,2045,5268,courier,fit,rank,courier-00,2.000000
+400,2045,5268,courier,drag,rank,courier-00,4.000000
+400,2045,5268,courier,excess,right first driver,courier-00,1.000000
+400,2045,5268,courier,drag,right first driver,courier-00,1.000000
+400,2045,5268,courier,excess,rank,courier-01,3.000000
+400,2045,5268,courier,fit,rank,courier-01,3.000000
+400,2045,5268,courier,drag,rank,courier-01,25.000000
+400,2045,5268,courier,excess,right first driver,courier-01,1.000000
+400,2045,5268,courier,drag,right first driver,courier-01,0.000000
+400,2045,5268,courier,excess,rank,courier-02,1.000000
+400,2045,5268,courier,fit,rank,courier-02,1.000000
+400,2045,5268,courier,drag,rank,courier-02,1.000000
+400,2045,5268,courier,excess,right first driver,courier-02,1.000000
+400,2045,5268,courier,drag,right first driver,courier-02,1.000000

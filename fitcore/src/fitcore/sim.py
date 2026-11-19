@@ -45,6 +45,11 @@ class TrueModel:
     copied and made read-only. Raises ValueError for a wrong shape, a value
     that is not finite, kappa below 1, a scale of zero or less, a negative
     weight, or a weight outside its mask.
+
+    relaxed (T803) lifts the last two checks, for a truth that breaks the
+    theory on purpose: a path the masks lack, or an input that lowers a
+    latent. CFI itself can still learn only the theory's paths, and only
+    positive weights.
     """
 
     kappa: Array
@@ -53,6 +58,7 @@ class TrueModel:
     b1: Array
     w2: Array
     b2: Array
+    relaxed: bool = False
 
     def __post_init__(self) -> None:
         shapes = {
@@ -69,6 +75,8 @@ class TrueModel:
             raise ValueError("kappa must be at least 1 for every input")
         if np.any(self.scale <= 0.0):
             raise ValueError("scale must be positive for every input")
+        if self.relaxed:
+            return
         for name, weights, mask in (("w1", self.w1, MASK_1), ("w2", self.w2, MASK_2)):
             if np.any(weights < 0.0):
                 raise ValueError(f"{name} must be zero or more")
