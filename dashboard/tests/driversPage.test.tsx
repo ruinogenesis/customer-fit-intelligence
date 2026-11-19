@@ -9,6 +9,7 @@ import { ApiError } from "../src/api";
 import { App } from "../src/App";
 import { INPUTS, type Input } from "../src/customers";
 import type { DriverGroup, Drivers } from "../src/drivers";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth } from "./fakes";
 
 // 10:00 on 2026-11-19 in Bangkok: the last 28 days start on 2026-10-23.
@@ -188,6 +189,12 @@ test("a row opens all eight inputs against every order; one row at a time", asyn
   expect(screen.getByText("42 orders, fit 0.513; over every order, 0.595.")).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "rest-01" }));
   expect(document.querySelector("tr.detail")).toBeNull();
+});
+
+test("axe finds nothing on the drivers screen, with a row open (T409)", async () => {
+  await open();
+  fireEvent.click(screen.getByRole("button", { name: "rest-02" }));
+  expect(await violations()).toEqual([]);
 });
 
 // --- The URL ---

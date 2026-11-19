@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="cfi-commit" content="%VITE_COMMIT%" />
     <title>Customer Fit Intelligence</title>
+    <script>
+      // The kept theme before the first paint (T409; see src/theme.ts).
+      try {
+        const kept = localStorage.getItem("cfi-theme");
+        if (kept === "light" || kept === "dark") document.documentElement.dataset.theme = kept;
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -8,6 +8,7 @@ import { ApiError } from "../src/api";
 import { App } from "../src/App";
 import type { OverviewNow, Trend } from "../src/overview";
 import { REFRESH_MS } from "../src/OverviewPage";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth } from "./fakes";
 
 const NOW: OverviewNow = {
@@ -103,6 +104,12 @@ test("today's numbers come from the API", async () => {
   expect(tile("Lovemark")).toBe("Lovemark | 90 | 56% of scored");
   expect(tile("Product")).toBe("Product | 15 | 9% of scored");
   expect(screen.getByText(/^Updated \d\d:\d\d:\d\d · refreshes every 30 seconds$/)).toBeTruthy();
+});
+
+test("axe finds nothing on the overview, with the numbers table open (T409)", async () => {
+  await overviewWith();
+  for (const details of document.querySelectorAll("details")) details.open = true;
+  expect(await violations()).toEqual([]);
 });
 
 test("the numbers refresh every 30 seconds", async () => {

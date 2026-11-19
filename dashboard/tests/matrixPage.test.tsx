@@ -1,5 +1,6 @@
 // T403: the love matrix: every customer as a dot from the live feed, those at
 // risk standing out; a group to list and open; movement between two days.
+// T409: the arrow keys move through the dots; nothing axe can find.
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { createMemoryRouter } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
@@ -7,6 +8,7 @@ import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { ApiError } from "../src/api";
 import { App } from "../src/App";
 import type { FeedCustomer, Movement } from "../src/matrix";
+import { violations } from "./axe";
 import { FakeApi, FakeAuth, FakeFeed } from "./fakes";
 
 // 10:00 on 2026-11-19 in Bangkok: yesterday, the latest snapshot, is the 18th.
@@ -137,10 +139,10 @@ test("every scored customer is a dot; those at risk drawn larger, on top", async
   ]);
   expect(screen.getByText(/^Live: 5 customers placed, 1 not scored yet · updated 10:00:00$/)).toBeTruthy();
   expect(document.querySelector(".legend")?.textContent).toBe(
-    " customer (2)  at risk: churn risk 10% or more (3). Click a dot to open the customer.",
+    " customer (2)  at risk: churn risk 10% or more (3). Click a dot to open the customer, or move through them with the arrow keys.",
   );
   expect(screen.getByRole("img").getAttribute("aria-label")).toBe(
-    "Love matrix: 5 customers by Respect (across) and Love (up), 3 at risk.",
+    "Love matrix: 5 customers by Respect (across) and Love (up), 3 at risk. Arrow keys move between customers, Page Up and Page Down through all of them in order; Enter opens one.",
   );
   expect(picker()).toEqual(["Lovemark 2", "Brand 1", "Fad 1", "Product 1"]);
   expect(screen.getByText("Pick a quadrant or a churn-risk level to list those customers.")).toBeTruthy();
@@ -192,6 +194,122 @@ test("a dot or a listed customer opens their profile", async () => {
   expect(screen.getByRole("link", { name: "c-d" }).getAttribute("href")).toBe("/customers/c-d");
   fireEvent.click(document.querySelectorAll("circle.dot")[3]!);
   expect(router.state.location.pathname).toBe("/customers/c-d");
+});
+
+// --- By keyboard (T409) ---
+
+const plot = () => screen.getByRole("img");
+const ring = () => document.querySelector("circle.spot-ring");
+const info = () => document.querySelector(".spot-info")?.textContent ?? "";
+const press = (key: string) => fireEvent.keyDown(plot(), { key });
+
+test("focusing the matrix puts a ring on the top customer and says who it is", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  expect(plot().getAttribute("tabindex")).toBe("0");
+  expect(ring()).toBeNull();
+  expect(info()).toBe("");
+  fireEvent.focus(plot());
+  expect([ring()?.getAttribute("cx"), ring()?.getAttribute("cy"), ring()?.getAttribute("r")]).toEqual([
+    "478.4",
+    "108.8",
+    "9",
+  ]);
+  expect(info()).toBe("c-a: Lovemark, love 0.900, respect 0.800, churn risk 2.0%. Enter opens their profile.");
+  expect(document.querySelector(".spot-info")?.getAttribute("aria-live")).toBe("polite");
+});
+
+test("the arrows move to the nearest customer that way, Home and End to the first and last", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.focus(plot());
+  const path: string[] = [];
+  for (const key of ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "ArrowDown", "ArrowDown", "End", "Home"]) {
+    press(key);
+    path.push(info().split(":")[0]!);
+  }
+  // Up from the top stays; c-d is left of c-a, c-e below c-d, c-c right of
+  // c-e; nothing is below c-c. c-e is last in reading order, c-a first.
+  expect(path).toEqual(["c-a", "c-d", "c-e", "c-c", "c-c", "c-c", "c-e", "c-a"]);
+  expect(ring()?.getAttribute("r")).toBe("9");
+  press("ArrowLeft");
+  expect(ring()?.getAttribute("r")).toBe("11"); // c-d is at risk: a larger dot, a larger ring
+});
+
+test("Page Down and Page Up step through every customer in reading order", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.focus(plot());
+  const path: string[] = [];
+  for (const key of ["PageDown", "PageDown", "PageDown", "PageDown", "PageDown", "PageUp"]) {
+    press(key);
+    path.push(info().split(":")[0]!);
+  }
+  // Top to bottom: c-a, c-d, c-b, c-c, c-e; past the last it stays.
+  expect(path).toEqual(["c-d", "c-b", "c-c", "c-e", "c-e", "c-c"]);
+});
+
+test("Enter opens the customer under the ring", async () => {
+  const { feed, router } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.focus(plot());
+  press("ArrowDown");
+  press("Enter");
+  expect(router.state.location.pathname).toBe("/customers/c-b");
+});
+
+test("customers on one spot are listed by Enter, and focus moves to the list", async () => {
+  const { feed } = await open();
+  feed.send([
+    ...CUSTOMERS,
+    customer("c-h", 0.6, 0.6, "lovemark", 0.03),
+    customer("c-g", 0.6, 0.6, "lovemark", 0.04),
+  ]);
+  fireEvent.focus(plot());
+  press("ArrowDown");
+  press("ArrowLeft");
+  expect(info()).toBe("2 customers at love 0.600, respect 0.600. Enter lists them below.");
+  press("Enter");
+  const summary = screen.getByText("2 customers on one spot, love 0.600, respect 0.600, riskiest first.");
+  expect(document.activeElement).toBe(summary);
+  expect(listed().map((r) => r.slice(0, 3))).toEqual(["c-g", "c-h"]);
+  expect(picker()).toEqual(["Lovemark 4", "Brand 1", "Fad 1", "Product 1"]);
+  expect(dots().filter((d) => !d.className.includes("faded")).map((d) => d.id)).toEqual(["c-h", "c-g"]);
+  fireEvent.click(screen.getByRole("button", { name: "Lovemark 4" }));
+  expect(screen.getByText("4 customers in Lovemark, riskiest first.")).toBeTruthy();
+});
+
+test("a click shows no ring; the ring is for the keyboard, and it remembers its place", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.pointerDown(plot());
+  fireEvent.focus(plot());
+  expect(ring()).toBeNull();
+  press("ArrowRight"); // a key after a click starts at the top
+  expect(info().startsWith("c-a:")).toBe(true);
+  press("ArrowDown");
+  fireEvent.blur(plot());
+  expect(ring()).toBeNull();
+  expect(info()).toBe("");
+  fireEvent.focus(plot());
+  expect(info().startsWith("c-b:")).toBe(true);
+});
+
+test("when the customer under the ring moves, the ring follows to the nearest spot", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.focus(plot());
+  press("ArrowDown");
+  feed.send(CUSTOMERS.map((c) => (c.customer_id === "c-b" ? customer("c-b", 0.72, 0.6, "lovemark", 0.12) : c)));
+  expect(info()).toBe("c-b: Lovemark, love 0.600, respect 0.720, churn risk 12.0%. Enter opens their profile.");
+});
+
+test("axe finds nothing on the matrix, with a group listed and movement shown", async () => {
+  const { feed } = await open();
+  feed.send(CUSTOMERS);
+  fireEvent.click(screen.getByRole("button", { name: "Lovemark 2" }));
+  fireEvent.focus(plot());
+  expect(await violations()).toEqual([]);
 });
 
 test("when the feed stops, the matrix stays as it was and says so", async () => {

@@ -14,5 +14,5 @@ try {
     </StrictMode>,
   );
 } catch (error) {
-  root.render(<p className="status">The dashboard couldn't start: {String(error)}</p>);
+  root.render(<p className="startup">The dashboard couldn't start: {String(error)}</p>);
 }

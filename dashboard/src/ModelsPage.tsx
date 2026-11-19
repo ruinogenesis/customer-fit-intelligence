@@ -130,6 +130,10 @@ function Versions(props: {
   onCard: (version: string) => void;
 }) {
   const { models, admin, confirming, busy, open, cards } = props;
+  const cancel = (version: string) => {
+    props.onCancel();
+    document.getElementById(`promote-${version}`)?.focus();
+  };
   const metrics = metricNames(models);
   const live = models.find((model) => model.status === "live")?.version ?? null;
   const columns = 5 + metrics.length;
@@ -179,7 +183,9 @@ function Versions(props: {
                   {admin && label !== null && (
                     <button
                       type="button"
+                      id={`promote-${model.version}`}
                       aria-label={`${label} ${model.version}`}
+                      aria-expanded={confirming === model.version}
                       disabled={busy}
                       onClick={() => props.onPromote(model.version)}
                     >
@@ -190,16 +196,29 @@ function Versions(props: {
               </tr>
               {confirming === model.version && (
                 <tr className="confirm">
-                  <td colSpan={columns}>
-                    <p>
+                  {/* Focus goes to the confirm button; Cancel or Escape brings it
+                      back to the button that asked (T409). */}
+                  <td
+                    colSpan={columns}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape" && !busy) cancel(model.version);
+                    }}
+                  >
+                    <p id={`confirm-${model.version}`}>
                       Make <code>{model.version}</code> live? Every event from then on, on every
                       instance, is scored by it
                       {live === null ? "." : <>; <code>{live}</code> is retired.</>}
                     </p>
-                    <button type="button" disabled={busy} onClick={() => props.onConfirm(model.version)}>
+                    <button
+                      type="button"
+                      autoFocus
+                      aria-describedby={`confirm-${model.version}`}
+                      disabled={busy}
+                      onClick={() => props.onConfirm(model.version)}
+                    >
                       {busy ? "Promoting…" : `Make ${model.version} live`}
                     </button>
-                    <button type="button" disabled={busy} onClick={props.onCancel}>
+                    <button type="button" disabled={busy} onClick={() => cancel(model.version)}>
                       Cancel
                     </button>
                   </td>
