@@ -27,7 +27,8 @@ class TrueOutcomes:
     """The hidden settings that turn latents into fit, and fit into behaviour.
 
     w_fit, b_fit: Fit = sigmoid(w_fit[0] * trust + w_fit[1] * convenience
-    + b_fit). pace: the wait to the next order is the customer's usual
+    + w_interaction * trust * convenience + b_fit); w_interaction is 0 unless
+    a robustness check (T803) asks for an effect CFI's additive layer lacks. pace: the wait to the next order is the customer's usual
     days_between_orders times exp(-pace * (fit - FIT_MIDPOINT)).
     churn_base, churn_slope: after each order, the chance of stopping for
     good is sigmoid(churn_base - churn_slope * (fit - FIT_MIDPOINT)).
@@ -48,6 +49,7 @@ class TrueOutcomes:
     survey_rate: float
     nps_slope: float
     nps_cuts: tuple[float, ...]
+    w_interaction: float = 0.0
 
     def __post_init__(self) -> None:
         numbers = [
@@ -59,6 +61,7 @@ class TrueOutcomes:
             self.survey_rate,
             self.nps_slope,
             *self.nps_cuts,
+            self.w_interaction,
         ]
         if not all(math.isfinite(x) for x in numbers):
             raise ValueError("every outcome setting must be finite")
@@ -103,7 +106,10 @@ def fit(
 ) -> float:
     """The true fit score, between 0 and 1."""
     w_trust, w_convenience = outcomes.w_fit
-    return _sigmoid(w_trust * trust + w_convenience * convenience + outcomes.b_fit)
+    pair = outcomes.w_interaction * trust * convenience
+    return _sigmoid(
+        w_trust * trust + w_convenience * convenience + pair + outcomes.b_fit
+    )
 
 
 def wait_factor(score: float, outcomes: TrueOutcomes = DEFAULT_OUTCOMES) -> float:

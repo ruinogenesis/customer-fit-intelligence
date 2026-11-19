@@ -1,0 +1,271 @@
+scenario,seed,measure,model,value
+baseline,2026,recovery respect,,0.984773
+baseline,2026,recovery love,,0.983330
+baseline,2026,recovery fit,,0.987076
+baseline,2026,kappa,,1.604055
+baseline,2026,mean true fit,,0.580233
+baseline,2026,auc churn 30d,CFI (15 paths),0.788569
+baseline,2026,auc churn 30d,logistic regression,0.775373
+baseline,2026,auc churn 30d,gradient boosting,0.774899
+baseline,2026,auc churn 30d,unconstrained network,0.779354
+baseline,2026,auc churn 30d,true Fit (ceiling),0.787421
+baseline,2026,auc reorder 14d,CFI (15 paths),0.710618
+baseline,2026,auc reorder 14d,logistic regression,0.707160
+baseline,2026,auc reorder 14d,gradient boosting,0.702090
+baseline,2026,auc reorder 14d,unconstrained network,0.710442
+baseline,2026,auc reorder 14d,true Fit (ceiling),0.711795
+baseline,2027,recovery respect,,0.980421
+baseline,2027,recovery love,,0.986067
+baseline,2027,recovery fit,,0.983479
+baseline,2027,kappa,,1.671267
+baseline,2027,mean true fit,,0.576274
+baseline,2027,auc churn 30d,CFI (15 paths),0.797636
+baseline,2027,auc churn 30d,logistic regression,0.801271
+baseline,2027,auc churn 30d,gradient boosting,0.782768
+baseline,2027,auc churn 30d,unconstrained network,0.804293
+baseline,2027,auc churn 30d,true Fit (ceiling),0.804055
+baseline,2027,auc reorder 14d,CFI (15 paths),0.723538
+baseline,2027,auc reorder 14d,logistic regression,0.717065
+baseline,2027,auc reorder 14d,gradient boosting,0.713968
+baseline,2027,auc reorder 14d,unconstrained network,0.721685
+baseline,2027,auc reorder 14d,true Fit (ceiling),0.726166
+baseline,2028,recovery respect,,0.984081
+baseline,2028,recovery love,,0.984120
+baseline,2028,recovery fit,,0.985836
+baseline,2028,kappa,,1.414267
+baseline,2028,mean true fit,,0.582115
+baseline,2028,auc churn 30d,CFI (15 paths),0.785519
+baseline,2028,auc churn 30d,logistic regression,0.782323
+baseline,2028,auc churn 30d,gradient boosting,0.760202
+baseline,2028,auc churn 30d,unconstrained network,0.773134
+baseline,2028,auc churn 30d,true Fit (ceiling),0.788415
+baseline,2028,auc reorder 14d,CFI (15 paths),0.717848
+baseline,2028,auc reorder 14d,logistic regression,0.712413
+baseline,2028,auc reorder 14d,gradient boosting,0.709314
+baseline,2028,auc reorder 14d,unconstrained network,0.718192
+baseline,2028,auc reorder 14d,true Fit (ceiling),0.719633
+missing paths,2026,recovery respect,,0.984455
+missing paths,2026,recovery love,,0.897076
+missing paths,2026,recovery fit,,0.970697
+missing paths,2026,kappa,,1.900180
+missing paths,2026,mean true fit,,0.564205
+missing paths,2026,auc churn 30d,CFI (15 paths),0.799632
+missing paths,2026,auc churn 30d,logistic regression,0.797941
+missing paths,2026,auc churn 30d,gradient boosting,0.790240
+missing paths,2026,auc churn 30d,unconstrained network,0.798499
+missing paths,2026,auc churn 30d,true Fit (ceiling),0.806673
+missing paths,2026,auc reorder 14d,CFI (15 paths),0.721672
+missing paths,2026,auc reorder 14d,logistic regression,0.720492
+missing paths,2026,auc reorder 14d,gradient boosting,0.717882
+missing paths,2026,auc reorder 14d,unconstrained network,0.724619
+missing paths,2026,auc reorder 14d,true Fit (ceiling),0.727905
+missing paths,2027,recovery respect,,0.980937
+missing paths,2027,recovery love,,0.899231
+missing paths,2027,recovery fit,,0.976502
+missing paths,2027,kappa,,1.859309
+missing paths,2027,mean true fit,,0.559736
+missing paths,2027,auc churn 30d,CFI (15 paths),0.808245
+missing paths,2027,auc churn 30d,logistic regression,0.805947
+missing paths,2027,auc churn 30d,gradient boosting,0.799223
+missing paths,2027,auc churn 30d,unconstrained network,0.813222
+missing paths,2027,auc churn 30d,true Fit (ceiling),0.816759
+missing paths,2027,auc reorder 14d,CFI (15 paths),0.745255
+missing paths,2027,auc reorder 14d,logistic regression,0.739143
+missing paths,2027,auc reorder 14d,gradient boosting,0.738536
+missing paths,2027,auc reorder 14d,unconstrained network,0.745474
+missing paths,2027,auc reorder 14d,true Fit (ceiling),0.751172
+missing paths,2028,recovery respect,,0.984811
+missing paths,2028,recovery love,,0.900508
+missing paths,2028,recovery fit,,0.973199
+missing paths,2028,kappa,,1.536702
+missing paths,2028,mean true fit,,0.566781
+missing paths,2028,auc churn 30d,CFI (15 paths),0.806580
+missing paths,2028,auc churn 30d,logistic regression,0.809209
+missing paths,2028,auc churn 30d,gradient boosting,0.793452
+missing paths,2028,auc churn 30d,unconstrained network,0.804694
+missing paths,2028,auc churn 30d,true Fit (ceiling),0.816659
+missing paths,2028,auc reorder 14d,CFI (15 paths),0.744313
+missing paths,2028,auc reorder 14d,logistic regression,0.741126
+missing paths,2028,auc reorder 14d,gradient boosting,0.743054
+missing paths,2028,auc reorder 14d,unconstrained network,0.746436
+missing paths,2028,auc reorder 14d,true Fit (ceiling),0.752442
+flipped sign,2026,recovery respect,,0.932508
+flipped sign,2026,recovery love,,0.982326
+flipped sign,2026,recovery fit,,0.966898
+flipped sign,2026,kappa,,1.511291
+flipped sign,2026,mean true fit,,0.591847
+flipped sign,2026,auc churn 30d,CFI (15 paths),0.801024
+flipped sign,2026,auc churn 30d,logistic regression,0.788739
+flipped sign,2026,auc churn 30d,gradient boosting,0.783438
+flipped sign,2026,auc churn 30d,unconstrained network,0.787399
+flipped sign,2026,auc churn 30d,true Fit (ceiling),0.799212
+flipped sign,2026,auc reorder 14d,CFI (15 paths),0.706753
+flipped sign,2026,auc reorder 14d,logistic regression,0.702366
+flipped sign,2026,auc reorder 14d,gradient boosting,0.698772
+flipped sign,2026,auc reorder 14d,unconstrained network,0.705686
+flipped sign,2026,auc reorder 14d,true Fit (ceiling),0.709190
+flipped sign,2027,recovery respect,,0.927132
+flipped sign,2027,recovery love,,0.984878
+flipped sign,2027,recovery fit,,0.965245
+flipped sign,2027,kappa,,1.637125
+flipped sign,2027,mean true fit,,0.589069
+flipped sign,2027,auc churn 30d,CFI (15 paths),0.790840
+flipped sign,2027,auc churn 30d,logistic regression,0.797346
+flipped sign,2027,auc churn 30d,gradient boosting,0.778621
+flipped sign,2027,auc churn 30d,unconstrained network,0.796443
+flipped sign,2027,auc churn 30d,true Fit (ceiling),0.801034
+flipped sign,2027,auc reorder 14d,CFI (15 paths),0.725603
+flipped sign,2027,auc reorder 14d,logistic regression,0.723701
+flipped sign,2027,auc reorder 14d,gradient boosting,0.722951
+flipped sign,2027,auc reorder 14d,unconstrained network,0.729003
+flipped sign,2027,auc reorder 14d,true Fit (ceiling),0.733459
+flipped sign,2028,recovery respect,,0.928327
+flipped sign,2028,recovery love,,0.985210
+flipped sign,2028,recovery fit,,0.965145
+flipped sign,2028,kappa,,1.369607
+flipped sign,2028,mean true fit,,0.594040
+flipped sign,2028,auc churn 30d,CFI (15 paths),0.797139
+flipped sign,2028,auc churn 30d,logistic regression,0.794757
+flipped sign,2028,auc churn 30d,gradient boosting,0.785585
+flipped sign,2028,auc churn 30d,unconstrained network,0.791347
+flipped sign,2028,auc churn 30d,true Fit (ceiling),0.800370
+flipped sign,2028,auc reorder 14d,CFI (15 paths),0.721074
+flipped sign,2028,auc reorder 14d,logistic regression,0.717170
+flipped sign,2028,auc reorder 14d,gradient boosting,0.717466
+flipped sign,2028,auc reorder 14d,unconstrained network,0.722143
+flipped sign,2028,auc reorder 14d,true Fit (ceiling),0.723810
+interaction,2026,recovery respect,,0.983835
+interaction,2026,recovery love,,0.986673
+interaction,2026,recovery fit,,0.989933
+interaction,2026,kappa,,1.644097
+interaction,2026,mean true fit,,0.584004
+interaction,2026,auc churn 30d,CFI (15 paths),0.832975
+interaction,2026,auc churn 30d,logistic regression,0.821853
+interaction,2026,auc churn 30d,gradient boosting,0.816021
+interaction,2026,auc churn 30d,unconstrained network,0.823520
+interaction,2026,auc churn 30d,true Fit (ceiling),0.831713
+interaction,2026,auc reorder 14d,CFI (15 paths),0.759863
+interaction,2026,auc reorder 14d,logistic regression,0.755467
+interaction,2026,auc reorder 14d,gradient boosting,0.752911
+interaction,2026,auc reorder 14d,unconstrained network,0.758985
+interaction,2026,auc reorder 14d,true Fit (ceiling),0.761041
+interaction,2027,recovery respect,,0.980676
+interaction,2027,recovery love,,0.985354
+interaction,2027,recovery fit,,0.986736
+interaction,2027,kappa,,1.728151
+interaction,2027,mean true fit,,0.577733
+interaction,2027,auc churn 30d,CFI (15 paths),0.829698
+interaction,2027,auc churn 30d,logistic regression,0.830185
+interaction,2027,auc churn 30d,gradient boosting,0.817600
+interaction,2027,auc churn 30d,unconstrained network,0.830761
+interaction,2027,auc churn 30d,true Fit (ceiling),0.834208
+interaction,2027,auc reorder 14d,CFI (15 paths),0.777758
+interaction,2027,auc reorder 14d,logistic regression,0.771198
+interaction,2027,auc reorder 14d,gradient boosting,0.772288
+interaction,2027,auc reorder 14d,unconstrained network,0.778220
+interaction,2027,auc reorder 14d,true Fit (ceiling),0.780815
+interaction,2028,recovery respect,,0.984689
+interaction,2028,recovery love,,0.985533
+interaction,2028,recovery fit,,0.989820
+interaction,2028,kappa,,1.435106
+interaction,2028,mean true fit,,0.586702
+interaction,2028,auc churn 30d,CFI (15 paths),0.834116
+interaction,2028,auc churn 30d,logistic regression,0.827295
+interaction,2028,auc churn 30d,gradient boosting,0.819878
+interaction,2028,auc churn 30d,unconstrained network,0.833059
+interaction,2028,auc churn 30d,true Fit (ceiling),0.835616
+interaction,2028,auc reorder 14d,CFI (15 paths),0.773351
+interaction,2028,auc reorder 14d,logistic regression,0.765608
+interaction,2028,auc reorder 14d,gradient boosting,0.763989
+interaction,2028,auc reorder 14d,unconstrained network,0.771493
+interaction,2028,auc reorder 14d,true Fit (ceiling),0.774902
+weak anchors,2026,recovery respect,,0.992107
+weak anchors,2026,recovery love,,0.975412
+weak anchors,2026,recovery fit,,0.987607
+weak anchors,2026,kappa,,1.799501
+weak anchors,2026,mean true fit,,0.580233
+weak anchors,2026,auc churn 30d,CFI (15 paths),0.787112
+weak anchors,2026,auc churn 30d,logistic regression,0.775373
+weak anchors,2026,auc churn 30d,gradient boosting,0.774899
+weak anchors,2026,auc churn 30d,unconstrained network,0.779354
+weak anchors,2026,auc churn 30d,true Fit (ceiling),0.787421
+weak anchors,2026,auc reorder 14d,CFI (15 paths),0.711022
+weak anchors,2026,auc reorder 14d,logistic regression,0.707160
+weak anchors,2026,auc reorder 14d,gradient boosting,0.702090
+weak anchors,2026,auc reorder 14d,unconstrained network,0.710442
+weak anchors,2026,auc reorder 14d,true Fit (ceiling),0.711795
+weak anchors,2027,recovery respect,,0.987702
+weak anchors,2027,recovery love,,0.979165
+weak anchors,2027,recovery fit,,0.986373
+weak anchors,2027,kappa,,1.692505
+weak anchors,2027,mean true fit,,0.576274
+weak anchors,2027,auc churn 30d,CFI (15 paths),0.800731
+weak anchors,2027,auc churn 30d,logistic regression,0.801271
+weak anchors,2027,auc churn 30d,gradient boosting,0.782768
+weak anchors,2027,auc churn 30d,unconstrained network,0.804293
+weak anchors,2027,auc churn 30d,true Fit (ceiling),0.804055
+weak anchors,2027,auc reorder 14d,CFI (15 paths),0.724476
+weak anchors,2027,auc reorder 14d,logistic regression,0.717065
+weak anchors,2027,auc reorder 14d,gradient boosting,0.713968
+weak anchors,2027,auc reorder 14d,unconstrained network,0.721685
+weak anchors,2027,auc reorder 14d,true Fit (ceiling),0.726166
+weak anchors,2028,recovery respect,,0.991006
+weak anchors,2028,recovery love,,0.983275
+weak anchors,2028,recovery fit,,0.989435
+weak anchors,2028,kappa,,1.496759
+weak anchors,2028,mean true fit,,0.582115
+weak anchors,2028,auc churn 30d,CFI (15 paths),0.786567
+weak anchors,2028,auc churn 30d,logistic regression,0.782323
+weak anchors,2028,auc churn 30d,gradient boosting,0.760202
+weak anchors,2028,auc churn 30d,unconstrained network,0.773134
+weak anchors,2028,auc churn 30d,true Fit (ceiling),0.788415
+weak anchors,2028,auc reorder 14d,CFI (15 paths),0.717904
+weak anchors,2028,auc reorder 14d,logistic regression,0.712413
+weak anchors,2028,auc reorder 14d,gradient boosting,0.709314
+weak anchors,2028,auc reorder 14d,unconstrained network,0.718192
+weak anchors,2028,auc reorder 14d,true Fit (ceiling),0.719633
+noisy labels,2026,recovery respect,,0.984677
+noisy labels,2026,recovery love,,0.983312
+noisy labels,2026,recovery fit,,0.988246
+noisy labels,2026,kappa,,1.601329
+noisy labels,2026,mean true fit,,0.580233
+noisy labels,2026,auc churn 30d,CFI (15 paths),0.788555
+noisy labels,2026,auc churn 30d,logistic regression,0.771052
+noisy labels,2026,auc churn 30d,gradient boosting,0.756275
+noisy labels,2026,auc churn 30d,unconstrained network,0.757337
+noisy labels,2026,auc churn 30d,true Fit (ceiling),0.787421
+noisy labels,2026,auc reorder 14d,CFI (15 paths),0.710886
+noisy labels,2026,auc reorder 14d,logistic regression,0.706902
+noisy labels,2026,auc reorder 14d,gradient boosting,0.693470
+noisy labels,2026,auc reorder 14d,unconstrained network,0.690879
+noisy labels,2026,auc reorder 14d,true Fit (ceiling),0.711795
+noisy labels,2027,recovery respect,,0.980332
+noisy labels,2027,recovery love,,0.986028
+noisy labels,2027,recovery fit,,0.984230
+noisy labels,2027,kappa,,1.667312
+noisy labels,2027,mean true fit,,0.576274
+noisy labels,2027,auc churn 30d,CFI (15 paths),0.797526
+noisy labels,2027,auc churn 30d,logistic regression,0.799090
+noisy labels,2027,auc churn 30d,gradient boosting,0.759210
+noisy labels,2027,auc churn 30d,unconstrained network,0.745244
+noisy labels,2027,auc churn 30d,true Fit (ceiling),0.804055
+noisy labels,2027,auc reorder 14d,CFI (15 paths),0.723428
+noisy labels,2027,auc reorder 14d,logistic regression,0.715916
+noisy labels,2027,auc reorder 14d,gradient boosting,0.702269
+noisy labels,2027,auc reorder 14d,unconstrained network,0.713834
+noisy labels,2027,auc reorder 14d,true Fit (ceiling),0.726166
+noisy labels,2028,recovery respect,,0.983962
+noisy labels,2028,recovery love,,0.984061
+noisy labels,2028,recovery fit,,0.986684
+noisy labels,2028,kappa,,1.409596
+noisy labels,2028,mean true fit,,0.582115
+noisy labels,2028,auc churn 30d,CFI (15 paths),0.785624
+noisy labels,2028,auc churn 30d,logistic regression,0.782207
+noisy labels,2028,auc churn 30d,gradient boosting,0.741937
+noisy labels,2028,auc churn 30d,unconstrained network,0.758978
+noisy labels,2028,auc churn 30d,true Fit (ceiling),0.788415
+noisy labels,2028,auc reorder 14d,CFI (15 paths),0.717937
+noisy labels,2028,auc reorder 14d,logistic regression,0.712653
+noisy labels,2028,auc reorder 14d,gradient boosting,0.702734
+noisy labels,2028,auc reorder 14d,unconstrained network,0.702642
+noisy labels,2028,auc reorder 14d,true Fit (ceiling),0.719633

@@ -25,6 +25,21 @@ def test_fit_follows_the_doc_formula() -> None:
     assert fit(0.6, 0.5) == pytest.approx(want)
 
 
+def test_an_interaction_adds_trust_times_convenience() -> None:
+    o = replace(DEFAULT_OUTCOMES, w_interaction=3.0)
+    want = sigmoid(o.w_fit[0] * 0.6 + o.w_fit[1] * 0.5 + 3.0 * 0.6 * 0.5 + o.b_fit)
+    assert fit(0.6, 0.5, o) == pytest.approx(want)
+
+
+def test_by_default_there_is_no_interaction() -> None:
+    assert DEFAULT_OUTCOMES.w_interaction == 0.0
+
+
+def test_the_interaction_must_be_finite() -> None:
+    with pytest.raises(ValueError, match="finite"):
+        replace(DEFAULT_OUTCOMES, w_interaction=math.inf)
+
+
 def test_fit_rises_with_trust_and_with_convenience() -> None:
     assert fit(0.3, 0.5) < fit(0.6, 0.5) < fit(0.9, 0.5)
     assert fit(0.6, 0.2) < fit(0.6, 0.5) < fit(0.6, 0.8)

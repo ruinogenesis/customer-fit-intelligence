@@ -123,6 +123,34 @@ def test_true_model_rejects_a_weight_outside_the_mask() -> None:
         replace(DEFAULT_TRUTH, w1=w1)
 
 
+def test_a_relaxed_truth_accepts_paths_outside_the_masks_and_negative_weights() -> None:
+    w1 = DEFAULT_TRUTH.w1.copy()
+    w1[1, 1] = 0.3  # x2 feeds love, which the theory leaves out
+    w1[0, 4] = -0.25  # x5 lowers respect
+    truth = replace(DEFAULT_TRUTH, w1=w1, relaxed=True)
+    x2_up = np.zeros((1, 8))
+    x2_up[0, 1] = 2.0
+    # love rises with x2 under the relaxed truth, and not under the default one
+    assert (
+        true_latents(x2_up, truth)["love"][0]
+        > true_latents(no_gaps(), truth)["love"][0]
+    )
+    assert true_latents(x2_up)["love"][0] == true_latents(no_gaps())["love"][0]
+    x5_up = np.zeros((1, 8))
+    x5_up[0, 4] = 2.0
+    assert (
+        true_latents(x5_up, truth)["respect"][0]
+        < true_latents(no_gaps(), truth)["respect"][0]
+    )
+
+
+def test_a_relaxed_truth_still_rejects_kappa_below_one() -> None:
+    kappa = DEFAULT_TRUTH.kappa.copy()
+    kappa[0] = 0.9
+    with pytest.raises(ValueError, match="kappa"):
+        replace(DEFAULT_TRUTH, kappa=kappa, relaxed=True)
+
+
 def test_true_model_rejects_kappa_below_one() -> None:
     kappa = DEFAULT_TRUTH.kappa.copy()
     kappa[0] = 0.9
