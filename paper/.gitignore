@@ -1,0 +1,4 @@
+# LaTeX build files; main.pdf is kept
+*.aux
+*.log
+*.out
