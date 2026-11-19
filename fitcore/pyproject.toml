@@ -47,7 +47,8 @@ warn_unused_ignores = true
 module = ["torch", "torch.*"]
 ignore_missing_imports = true
 
-# Likewise scipy (the paper extra), which fitcore.baselines imports lazily.
+# Likewise the paper extra's scipy and pandas, which fitcore.baselines and
+# fitcore.olist import lazily.
 [[tool.mypy.overrides]]
-module = ["scipy", "scipy.*"]
+module = ["scipy", "scipy.*", "pandas", "pandas.*"]
 ignore_missing_imports = true
