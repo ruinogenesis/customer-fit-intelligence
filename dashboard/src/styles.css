@@ -592,10 +592,11 @@ table.bars {
 }
 
 /* T410: customers whose latest order measured nothing that moves Love share
-   one Love, the live model's as-expected one. A pale band marks that level,
-   behind the dots, unlike the dashed quadrant lines; on it the dots go
-   without rings and lighter, so many together read as one band, not a chain
-   of overlapping rings. */
+   one Love, the live model's as-expected one. A shaded band marks that level,
+   behind the dots, unlike the dashed quadrant lines: pale in Light, a muted
+   blue in Dark, so the legend calls it shaded. On it the dots go without
+   rings and lighter, so many together read as one band, not a chain of
+   overlapping rings. */
 .matrix-plot line.as-expected {
   stroke: var(--band);
   stroke-width: 12;
