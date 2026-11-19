@@ -12,6 +12,7 @@ It does all the act automatically with measured actions.
 - `fitcore/`: shared python package
 - `functions/`: cloud functions
 - `notebooks/`: colab research
+- `paper/`: the paper, its figures and where each number comes from
 
 ## Local development
 
