@@ -9,10 +9,11 @@ IEEE conference layout, 15 references.
   the references settle; any TeX Live with the standard packages will do, and
   so will Overleaf (upload the folder as a project).
 - `figures.py`: draws the five data figures, `fig_*.pdf`, from
-  `notebooks/results`. From the repository root, with
+  `notebooks/results`, and cuts Fig. 8's panels, `fig_dash_*.png`, from the
+  screenshots. From the repository root, with
   `python -m pip install -e "fitcore[lab]"`, run `python paper/figures.py`.
-- `shot_matrix.png`, `shot_drivers.png`: Fig. 8, two pages of the dashboard on
-  dev.
+- `shot_matrix.png`, `shot_drivers.png`: the two dashboard pages on dev that
+  Fig. 8 shows.
 - `SOURCES.md`: where every table, figure and number comes from.
 
 When a result file changes, rerun `figures.py`, update the numbers that
