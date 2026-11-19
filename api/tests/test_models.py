@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from fitcore.model import SCORES, ModelParams
+from fitcore.scoring import score
 from flask import Flask
 from flask.testing import FlaskClient
 from test_access import bearer
@@ -260,6 +262,10 @@ def test_staff_see_the_models_and_only_admins_promote(
     card = f"{API}/models/t112-sim/card"
     assert client.get(card).status_code == 401
     assert client.get(card, headers=bearer("viewer")).status_code == 200
+    live = f"{API}/models/live"
+    assert client.get(live).status_code == 401
+    assert client.get(live, headers=bearer()).status_code == 403  # no role
+    assert client.get(live, headers=bearer("viewer")).status_code == 200
 
 
 def test_the_endpoints_are_documented(client: FlaskClient) -> None:
@@ -267,10 +273,58 @@ def test_the_endpoints_are_documented(client: FlaskClient) -> None:
     listing = paths[f"{API}/models"]["get"]["responses"]
     promoting = paths[f"{API}/models/{{version}}/promote"]["post"]["responses"]
     carding = paths[f"{API}/models/{{version}}/card"]["get"]["responses"]
+    living = paths[f"{API}/models/live"]["get"]["responses"]
     assert {"200", "401", "403", "503"} <= set(listing)
+    assert {"200", "401", "403", "503"} <= set(living)
     assert {"200", "401", "403", "404", "409", "503"} <= set(promoting)
     assert {"200", "401", "403", "404", "503"} <= set(carding)
     assert "text/markdown" in carding["200"]["content"]
+
+
+# --- The live model's as-expected scores (T410) ---
+
+
+def as_expected(data: bytes = T112) -> dict[str, float]:
+    expected = score(ModelParams.from_json(data), {})
+    return {name: getattr(expected, name) for name in SCORES}
+
+
+def test_the_live_model_answers_what_an_as_expected_order_scores(
+    app: Flask, client: FlaskClient
+) -> None:
+    add(app, "t112-sim")
+    add(app, "kappa-2", other_model())
+    assert promote(client, "t112-sim").status_code == 200
+    answer = client.get(f"{API}/models/live")
+    assert answer.status_code == 200
+    assert answer.get_json() == {"version": "t112-sim", "as_expected": as_expected()}
+    # An order with no gaps: Love sits where an unmeasured Love does.
+    assert answer.get_json()["as_expected"]["love"] == pytest.approx(0.8292, abs=1e-4)
+
+
+def test_the_answer_follows_a_promote(app: Flask, client: FlaskClient) -> None:
+    add(app, "t112-sim")
+    add(app, "kappa-2", other_model())
+    promote(client, "t112-sim")
+    promote(client, "kappa-2")
+    assert client.get(f"{API}/models/live").get_json()["version"] == "kappa-2"
+
+
+def test_without_a_live_version_there_is_no_live_model(client: FlaskClient) -> None:
+    assert client.get(f"{API}/models/live").status_code == 503
+
+
+def test_without_a_registry_the_model_file_is_the_live_model(
+    reference_model: str,
+) -> None:
+    client = _app(
+        REGISTRY=None, MODEL_PATH=reference_model, MODEL_VERSION="t112-sim"
+    ).test_client()
+    answer = client.get(f"{API}/models/live")
+    assert answer.status_code == 200
+    assert answer.get_json()["version"] == "t112-sim"
+    data = Path(reference_model).read_bytes()
+    assert answer.get_json()["as_expected"] == as_expected(data)
 
 
 # --- Model cards (T407) ---

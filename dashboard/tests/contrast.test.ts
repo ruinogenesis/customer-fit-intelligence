@@ -57,9 +57,10 @@ const MARKS: Record<string, string[]> = {
   rule: ["surface", "tint"],
 };
 
-/** Hairlines that only separate (dataviz skill: recessive grid and frame);
- * nothing is read from them alone, so they have no contrast floor. */
-const HAIRLINES = ["line", "grid", "frame"];
+/** Hairlines that only separate (dataviz skill: recessive grid and frame),
+ * and the matrix's as-expected band behind its dots (T410); nothing is read
+ * from them alone, so they have no contrast floor. */
+const HAIRLINES = ["line", "grid", "frame", "band"];
 
 test("every colour outside the theme block is one of its variables", () => {
   expect(REST.match(new RegExp(HEX, "g")) ?? []).toEqual([]);

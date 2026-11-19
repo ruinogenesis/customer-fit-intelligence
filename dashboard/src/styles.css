@@ -20,6 +20,8 @@
   --worse: light-dark(#e34948, #e66767);
   --critical: #d03b3b;
   --tint: light-dark(#eef4fc, #1d2b3f);
+  /* The series blue at about a sixth, on the chart surface (T410). */
+  --band: light-dark(#dde9f8, #202e3e);
   --badge: light-dark(#ddf4ff, #1d3550);
   --pill: light-dark(#f0efec, #383835);
   --pill-live: light-dark(#e5f4e4, #1e3a1e);
@@ -589,6 +591,25 @@ table.bars {
   opacity: 0.2;
 }
 
+/* T410: customers whose latest order measured nothing that moves Love share
+   one Love, the live model's as-expected one. A pale band marks that level,
+   behind the dots, unlike the dashed quadrant lines; on it the dots go
+   without rings and lighter, so many together read as one band, not a chain
+   of overlapping rings. */
+.matrix-plot line.as-expected {
+  stroke: var(--band);
+  stroke-width: 12;
+}
+
+.matrix-plot .dot.as-expected {
+  stroke: none;
+  fill-opacity: 0.6;
+}
+
+.matrix-plot .dot.as-expected.at-risk {
+  fill-opacity: 1;
+}
+
 /* The keyboard's place on the plot (T409). */
 .matrix-plot .spot-ring {
   fill: none;
@@ -609,7 +630,8 @@ table.bars {
 }
 
 .legend .key.customer,
-.legend .key.at-risk {
+.legend .key.at-risk,
+.legend .key.as-expected {
   border-radius: 50%;
 }
 
@@ -619,6 +641,14 @@ table.bars {
 
 .legend .key.at-risk {
   background: var(--critical);
+}
+
+.legend .key.as-expected {
+  background: var(--series);
+  opacity: 0.6;
+  width: 0.6em;
+  height: 0.6em;
+  box-shadow: 0 0 0 0.25em var(--band);
 }
 
 .picker {

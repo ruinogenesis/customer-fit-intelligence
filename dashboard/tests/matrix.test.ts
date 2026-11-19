@@ -16,6 +16,7 @@ import {
   scoresAt,
   SIZE,
   spotsOf,
+  lovesAsExpected,
   toDot,
   type Dot,
   type FeedCustomer,
@@ -180,4 +181,16 @@ test("days are Bangkok's, whatever the computer's time zone", () => {
   expect(bangkokDay(new Date("2026-11-18T18:30:00Z"))).toBe("2026-11-19");
   expect(bangkokDay(new Date("2026-11-18T18:30:00Z"), 1)).toBe("2026-11-18");
   expect(bangkokDay(new Date("2026-03-01T03:00:00Z"), 1)).toBe("2026-02-28");
+});
+
+test("Love as expected: exactly the live model's, never a near miss (T410)", () => {
+  const live = 0.8291911026056588;
+  const customers = [
+    customer("on", 0.9, live, "lovemark"),
+    customer("near", 0.9, 0.829, "lovemark"),
+    customer("far", 0.2, 0.3, "product"),
+    { customer_id: "unscored", scores: null, churn_risk: null, quadrant: null },
+  ];
+  expect([...lovesAsExpected(customers, live)]).toEqual(["on"]);
+  expect(lovesAsExpected(customers, null).size).toBe(0);
 });

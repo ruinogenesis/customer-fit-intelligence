@@ -304,10 +304,58 @@ test("when the customer under the ring moves, the ring follows to the nearest sp
   expect(info()).toBe("c-b: Lovemark, love 0.600, respect 0.720, churn risk 12.0%. Enter opens their profile.");
 });
 
-test("axe finds nothing on the matrix, with a group listed and movement shown", async () => {
+// --- Love as expected (T410) ---
+
+const LIVE = { version: "t112-sim", as_expected: { respect: 0.9, love: 0.8, convenience: 0.75, trust: 0.85, fit: 0.74 } };
+
+function withLiveModel(): FakeApi {
+  const api = fakeApi();
+  api.answers["/models/live"] = LIVE;
+  return api;
+}
+
+const ON_THE_LINE: FeedCustomer[] = [
+  ...CUSTOMERS,
+  customer("c-g", 0.6, 0.8, "lovemark", 0.03),
+  customer("c-h", 0.3, 0.8, "fad", 0.3),
+];
+
+test("customers with Love as expected sit on a pale band, without rings", async () => {
+  const { feed, api } = await open("/matrix", withLiveModel());
+  feed.send(ON_THE_LINE);
+  expect(api.asked("/models/live")).toBe(1);
+  const line = document.querySelector("line.as-expected")!;
+  expect([line.getAttribute("y1"), line.getAttribute("y2")]).toEqual(["161.6", "161.6"]);
+  // c-d has Love 0.8 too: an at-risk dot on the line keeps its size and colour.
+  expect(dots().filter((d) => d.className.includes("as-expected"))).toEqual([
+    { id: "c-g", className: "dot as-expected", r: "3", transform: "translate(372.8px, 161.6px)" },
+    { id: "c-d", className: "dot at-risk as-expected", r: "6", transform: "translate(161.6px, 161.6px)" },
+    { id: "c-h", className: "dot at-risk as-expected", r: "6", transform: "translate(214.4px, 161.6px)" },
+  ]);
+  expect(document.querySelectorAll(".legend")[1]?.textContent).toBe(
+    " on the pale band: Love not measured on their latest order (3), so it scores as expected. Respect still moves them across.",
+  );
+  expect(screen.getByRole("img").getAttribute("aria-label")).toContain(
+    ", 3 with Love not measured on their latest order, on one band.",
+  );
+});
+
+test("without the live model, or with no one on it, there is no line", async () => {
   const { feed } = await open();
-  feed.send(CUSTOMERS);
-  fireEvent.click(screen.getByRole("button", { name: "Lovemark 2" }));
+  feed.send(ON_THE_LINE);
+  expect(document.querySelector("line.as-expected")).toBeNull();
+  expect(dots().some((d) => d.className.includes("as-expected"))).toBe(false);
+  cleanup();
+  const again = await open("/matrix", withLiveModel());
+  again.feed.send(CUSTOMERS.filter((c) => c.customer_id !== "c-d"));
+  expect(document.querySelector("line.as-expected")).toBeNull();
+  expect(document.querySelectorAll(".legend")).toHaveLength(1);
+});
+
+test("axe finds nothing on the matrix, with a group listed and movement shown", async () => {
+  const { feed } = await open("/matrix", withLiveModel());
+  feed.send(ON_THE_LINE);
+  fireEvent.click(screen.getByRole("button", { name: "Lovemark 3" }));
   fireEvent.focus(plot());
   expect(await violations()).toEqual([]);
 });
