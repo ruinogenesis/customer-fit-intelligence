@@ -1,7 +1,10 @@
 """GET /models, a version's card and POST /models/{version}/promote (T310).
 
 Every staff role sees the versions and their model cards (T407); only
-admins promote. Promoting checks
+admins promote. GET /models/live (T410) answers the model events are scored
+with now, and what it scores an order exactly as expected (every gap 0):
+the dashboard marks the customers whose latest order measured nothing that
+moves Love. Promoting checks
 that the version's file loads before it goes live, and the next event on
 every instance is scored by it (cfi_api.model_registry). Rolling back is
 promoting an older version.
@@ -11,6 +14,8 @@ from datetime import UTC, datetime
 from typing import Any
 
 from fitcore.documents import ModelDocument
+from fitcore.model import SCORES
+from fitcore.scoring import score
 from flask import Response, abort
 from flask.views import MethodView
 from flask_smorest import Blueprint
@@ -27,12 +32,13 @@ from cfi_api.model_registry import (
     model_document,
     promote,
 )
-from cfi_api.runtime import registry, store
+from cfi_api.runtime import live_model, registry, store
 
 blp = Blueprint("models", __name__, description="The model registry")
 
 NO_REGISTRY = "This API has no model registry (REGISTRY is unset)"
 NOT_ADMIN = "The caller is not an admin"
+NO_MODEL = "No model is loaded, or the live one will not load"
 
 
 class ModelsSchema(Schema):
@@ -40,6 +46,30 @@ class ModelsSchema(Schema):
         fields.Nested(ModelDocument),
         required=True,
         metadata={"description": "Every registered version, newest first"},
+    )
+
+
+class AsExpectedSchema(Schema):
+    respect = fields.Float(required=True)
+    love = fields.Float(required=True)
+    convenience = fields.Float(required=True)
+    trust = fields.Float(required=True)
+    fit = fields.Float(required=True)
+    churn_risk = fields.Float(required=True)
+
+
+class LiveModelSchema(Schema):
+    version = fields.String(
+        required=True, metadata={"description": "The version events are scored with"}
+    )
+    as_expected = fields.Nested(
+        AsExpectedSchema,
+        required=True,
+        metadata={
+            "description": "What it scores an order exactly as expected (every gap "
+            "0). A customer whose love is exactly this one's had nothing on their "
+            "latest order that moves Love (food, personalization or recovery)"
+        },
     )
 
 
@@ -61,6 +91,32 @@ class ModelList(MethodView):
         """Every model version, newest first, with its status and metrics."""
         _registry()
         return {"models": [model_document(e) for e in store().list_models()]}
+
+
+@blp.route("/models/live")
+class LiveModel(MethodView):
+    @blp.response(200, LiveModelSchema)
+    @blp.alt_response(401, schema=ErrorSchema, description=UNSIGNED)
+    @blp.alt_response(403, schema=ErrorSchema, description=NOT_STAFF)
+    @blp.alt_response(503, schema=ErrorSchema, description=NO_MODEL)
+    @blp.doc(security=ACCESS["models.LiveModel", "GET"].security)
+    def get(self) -> Any:
+        """The model events are scored with now, and its as-expected scores.
+
+        From the registry's live version, or the model file when the API has
+        no registry.
+        """
+        try:
+            model = live_model()
+        except BadModel as err:
+            abort(503, description=f"The live model cannot be loaded: {err}")
+        if model is None:
+            abort(503, description="No model is loaded.")
+        expected = score(model.params, {})
+        return {
+            "version": model.version,
+            "as_expected": {name: getattr(expected, name) for name in SCORES},
+        }
 
 
 @blp.route("/models/<string:version>/card")

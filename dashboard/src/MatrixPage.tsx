@@ -3,7 +3,8 @@
 // churn-risk level to list those customers; a dot or a listed customer opens
 // their profile (T404). The arrow keys move through the dots (T409). Below,
 // how customers moved between quadrants from one day to another (GET /matrix,
-// T313).
+// T313). Customers whose latest order measured nothing that moves Love sit on
+// one pale band, the live model's as-expected Love (T410).
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
 
@@ -15,6 +16,7 @@ import {
   bangkokDay,
   countByQuadrant,
   LINE,
+  lovesAsExpected,
   MARGIN,
   matches,
   moveTotals,
@@ -30,6 +32,7 @@ import {
   type Dot,
   type Spot,
   type FeedCustomer,
+  type LiveModel,
   type Movement,
   type Selection,
 } from "./matrix";
@@ -54,9 +57,27 @@ type Live =
   | { state: "ready"; customers: FeedCustomer[]; at: Date; stopped: string | null };
 
 export function MatrixPage() {
-  const { feed } = useStaff();
+  const { feed, api } = useStaff();
   const [live, setLive] = useState<Live>({ state: "loading" });
   const [selection, setSelection] = useState<Selection>({ quadrant: null, minChurn: 0 });
+  // The live model's as-expected Love; without it (an older API, an error)
+  // the plot simply draws no line.
+  const [expectedLove, setExpectedLove] = useState<number | null>(null);
+
+  useEffect(() => {
+    let current = true;
+    api.get<LiveModel>("/models/live").then(
+      (model) => {
+        if (current) setExpectedLove(model.as_expected.love);
+      },
+      () => {
+        if (current) setExpectedLove(null);
+      },
+    );
+    return () => {
+      current = false;
+    };
+  }, [api]);
 
   useEffect(
     () =>
@@ -76,7 +97,12 @@ export function MatrixPage() {
       {live.state === "loading" && <p>Loading every customer…</p>}
       {live.state === "failed" && <p role="alert">No customers: {live.message}</p>}
       {live.state === "ready" && (
-        <Now {...live} selection={selection} setSelection={setSelection} />
+        <Now
+          {...live}
+          expectedLove={expectedLove}
+          selection={selection}
+          setSelection={setSelection}
+        />
       )}
       <h2>Movement between two days</h2>
       <MovementView />
@@ -88,12 +114,14 @@ function Now({
   customers,
   at,
   stopped,
+  expectedLove,
   selection,
   setSelection,
 }: {
   customers: FeedCustomer[];
   at: Date;
   stopped: string | null;
+  expectedLove: number | null;
   selection: Selection;
   setSelection: (s: Selection) => void;
 }) {
@@ -101,6 +129,7 @@ function Now({
   const dots = customers.map(toDot).filter((d): d is Dot => d !== null);
   const counts = countByQuadrant(dots);
   const atRisk = dots.filter((d) => d.atRisk).length;
+  const asExpected = lovesAsExpected(customers, expectedLove);
   const chosen = selection.quadrant !== null || selection.minChurn > 0 || !!selection.ids?.length;
   const listed = chosen ? dots.filter((d) => matches(d, selection)) : [];
   const byId = new Map(customers.map((c) => [c.customer_id, c]));
@@ -128,6 +157,8 @@ function Now({
         dots={dots}
         selection={chosen ? selection : null}
         atRisk={atRisk}
+        expectedLove={asExpected.size > 0 ? expectedLove : null}
+        asExpected={asExpected}
         open={(id) => void navigate(customerPath(id))}
         list={(ids) => {
           setSelection({ quadrant: null, minChurn: 0, ids });
@@ -140,6 +171,13 @@ function Now({
         {whole(atRisk)}). Click a dot to open the customer, or move through them with the arrow
         keys.
       </p>
+      {asExpected.size > 0 && (
+        <p className="legend">
+          <span className="key as-expected" /> on the pale band: Love not measured on their
+          latest order ({whole(asExpected.size)}), so it scores as expected. Respect still moves
+          them across.
+        </p>
+      )}
 
       <h2>Pick a group</h2>
       <div className="picker" role="group" aria-label="Quadrant">
@@ -231,12 +269,16 @@ function Plot({
   dots,
   selection,
   atRisk,
+  expectedLove,
+  asExpected,
   open,
   list,
 }: {
   dots: Dot[];
   selection: Selection | null;
   atRisk: number;
+  expectedLove: number | null;
+  asExpected: ReadonlySet<string>;
   open: (id: string) => void;
   list: (ids: string[]) => void;
 }) {
@@ -291,7 +333,7 @@ function Plot({
         viewBox={`0 0 ${SIZE} ${SIZE}`}
         role="img"
         tabIndex={dots.length > 0 ? 0 : undefined}
-        aria-label={`Love matrix: ${dots.length} customers by Respect (across) and Love (up), ${atRisk} at risk. Arrow keys move between customers, Page Up and Page Down through all of them in order; Enter opens one.`}
+        aria-label={`Love matrix: ${dots.length} customers by Respect (across) and Love (up), ${atRisk} at risk${expectedLove === null ? "" : `, ${asExpected.size} with Love not measured on their latest order, on one band`}. Arrow keys move between customers, Page Up and Page Down through all of them in order; Enter opens one.`}
         onPointerDown={() => {
           clicked.current = true;
         }}
@@ -313,6 +355,15 @@ function Plot({
         <rect className="plot" x={low} y={low} width={side} height={side} />
         <line className="midline" x1={middle} y1={low} x2={middle} y2={high} />
         <line className="midline" x1={low} y1={middle} x2={high} y2={middle} />
+        {expectedLove !== null && (
+          <line
+            className="as-expected"
+            x1={low}
+            y1={Math.round((SIZE - along(expectedLove)) * 100) / 100}
+            x2={high}
+            y2={Math.round((SIZE - along(expectedLove)) * 100) / 100}
+          />
+        )}
         <text className="quadrant" x={low + 8} y={low + 20}>
           {QUADRANT_NAMES.fad}
         </text>
@@ -348,11 +399,12 @@ function Plot({
               className={[
                 "dot",
                 dot.atRisk ? "at-risk" : "",
+                asExpected.has(dot.id) ? "as-expected" : "",
                 selection !== null && !matches(dot, selection) ? "faded" : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
-              r={dot.atRisk ? 6 : 4}
+              r={dot.atRisk ? 6 : asExpected.has(dot.id) ? 3 : 4}
               style={{ transform: `translate(${dot.x}px, ${dot.y}px)` }}
               onClick={() => open(dot.id)}
             >

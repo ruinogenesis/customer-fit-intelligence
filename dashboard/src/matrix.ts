@@ -68,6 +68,33 @@ export function toDot(customer: FeedCustomer): Dot | null {
   };
 }
 
+/**
+ * GET /models/live (T410): the model events are scored with now, and what it
+ * scores an order exactly as expected (every gap 0).
+ */
+export interface LiveModel {
+  version: string;
+  as_expected: { respect: number; love: number; convenience: number; trust: number; fit: number };
+}
+
+/**
+ * The customers whose Love is exactly the live model's as-expected Love: their
+ * latest order measured nothing that moves Love (food, personalization,
+ * recovery), so it scored as expected. The API and the feed carry the same
+ * double; the tolerance only absorbs a reader's rounding.
+ */
+export function lovesAsExpected(
+  customers: readonly FeedCustomer[],
+  love: number | null,
+): Set<string> {
+  if (love === null) return new Set();
+  return new Set(
+    customers
+      .filter((c) => c.scores !== null && Math.abs(c.scores.love - love) < 1e-9)
+      .map((c) => c.customer_id),
+  );
+}
+
 /** How many dots each quadrant holds, with every quadrant listed. */
 export function countByQuadrant(dots: readonly Dot[]): QuadrantCounts {
   const counts = Object.fromEntries(QUADRANTS.map((q) => [q, 0])) as QuadrantCounts;
