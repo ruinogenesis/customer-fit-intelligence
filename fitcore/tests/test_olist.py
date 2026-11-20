@@ -182,7 +182,11 @@ def test_load_keeps_delivered_orders_with_their_latest_review(tmp_path: Path):
                 "review_comment_title": ["", "", ""],
                 "review_comment_message": ["", "", ""],
                 "review_creation_date": ["2017-01-06", "2017-01-07", "2017-01-04"],
-                "review_answer_timestamp": ["", "", ""],
+                "review_answer_timestamp": [
+                    "2017-01-06 09:00",
+                    "2017-01-07 12:00",
+                    "2017-01-04 08:00",
+                ],
             }
         ),
     )
@@ -208,6 +212,8 @@ def test_load_keeps_delivered_orders_with_their_latest_review(tmp_path: Path):
     assert out["fee"].tolist() == pytest.approx([0.2, 0.5])
     assert out["review"].iloc[0] == 5.0  # the later of two reviews
     assert np.isnan(out["review"].iloc[1])
+    assert out["reviewed"].iloc[0] == pd.Timestamp("2017-01-07 12:00")
+    assert pd.isna(out["reviewed"].iloc[1])
 
 
 def test_load_names_the_missing_files(tmp_path: Path):

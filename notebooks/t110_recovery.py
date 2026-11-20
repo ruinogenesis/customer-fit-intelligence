@@ -10,6 +10,13 @@
 # Since T114 one kappa is shared by all inputs, so the eight estimates in each
 # run are equal; the truth still has its own kappa per input.
 #
+# T810 adds what the structure recovers with no learning at all, on the same
+# held-out customers: CFI before training, with every allowed path at the
+# same weight, and CFI with random positive weights. Both keep the masks and
+# the signs, so a state that reads the right inputs with the right signs
+# already follows the truth; the trained model's recovery is to be read
+# against these two, not against zero.
+#
 # Phase 1 gate: recovered Love and Respect correlate 0.9 or more with the
 # truth. Saves notebooks/results/t110_recovery.csv.
 
@@ -28,10 +35,11 @@ from fitcore.sim import DEFAULT_TRUTH
 from fitcore.sim_behaviour import simulate_behaviour
 from fitcore.sim_orders import simulate_orders, simulate_profiles
 from fitcore.sim_survey import DEFAULT_ITEMS
-from fitcore.train import DTYPE, FitModel, fit_model
+from fitcore.train import DTYPE, FitModel, fit_model, inverse_softplus
 
 SEEDS = (2026, 2027, 2028, 2029, 2030)
 CUSTOMERS = 2000
+DRAWS = 20  # random-weight models per population
 
 
 def repo_root() -> Path:
@@ -50,14 +58,42 @@ def population(seed: int) -> tuple[TrainingSet, TrainingSet]:
     return split_by_customer(data, 0.2, seed=seed)
 
 
+def without_learning(
+    train: TrainingSet, test: TrainingSet, seed: int
+) -> dict[str, np.ndarray]:
+    """Per-order Pearson recovery of two models that learned nothing: CFI
+    before training (every allowed path at the same weight), and CFI with
+    random positive weights (uniform 0.1 to 1; the mean of DRAWS draws)."""
+    model = FitModel.for_training_set(train)
+    gaps = torch.tensor(test.gaps, dtype=DTYPE)
+    rng = np.random.default_rng(seed)
+    assert test.truth is not None
+
+    def recovered() -> np.ndarray:
+        predicted = model.network(gaps).numpy()
+        return latent_recovery(predicted, test.truth, test.customer)["pearson"]
+
+    with torch.no_grad():
+        equal = recovered()
+        drawn = []
+        for _ in range(DRAWS):
+            for layer in model.network.layers:
+                weights = rng.uniform(0.1, 1.0, size=tuple(layer.mask.shape))
+                layer.raw.copy_(inverse_softplus(torch.tensor(weights, dtype=DTYPE)))
+            drawn.append(recovered())
+    return {"equal weights": equal, "random weights": np.mean(drawn, axis=0)}
+
+
 def train_and_compare(
     seed: int, thresholds: np.ndarray | None = None
-) -> tuple[dict[str, np.ndarray], np.ndarray]:
-    """Train on one population; recovery on its held-out customers, and kappa.
+) -> tuple[dict[str, np.ndarray], np.ndarray, dict[str, np.ndarray]]:
+    """Train on one population; recovery on its held-out customers, kappa,
+    and (unless thresholds are given) the recovery with no learning.
 
     thresholds: marker thresholds to use instead of k/7 (the oracle run).
     """
     train, test = population(seed)
+    unlearned = without_learning(train, test, seed) if thresholds is None else {}
     model = FitModel.for_training_set(train)
     if thresholds is not None:
         with torch.no_grad():
@@ -74,7 +110,7 @@ def train_and_compare(
         f"{time.perf_counter() - start:.1f} s, "
         f"Love {recovery['pearson'][1]:.3f}, Respect {recovery['pearson'][0]:.3f}"
     )
-    return recovery, network_kappa(model)
+    return recovery, network_kappa(model), unlearned
 
 
 def network_kappa(model: FitModel) -> np.ndarray:
@@ -104,12 +140,18 @@ COLUMNS = ["marker", "seed", "name", "measure", "value"]
 rows = []
 kappas = []
 for seed in SEEDS:
-    recovery, kappa = train_and_compare(seed)
+    recovery, kappa, unlearned = train_and_compare(seed)
     kappas.append(kappa)
     rows += as_rows("k/7", seed, recovery, kappa)
+    rows += [
+        (marker, seed, latent, "pearson", float(value))
+        for marker, values in unlearned.items()
+        for latent, value in zip(LATENTS, values, strict=True)
+    ]
 
 # %% Latent recovery: the worst seed for each measure
-results = pd.DataFrame(rows, columns=COLUMNS)
+everything = pd.DataFrame(rows, columns=COLUMNS)
+results = everything[everything["marker"] == "k/7"]
 latents = results[results["measure"] != "kappa"]
 worst = latents.pivot_table(
     index="name", columns="measure", values="value", aggfunc="min", sort=False
@@ -123,6 +165,12 @@ latents[latents["measure"] == "pearson"].pivot_table(
     index="name", columns="seed", values="value", sort=False
 ).round(3)
 
+# %% Against no learning at all: mean Pearson per order over the seeds (T810)
+against = everything[everything["measure"] == "pearson"].pivot_table(
+    index="name", columns="marker", values="value", sort=False
+)[["k/7", "equal weights", "random weights"]]
+print(against.rename(columns={"k/7": "trained"}).round(3))
+
 # %% kappa against the truth, across the seeds
 kappa_table = pd.DataFrame(
     kappa_summary(np.array(kappas), DEFAULT_TRUTH.kappa), index=list(INPUTS)
@@ -133,7 +181,7 @@ kappa_table.round(2)
 oracle_thresholds = np.array(DEFAULT_ITEMS.cuts) / DEFAULT_ITEMS.slope
 print("k/7 thresholds:      ", (np.arange(1, 7) / 7).round(3))
 print("simulator's cuts:    ", oracle_thresholds.round(3))
-oracle, oracle_kappa = train_and_compare(SEEDS[0], oracle_thresholds)
+oracle, oracle_kappa, _ = train_and_compare(SEEDS[0], oracle_thresholds)
 oracle_rows = as_rows("simulator cuts", SEEDS[0], oracle, oracle_kappa)
 same_seed = results[(results["seed"] == SEEDS[0]) & (results["measure"] != "kappa")]
 compare = same_seed.pivot_table(

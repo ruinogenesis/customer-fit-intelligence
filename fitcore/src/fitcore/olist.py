@@ -9,7 +9,8 @@ date, an actual one, a price, a freight charge, and usually a 1-to-5 review.
 - load(): one row per delivered order, from four of the dataset's files:
   the gap in days (promised minus actual, positive when early, x1's sign),
   the delivery time itself, the fee load (freight over price, x3's
-  measure) and the review, the order's latest if it has several;
+  measure), the review, the order's latest if it has several, and when
+  that review was answered;
 - fit_ordinal(): a cumulative-logit model of an answer on 0..K-1 (here the
   review minus 1), P(answer <= k) = sigmoid(cut_k - x @ beta), the form CFI
   uses for NPS and the survey items;
@@ -51,8 +52,11 @@ def load(folder: Path) -> Any:
     Columns: order_id, customer (customer_unique_id, the same person across
     orders), purchased, delivered, promised, gap_days (promised minus
     delivered, in days; positive = early), days (purchase to delivery),
-    price and freight (sums over the order's items), fee (freight / price)
-    and review (1 to 5, the order's latest review; NaN if none). Raises
+    price and freight (sums over the order's items), fee (freight / price),
+    review (1 to 5, the order's latest review; NaN if none) and reviewed
+    (when that review was answered; NaT if none or not recorded). Olist
+    sends its survey on the promised date when the order has not arrived,
+    so a late order is often reviewed before it is delivered (T810). Raises
     FileNotFoundError naming any missing file.
     """
     import pandas as pd
@@ -70,9 +74,8 @@ def load(folder: Path) -> Any:
         orders[column] = pd.to_datetime(orders[column], format="ISO8601")
     items = pd.read_csv(folder / FILES["items"])
     reviews = pd.read_csv(folder / FILES["reviews"])
-    reviews["review_creation_date"] = pd.to_datetime(
-        reviews["review_creation_date"], format="ISO8601"
-    )
+    for column in ("review_creation_date", "review_answer_timestamp"):
+        reviews[column] = pd.to_datetime(reviews[column], format="ISO8601")
     customers = pd.read_csv(folder / FILES["customers"])
 
     delivered = orders[
@@ -81,8 +84,8 @@ def load(folder: Path) -> Any:
     ]
     latest = (
         reviews.sort_values(["review_creation_date", "review_id"])
-        .groupby("order_id")["review_score"]
-        .last()
+        .drop_duplicates("order_id", keep="last")
+        .set_index("order_id")
     )
     money = items.groupby("order_id").agg(
         price=("price", "sum"), freight=("freight_value", "sum")
@@ -104,7 +107,8 @@ def load(folder: Path) -> Any:
     out["days"] = (out["delivered"] - out["purchased"]).dt.total_seconds() / DAY_SECONDS
     out = out.join(money, on="order_id")
     out["fee"] = out["freight"] / out["price"]
-    out["review"] = out["order_id"].map(latest).astype(float)
+    out["review"] = out["order_id"].map(latest["review_score"]).astype(float)
+    out["reviewed"] = out["order_id"].map(latest["review_answer_timestamp"])
     return out.sort_values(["purchased", "order_id"]).reset_index(drop=True)
 
 

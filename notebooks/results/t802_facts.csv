@@ -1,0 +1,541 @@
+seed,measure,value
+2026,training customers,1600.000000
+2026,training orders,35707.000000
+2026,held-out customers,400.000000
+2026,held-out orders,8520.000000
+2026,churn rate,0.039870
+2026,"churn rate, closed windows",0.044010
+2026,"churn rate, open windows",0.000000
+2026,churn labels from open windows,0.094074
+2026,"churn: riskiest 1%, predicted",0.203340
+2026,"churn: riskiest 1%, observed",0.285714
+2026,reorder rate,0.878806
+2026,"reorder rate, closed windows",0.874721
+2026,"reorder rate, open windows",1.000000
+2026,reorder labels from open windows,0.032606
+2026,"reorder: riskiest 1%, predicted",0.388864
+2026,"reorder: riskiest 1%, observed",0.428571
+2026,churn head ceiling,0.232036
+2026,nps log loss,1.788342
+2026,"nps log loss, no inputs",1.953014
+2026,nps rank correlation with Fit,0.517810
+2026,nps rank correlation with the true Fit,0.518055
+2026,respect as expected,0.898839
+2026,love as expected,0.829186
+2026,"respect of unrated orders, quantile 0.05",0.674618
+2026,"respect of unrated orders, quantile 0.5",0.875060
+2026,"respect of unrated orders, quantile 0.95",0.941721
+2026,true quadrant changes between orders,0.327463
+2027,training customers,1600.000000
+2027,training orders,34208.000000
+2027,held-out customers,400.000000
+2027,held-out orders,8936.000000
+2027,churn rate,0.037684
+2027,"churn rate, closed windows",0.041572
+2027,"churn rate, open windows",0.000000
+2027,churn labels from open windows,0.093520
+2027,"churn: riskiest 1%, predicted",0.200008
+2027,"churn: riskiest 1%, observed",0.159091
+2027,reorder rate,0.886057
+2027,"reorder rate, closed windows",0.882318
+2027,"reorder rate, open windows",1.000000
+2027,reorder labels from open windows,0.031771
+2027,"reorder: riskiest 1%, predicted",0.387547
+2027,"reorder: riskiest 1%, observed",0.443182
+2027,churn head ceiling,0.227060
+2027,nps log loss,1.807901
+2027,"nps log loss, no inputs",1.954537
+2027,nps rank correlation with Fit,0.478207
+2027,nps rank correlation with the true Fit,0.494202
+2027,respect as expected,0.917482
+2027,love as expected,0.831684
+2027,"respect of unrated orders, quantile 0.05",0.705188
+2027,"respect of unrated orders, quantile 0.5",0.900445
+2027,"respect of unrated orders, quantile 0.95",0.956290
+2027,true quadrant changes between orders,0.328725
+2028,training customers,1600.000000
+2028,training orders,36293.000000
+2028,held-out customers,400.000000
+2028,held-out orders,8672.000000
+2028,churn rate,0.042470
+2028,"churn rate, closed windows",0.047324
+2028,"churn rate, open windows",0.000000
+2028,churn labels from open windows,0.102567
+2028,"churn: riskiest 1%, predicted",0.203889
+2028,"churn: riskiest 1%, observed",0.317647
+2028,reorder rate,0.877986
+2028,"reorder rate, closed windows",0.873243
+2028,"reorder rate, open windows",1.000000
+2028,reorder labels from open windows,0.037416
+2028,"reorder: riskiest 1%, predicted",0.403725
+2028,"reorder: riskiest 1%, observed",0.482353
+2028,churn head ceiling,0.241603
+2028,nps log loss,1.749381
+2028,"nps log loss, no inputs",1.840476
+2028,nps rank correlation with Fit,0.381741
+2028,nps rank correlation with the true Fit,0.383834
+2028,respect as expected,0.888848
+2028,love as expected,0.819137
+2028,"respect of unrated orders, quantile 0.05",0.669361
+2028,"respect of unrated orders, quantile 0.5",0.869202
+2028,"respect of unrated orders, quantile 0.95",0.943675
+2028,true quadrant changes between orders,0.314072
+2029,training customers,1600.000000
+2029,training orders,33885.000000
+2029,held-out customers,400.000000
+2029,held-out orders,8908.000000
+2029,churn rate,0.038116
+2029,"churn rate, closed windows",0.042333
+2029,"churn rate, open windows",0.000000
+2029,churn labels from open windows,0.099608
+2029,"churn: riskiest 1%, predicted",0.209563
+2029,"churn: riskiest 1%, observed",0.321839
+2029,reorder rate,0.886025
+2029,"reorder rate, closed windows",0.881787
+2029,"reorder rate, open windows",1.000000
+2029,reorder labels from open windows,0.035853
+2029,"reorder: riskiest 1%, predicted",0.402419
+2029,"reorder: riskiest 1%, observed",0.465909
+2029,churn head ceiling,0.243726
+2029,nps log loss,1.872466
+2029,"nps log loss, no inputs",2.005691
+2029,nps rank correlation with Fit,0.474878
+2029,nps rank correlation with the true Fit,0.476922
+2029,respect as expected,0.893342
+2029,love as expected,0.827300
+2029,"respect of unrated orders, quantile 0.05",0.652893
+2029,"respect of unrated orders, quantile 0.5",0.878085
+2029,"respect of unrated orders, quantile 0.95",0.945892
+2029,true quadrant changes between orders,0.304302
+2030,training customers,1600.000000
+2030,training orders,35133.000000
+2030,held-out customers,400.000000
+2030,held-out orders,8269.000000
+2030,churn rate,0.041563
+2030,"churn rate, closed windows",0.046687
+2030,"churn rate, open windows",0.000000
+2030,churn labels from open windows,0.109756
+2030,"churn: riskiest 1%, predicted",0.211968
+2030,"churn: riskiest 1%, observed",0.345679
+2030,reorder rate,0.866229
+2030,"reorder rate, closed windows",0.860929
+2030,"reorder rate, open windows",1.000000
+2030,reorder labels from open windows,0.038114
+2030,"reorder: riskiest 1%, predicted",0.409217
+2030,"reorder: riskiest 1%, observed",0.493827
+2030,churn head ceiling,0.266327
+2030,nps log loss,1.829231
+2030,"nps log loss, no inputs",1.988577
+2030,nps rank correlation with Fit,0.500339
+2030,nps rank correlation with the true Fit,0.493434
+2030,respect as expected,0.896466
+2030,love as expected,0.824662
+2030,"respect of unrated orders, quantile 0.05",0.667910
+2030,"respect of unrated orders, quantile 0.5",0.878677
+2030,"respect of unrated orders, quantile 0.95",0.945735
+2030,true quadrant changes between orders,0.332317
+2031,training customers,1600.000000
+2031,training orders,34367.000000
+2031,held-out customers,400.000000
+2031,held-out orders,8937.000000
+2031,churn rate,0.038056
+2031,"churn rate, closed windows",0.042358
+2031,"churn rate, open windows",0.000000
+2031,churn labels from open windows,0.101559
+2031,"churn: riskiest 1%, predicted",0.208990
+2031,"churn: riskiest 1%, observed",0.272727
+2031,reorder rate,0.884918
+2031,"reorder rate, closed windows",0.880470
+2031,"reorder rate, open windows",1.000000
+2031,reorder labels from open windows,0.037219
+2031,"reorder: riskiest 1%, predicted",0.407485
+2031,"reorder: riskiest 1%, observed",0.454545
+2031,churn head ceiling,0.244361
+2031,nps log loss,1.793988
+2031,"nps log loss, no inputs",1.948164
+2031,nps rank correlation with Fit,0.460253
+2031,nps rank correlation with the true Fit,0.468149
+2031,respect as expected,0.897708
+2031,love as expected,0.838001
+2031,"respect of unrated orders, quantile 0.05",0.679478
+2031,"respect of unrated orders, quantile 0.5",0.886053
+2031,"respect of unrated orders, quantile 0.95",0.944133
+2031,true quadrant changes between orders,0.317910
+2032,training customers,1600.000000
+2032,training orders,35280.000000
+2032,held-out customers,400.000000
+2032,held-out orders,9015.000000
+2032,churn rate,0.038330
+2032,"churn rate, closed windows",0.042529
+2032,"churn rate, open windows",0.000000
+2032,churn labels from open windows,0.098726
+2032,"churn: riskiest 1%, predicted",0.224520
+2032,"churn: riskiest 1%, observed",0.261364
+2032,reorder rate,0.885517
+2032,"reorder rate, closed windows",0.881031
+2032,"reorder rate, open windows",1.000000
+2032,reorder labels from open windows,0.037708
+2032,"reorder: riskiest 1%, predicted",0.430397
+2032,"reorder: riskiest 1%, observed",0.584270
+2032,churn head ceiling,0.282216
+2032,nps log loss,1.744616
+2032,"nps log loss, no inputs",1.923329
+2032,nps rank correlation with Fit,0.544030
+2032,nps rank correlation with the true Fit,0.554923
+2032,respect as expected,0.906773
+2032,love as expected,0.817102
+2032,"respect of unrated orders, quantile 0.05",0.684898
+2032,"respect of unrated orders, quantile 0.5",0.897148
+2032,"respect of unrated orders, quantile 0.95",0.954580
+2032,true quadrant changes between orders,0.322113
+2033,training customers,1600.000000
+2033,training orders,35219.000000
+2033,held-out customers,400.000000
+2033,held-out orders,8445.000000
+2033,churn rate,0.040759
+2033,"churn rate, closed windows",0.045430
+2033,"churn rate, open windows",0.000000
+2033,churn labels from open windows,0.102811
+2033,"churn: riskiest 1%, predicted",0.190919
+2033,"churn: riskiest 1%, observed",0.253012
+2033,reorder rate,0.875650
+2033,"reorder rate, closed windows",0.871000
+2033,"reorder rate, open windows",1.000000
+2033,reorder labels from open windows,0.036047
+2033,"reorder: riskiest 1%, predicted",0.392804
+2033,"reorder: riskiest 1%, observed",0.506024
+2033,churn head ceiling,0.213254
+2033,nps log loss,1.776927
+2033,"nps log loss, no inputs",1.856980
+2033,nps rank correlation with Fit,0.395702
+2033,nps rank correlation with the true Fit,0.422832
+2033,respect as expected,0.900671
+2033,love as expected,0.811329
+2033,"respect of unrated orders, quantile 0.05",0.683788
+2033,"respect of unrated orders, quantile 0.5",0.882554
+2033,"respect of unrated orders, quantile 0.95",0.946449
+2033,true quadrant changes between orders,0.321939
+2034,training customers,1600.000000
+2034,training orders,34344.000000
+2034,held-out customers,400.000000
+2034,held-out orders,8299.000000
+2034,churn rate,0.042032
+2034,"churn rate, closed windows",0.046678
+2034,"churn rate, open windows",0.000000
+2034,churn labels from open windows,0.099518
+2034,"churn: riskiest 1%, predicted",0.206989
+2034,"churn: riskiest 1%, observed",0.271605
+2034,reorder rate,0.876800
+2034,"reorder rate, closed windows",0.872175
+2034,"reorder rate, open windows",1.000000
+2034,reorder labels from open windows,0.036185
+2034,"reorder: riskiest 1%, predicted",0.409484
+2034,"reorder: riskiest 1%, observed",0.463415
+2034,churn head ceiling,0.242897
+2034,nps log loss,1.789806
+2034,"nps log loss, no inputs",1.976764
+2034,nps rank correlation with Fit,0.564233
+2034,nps rank correlation with the true Fit,0.576358
+2034,respect as expected,0.900057
+2034,love as expected,0.823388
+2034,"respect of unrated orders, quantile 0.05",0.717810
+2034,"respect of unrated orders, quantile 0.5",0.883705
+2034,"respect of unrated orders, quantile 0.95",0.941563
+2034,true quadrant changes between orders,0.329915
+2035,training customers,1600.000000
+2035,training orders,34173.000000
+2035,held-out customers,400.000000
+2035,held-out orders,9057.000000
+2035,churn rate,0.037637
+2035,"churn rate, closed windows",0.041599
+2035,"churn rate, open windows",0.000000
+2035,churn labels from open windows,0.095227
+2035,"churn: riskiest 1%, predicted",0.211498
+2035,"churn: riskiest 1%, observed",0.292135
+2035,reorder rate,0.878115
+2035,"reorder rate, closed windows",0.873803
+2035,"reorder rate, open windows",1.000000
+2035,reorder labels from open windows,0.034164
+2035,"reorder: riskiest 1%, predicted",0.415136
+2035,"reorder: riskiest 1%, observed",0.505618
+2035,churn head ceiling,0.251965
+2035,nps log loss,1.805197
+2035,"nps log loss, no inputs",1.954472
+2035,nps rank correlation with Fit,0.482766
+2035,nps rank correlation with the true Fit,0.493601
+2035,respect as expected,0.906519
+2035,love as expected,0.833653
+2035,"respect of unrated orders, quantile 0.05",0.696981
+2035,"respect of unrated orders, quantile 0.5",0.892776
+2035,"respect of unrated orders, quantile 0.95",0.949456
+2035,true quadrant changes between orders,0.323669
+2036,training customers,1600.000000
+2036,training orders,34299.000000
+2036,held-out customers,400.000000
+2036,held-out orders,8229.000000
+2036,churn rate,0.041708
+2036,"churn rate, closed windows",0.046473
+2036,"churn rate, open windows",0.000000
+2036,churn labels from open windows,0.102522
+2036,"churn: riskiest 1%, predicted",0.196837
+2036,"churn: riskiest 1%, observed",0.407407
+2036,reorder rate,0.878091
+2036,"reorder rate, closed windows",0.873125
+2036,"reorder rate, open windows",1.000000
+2036,reorder labels from open windows,0.039145
+2036,"reorder: riskiest 1%, predicted",0.378753
+2036,"reorder: riskiest 1%, observed",0.555556
+2036,churn head ceiling,0.218081
+2036,nps log loss,1.854826
+2036,"nps log loss, no inputs",2.024471
+2036,nps rank correlation with Fit,0.544527
+2036,nps rank correlation with the true Fit,0.539621
+2036,respect as expected,0.904474
+2036,love as expected,0.819751
+2036,"respect of unrated orders, quantile 0.05",0.683687
+2036,"respect of unrated orders, quantile 0.5",0.885303
+2036,"respect of unrated orders, quantile 0.95",0.951746
+2036,true quadrant changes between orders,0.319709
+2037,training customers,1600.000000
+2037,training orders,35461.000000
+2037,held-out customers,400.000000
+2037,held-out orders,8751.000000
+2037,churn rate,0.037033
+2037,"churn rate, closed windows",0.041183
+2037,"churn rate, open windows",0.000000
+2037,churn labels from open windows,0.100785
+2037,"churn: riskiest 1%, predicted",0.185491
+2037,"churn: riskiest 1%, observed",0.325581
+2037,reorder rate,0.884055
+2037,"reorder rate, closed windows",0.879603
+2037,"reorder rate, open windows",1.000000
+2037,reorder labels from open windows,0.036977
+2037,"reorder: riskiest 1%, predicted",0.381703
+2037,"reorder: riskiest 1%, observed",0.558140
+2037,churn head ceiling,0.214072
+2037,nps log loss,1.853483
+2037,"nps log loss, no inputs",1.993889
+2037,nps rank correlation with Fit,0.490395
+2037,nps rank correlation with the true Fit,0.486691
+2037,respect as expected,0.900937
+2037,love as expected,0.819347
+2037,"respect of unrated orders, quantile 0.05",0.672316
+2037,"respect of unrated orders, quantile 0.5",0.886691
+2037,"respect of unrated orders, quantile 0.95",0.951297
+2037,true quadrant changes between orders,0.319962
+2038,training customers,1600.000000
+2038,training orders,34605.000000
+2038,held-out customers,400.000000
+2038,held-out orders,8687.000000
+2038,churn rate,0.036901
+2038,"churn rate, closed windows",0.041473
+2038,"churn rate, open windows",0.000000
+2038,churn labels from open windows,0.110231
+2038,"churn: riskiest 1%, predicted",0.218810
+2038,"churn: riskiest 1%, observed",0.258824
+2038,reorder rate,0.880391
+2038,"reorder rate, closed windows",0.875430
+2038,"reorder rate, open windows",1.000000
+2038,reorder labels from open windows,0.039830
+2038,"reorder: riskiest 1%, predicted",0.418099
+2038,"reorder: riskiest 1%, observed",0.411765
+2038,churn head ceiling,0.261351
+2038,nps log loss,1.832380
+2038,"nps log loss, no inputs",1.924492
+2038,nps rank correlation with Fit,0.407543
+2038,nps rank correlation with the true Fit,0.426571
+2038,respect as expected,0.905533
+2038,love as expected,0.823383
+2038,"respect of unrated orders, quantile 0.05",0.727478
+2038,"respect of unrated orders, quantile 0.5",0.893512
+2038,"respect of unrated orders, quantile 0.95",0.947302
+2038,true quadrant changes between orders,0.318813
+2039,training customers,1600.000000
+2039,training orders,34048.000000
+2039,held-out customers,400.000000
+2039,held-out orders,8522.000000
+2039,churn rate,0.040834
+2039,"churn rate, closed windows",0.045297
+2039,"churn rate, open windows",0.000000
+2039,churn labels from open windows,0.098530
+2039,"churn: riskiest 1%, predicted",0.213660
+2039,"churn: riskiest 1%, observed",0.202381
+2039,reorder rate,0.879540
+2039,"reorder rate, closed windows",0.874969
+2039,"reorder rate, open windows",1.000000
+2039,reorder labels from open windows,0.036558
+2039,"reorder: riskiest 1%, predicted",0.422498
+2039,"reorder: riskiest 1%, observed",0.416667
+2039,churn head ceiling,0.238268
+2039,nps log loss,1.826885
+2039,"nps log loss, no inputs",2.023136
+2039,nps rank correlation with Fit,0.564349
+2039,nps rank correlation with the true Fit,0.557466
+2039,respect as expected,0.910991
+2039,love as expected,0.807294
+2039,"respect of unrated orders, quantile 0.05",0.699993
+2039,"respect of unrated orders, quantile 0.5",0.890544
+2039,"respect of unrated orders, quantile 0.95",0.953274
+2039,true quadrant changes between orders,0.320857
+2040,training customers,1600.000000
+2040,training orders,35201.000000
+2040,held-out customers,400.000000
+2040,held-out orders,8761.000000
+2040,churn rate,0.037939
+2040,"churn rate, closed windows",0.042034
+2040,"churn rate, open windows",0.000000
+2040,churn labels from open windows,0.097424
+2040,"churn: riskiest 1%, predicted",0.212444
+2040,"churn: riskiest 1%, observed",0.186047
+2040,reorder rate,0.883046
+2040,"reorder rate, closed windows",0.878850
+2040,"reorder rate, open windows",1.000000
+2040,reorder labels from open windows,0.034632
+2040,"reorder: riskiest 1%, predicted",0.414528
+2040,"reorder: riskiest 1%, observed",0.476744
+2040,churn head ceiling,0.263735
+2040,nps log loss,1.791748
+2040,"nps log loss, no inputs",1.946336
+2040,nps rank correlation with Fit,0.493625
+2040,nps rank correlation with the true Fit,0.501081
+2040,respect as expected,0.893537
+2040,love as expected,0.807480
+2040,"respect of unrated orders, quantile 0.05",0.662355
+2040,"respect of unrated orders, quantile 0.5",0.876238
+2040,"respect of unrated orders, quantile 0.95",0.948651
+2040,true quadrant changes between orders,0.329028
+2041,training customers,1600.000000
+2041,training orders,34664.000000
+2041,held-out customers,400.000000
+2041,held-out orders,8962.000000
+2041,churn rate,0.037313
+2041,"churn rate, closed windows",0.041219
+2041,"churn rate, open windows",0.000000
+2041,churn labels from open windows,0.094769
+2041,"churn: riskiest 1%, predicted",0.215073
+2041,"churn: riskiest 1%, observed",0.295455
+2041,reorder rate,0.886079
+2041,"reorder rate, closed windows",0.882187
+2041,"reorder rate, open windows",1.000000
+2041,reorder labels from open windows,0.033037
+2041,"reorder: riskiest 1%, predicted",0.411012
+2041,"reorder: riskiest 1%, observed",0.443182
+2041,churn head ceiling,0.259207
+2041,nps log loss,1.797724
+2041,"nps log loss, no inputs",1.966007
+2041,nps rank correlation with Fit,0.533751
+2041,nps rank correlation with the true Fit,0.540689
+2041,respect as expected,0.888484
+2041,love as expected,0.814197
+2041,"respect of unrated orders, quantile 0.05",0.674533
+2041,"respect of unrated orders, quantile 0.5",0.873438
+2041,"respect of unrated orders, quantile 0.95",0.941399
+2041,true quadrant changes between orders,0.320252
+2042,training customers,1600.000000
+2042,training orders,34948.000000
+2042,held-out customers,400.000000
+2042,held-out orders,9040.000000
+2042,churn rate,0.035645
+2042,"churn rate, closed windows",0.039898
+2042,"churn rate, open windows",0.000000
+2042,churn labels from open windows,0.106596
+2042,"churn: riskiest 1%, predicted",0.187395
+2042,"churn: riskiest 1%, observed",0.258427
+2042,reorder rate,0.884911
+2042,"reorder rate, closed windows",0.880637
+2042,"reorder rate, open windows",1.000000
+2042,reorder labels from open windows,0.035803
+2042,"reorder: riskiest 1%, predicted",0.386849
+2042,"reorder: riskiest 1%, observed",0.359551
+2042,churn head ceiling,0.215204
+2042,nps log loss,1.838015
+2042,"nps log loss, no inputs",1.978419
+2042,nps rank correlation with Fit,0.490034
+2042,nps rank correlation with the true Fit,0.496212
+2042,respect as expected,0.904270
+2042,love as expected,0.826496
+2042,"respect of unrated orders, quantile 0.05",0.683440
+2042,"respect of unrated orders, quantile 0.5",0.891658
+2042,"respect of unrated orders, quantile 0.95",0.951741
+2042,true quadrant changes between orders,0.332176
+2043,training customers,1599.000000
+2043,training orders,34026.000000
+2043,held-out customers,400.000000
+2043,held-out orders,8256.000000
+2043,churn rate,0.038548
+2043,"churn rate, closed windows",0.043026
+2043,"churn rate, open windows",0.000000
+2043,churn labels from open windows,0.104079
+2043,"churn: riskiest 1%, predicted",0.217336
+2043,"churn: riskiest 1%, observed",0.308642
+2043,reorder rate,0.879842
+2043,"reorder rate, closed windows",0.874742
+2043,"reorder rate, open windows",1.000000
+2043,reorder labels from open windows,0.040713
+2043,"reorder: riskiest 1%, predicted",0.411330
+2043,"reorder: riskiest 1%, observed",0.493827
+2043,churn head ceiling,0.252877
+2043,nps log loss,1.782741
+2043,"nps log loss, no inputs",1.913692
+2043,nps rank correlation with Fit,0.445878
+2043,nps rank correlation with the true Fit,0.443681
+2043,respect as expected,0.895181
+2043,love as expected,0.817476
+2043,"respect of unrated orders, quantile 0.05",0.682405
+2043,"respect of unrated orders, quantile 0.5",0.877576
+2043,"respect of unrated orders, quantile 0.95",0.944648
+2043,true quadrant changes between orders,0.324211
+2044,training customers,1600.000000
+2044,training orders,36304.000000
+2044,held-out customers,400.000000
+2044,held-out orders,8343.000000
+2044,churn rate,0.041482
+2044,"churn rate, closed windows",0.046007
+2044,"churn rate, open windows",0.000000
+2044,churn labels from open windows,0.098351
+2044,"churn: riskiest 1%, predicted",0.177245
+2044,"churn: riskiest 1%, observed",0.207317
+2044,reorder rate,0.876486
+2044,"reorder rate, closed windows",0.872308
+2044,"reorder rate, open windows",1.000000
+2044,reorder labels from open windows,0.032717
+2044,"reorder: riskiest 1%, predicted",0.370851
+2044,"reorder: riskiest 1%, observed",0.426829
+2044,churn head ceiling,0.202387
+2044,nps log loss,1.801792
+2044,"nps log loss, no inputs",1.968065
+2044,nps rank correlation with Fit,0.502908
+2044,nps rank correlation with the true Fit,0.507386
+2044,respect as expected,0.890809
+2044,love as expected,0.817708
+2044,"respect of unrated orders, quantile 0.05",0.687806
+2044,"respect of unrated orders, quantile 0.5",0.877866
+2044,"respect of unrated orders, quantile 0.95",0.943595
+2044,true quadrant changes between orders,0.331613
+2045,training customers,1600.000000
+2045,training orders,34865.000000
+2045,held-out customers,400.000000
+2045,held-out orders,8286.000000
+2045,churn rate,0.042574
+2045,"churn rate, closed windows",0.047481
+2045,"churn rate, open windows",0.000000
+2045,churn labels from open windows,0.103342
+2045,"churn: riskiest 1%, predicted",0.216061
+2045,"churn: riskiest 1%, observed",0.271605
+2045,reorder rate,0.880665
+2045,"reorder rate, closed windows",0.875849
+2045,"reorder rate, open windows",1.000000
+2045,reorder labels from open windows,0.038793
+2045,"reorder: riskiest 1%, predicted",0.415902
+2045,"reorder: riskiest 1%, observed",0.439024
+2045,churn head ceiling,0.244915
+2045,nps log loss,1.781367
+2045,"nps log loss, no inputs",1.968700
+2045,nps rank correlation with Fit,0.546638
+2045,nps rank correlation with the true Fit,0.549518
+2045,respect as expected,0.902102
+2045,love as expected,0.813098
+2045,"respect of unrated orders, quantile 0.05",0.670577
+2045,"respect of unrated orders, quantile 0.5",0.887374
+2045,"respect of unrated orders, quantile 0.95",0.951186
+2045,true quadrant changes between orders,0.328684

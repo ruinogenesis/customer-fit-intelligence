@@ -241,11 +241,23 @@ def brier(p: ArrayLike, y: ArrayLike) -> float:
     return float(np.mean((p_ - y_) ** 2))
 
 
-def ece(p: ArrayLike, y: ArrayLike, bins: int = 10) -> float:
-    """Expected calibration error: equal-width bins of p, each weighted by its share."""
+def ece(
+    p: ArrayLike, y: ArrayLike, bins: int = 10, *, equal_mass: bool = False
+) -> float:
+    """Expected calibration error: bins of p, each weighted by its share.
+
+    The bins have equal widths on 0..1, or with equal_mass hold the same
+    number of rows each (in order of p, ties kept in row order), which
+    still tells models apart when nearly every chance is small (T810).
+    """
     p_, y_ = _known(p, y)
-    edges = np.linspace(0.0, 1.0, bins + 1)
-    which = np.clip(np.digitize(p_, edges[1:-1]), 0, bins - 1)
+    if equal_mass:
+        which = np.empty(len(p_), dtype=np.intp)
+        order = np.argsort(p_, kind="mergesort")
+        which[order] = np.arange(len(p_)) * bins // max(len(p_), 1)
+    else:
+        edges = np.linspace(0.0, 1.0, bins + 1)
+        which = np.clip(np.digitize(p_, edges[1:-1]), 0, bins - 1)
     total = 0.0
     for k in range(bins):
         inside = which == k

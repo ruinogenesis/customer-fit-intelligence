@@ -476,6 +476,7 @@ def fit_model(
     l2: float = L2,
     rounds: int = ROUNDS,
     tolerance: float = TOLERANCE,
+    terms: Sequence[str] | None = None,
 ) -> TrainingResult:
     """Train model on data, in place, with full-batch LBFGS.
 
@@ -485,7 +486,19 @@ def fit_model(
     or absolute when the loss is below 1); it stops then, or after rounds
     rounds. Nothing is random, so the same model and data always give the
     same result.
+
+    terms: the data terms of TERMS to train on, the L2 penalty always added;
+    None means all of them. ("reorder", "churn") trains on the two outcome
+    labels alone, with no survey answer or behaviour (T810). Raises
+    ValueError for a name that is not a data term, or for none at all.
     """
+    data_terms = tuple(name for name in TERMS if name != "l2")
+    chosen = data_terms if terms is None else tuple(terms)
+    unknown = [name for name in chosen if name not in data_terms]
+    if unknown or not chosen:
+        raise ValueError(
+            f"unknown or missing terms {unknown}, expected some of {data_terms}"
+        )
     batch = Batch.from_training_set(data)
     optimiser = torch.optim.LBFGS(
         model.parameters(),
@@ -498,7 +511,8 @@ def fit_model(
     )
 
     def loss() -> Tensor:
-        return sum(loss_terms(model, batch, l2).values())
+        parts = loss_terms(model, batch, l2)
+        return sum(parts[name] for name in (*chosen, "l2"))
 
     def closure() -> Tensor:
         optimiser.zero_grad()

@@ -88,6 +88,15 @@ def test_ece_is_zero_when_every_bin_is_calibrated_and_the_gap_when_not():
     assert ece([0.9, 0.9], [0, 0]) == pytest.approx(0.9)
 
 
+def test_ece_with_equal_mass_bins_splits_the_rows_evenly():
+    p = [0.1, 0.1, 0.2, 0.2]
+    y = [0, 0, 1, 1]
+    # Two equal-width bins put all four rows in the lower one: |0.15 - 0.5|.
+    assert ece(p, y, bins=2) == pytest.approx(0.35)
+    # Two equal-mass bins hold two rows each: (|0.1 - 0| + |0.2 - 1|) / 2.
+    assert ece(p, y, bins=2, equal_mass=True) == pytest.approx(0.45)
+
+
 # --- BG/NBD ---
 
 

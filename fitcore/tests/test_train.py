@@ -289,6 +289,24 @@ def test_the_same_data_gives_exactly_the_same_model(small: TrainingSet) -> None:
         assert torch.equal(value, second[name]), name
 
 
+def test_fit_model_can_train_on_some_terms_only(small: TrainingSet) -> None:
+    model = FitModel.for_training_set(small)
+    with torch.no_grad():
+        start = loss_terms(model, Batch.from_training_set(small))
+    result = fit_model(model, small, rounds=2, terms=("reorder", "churn"))
+    want = start["reorder"] + start["churn"] + start["l2"]
+    assert result.losses[0] == pytest.approx(want.item(), rel=1e-14)
+    assert result.losses[-1] < result.losses[0]
+
+
+def test_fit_model_refuses_a_term_it_does_not_know(small: TrainingSet) -> None:
+    model = FitModel.for_training_set(small)
+    with pytest.raises(ValueError, match="surveys"):
+        fit_model(model, small, terms=("reorder", "surveys"))
+    with pytest.raises(ValueError, match="terms"):
+        fit_model(model, small, terms=())
+
+
 @pytest.fixture(scope="module")
 def trained() -> tuple[FitModel, TrainingResult, TrainingSet, TrainingSet]:
     train, test = split_by_customer(_simulated(300), 0.2, seed=2026)
