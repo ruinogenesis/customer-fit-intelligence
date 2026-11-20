@@ -1,136 +1,256 @@
 seed,customers,orders,measure,model,value
+2026,100,2193,converged,"CFI, outcome labels only",1.000000
 2026,100,2193,recovery respect,CFI (15 paths),0.963373
 2026,100,2193,recovery love,CFI (15 paths),0.969938
 2026,100,2193,recovery fit,CFI (15 paths),0.958949
+2026,100,2193,recovery respect,"CFI, outcome labels only",0.922539
+2026,100,2193,recovery love,"CFI, outcome labels only",0.615301
+2026,100,2193,recovery fit,"CFI, outcome labels only",0.934378
 2026,100,2193,auc churn 30d,CFI (15 paths),0.788646
+2026,100,2193,auc churn 30d,"CFI, outcome labels only",0.776651
 2026,100,2193,auc churn 30d,logistic regression,0.763066
+2026,100,2193,auc churn 30d,"logistic regression, surplus and shortfall",0.776460
 2026,100,2193,auc churn 30d,unconstrained network,0.771178
 2026,100,2193,auc reorder 14d,CFI (15 paths),0.709612
+2026,100,2193,auc reorder 14d,"CFI, outcome labels only",0.707276
 2026,100,2193,auc reorder 14d,logistic regression,0.694559
+2026,100,2193,auc reorder 14d,"logistic regression, surplus and shortfall",0.703002
 2026,100,2193,auc reorder 14d,unconstrained network,0.697422
+2026,200,4566,converged,"CFI, outcome labels only",1.000000
 2026,200,4566,recovery respect,CFI (15 paths),0.970238
 2026,200,4566,recovery love,CFI (15 paths),0.979385
 2026,200,4566,recovery fit,CFI (15 paths),0.971316
+2026,200,4566,recovery respect,"CFI, outcome labels only",0.923830
+2026,200,4566,recovery love,"CFI, outcome labels only",0.960019
+2026,200,4566,recovery fit,"CFI, outcome labels only",0.958128
 2026,200,4566,auc churn 30d,CFI (15 paths),0.781939
+2026,200,4566,auc churn 30d,"CFI, outcome labels only",0.785599
 2026,200,4566,auc churn 30d,logistic regression,0.771633
+2026,200,4566,auc churn 30d,"logistic regression, surplus and shortfall",0.781189
 2026,200,4566,auc churn 30d,unconstrained network,0.764619
 2026,200,4566,auc reorder 14d,CFI (15 paths),0.708168
+2026,200,4566,auc reorder 14d,"CFI, outcome labels only",0.709396
 2026,200,4566,auc reorder 14d,logistic regression,0.707022
+2026,200,4566,auc reorder 14d,"logistic regression, surplus and shortfall",0.709973
 2026,200,4566,auc reorder 14d,unconstrained network,0.697598
+2026,400,9373,converged,"CFI, outcome labels only",1.000000
 2026,400,9373,recovery respect,CFI (15 paths),0.975927
 2026,400,9373,recovery love,CFI (15 paths),0.977899
 2026,400,9373,recovery fit,CFI (15 paths),0.982882
+2026,400,9373,recovery respect,"CFI, outcome labels only",0.937870
+2026,400,9373,recovery love,"CFI, outcome labels only",0.929738
+2026,400,9373,recovery fit,"CFI, outcome labels only",0.948764
 2026,400,9373,auc churn 30d,CFI (15 paths),0.789108
+2026,400,9373,auc churn 30d,"CFI, outcome labels only",0.788434
 2026,400,9373,auc churn 30d,logistic regression,0.775562
+2026,400,9373,auc churn 30d,"logistic regression, surplus and shortfall",0.786005
 2026,400,9373,auc churn 30d,unconstrained network,0.771554
 2026,400,9373,auc reorder 14d,CFI (15 paths),0.709463
+2026,400,9373,auc reorder 14d,"CFI, outcome labels only",0.707704
 2026,400,9373,auc reorder 14d,logistic regression,0.706099
+2026,400,9373,auc reorder 14d,"logistic regression, surplus and shortfall",0.711506
 2026,400,9373,auc reorder 14d,unconstrained network,0.708606
+2026,800,18035,converged,"CFI, outcome labels only",1.000000
 2026,800,18035,recovery respect,CFI (15 paths),0.985943
 2026,800,18035,recovery love,CFI (15 paths),0.984718
 2026,800,18035,recovery fit,CFI (15 paths),0.988758
+2026,800,18035,recovery respect,"CFI, outcome labels only",0.974421
+2026,800,18035,recovery love,"CFI, outcome labels only",0.958813
+2026,800,18035,recovery fit,"CFI, outcome labels only",0.980894
 2026,800,18035,auc churn 30d,CFI (15 paths),0.788723
+2026,800,18035,auc churn 30d,"CFI, outcome labels only",0.788664
 2026,800,18035,auc churn 30d,logistic regression,0.774894
+2026,800,18035,auc churn 30d,"logistic regression, surplus and shortfall",0.786025
 2026,800,18035,auc churn 30d,unconstrained network,0.775885
 2026,800,18035,auc reorder 14d,CFI (15 paths),0.710895
+2026,800,18035,auc reorder 14d,"CFI, outcome labels only",0.711567
 2026,800,18035,auc reorder 14d,logistic regression,0.707402
+2026,800,18035,auc reorder 14d,"logistic regression, surplus and shortfall",0.713966
 2026,800,18035,auc reorder 14d,unconstrained network,0.709951
+2026,1600,35707,converged,"CFI, outcome labels only",1.000000
 2026,1600,35707,recovery respect,CFI (15 paths),0.984773
 2026,1600,35707,recovery love,CFI (15 paths),0.983330
 2026,1600,35707,recovery fit,CFI (15 paths),0.987076
+2026,1600,35707,recovery respect,"CFI, outcome labels only",0.982585
+2026,1600,35707,recovery love,"CFI, outcome labels only",0.965802
+2026,1600,35707,recovery fit,"CFI, outcome labels only",0.983054
 2026,1600,35707,auc churn 30d,CFI (15 paths),0.788569
+2026,1600,35707,auc churn 30d,"CFI, outcome labels only",0.788606
 2026,1600,35707,auc churn 30d,logistic regression,0.775373
+2026,1600,35707,auc churn 30d,"logistic regression, surplus and shortfall",0.786759
 2026,1600,35707,auc churn 30d,unconstrained network,0.779354
 2026,1600,35707,auc reorder 14d,CFI (15 paths),0.710618
+2026,1600,35707,auc reorder 14d,"CFI, outcome labels only",0.711050
 2026,1600,35707,auc reorder 14d,logistic regression,0.707160
+2026,1600,35707,auc reorder 14d,"logistic regression, surplus and shortfall",0.713784
 2026,1600,35707,auc reorder 14d,unconstrained network,0.710442
+2027,100,2427,converged,"CFI, outcome labels only",1.000000
 2027,100,2427,recovery respect,CFI (15 paths),0.966531
 2027,100,2427,recovery love,CFI (15 paths),0.969476
 2027,100,2427,recovery fit,CFI (15 paths),0.966971
+2027,100,2427,recovery respect,"CFI, outcome labels only",0.696322
+2027,100,2427,recovery love,"CFI, outcome labels only",0.609890
+2027,100,2427,recovery fit,"CFI, outcome labels only",0.807209
 2027,100,2427,auc churn 30d,CFI (15 paths),0.795929
+2027,100,2427,auc churn 30d,"CFI, outcome labels only",0.750756
 2027,100,2427,auc churn 30d,logistic regression,0.765341
+2027,100,2427,auc churn 30d,"logistic regression, surplus and shortfall",0.756194
 2027,100,2427,auc churn 30d,unconstrained network,0.760408
 2027,100,2427,auc reorder 14d,CFI (15 paths),0.722361
+2027,100,2427,auc reorder 14d,"CFI, outcome labels only",0.691367
 2027,100,2427,auc reorder 14d,logistic regression,0.699129
+2027,100,2427,auc reorder 14d,"logistic regression, surplus and shortfall",0.703747
 2027,100,2427,auc reorder 14d,unconstrained network,0.707066
+2027,200,4715,converged,"CFI, outcome labels only",1.000000
 2027,200,4715,recovery respect,CFI (15 paths),0.975579
 2027,200,4715,recovery love,CFI (15 paths),0.985182
 2027,200,4715,recovery fit,CFI (15 paths),0.970687
+2027,200,4715,recovery respect,"CFI, outcome labels only",0.945075
+2027,200,4715,recovery love,"CFI, outcome labels only",0.853026
+2027,200,4715,recovery fit,"CFI, outcome labels only",0.978827
 2027,200,4715,auc churn 30d,CFI (15 paths),0.794219
+2027,200,4715,auc churn 30d,"CFI, outcome labels only",0.800017
 2027,200,4715,auc churn 30d,logistic regression,0.800068
+2027,200,4715,auc churn 30d,"logistic regression, surplus and shortfall",0.803486
 2027,200,4715,auc churn 30d,unconstrained network,0.797392
 2027,200,4715,auc reorder 14d,CFI (15 paths),0.720718
+2027,200,4715,auc reorder 14d,"CFI, outcome labels only",0.723734
 2027,200,4715,auc reorder 14d,logistic regression,0.716980
+2027,200,4715,auc reorder 14d,"logistic regression, surplus and shortfall",0.719399
 2027,200,4715,auc reorder 14d,unconstrained network,0.710971
+2027,400,8449,converged,"CFI, outcome labels only",1.000000
 2027,400,8449,recovery respect,CFI (15 paths),0.983019
 2027,400,8449,recovery love,CFI (15 paths),0.979803
 2027,400,8449,recovery fit,CFI (15 paths),0.975146
+2027,400,8449,recovery respect,"CFI, outcome labels only",0.975849
+2027,400,8449,recovery love,"CFI, outcome labels only",0.979340
+2027,400,8449,recovery fit,"CFI, outcome labels only",0.982618
 2027,400,8449,auc churn 30d,CFI (15 paths),0.796681
+2027,400,8449,auc churn 30d,"CFI, outcome labels only",0.801698
 2027,400,8449,auc churn 30d,logistic regression,0.799389
+2027,400,8449,auc churn 30d,"logistic regression, surplus and shortfall",0.805551
 2027,400,8449,auc churn 30d,unconstrained network,0.793490
 2027,400,8449,auc reorder 14d,CFI (15 paths),0.722996
+2027,400,8449,auc reorder 14d,"CFI, outcome labels only",0.726594
 2027,400,8449,auc reorder 14d,logistic regression,0.716539
+2027,400,8449,auc reorder 14d,"logistic regression, surplus and shortfall",0.724435
 2027,400,8449,auc reorder 14d,unconstrained network,0.712837
+2027,800,16857,converged,"CFI, outcome labels only",1.000000
 2027,800,16857,recovery respect,CFI (15 paths),0.982235
 2027,800,16857,recovery love,CFI (15 paths),0.988049
 2027,800,16857,recovery fit,CFI (15 paths),0.984275
+2027,800,16857,recovery respect,"CFI, outcome labels only",0.939723
+2027,800,16857,recovery love,"CFI, outcome labels only",0.944334
+2027,800,16857,recovery fit,"CFI, outcome labels only",0.978901
 2027,800,16857,auc churn 30d,CFI (15 paths),0.797775
+2027,800,16857,auc churn 30d,"CFI, outcome labels only",0.801439
 2027,800,16857,auc churn 30d,logistic regression,0.799815
+2027,800,16857,auc churn 30d,"logistic regression, surplus and shortfall",0.807142
 2027,800,16857,auc churn 30d,unconstrained network,0.793092
 2027,800,16857,auc reorder 14d,CFI (15 paths),0.723588
+2027,800,16857,auc reorder 14d,"CFI, outcome labels only",0.727802
 2027,800,16857,auc reorder 14d,logistic regression,0.715381
+2027,800,16857,auc reorder 14d,"logistic regression, surplus and shortfall",0.725099
 2027,800,16857,auc reorder 14d,unconstrained network,0.721794
+2027,1600,34208,converged,"CFI, outcome labels only",1.000000
 2027,1600,34208,recovery respect,CFI (15 paths),0.980421
 2027,1600,34208,recovery love,CFI (15 paths),0.986067
 2027,1600,34208,recovery fit,CFI (15 paths),0.983479
+2027,1600,34208,recovery respect,"CFI, outcome labels only",0.955064
+2027,1600,34208,recovery love,"CFI, outcome labels only",0.932722
+2027,1600,34208,recovery fit,"CFI, outcome labels only",0.986700
 2027,1600,34208,auc churn 30d,CFI (15 paths),0.797636
+2027,1600,34208,auc churn 30d,"CFI, outcome labels only",0.802226
 2027,1600,34208,auc churn 30d,logistic regression,0.801271
+2027,1600,34208,auc churn 30d,"logistic regression, surplus and shortfall",0.808474
 2027,1600,34208,auc churn 30d,unconstrained network,0.804293
 2027,1600,34208,auc reorder 14d,CFI (15 paths),0.723538
+2027,1600,34208,auc reorder 14d,"CFI, outcome labels only",0.727173
 2027,1600,34208,auc reorder 14d,logistic regression,0.717065
+2027,1600,34208,auc reorder 14d,"logistic regression, surplus and shortfall",0.725501
 2027,1600,34208,auc reorder 14d,unconstrained network,0.721685
+2028,100,2359,converged,"CFI, outcome labels only",1.000000
 2028,100,2359,recovery respect,CFI (15 paths),0.947279
 2028,100,2359,recovery love,CFI (15 paths),0.980748
 2028,100,2359,recovery fit,CFI (15 paths),0.958273
+2028,100,2359,recovery respect,"CFI, outcome labels only",0.812278
+2028,100,2359,recovery love,"CFI, outcome labels only",0.654742
+2028,100,2359,recovery fit,"CFI, outcome labels only",0.925334
 2028,100,2359,auc churn 30d,CFI (15 paths),0.777347
+2028,100,2359,auc churn 30d,"CFI, outcome labels only",0.779810
 2028,100,2359,auc churn 30d,logistic regression,0.778962
+2028,100,2359,auc churn 30d,"logistic regression, surplus and shortfall",0.760860
 2028,100,2359,auc churn 30d,unconstrained network,0.777032
 2028,100,2359,auc reorder 14d,CFI (15 paths),0.712740
+2028,100,2359,auc reorder 14d,"CFI, outcome labels only",0.711208
 2028,100,2359,auc reorder 14d,logistic regression,0.710325
+2028,100,2359,auc reorder 14d,"logistic regression, surplus and shortfall",0.717168
 2028,100,2359,auc reorder 14d,unconstrained network,0.710980
+2028,200,4558,converged,"CFI, outcome labels only",1.000000
 2028,200,4558,recovery respect,CFI (15 paths),0.976109
 2028,200,4558,recovery love,CFI (15 paths),0.978546
 2028,200,4558,recovery fit,CFI (15 paths),0.956959
+2028,200,4558,recovery respect,"CFI, outcome labels only",0.934661
+2028,200,4558,recovery love,"CFI, outcome labels only",0.981373
+2028,200,4558,recovery fit,"CFI, outcome labels only",0.973215
 2028,200,4558,auc churn 30d,CFI (15 paths),0.781673
+2028,200,4558,auc churn 30d,"CFI, outcome labels only",0.787943
 2028,200,4558,auc churn 30d,logistic regression,0.779100
+2028,200,4558,auc churn 30d,"logistic regression, surplus and shortfall",0.782277
 2028,200,4558,auc churn 30d,unconstrained network,0.777616
 2028,200,4558,auc reorder 14d,CFI (15 paths),0.713957
+2028,200,4558,auc reorder 14d,"CFI, outcome labels only",0.720996
 2028,200,4558,auc reorder 14d,logistic regression,0.710847
+2028,200,4558,auc reorder 14d,"logistic regression, surplus and shortfall",0.716740
 2028,200,4558,auc reorder 14d,unconstrained network,0.713954
+2028,400,9185,converged,"CFI, outcome labels only",1.000000
 2028,400,9185,recovery respect,CFI (15 paths),0.980050
 2028,400,9185,recovery love,CFI (15 paths),0.975086
 2028,400,9185,recovery fit,CFI (15 paths),0.979532
+2028,400,9185,recovery respect,"CFI, outcome labels only",0.849348
+2028,400,9185,recovery love,"CFI, outcome labels only",0.621716
+2028,400,9185,recovery fit,"CFI, outcome labels only",0.973990
 2028,400,9185,auc churn 30d,CFI (15 paths),0.782685
+2028,400,9185,auc churn 30d,"CFI, outcome labels only",0.788318
 2028,400,9185,auc churn 30d,logistic regression,0.779030
+2028,400,9185,auc churn 30d,"logistic regression, surplus and shortfall",0.786577
 2028,400,9185,auc churn 30d,unconstrained network,0.781822
 2028,400,9185,auc reorder 14d,CFI (15 paths),0.715752
+2028,400,9185,auc reorder 14d,"CFI, outcome labels only",0.719287
 2028,400,9185,auc reorder 14d,logistic regression,0.712375
+2028,400,9185,auc reorder 14d,"logistic regression, surplus and shortfall",0.719700
 2028,400,9185,auc reorder 14d,unconstrained network,0.712585
+2028,800,17986,converged,"CFI, outcome labels only",1.000000
 2028,800,17986,recovery respect,CFI (15 paths),0.981845
 2028,800,17986,recovery love,CFI (15 paths),0.980142
 2028,800,17986,recovery fit,CFI (15 paths),0.981460
+2028,800,17986,recovery respect,"CFI, outcome labels only",0.905937
+2028,800,17986,recovery love,"CFI, outcome labels only",0.911539
+2028,800,17986,recovery fit,"CFI, outcome labels only",0.981612
 2028,800,17986,auc churn 30d,CFI (15 paths),0.784420
+2028,800,17986,auc churn 30d,"CFI, outcome labels only",0.787643
 2028,800,17986,auc churn 30d,logistic regression,0.780562
+2028,800,17986,auc churn 30d,"logistic regression, surplus and shortfall",0.786196
 2028,800,17986,auc churn 30d,unconstrained network,0.779748
 2028,800,17986,auc reorder 14d,CFI (15 paths),0.716864
+2028,800,17986,auc reorder 14d,"CFI, outcome labels only",0.718697
 2028,800,17986,auc reorder 14d,logistic regression,0.711603
+2028,800,17986,auc reorder 14d,"logistic regression, surplus and shortfall",0.718499
 2028,800,17986,auc reorder 14d,unconstrained network,0.712416
+2028,1600,36293,converged,"CFI, outcome labels only",1.000000
 2028,1600,36293,recovery respect,CFI (15 paths),0.984081
 2028,1600,36293,recovery love,CFI (15 paths),0.984120
 2028,1600,36293,recovery fit,CFI (15 paths),0.985836
+2028,1600,36293,recovery respect,"CFI, outcome labels only",0.928433
+2028,1600,36293,recovery love,"CFI, outcome labels only",0.944219
+2028,1600,36293,recovery fit,"CFI, outcome labels only",0.987563
 2028,1600,36293,auc churn 30d,CFI (15 paths),0.785519
+2028,1600,36293,auc churn 30d,"CFI, outcome labels only",0.790039
 2028,1600,36293,auc churn 30d,logistic regression,0.782323
+2028,1600,36293,auc churn 30d,"logistic regression, surplus and shortfall",0.787509
 2028,1600,36293,auc churn 30d,unconstrained network,0.773134
 2028,1600,36293,auc reorder 14d,CFI (15 paths),0.717848
+2028,1600,36293,auc reorder 14d,"CFI, outcome labels only",0.720854
 2028,1600,36293,auc reorder 14d,logistic regression,0.712413
+2028,1600,36293,auc reorder 14d,"logistic regression, surplus and shortfall",0.720792
 2028,1600,36293,auc reorder 14d,unconstrained network,0.718192

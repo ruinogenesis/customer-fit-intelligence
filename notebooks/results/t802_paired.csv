@@ -1,0 +1,103 @@
+outcome,inputs,model,against,measure,difference,standard_error,better_in,populations
+churn 30d,gaps,CFI (15 paths),logistic regression,auc,0.004364,0.000962,17,20
+churn 30d,gaps,CFI (15 paths),logistic regression,log_loss,-0.001242,0.000195,18,20
+churn 30d,gaps,CFI (15 paths),logistic regression,auc_closed,0.003951,0.000953,15,20
+churn 30d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",auc,-0.002181,0.000796,5,20
+churn 30d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",log_loss,-0.000462,0.000215,14,20
+churn 30d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",auc_closed,-0.001807,0.000792,6,20
+churn 30d,gaps,CFI (15 paths),gradient boosting,auc,0.018141,0.001404,20,20
+churn 30d,gaps,CFI (15 paths),gradient boosting,log_loss,-0.004101,0.000156,20,20
+churn 30d,gaps,CFI (15 paths),gradient boosting,auc_closed,0.018589,0.001391,20,20
+churn 30d,gaps,CFI (15 paths),"gradient boosting, monotone",auc,0.004371,0.001056,15,20
+churn 30d,gaps,CFI (15 paths),"gradient boosting, monotone",log_loss,-0.001861,0.000196,20,20
+churn 30d,gaps,CFI (15 paths),"gradient boosting, monotone",auc_closed,0.004797,0.001062,15,20
+churn 30d,gaps,CFI (15 paths),unconstrained network,auc,0.003729,0.001180,15,20
+churn 30d,gaps,CFI (15 paths),unconstrained network,log_loss,-0.000496,0.000219,14,20
+churn 30d,gaps,CFI (15 paths),unconstrained network,auc_closed,0.004163,0.001197,16,20
+churn 30d,gaps + history,CFI Fit + history,gradient boosting,auc,0.019221,0.001558,20,20
+churn 30d,gaps + history,CFI Fit + history,gradient boosting,log_loss,-0.004946,0.000334,20,20
+churn 30d,gaps + history,CFI Fit + history,gradient boosting,auc_closed,0.018898,0.001591,20,20
+churn 30d,gaps + history,CFI Fit + history,true Fit + history (ceiling),auc,-0.002656,0.000430,4,20
+churn 30d,gaps + history,CFI Fit + history,true Fit + history (ceiling),log_loss,0.000649,0.000089,1,20
+churn 30d,gaps + history,CFI Fit + history,true Fit + history (ceiling),auc_closed,-0.002723,0.000424,3,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),logistic regression,auc,0.004481,0.001128,15,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),logistic regression,log_loss,0.001602,0.000219,0,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),logistic regression,auc_closed,0.004170,0.001121,15,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",auc,-0.004313,0.001210,2,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",log_loss,0.002422,0.000266,1,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",auc_closed,-0.003547,0.001217,4,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,auc,0.000959,0.002525,11,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,log_loss,0.001208,0.000425,6,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,auc_closed,0.001611,0.002564,11,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",auc,-0.001604,0.001416,10,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",log_loss,0.001704,0.000279,0,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",auc_closed,-0.001044,0.001421,10,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,auc,-0.005003,0.001625,6,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,log_loss,0.002865,0.000294,0,20
+churn 30d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,auc_closed,-0.004124,0.001652,6,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),logistic regression,auc,0.003026,0.000901,15,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),logistic regression,log_loss,-0.000359,0.000146,15,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),logistic regression,auc_closed,0.002870,0.000888,14,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",auc,-0.005768,0.001291,3,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",log_loss,0.000461,0.000199,5,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",auc_closed,-0.004847,0.001295,3,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),gradient boosting,auc,-0.000496,0.002589,11,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),gradient boosting,log_loss,-0.000754,0.000381,14,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),gradient boosting,auc_closed,0.000312,0.002630,11,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",auc,-0.003059,0.001478,6,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",log_loss,-0.000258,0.000191,13,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",auc_closed,-0.002343,0.001485,7,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),unconstrained network,auc,-0.006458,0.001753,4,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),unconstrained network,log_loss,0.000903,0.000230,6,20
+churn 30d,event-measured gaps,CFI retrained (13 paths),unconstrained network,auc_closed,-0.005424,0.001772,5,20
+reorder 14d,gaps,CFI (15 paths),logistic regression,auc,0.004472,0.000547,20,20
+reorder 14d,gaps,CFI (15 paths),logistic regression,log_loss,-0.001654,0.000196,19,20
+reorder 14d,gaps,CFI (15 paths),logistic regression,auc_closed,0.004212,0.000558,19,20
+reorder 14d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",auc,-0.003439,0.000521,2,20
+reorder 14d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",log_loss,0.000444,0.000278,7,20
+reorder 14d,gaps,CFI (15 paths),"logistic regression, surplus and shortfall",auc_closed,-0.003215,0.000522,2,20
+reorder 14d,gaps,CFI (15 paths),gradient boosting,auc,0.007494,0.000872,20,20
+reorder 14d,gaps,CFI (15 paths),gradient boosting,log_loss,-0.002815,0.000302,20,20
+reorder 14d,gaps,CFI (15 paths),gradient boosting,auc_closed,0.007718,0.000898,20,20
+reorder 14d,gaps,CFI (15 paths),"gradient boosting, monotone",auc,0.001318,0.000672,14,20
+reorder 14d,gaps,CFI (15 paths),"gradient boosting, monotone",log_loss,-0.001333,0.000273,18,20
+reorder 14d,gaps,CFI (15 paths),"gradient boosting, monotone",auc_closed,0.001534,0.000686,14,20
+reorder 14d,gaps,CFI (15 paths),unconstrained network,auc,0.001827,0.000838,14,20
+reorder 14d,gaps,CFI (15 paths),unconstrained network,log_loss,-0.000644,0.000303,15,20
+reorder 14d,gaps,CFI (15 paths),unconstrained network,auc_closed,0.002090,0.000826,15,20
+reorder 14d,gaps + history,CFI Fit + history,gradient boosting,auc,0.009003,0.000681,20,20
+reorder 14d,gaps + history,CFI Fit + history,gradient boosting,log_loss,-0.003088,0.000265,20,20
+reorder 14d,gaps + history,CFI Fit + history,gradient boosting,auc_closed,0.008794,0.000690,20,20
+reorder 14d,gaps + history,CFI Fit + history,true Fit + history (ceiling),auc,-0.001955,0.000283,1,20
+reorder 14d,gaps + history,CFI Fit + history,true Fit + history (ceiling),log_loss,0.000996,0.000119,0,20
+reorder 14d,gaps + history,CFI Fit + history,true Fit + history (ceiling),auc_closed,-0.002010,0.000293,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),logistic regression,auc,0.003772,0.000592,18,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),logistic regression,log_loss,0.002473,0.000347,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),logistic regression,auc_closed,0.003620,0.000590,18,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",auc,-0.006386,0.000660,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",log_loss,0.004509,0.000368,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"logistic regression, surplus and shortfall",auc_closed,-0.005943,0.000653,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,auc,-0.006217,0.001083,2,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,log_loss,0.004388,0.000461,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),gradient boosting,auc_closed,-0.005858,0.001109,2,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",auc,-0.004926,0.000614,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",log_loss,0.003892,0.000387,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),"gradient boosting, monotone",auc_closed,-0.004600,0.000628,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,auc,-0.008331,0.001012,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,log_loss,0.005241,0.000466,0,20
+reorder 14d,event-measured gaps,CFI as deployed (15 paths),unconstrained network,auc_closed,-0.007864,0.001021,0,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),logistic regression,auc,0.002509,0.000499,17,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),logistic regression,log_loss,-0.000743,0.000175,16,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),logistic regression,auc_closed,0.002425,0.000500,17,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",auc,-0.007648,0.000663,0,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",log_loss,0.001293,0.000232,2,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"logistic regression, surplus and shortfall",auc_closed,-0.007139,0.000665,0,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),gradient boosting,auc,-0.007479,0.001111,2,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),gradient boosting,log_loss,0.001173,0.000330,6,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),gradient boosting,auc_closed,-0.007054,0.001138,2,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",auc,-0.006189,0.000642,0,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",log_loss,0.000676,0.000226,5,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),"gradient boosting, monotone",auc_closed,-0.005795,0.000664,1,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),unconstrained network,auc,-0.009593,0.001023,0,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),unconstrained network,log_loss,0.002026,0.000345,2,20
+reorder 14d,event-measured gaps,CFI retrained (13 paths),unconstrained network,auc_closed,-0.009059,0.001033,0,20

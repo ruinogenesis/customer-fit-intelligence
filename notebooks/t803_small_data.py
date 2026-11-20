@@ -9,9 +9,18 @@
 #
 # For each size: churn and reorder AUC for CFI, logistic regression and the
 # tuned unconstrained network (as in T802), and how closely CFI's Respect,
-# Love and Fit follow the truth (Pearson per order). Saves
-# notebooks/results/t803_small_data.csv. About ten minutes on two CPU
-# cores.
+# Love and Fit follow the truth (Pearson per order).
+#
+# T810 separates the structure from the labels. CFI learns from five kinds
+# of signal (the two outcome labels, NPS answers, survey items and
+# behaviours) and its comparators from one label each, so a second CFI is
+# trained on the two outcome labels alone: what it keeps at 100 customers is
+# what the structure gives, and what it loses is what the surveys and
+# behaviours gave. A logistic regression on each gap's surplus and shortfall
+# joins the comparators, as in T802.
+#
+# Saves notebooks/results/t803_small_data.csv. About half an hour on two
+# CPU cores.
 
 # %%
 import time
@@ -19,13 +28,14 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import torch
 from fitcore.baselines import auc, log_loss
 from fitcore.dataset import TrainingSet, from_simulation, split_by_customer
 from fitcore.model import forward, outcomes
 from fitcore.recovery import pearson
 from fitcore.sim_behaviour import simulate_behaviour
 from fitcore.sim_orders import simulate_orders, simulate_profiles
-from fitcore.train import FitModel, export_params, fit_model
+from fitcore.train import DTYPE, FitModel, export_params, fit_model
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
@@ -38,6 +48,8 @@ SIZES = (100, 200, 400, 800, 1600)  # training customers
 FIT = 4  # Fit's column in the latents and in the simulator's truth
 RECOVERED = {"respect": 0, "love": 1, "fit": FIT}
 NETWORK_PENALTIES = (0.1, 1.0, 10.0)
+CFI = "CFI (15 paths)"
+OUTCOMES_ONLY = "CFI, outcome labels only"
 
 
 # %% Helpers (as in t803_robustness.py)
@@ -93,9 +105,28 @@ def tuned_network_chance(seed, x_train, y_train, customer_train, x_test) -> np.n
 
 def logistic_chance(x_train, y_train, x_test) -> np.ndarray:
     known = ~np.isnan(y_train)
-    model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000))
+    model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=4000))
     model.fit(x_train[known], y_train[known].astype(int))
     return model.predict_proba(x_test)[:, 1]
+
+
+def surplus_and_shortfall(gaps: np.ndarray) -> np.ndarray:
+    """Each gap as two columns: what it is above 0, and what it is below."""
+    return np.column_stack([np.maximum(gaps, 0.0), np.minimum(gaps, 0.0)])
+
+
+def outcomes_only(train: TrainingSet, test_gaps: np.ndarray):
+    """CFI trained on the reorder and churn labels alone: its latents on the
+    held-out orders, its two scores there (logits, which rank as the chances
+    do), and whether training converged. No survey answer or behaviour fixes
+    a state's scale here, so the states are free to drift."""
+    model = FitModel.for_training_set(train)
+    converged = fit_model(model, train, terms=("reorder", "churn")).converged
+    with torch.no_grad():
+        latents = model.network(torch.tensor(test_gaps, dtype=DTYPE))
+        reorder, churn, _ = model.heads(latents[:, -1])
+    scores = {"churn 30d": churn.numpy(), "reorder 14d": reorder.numpy()}
+    return latents.numpy(), scores, converged
 
 
 # %% Train on fewer and fewer customers
@@ -120,23 +151,39 @@ for seed in SEEDS:
         latents = forward(params, test_gaps)
         heads = outcomes(params, latents[:, FIT])
         cfi = {"churn 30d": heads.churn, "reorder 14d": heads.reorder}
+        bare_latents, bare, converged = outcomes_only(train, test_gaps)
         base = {"seed": seed, "customers": size, "orders": len(train.customer)}
-        for name, column in RECOVERED.items():
-            r = pearson(latents[:, [column]], true_latents[:, [column]])
-            rows.append(
-                {
-                    **base,
-                    "measure": f"recovery {name}",
-                    "model": "CFI (15 paths)",
-                    "value": float(r[0]),
-                }
-            )
+        rows.append(
+            {
+                **base,
+                "measure": "converged",
+                "model": OUTCOMES_ONLY,
+                "value": float(converged),
+            }
+        )
+        for model_name, states in ((CFI, latents), (OUTCOMES_ONLY, bare_latents)):
+            for name, column in RECOVERED.items():
+                r = pearson(states[:, [column]], true_latents[:, [column]])
+                rows.append(
+                    {
+                        **base,
+                        "measure": f"recovery {name}",
+                        "model": model_name,
+                        "value": float(r[0]),
+                    }
+                )
         train_labels = {"churn 30d": train.churn, "reorder 14d": train.reorder}
         for outcome, y_test in labels.items():
             y_train = train_labels[outcome]
             chance = {
-                "CFI (15 paths)": cfi[outcome],
+                CFI: cfi[outcome],
+                OUTCOMES_ONLY: bare[outcome],
                 "logistic regression": logistic_chance(train.gaps, y_train, test_gaps),
+                "logistic regression, surplus and shortfall": logistic_chance(
+                    surplus_and_shortfall(train.gaps),
+                    y_train,
+                    surplus_and_shortfall(test_gaps),
+                ),
                 "unconstrained network": tuned_network_chance(
                     seed, train.gaps, y_train, train.customer, test_gaps
                 ),

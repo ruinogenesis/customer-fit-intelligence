@@ -1,0 +1,4 @@
+reviews,orders,late_share,kappa,kappa_low,kappa_high,gain_symmetric,gain_asymmetric,gain_delivery_time
+all reviews,95824,0.079949,7.000000,6.285822,7.668043,0.031577,0.047953,0.052352
+written after delivery,91170,0.034869,12.000000,8.947838,14.952499,0.001958,0.003284,0.012139
+"written after delivery, within 14 days of the promise",56437,0.055921,3.250000,2.398432,4.356356,0.004883,0.005532,0.014905

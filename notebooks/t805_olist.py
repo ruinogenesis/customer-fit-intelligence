@@ -23,9 +23,17 @@
 # 3. Does a late first order cost the next one? Customers whose first order
 #    was bought at least 180 days before the data ends: did they order again
 #    within 180 days, late first orders against the rest?
+# 4. When was the review written (T810)? Olist sends its survey when the
+#    order arrives or when its promised date passes, whichever is first. So
+#    a late order is often reviewed before it is delivered, by a customer
+#    who cannot yet know how late it will be. The review by gap is split
+#    into reviews written before and after delivery, and kappa is profiled
+#    again on the reviews written after delivery, and on those within two
+#    weeks of the promise, where early and late orders are both common.
 #
 # Saves notebooks/results/t805_models.csv, t805_kappa_profile.csv,
-# t805_review_by_gap.csv and t805_repeat.csv. About a minute.
+# t805_review_by_gap.csv, t805_repeat.csv and t805_variants.csv. About five
+# minutes.
 
 # %%
 from pathlib import Path
@@ -58,6 +66,8 @@ FEE_KAPPAS = np.round(
     np.concatenate([np.arange(0.05, 1.0, 0.05), np.arange(1.0, 4.01, 0.25)]), 2
 )
 REPEAT_DAYS = 180
+NEAR_DAYS = 14  # "near the promise": within two weeks of it, early or late
+LR_95 = 3.841458820694124 / 2.0  # as fitcore.olist: half the chi-squared(1) quantile
 
 
 def repo_root() -> Path:
@@ -201,6 +211,106 @@ by_gap["fitted_symmetric"] = expected_review(
 by_gap["bin"] = by_gap["bin"].astype(str)
 print(by_gap.round(3))
 
+# %% When was the review written? (T810)
+# Olist sends the survey at delivery or on the promised date, whichever
+# comes first, so a review can be older than the delivery it is matched to.
+after = (rated["reviewed"] >= rated["delivered"]).to_numpy()
+late_orders = gap < 0
+print(
+    f"reviewed before delivery: {np.mean(~after):.1%} of all orders, "
+    f"{np.mean(~after[late_orders]):.1%} of late ones, "
+    f"{np.mean(~after[~late_orders]):.2%} of the rest"
+)
+frame = pd.DataFrame(
+    {"bin": bins, "review": rated["review"].to_numpy(), "after": after}
+)
+written_after = frame[frame["after"]].groupby("bin", observed=True)["review"]
+written_before = frame[~frame["after"]].groupby("bin", observed=True)["review"]
+timing = pd.DataFrame(
+    {
+        "before_share": 1.0 - frame.groupby("bin", observed=True)["after"].mean(),
+        "orders_after": written_after.size(),
+        "review_after": written_after.mean(),
+        "sd_after": written_after.std(),
+        "review_before": written_before.mean(),
+    }
+).reset_index()
+timing["ci95_after"] = 1.96 * timing["sd_after"] / np.sqrt(timing["orders_after"])
+by_gap = by_gap.join(timing.drop(columns=["bin", "sd_after"]))
+print(by_gap.drop(columns=["sd", "fitted_symmetric"]).round(3))
+
+
+def interval(profile) -> tuple[float, float]:
+    """Where the profile's rise from its minimum crosses LR_95 on each side,
+    by linear interpolation between grid points (as paper/figures.py); the
+    grid's edge where it never crosses."""
+    x = np.array([k for k, _ in profile])
+    rise = np.array([v for _, v in profile])
+    rise = rise - rise.min()
+    best = int(rise.argmin())
+    low, high = float(x[0]), float(x[-1])
+    for i in range(best, 0, -1):
+        if rise[i - 1] > LR_95:
+            low = x[i - 1] + (x[i] - x[i - 1]) * (rise[i - 1] - LR_95) / (
+                rise[i - 1] - rise[i]
+            )
+            break
+    for i in range(best, len(x) - 1):
+        if rise[i + 1] > LR_95:
+            high = x[i] + (x[i + 1] - x[i]) * (LR_95 - rise[i]) / (
+                rise[i + 1] - rise[i]
+            )
+            break
+    return float(low), float(high)
+
+
+# kappa again, on the reviews that could know the delivery.
+subsets = {
+    "all reviews": np.ones(len(rated), dtype=bool),
+    "written after delivery": after,
+    f"written after delivery, within {NEAR_DAYS} days of the promise": after
+    & (np.abs(gap) <= NEAR_DAYS),
+}
+variant_rows = []
+for name, keep in subsets.items():
+    fit_rows, held_rows = keep & ~test, keep & test
+    scale = rms(gap[fit_rows])
+    subset_profile = profile_kappa(
+        gap[fit_rows],
+        scale,
+        np.empty((int(fit_rows.sum()), 0)),
+        y[fit_rows],
+        CLASSES,
+        KAPPAS,
+    )
+    best, _, _ = kappa_interval(subset_profile)
+    low, high = interval(subset_profile)
+    columns = {
+        "no inputs": np.empty((len(y), 0)),
+        "delivery time": (days / rms(days[fit_rows])).reshape(-1, 1),
+        "gap, symmetric": (gap / scale).reshape(-1, 1),
+        "gap, asymmetric": (asymmetric(gap, best) / scale).reshape(-1, 1),
+    }
+    held = {}
+    for model, x in columns.items():
+        fit = fit_ordinal(x[fit_rows], y[fit_rows], CLASSES)
+        held[model] = ordinal_nll(fit.beta, fit.cuts, x[held_rows], y[held_rows]).mean()
+    variant_rows.append(
+        {
+            "reviews": name,
+            "orders": int(keep.sum()),
+            "late_share": float(np.mean(gap[keep] < 0)),
+            "kappa": best,
+            "kappa_low": low,
+            "kappa_high": high,
+            "gain_symmetric": held["no inputs"] - held["gap, symmetric"],
+            "gain_asymmetric": held["no inputs"] - held["gap, asymmetric"],
+            "gain_delivery_time": held["no inputs"] - held["delivery time"],
+        }
+    )
+variants = pd.DataFrame(variant_rows)
+print(variants.round(4).to_string())
+
 # %% Does a late first order cost the next one?
 ordered = orders.sort_values(["customer", "purchased"]).copy()
 ordered["rank"] = ordered.groupby("customer").cumcount()
@@ -271,6 +381,7 @@ pd.DataFrame(profile, columns=["kappa", "train_nll"]).assign(kind="delivery").pi
 ).to_csv(RESULTS / "t805_kappa_profile.csv", index=False, float_format="%.6f")
 by_gap.to_csv(RESULTS / "t805_review_by_gap.csv", index=False, float_format="%.6f")
 repeat.to_csv(RESULTS / "t805_repeat.csv", index=False, float_format="%.6f")
+variants.to_csv(RESULTS / "t805_variants.csv", index=False, float_format="%.6f")
 print(
     f"delivery kappa {kappa} [{kappa_low}, {kappa_high}], fee kappa {fee_kappa} [{fee_low}, {fee_high}]"
 )

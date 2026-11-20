@@ -27,6 +27,16 @@ k/7,2026,x5,kappa,1.60406
 k/7,2026,x6,kappa,1.60406
 k/7,2026,x7,kappa,1.60406
 k/7,2026,x8,kappa,1.60406
+equal weights,2026,respect,pearson,0.912267
+equal weights,2026,love,pearson,0.919589
+equal weights,2026,convenience,pearson,0.933372
+equal weights,2026,trust,pearson,0.926221
+equal weights,2026,fit,pearson,0.750625
+random weights,2026,respect,pearson,0.819314
+random weights,2026,love,pearson,0.865516
+random weights,2026,convenience,pearson,0.862805
+random weights,2026,trust,pearson,0.846494
+random weights,2026,fit,pearson,0.707522
 k/7,2027,respect,pearson,0.980421
 k/7,2027,love,pearson,0.986067
 k/7,2027,convenience,pearson,0.987657
@@ -55,6 +65,16 @@ k/7,2027,x5,kappa,1.67127
 k/7,2027,x6,kappa,1.67127
 k/7,2027,x7,kappa,1.67127
 k/7,2027,x8,kappa,1.67127
+equal weights,2027,respect,pearson,0.910985
+equal weights,2027,love,pearson,0.920183
+equal weights,2027,convenience,pearson,0.934106
+equal weights,2027,trust,pearson,0.92754
+equal weights,2027,fit,pearson,0.751965
+random weights,2027,respect,pearson,0.822667
+random weights,2027,love,pearson,0.846766
+random weights,2027,convenience,pearson,0.856205
+random weights,2027,trust,pearson,0.806406
+random weights,2027,fit,pearson,0.692635
 k/7,2028,respect,pearson,0.984081
 k/7,2028,love,pearson,0.98412
 k/7,2028,convenience,pearson,0.988623
@@ -83,6 +103,16 @@ k/7,2028,x5,kappa,1.41427
 k/7,2028,x6,kappa,1.41427
 k/7,2028,x7,kappa,1.41427
 k/7,2028,x8,kappa,1.41427
+equal weights,2028,respect,pearson,0.916358
+equal weights,2028,love,pearson,0.921976
+equal weights,2028,convenience,pearson,0.933598
+equal weights,2028,trust,pearson,0.929223
+equal weights,2028,fit,pearson,0.741597
+random weights,2028,respect,pearson,0.834131
+random weights,2028,love,pearson,0.867495
+random weights,2028,convenience,pearson,0.872358
+random weights,2028,trust,pearson,0.84008
+random weights,2028,fit,pearson,0.693242
 k/7,2029,respect,pearson,0.983631
 k/7,2029,love,pearson,0.985037
 k/7,2029,convenience,pearson,0.989865
@@ -111,6 +141,16 @@ k/7,2029,x5,kappa,1.52587
 k/7,2029,x6,kappa,1.52587
 k/7,2029,x7,kappa,1.52587
 k/7,2029,x8,kappa,1.52587
+equal weights,2029,respect,pearson,0.915278
+equal weights,2029,love,pearson,0.921249
+equal weights,2029,convenience,pearson,0.935344
+equal weights,2029,trust,pearson,0.929371
+equal weights,2029,fit,pearson,0.740198
+random weights,2029,respect,pearson,0.832813
+random weights,2029,love,pearson,0.885851
+random weights,2029,convenience,pearson,0.86829
+random weights,2029,trust,pearson,0.836469
+random weights,2029,fit,pearson,0.723497
 k/7,2030,respect,pearson,0.98228
 k/7,2030,love,pearson,0.989043
 k/7,2030,convenience,pearson,0.987614
@@ -139,6 +179,16 @@ k/7,2030,x5,kappa,1.51888
 k/7,2030,x6,kappa,1.51888
 k/7,2030,x7,kappa,1.51888
 k/7,2030,x8,kappa,1.51888
+equal weights,2030,respect,pearson,0.912701
+equal weights,2030,love,pearson,0.923386
+equal weights,2030,convenience,pearson,0.930669
+equal weights,2030,trust,pearson,0.929409
+equal weights,2030,fit,pearson,0.747558
+random weights,2030,respect,pearson,0.859715
+random weights,2030,love,pearson,0.863585
+random weights,2030,convenience,pearson,0.861497
+random weights,2030,trust,pearson,0.844154
+random weights,2030,fit,pearson,0.686831
 simulator cuts,2026,respect,pearson,0.998268
 simulator cuts,2026,love,pearson,0.991926
 simulator cuts,2026,convenience,pearson,0.999072
