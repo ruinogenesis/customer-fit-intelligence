@@ -16,19 +16,22 @@ the paper quotes the committed files.
 | IV Model: paths, parameter counts, heads, loss (equation 5), training, Fig. 1 | `fitcore/src/fitcore/model.py`, `fitcore/src/fitcore/train.py` | |
 | IV Model: exact explanations over 256 coalitions | `fitcore/src/fitcore/scoring.py` | |
 | V-A Setup: comparators and their settings | `notebooks/t802_baselines.py`, `fitcore/src/fitcore/baselines.py` | |
-| V-B Prediction, Table II (AUC over 20 populations, paired differences) | `t802_baselines.csv`, `t802_paired.csv` | `notebooks/t802_baselines.py` |
+| V-B Prediction, Table II (AUC over 20 populations, paired differences), including CFI on outcome labels only, CFI with a kappa per input, the surplus/shortfall regression with history and the true Fit alone (T811) | `t802_baselines.csv`, `t802_paired.csv`; the true Fit's differences and the 95% interval ends are computed from `t802_baselines.csv` | `notebooks/t802_baselines.py` |
 | V-B labels from closed windows only (0.799) | the `auc_closed` columns of `t802_baselines.csv` and `t802_paired.csv` | `notebooks/t802_baselines.py` |
 | V-B calibration, base rates, the churn head's ceiling, the riskiest 1%, the NPS head | the `ece_mass` column of `t802_baselines.csv`; `t802_facts.csv`; `t802_calibration.csv` (supplement) | `notebooks/t802_baselines.py` |
-| V-C recovery (0.975 to 0.988), with equal and random weights | `t110_recovery.csv` (markers `k/7`, `equal weights`, `random weights`) | `notebooks/t110_recovery.py` |
-| V-C weights against the simulator's, per unit of raw gap (1.8 to 4.0) | `t112_model.json` (weights and gap scales) against `DEFAULT_TRUTH` in `fitcore/src/fitcore/sim.py` | arithmetic: (learned weight / learned scale) / (true weight / true scale) |
+| V-C recovery in 20 populations (0.976 to 0.989), with outcome labels only (Respect 0.950, Love 0.948), and on event-measured gaps (V-F) | the `recovery` rows of `t802_facts.csv` | `notebooks/t802_baselines.py` |
+| V-C recovery with equal and random weights (first five populations), and with the simulator's own item thresholds (kappa 1.79) | `t110_recovery.csv` (markers `equal weights`, `random weights`, `simulator cuts`) | `notebooks/t110_recovery.py` |
+| V-C weights against the simulator's, per unit of raw gap (1.8 to 4.0), and their correlation with each input's true kappa (0.85) | `t112_model.json` (weights and gap scales) against `DEFAULT_TRUTH` in `fitcore/src/fitcore/sim.py` | arithmetic: (learned weight / learned scale) / (true weight / true scale) |
+| V-C survey thresholds twice as wide as the simulator's | CFI's k/7 (`fitcore/src/fitcore/model.py`) against the item cuts over the slope in `DEFAULT_ITEMS` (`fitcore/src/fitcore/sim_survey.py`): 6/7 − 1/7 against (8.1 − 3.7)/12 | arithmetic |
 | Table III weights and kappa 1.60 | `t112_model.json`, the model live on dev | `notebooks/t112_export.py` |
 | Table III change in loss, total and heads, per path, for asymmetry and for a kappa per input | `t111_ablation.csv` (the shared-kappa CFI, retrained without each path or choice; heads are the reorder and churn measures) | `notebooks/t111_ablation.py` |
-| V-C learned kappa 1.55 | the `kappa` rows of `t110_recovery.csv` | `notebooks/t110_recovery.py` |
-| V-D Robustness, Table IV | `t803_robustness.csv` | `notebooks/t803_robustness.py` |
+| V-C shared kappa 1.56 on average, and a kappa per input against the simulator's (correlation 0.85) | the `kappa` rows of `t802_facts.csv`, against `DEFAULT_TRUTH` | `notebooks/t802_baselines.py` |
+| V-D Robustness, Table IV, with the surplus/shortfall regression and every model's log loss (T811) | `t803_robustness.csv` | `notebooks/t803_robustness.py` |
 | V-D Small data, Fig. 2, the outcome-only CFI | `t803_small_data.csv` | `notebooks/t803_small_data.py`; drawn by `figures.py` |
-| V-E one order explained, Fig. 3 | `t112_model.json`, scored and explained by `fitcore.scoring` | `figures.py` |
-| V-E drivers, Fig. 4 (with standard errors and the stricter hit); 670,639 scorings whose splits add up exactly | `t804_drivers.csv` | `notebooks/t804_drivers.py`; Fig. 4 drawn by `figures.py` |
-| V-F what events measure: the deployed and retrained CFI and the comparators | the `event-measured gaps` rows of `t802_baselines.csv` and `t802_paired.csv` | `notebooks/t802_baselines.py` |
+| V-E a constructed order explained, Fig. 3 | `t112_model.json`, scored and explained by `fitcore.scoring`; the order is `EXAMPLE` in `figures.py` | `figures.py` |
+| V-E drivers, Fig. 4 (with standard errors, the stricter hit and the mean courier rating); the plain rankings and the populations with nothing planted (T811); 670,639 scorings whose splits add up exactly | `t804_drivers.csv`, `t804_alarms.csv` | `notebooks/t804_drivers.py`; Fig. 4 drawn by `figures.py` |
+| V-E about 80 times an unplanted courier's share | `PLANTED` and `PLANT_SHARE` in `fitcore/src/fitcore/sim_events.py`: (0.8/3 + 0.2/60) / (0.2/60) | arithmetic |
+| V-F what events measure: the deployed and retrained CFI and the comparators, their calibration and log loss | the `event-measured gaps` rows of `t802_baselines.csv` and `t802_paired.csv` | `notebooks/t802_baselines.py` |
 | V-F the matrix, Table V, quadrant changes between orders, Love as expected (0.82) | `t802_display.csv`, `t802_facts.csv` | `notebooks/t802_baselines.py` |
 | V-G Real orders: models, held-out gains, repeat buying | `t805_models.csv`, `t805_repeat.csv` | `notebooks/t805_olist.py`, with the Olist files in `notebooks/data/olist/` |
 | V-G kappa's interval (6.3 to 7.7; fees 0.07 to 0.27) | `t805_kappa_profile.csv` | `notebooks/t805_olist.py`; interpolated between grid points by `figures.py`, which also draws `fig_kappa.pdf` for the supplement |
@@ -37,6 +40,6 @@ the paper quotes the committed files.
 | VI Models: the golden replay of 795 events | `t309_events.jsonl`, `t309_golden.json` | `notebooks/t309_golden.py` |
 | VI Dashboard (223 customers, 1,633 orders, 122 on the band); supplement section 11 | `shot_matrix.png`, `shot_drivers.png`: the dev dashboard on 2026-11-19, signed in as admin, Light theme | screenshots |
 | VI Work, latency and cost | `t806_system.csv` (Cloud Run's own times are from its request log); 3.6 events per order is its bytes per order over bytes per event | `notebooks/t806_system.py`, against dev |
-| VI Cost per 1,000 events | the per-event reads, writes, deletes and bytes in `t806_system.csv`, priced at Google Cloud's list rates | arithmetic in the text |
+| VI Cost per 1,000 events | the per-event reads, writes, deletes and bytes in `t806_system.csv`, priced at Google Cloud's list rates (the breakdown is in the T810 version of this file's paper, `git show dc3bb9a:paper/main.tex`) | arithmetic |
 | VII Discussion, VIII Conclusion | the rows above | |
 | Supplement tables | the files named in each section, printed without rounding beyond what they show | |

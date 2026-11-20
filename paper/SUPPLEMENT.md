@@ -82,7 +82,11 @@ warmed up, prior weight 3, a 60-day half-life, and the population averages
 above as priors (`fitcore/src/fitcore/expectations.py`).
 
 **Outcomes.** After each order the customer stops for good with chance
-$\sigma(-4 + 6(0.5 - \text{Fit}))$: 1.8% at Fit 0.5, 10% at 0.2. One order in
+$\sigma(-4 + 6(0.5 - \text{Fit}))$: 1.8% at Fit 0.5, 10% at 0.2. Otherwise
+the next order comes after an exponential wait whose mean is the customer's
+usual interval times $\exp(-2(\text{Fit} - 0.5))$, so outcomes also follow
+each customer's own pace, which history carries and the gaps do not; the true
+Fit alone is therefore a reference, not a strict ceiling. One order in
 five gets a survey question, rotating through the NPS question and the four
 state items. The NPS answer counts how many of ten cuts
 ($-0.6, -0.2, 0.1, 0.5, 0.9, 1.3, 1.9, 2.7, 3.5, 4.4$) lie below
@@ -139,11 +143,20 @@ labels and judged on the held-out customers' orders.
   history; for a held-out order it gives the chance of no order in the next 30
   (churn) or 14 days (one minus the reorder chance), given that customer's
   history so far.
+- **CFI's variants (T811):** the same 15-path network trained on the reorder
+  and churn losses alone (no NPS, item or behaviour term), and with a
+  $\kappa$ per input; both converged in all 20 populations.
+- **With history (T811):** logistic regression on each gap's surplus and
+  shortfall plus the three history columns; and the simulator's true Fit
+  alone, as a reference for one order's gaps.
 - **Event-measured gaps:** an input counts as measured as v1 events measure
   it ($x_1$ to $x_3$ always; $x_5$ and $x_6$ on rated orders; $x_8$ on orders
   with an incident; $x_4$ and $x_7$ never), else as 0. CFI as deployed is
   the 15-path model trained with every input measured; CFI retrained is
-  trained on event-measured gaps without the $x_4$ and $x_7$ paths.
+  trained on event-measured gaps without the $x_4$ and $x_7$ paths. The gaps
+  are the simulator's, masked: its expectations still learn from every
+  order's measures, which a service that never sees an unrated order's
+  ratings could not.
 - **Calibration:** expected calibration error over ten bins, holding equal
   numbers of orders (the paper's measure) or of equal width.
 - **Paired differences:** CFI's score minus each comparator's, population by
@@ -167,11 +180,15 @@ Mean over 20 populations (standard deviation of the AUC).
 | gaps | gradient boosting | 0.784 (0.012) | 0.1452 | 0.0059 | 0.0059 | 0.780 |
 | gaps | gradient boosting, monotone | 0.798 (0.010) | 0.1430 | 0.0050 | 0.0053 | 0.794 |
 | gaps | unconstrained network | 0.798 (0.013) | 0.1416 | 0.0049 | 0.0042 | 0.795 |
+| gaps | CFI, outcome labels only | 0.804 (0.011) | 0.1406 | 0.0052 | 0.0037 | 0.800 |
+| gaps | CFI, a kappa per input | 0.802 (0.013) | 0.1411 | 0.0055 | 0.0038 | 0.799 |
 | history | order rate | 0.642 (0.020) | 0.1607 | 0.0062 | 0.0020 | 0.646 |
 | history | BG/NBD | 0.664 (0.016) | 0.1603 | 0.0086 | 0.0053 | 0.655 |
 | gaps + history | gradient boosting | 0.798 (0.010) | 0.1430 | 0.0065 | 0.0060 | 0.796 |
 | gaps + history | CFI Fit + history | 0.817 (0.012) | 0.1380 | 0.0049 | 0.0033 | 0.814 |
+| gaps + history | LR, surplus and shortfall | 0.818 (0.011) | 0.1388 | 0.0056 | 0.0053 | 0.816 |
 | truth + history | true Fit + history (ceiling) | 0.819 (0.012) | 0.1374 | 0.0049 | 0.0036 | 0.817 |
+| truth | true Fit | 0.805 (0.013) | 0.1402 | 0.0049 | 0.0036 | 0.801 |
 | event-measured gaps | CFI as deployed (15 paths) | 0.744 (0.014) | 0.1518 | 0.0114 | 0.0113 | 0.742 |
 | event-measured gaps | CFI retrained (13 paths) | 0.743 (0.014) | 0.1498 | 0.0057 | 0.0030 | 0.740 |
 | event-measured gaps | LR, raw gaps | 0.740 (0.014) | 0.1502 | 0.0055 | 0.0042 | 0.737 |
@@ -190,11 +207,15 @@ Mean over 20 populations (standard deviation of the AUC).
 | gaps | gradient boosting | 0.721 (0.010) | 0.3319 | 0.0100 | 0.0090 | 0.719 |
 | gaps | gradient boosting, monotone | 0.727 (0.009) | 0.3304 | 0.0103 | 0.0092 | 0.726 |
 | gaps | unconstrained network | 0.727 (0.010) | 0.3297 | 0.0100 | 0.0087 | 0.725 |
+| gaps | CFI, outcome labels only | 0.730 (0.010) | 0.3284 | 0.0099 | 0.0079 | 0.729 |
+| gaps | CFI, a kappa per input | 0.729 (0.010) | 0.3289 | 0.0103 | 0.0084 | 0.727 |
 | history | order rate | 0.677 (0.012) | 0.3452 | 0.0112 | 0.0080 | 0.678 |
 | history | BG/NBD | 0.684 (0.011) | 0.3448 | 0.0181 | 0.0163 | 0.683 |
 | gaps + history | gradient boosting | 0.766 (0.012) | 0.3164 | 0.0099 | 0.0083 | 0.765 |
 | gaps + history | CFI Fit + history | 0.775 (0.012) | 0.3133 | 0.0122 | 0.0102 | 0.774 |
+| gaps + history | LR, surplus and shortfall | 0.777 (0.011) | 0.3132 | 0.0124 | 0.0133 | 0.776 |
 | truth + history | true Fit + history (ceiling) | 0.777 (0.011) | 0.3123 | 0.0121 | 0.0107 | 0.776 |
+| truth | true Fit | 0.731 (0.010) | 0.3279 | 0.0096 | 0.0078 | 0.729 |
 | event-measured gaps | CFI as deployed (15 paths) | 0.682 (0.010) | 0.3452 | 0.0247 | 0.0246 | 0.681 |
 | event-measured gaps | CFI retrained (13 paths) | 0.681 (0.010) | 0.3420 | 0.0101 | 0.0087 | 0.680 |
 | event-measured gaps | LR, raw gaps | 0.678 (0.010) | 0.3427 | 0.0113 | 0.0085 | 0.677 |
@@ -203,11 +224,13 @@ Mean over 20 populations (standard deviation of the AUC).
 | event-measured gaps | gradient boosting, monotone | 0.687 (0.010) | 0.3413 | 0.0101 | 0.0088 | 0.685 |
 | event-measured gaps | unconstrained network | 0.690 (0.010) | 0.3399 | 0.0100 | 0.0078 | 0.689 |
 
-**Paired differences.** CFI (the first model of each group) minus each
-comparator, mean over 20 populations, its standard error, and the number of
-populations where CFI did better (lower log loss, higher AUC).
+**Paired differences.** The model named minus each other model on the same
+inputs, mean over 20 populations, its standard error, and the number of
+populations where the model named did better (lower log loss, higher AUC).
+CFI is paired with every model; the outcome-only CFI with every model but CFI
+(T811, by the same rule).
 
-| outcome | inputs | model | against | measure | difference | standard_error | CFI better in |
+| outcome | inputs | model | against | measure | difference | standard_error | better in |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | churn 30d | gaps | CFI | LR, raw gaps | auc | +0.0044 | 0.0010 | 17 of 20 |
 | churn 30d | gaps | CFI | LR, raw gaps | log_loss | -0.0012 | 0.0002 | 18 of 20 |
@@ -219,10 +242,30 @@ populations where CFI did better (lower log loss, higher AUC).
 | churn 30d | gaps | CFI | gradient boosting, monotone | log_loss | -0.0019 | 0.0002 | 20 of 20 |
 | churn 30d | gaps | CFI | unconstrained network | auc | +0.0037 | 0.0012 | 15 of 20 |
 | churn 30d | gaps | CFI | unconstrained network | log_loss | -0.0005 | 0.0002 | 14 of 20 |
+| churn 30d | gaps | CFI | CFI, outcome labels only | auc | -0.0018 | 0.0007 | 3 of 20 |
+| churn 30d | gaps | CFI | CFI, outcome labels only | log_loss | +0.0005 | 0.0001 | 3 of 20 |
+| churn 30d | gaps | CFI | CFI, a kappa per input | auc | -0.0001 | 0.0001 | 7 of 20 |
+| churn 30d | gaps | CFI | CFI, a kappa per input | log_loss | +0.0000 | 0.0000 | 8 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | LR, raw gaps | auc | +0.0062 | 0.0011 | 19 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | LR, raw gaps | log_loss | -0.0018 | 0.0002 | 19 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | LR, surplus and shortfall | auc | -0.0004 | 0.0006 | 10 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | LR, surplus and shortfall | log_loss | -0.0010 | 0.0002 | 16 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | gradient boosting | auc | +0.0199 | 0.0012 | 20 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | gradient boosting | log_loss | -0.0046 | 0.0002 | 20 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | gradient boosting, monotone | auc | +0.0062 | 0.0006 | 20 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | gradient boosting, monotone | log_loss | -0.0024 | 0.0002 | 20 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | unconstrained network | auc | +0.0055 | 0.0011 | 18 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | unconstrained network | log_loss | -0.0010 | 0.0002 | 18 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | CFI, a kappa per input | auc | +0.0017 | 0.0007 | 17 of 20 |
+| churn 30d | gaps | CFI, outcome labels only | CFI, a kappa per input | log_loss | -0.0005 | 0.0001 | 17 of 20 |
 | churn 30d | gaps + history | CFI Fit + history | gradient boosting | auc | +0.0192 | 0.0016 | 20 of 20 |
 | churn 30d | gaps + history | CFI Fit + history | gradient boosting | log_loss | -0.0049 | 0.0003 | 20 of 20 |
+| churn 30d | gaps + history | CFI Fit + history | LR, surplus and shortfall | auc | -0.0013 | 0.0007 | 7 of 20 |
+| churn 30d | gaps + history | CFI Fit + history | LR, surplus and shortfall | log_loss | -0.0008 | 0.0002 | 16 of 20 |
 | churn 30d | gaps + history | CFI Fit + history | true Fit + history (ceiling) | auc | -0.0027 | 0.0004 | 4 of 20 |
 | churn 30d | gaps + history | CFI Fit + history | true Fit + history (ceiling) | log_loss | +0.0006 | 0.0001 | 1 of 20 |
+| churn 30d | event-measured gaps | CFI as deployed (15 paths) | CFI retrained (13 paths) | auc | +0.0015 | 0.0004 | 17 of 20 |
+| churn 30d | event-measured gaps | CFI as deployed (15 paths) | CFI retrained (13 paths) | log_loss | +0.0020 | 0.0002 | 0 of 20 |
 | churn 30d | event-measured gaps | CFI as deployed (15 paths) | LR, raw gaps | auc | +0.0045 | 0.0011 | 15 of 20 |
 | churn 30d | event-measured gaps | CFI as deployed (15 paths) | LR, raw gaps | log_loss | +0.0016 | 0.0002 | 0 of 20 |
 | churn 30d | event-measured gaps | CFI as deployed (15 paths) | LR, surplus and shortfall | auc | -0.0043 | 0.0012 | 2 of 20 |
@@ -253,10 +296,30 @@ populations where CFI did better (lower log loss, higher AUC).
 | reorder 14d | gaps | CFI | gradient boosting, monotone | log_loss | -0.0013 | 0.0003 | 18 of 20 |
 | reorder 14d | gaps | CFI | unconstrained network | auc | +0.0018 | 0.0008 | 14 of 20 |
 | reorder 14d | gaps | CFI | unconstrained network | log_loss | -0.0006 | 0.0003 | 15 of 20 |
+| reorder 14d | gaps | CFI | CFI, outcome labels only | auc | -0.0019 | 0.0004 | 3 of 20 |
+| reorder 14d | gaps | CFI | CFI, outcome labels only | log_loss | +0.0007 | 0.0001 | 2 of 20 |
+| reorder 14d | gaps | CFI | CFI, a kappa per input | auc | -0.0004 | 0.0001 | 5 of 20 |
+| reorder 14d | gaps | CFI | CFI, a kappa per input | log_loss | +0.0001 | 0.0000 | 6 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | LR, raw gaps | auc | +0.0064 | 0.0007 | 20 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | LR, raw gaps | log_loss | -0.0023 | 0.0002 | 20 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | LR, surplus and shortfall | auc | -0.0016 | 0.0004 | 4 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | LR, surplus and shortfall | log_loss | -0.0002 | 0.0002 | 14 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | gradient boosting | auc | +0.0094 | 0.0009 | 20 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | gradient boosting | log_loss | -0.0035 | 0.0003 | 20 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | gradient boosting, monotone | auc | +0.0032 | 0.0006 | 18 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | gradient boosting, monotone | log_loss | -0.0020 | 0.0002 | 20 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | unconstrained network | auc | +0.0037 | 0.0008 | 18 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | unconstrained network | log_loss | -0.0013 | 0.0003 | 18 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | CFI, a kappa per input | auc | +0.0015 | 0.0004 | 16 of 20 |
+| reorder 14d | gaps | CFI, outcome labels only | CFI, a kappa per input | log_loss | -0.0005 | 0.0001 | 16 of 20 |
 | reorder 14d | gaps + history | CFI Fit + history | gradient boosting | auc | +0.0090 | 0.0007 | 20 of 20 |
 | reorder 14d | gaps + history | CFI Fit + history | gradient boosting | log_loss | -0.0031 | 0.0003 | 20 of 20 |
+| reorder 14d | gaps + history | CFI Fit + history | LR, surplus and shortfall | auc | -0.0016 | 0.0005 | 4 of 20 |
+| reorder 14d | gaps + history | CFI Fit + history | LR, surplus and shortfall | log_loss | +0.0001 | 0.0002 | 13 of 20 |
 | reorder 14d | gaps + history | CFI Fit + history | true Fit + history (ceiling) | auc | -0.0020 | 0.0003 | 1 of 20 |
 | reorder 14d | gaps + history | CFI Fit + history | true Fit + history (ceiling) | log_loss | +0.0010 | 0.0001 | 0 of 20 |
+| reorder 14d | event-measured gaps | CFI as deployed (15 paths) | CFI retrained (13 paths) | auc | +0.0013 | 0.0003 | 16 of 20 |
+| reorder 14d | event-measured gaps | CFI as deployed (15 paths) | CFI retrained (13 paths) | log_loss | +0.0032 | 0.0003 | 0 of 20 |
 | reorder 14d | event-measured gaps | CFI as deployed (15 paths) | LR, raw gaps | auc | +0.0038 | 0.0006 | 18 of 20 |
 | reorder 14d | event-measured gaps | CFI as deployed (15 paths) | LR, raw gaps | log_loss | +0.0025 | 0.0003 | 0 of 20 |
 | reorder 14d | event-measured gaps | CFI as deployed (15 paths) | LR, surplus and shortfall | auc | -0.0064 | 0.0007 | 0 of 20 |
@@ -279,7 +342,8 @@ populations where CFI did better (lower log loss, higher AUC).
 | reorder 14d | event-measured gaps | CFI retrained (13 paths) | unconstrained network | log_loss | +0.0020 | 0.0003 | 2 of 20 |
 
 **Facts per population.** Mean, standard deviation, smallest and largest over
-the 20 populations, on held-out orders.
+the 20 populations, on held-out orders. Recovery is each state's Pearson
+correlation with the simulator's true state; $\kappa$ is the learned one.
 
 | measure | mean | std | min | max |
 | --- | --- | --- | --- | --- |
@@ -287,6 +351,8 @@ the 20 populations, on held-out orders.
 | training orders | 34,852 | 720 | 33,885 | 36,304 |
 | held-out customers | 400 | 0.0000 | 400 | 400 |
 | held-out orders | 8,645 | 300 | 8,229 | 9,057 |
+| converged: CFI, outcome labels only | 1.0000 | 0.0000 | 1.0000 | 1.0000 |
+| converged: CFI, a kappa per input | 1.0000 | 0.0000 | 1.0000 | 1.0000 |
 | churn rate | 0.0393 | 0.0022 | 0.0356 | 0.0426 |
 | churn rate, closed windows | 0.0437 | 0.0024 | 0.0399 | 0.0475 |
 | churn rate, open windows | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
@@ -304,6 +370,41 @@ the 20 populations, on held-out orders.
 | nps log loss, no inputs | 1.9555 | 0.0474 | 1.8405 | 2.0245 |
 | nps rank correlation with Fit | 0.4910 | 0.0532 | 0.3817 | 0.5643 |
 | nps rank correlation with the true Fit | 0.4966 | 0.0502 | 0.3838 | 0.5764 |
+| recovery respect: every input measured | 0.9835 | 0.0017 | 0.9797 | 0.9867 |
+| recovery love: every input measured | 0.9872 | 0.0023 | 0.9826 | 0.9911 |
+| recovery convenience: every input measured | 0.9888 | 0.0012 | 0.9861 | 0.9912 |
+| recovery trust: every input measured | 0.9763 | 0.0019 | 0.9719 | 0.9795 |
+| recovery fit: every input measured | 0.9859 | 0.0014 | 0.9831 | 0.9886 |
+| recovery respect: outcome labels only | 0.9498 | 0.0205 | 0.9162 | 0.9826 |
+| recovery love: outcome labels only | 0.9479 | 0.0237 | 0.8964 | 0.9789 |
+| recovery convenience: outcome labels only | 0.9797 | 0.0047 | 0.9703 | 0.9864 |
+| recovery trust: outcome labels only | 0.9690 | 0.0088 | 0.9479 | 0.9803 |
+| recovery fit: outcome labels only | 0.9857 | 0.0022 | 0.9811 | 0.9892 |
+| recovery respect: a kappa per input | 0.9834 | 0.0014 | 0.9798 | 0.9863 |
+| recovery love: a kappa per input | 0.9879 | 0.0023 | 0.9830 | 0.9917 |
+| recovery convenience: a kappa per input | 0.9882 | 0.0010 | 0.9861 | 0.9901 |
+| recovery trust: a kappa per input | 0.9764 | 0.0018 | 0.9727 | 0.9791 |
+| recovery fit: a kappa per input | 0.9855 | 0.0013 | 0.9835 | 0.9884 |
+| recovery respect: as deployed, event-measured gaps | 0.7436 | 0.0090 | 0.7182 | 0.7538 |
+| recovery love: as deployed, event-measured gaps | 0.6647 | 0.0129 | 0.6400 | 0.6864 |
+| recovery convenience: as deployed, event-measured gaps | 0.9533 | 0.0022 | 0.9476 | 0.9569 |
+| recovery trust: as deployed, event-measured gaps | 0.7103 | 0.0094 | 0.6922 | 0.7246 |
+| recovery fit: as deployed, event-measured gaps | 0.8054 | 0.0053 | 0.7931 | 0.8154 |
+| recovery respect: retrained, event-measured gaps | 0.7462 | 0.0084 | 0.7233 | 0.7556 |
+| recovery love: retrained, event-measured gaps | 0.6639 | 0.0130 | 0.6417 | 0.6861 |
+| recovery convenience: retrained, event-measured gaps | 0.9492 | 0.0029 | 0.9443 | 0.9533 |
+| recovery trust: retrained, event-measured gaps | 0.7144 | 0.0083 | 0.7015 | 0.7286 |
+| recovery fit: retrained, event-measured gaps | 0.8055 | 0.0061 | 0.7913 | 0.8139 |
+| kappa | 1.5602 | 0.0783 | 1.4143 | 1.6824 |
+| kappa: outcome labels only | 3.0216 | 0.4615 | 2.4390 | 4.4499 |
+| kappa of x1: a kappa per input | 1.3712 | 0.2068 | 1.0639 | 1.8380 |
+| kappa of x2: a kappa per input | 1.5463 | 0.3489 | 1.0553 | 2.3355 |
+| kappa of x3: a kappa per input | 2.0267 | 0.3497 | 1.5752 | 2.9322 |
+| kappa of x4: a kappa per input | 2.8363 | 1.7473 | 1.3154 | 8.7137 |
+| kappa of x5: a kappa per input | 1.5050 | 0.4372 | 1.0000 | 2.6364 |
+| kappa of x6: a kappa per input | 1.5056 | 0.2039 | 1.1677 | 2.0122 |
+| kappa of x7: a kappa per input | 1.1365 | 0.1908 | 1.0000 | 1.6009 |
+| kappa of x8: a kappa per input | 1.8114 | 0.2788 | 1.2573 | 2.3125 |
 | respect as expected | 0.9002 | 0.0075 | 0.8885 | 0.9175 |
 | love as expected | 0.8211 | 0.0084 | 0.8073 | 0.8380 |
 | respect of unrated orders, quantile 0.05 | 0.6839 | 0.0183 | 0.6529 | 0.7275 |
@@ -391,25 +492,48 @@ behaviours 3.691.
 
 Churn AUC:
 
-| scenario | CFI | LR, raw gaps | gradient boosting | unconstrained network | true Fit |
-| --- | --- | --- | --- | --- | --- |
-| baseline | 0.791 | 0.786 | 0.773 | 0.786 | 0.793 |
-| missing paths | 0.805 | 0.804 | 0.794 | 0.805 | 0.813 |
-| flipped sign | 0.796 | 0.794 | 0.783 | 0.792 | 0.800 |
-| interaction | 0.832 | 0.826 | 0.818 | 0.829 | 0.834 |
-| weak anchors | 0.791 | 0.786 | 0.773 | 0.786 | 0.793 |
-| noisy labels | 0.791 | 0.784 | 0.752 | 0.754 | 0.793 |
+| scenario | CFI | LR, raw gaps | LR, surplus and shortfall | gradient boosting | unconstrained network | true Fit |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline | 0.791 | 0.786 | 0.794 | 0.773 | 0.786 | 0.793 |
+| missing paths | 0.805 | 0.804 | 0.812 | 0.794 | 0.805 | 0.813 |
+| flipped sign | 0.796 | 0.794 | 0.800 | 0.783 | 0.792 | 0.800 |
+| interaction | 0.832 | 0.826 | 0.833 | 0.818 | 0.829 | 0.834 |
+| weak anchors | 0.791 | 0.786 | 0.794 | 0.773 | 0.786 | 0.793 |
+| noisy labels | 0.791 | 0.784 | 0.790 | 0.752 | 0.754 | 0.793 |
 
 Reorder AUC:
 
-| scenario | CFI | LR, raw gaps | gradient boosting | unconstrained network | true Fit |
-| --- | --- | --- | --- | --- | --- |
-| baseline | 0.717 | 0.712 | 0.708 | 0.717 | 0.719 |
-| missing paths | 0.737 | 0.734 | 0.733 | 0.739 | 0.744 |
-| flipped sign | 0.718 | 0.714 | 0.713 | 0.719 | 0.722 |
-| interaction | 0.770 | 0.764 | 0.763 | 0.770 | 0.772 |
-| weak anchors | 0.718 | 0.712 | 0.708 | 0.717 | 0.719 |
-| noisy labels | 0.717 | 0.712 | 0.699 | 0.702 | 0.719 |
+| scenario | CFI | LR, raw gaps | LR, surplus and shortfall | gradient boosting | unconstrained network | true Fit |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline | 0.717 | 0.712 | 0.720 | 0.708 | 0.717 | 0.719 |
+| missing paths | 0.737 | 0.734 | 0.744 | 0.733 | 0.739 | 0.744 |
+| flipped sign | 0.718 | 0.714 | 0.723 | 0.713 | 0.719 | 0.722 |
+| interaction | 0.770 | 0.764 | 0.772 | 0.763 | 0.770 | 0.772 |
+| weak anchors | 0.718 | 0.712 | 0.720 | 0.708 | 0.717 | 0.719 |
+| noisy labels | 0.717 | 0.712 | 0.719 | 0.699 | 0.702 | 0.719 |
+
+Churn log loss (held-out labels are true; under noisy labels the models were
+trained on flipped ones):
+
+| scenario | CFI | LR, raw gaps | LR, surplus and shortfall | gradient boosting | unconstrained network | true Fit |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline | 0.1446 | 0.1460 | 0.1453 | 0.1488 | 0.1456 | 0.1439 |
+| missing paths | 0.1612 | 0.1624 | 0.1617 | 0.1634 | 0.1608 | 0.1586 |
+| flipped sign | 0.1335 | 0.1346 | 0.1341 | 0.1370 | 0.1342 | 0.1327 |
+| interaction | 0.1622 | 0.1669 | 0.1665 | 0.1676 | 0.1639 | 0.1618 |
+| weak anchors | 0.1446 | 0.1460 | 0.1453 | 0.1488 | 0.1456 | 0.1439 |
+| noisy labels | 0.2049 | 0.2055 | 0.2041 | 0.2056 | 0.2033 | 0.2043 |
+
+Reorder log loss:
+
+| scenario | CFI | LR, raw gaps | LR, surplus and shortfall | gradient boosting | unconstrained network | true Fit |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline | 0.3316 | 0.3336 | 0.3315 | 0.3350 | 0.3322 | 0.3307 |
+| missing paths | 0.3500 | 0.3509 | 0.3480 | 0.3508 | 0.3486 | 0.3461 |
+| flipped sign | 0.3219 | 0.3234 | 0.3213 | 0.3241 | 0.3221 | 0.3205 |
+| interaction | 0.3348 | 0.3398 | 0.3375 | 0.3391 | 0.3357 | 0.3338 |
+| weak anchors | 0.3317 | 0.3336 | 0.3315 | 0.3350 | 0.3322 | 0.3307 |
+| noisy labels | 0.3580 | 0.3596 | 0.3573 | 0.3611 | 0.3585 | 0.3570 |
 
 CFI's recovery and learned $\kappa$:
 
@@ -463,25 +587,63 @@ Recovery of Respect, Love and Fit:
 
 ## 8. Drivers (Section V-E, Fig. 4)
 
-Share of the three worst-ranked groups that are planted (precision at 3),
-mean over 20 populations (standard error), by customers per population
-(about 660, 1,310, 2,590 and 5,130 orders). Excess: GET /drivers' ranking;
-fit: lowest average Fit; drag: the raw average contribution.
+Share of the worst-ranked groups that are planted, mean over 20 populations
+(standard error), by customers per population (about 660, 1,310, 2,590 and
+5,130 orders). Excess: GET /drivers' ranking; fit: lowest average Fit; drag:
+the raw average contribution. With no model (T811): couriers by mean courier
+rating (three asked for, as three are planted); restaurants by mean minutes
+late (two) and by mean food rating (one), and the three those two name
+together as a top three ("plain means"). Each plain ranking uses the measure
+the planted incident moves, chosen in advance.
 
-| by | method | 50 | 100 | 200 | 400 |
-| --- | --- | --- | --- | --- | --- |
-| courier | drag | 0.13 (0.04) | 0.17 (0.05) | 0.13 (0.04) | 0.12 (0.04) |
-| courier | excess | 0.38 (0.06) | 0.57 (0.06) | 0.82 (0.05) | 0.97 (0.02) |
-| courier | fit | 0.43 (0.05) | 0.57 (0.04) | 0.67 (0.05) | 0.85 (0.04) |
-| restaurant | drag | 0.78 (0.04) | 0.98 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
-| restaurant | excess | 0.75 (0.04) | 0.98 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
-| restaurant | fit | 0.72 (0.04) | 0.88 (0.04) | 1.00 (0.00) | 1.00 (0.00) |
+| by | method | measure | 50 | 100 | 200 | 400 |
+| --- | --- | --- | --- | --- | --- | --- |
+| courier | drag | precision at 3 | 0.13 (0.04) | 0.17 (0.05) | 0.13 (0.04) | 0.12 (0.04) |
+| courier | excess | precision at 3 | 0.38 (0.06) | 0.57 (0.06) | 0.82 (0.05) | 0.97 (0.02) |
+| courier | fit | precision at 3 | 0.43 (0.05) | 0.57 (0.04) | 0.67 (0.05) | 0.85 (0.04) |
+| courier | mean courier rating | precision at 3 | 0.70 (0.04) | 0.85 (0.04) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | drag | precision at 3 | 0.78 (0.04) | 0.98 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | excess | precision at 3 | 0.75 (0.04) | 0.98 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | fit | precision at 3 | 0.72 (0.04) | 0.88 (0.04) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | mean food rating | precision at 1 | 0.75 (0.10) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | mean minutes late | precision at 2 | 0.70 (0.06) | 0.97 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
+| restaurant | plain means | precision at 3 | 0.72 (0.05) | 0.98 (0.02) | 1.00 (0.00) | 1.00 (0.00) |
 
 Counting a courier only when it is in the top three and its first driver is
 courier conduct: 32%, 53%, 82% and 97%. Every planted restaurant's first
 driver by the excess is its planted input at every size; for planted
 couriers, 80%, 90%, 100% and 100%. All 670,639 scorings split exactly into
 their inputs' contributions (within $10^{-12}$).
+
+**With nothing planted.** The same 20 populations at each size, replayed with
+nothing planted, give each ranking's most extreme value by chance: the lowest
+excess, the lowest mean rating, the most minutes late. Threshold: the most
+extreme of those 20 values; found: the share of planted groups (over the 20
+planted populations) beyond it, so found with no false alarm in any of the 20
+unplanted ones. A group needs at least five orders to be ranked.
+
+| size | by | method | populations | threshold | planted_groups | found |
+| --- | --- | --- | --- | --- | --- | --- |
+| 50 | restaurant | excess | 20 | -0.120 | 60 | 50% |
+| 50 | restaurant | mean minutes late | 20 | 6.351 | 40 | 42% |
+| 50 | restaurant | mean food rating | 20 | 3.000 | 20 | 5% |
+| 50 | courier | excess | 20 | -0.180 | 60 | 3% |
+| 50 | courier | mean courier rating | 20 | 2.000 | 60 | 0% |
+| 100 | restaurant | excess | 20 | -0.084 | 60 | 85% |
+| 100 | restaurant | mean minutes late | 20 | 6.348 | 40 | 50% |
+| 100 | restaurant | mean food rating | 20 | 3.500 | 20 | 75% |
+| 100 | courier | excess | 20 | -0.112 | 60 | 8% |
+| 100 | courier | mean courier rating | 20 | 2.000 | 60 | 0% |
+| 200 | restaurant | excess | 20 | -0.070 | 60 | 95% |
+| 200 | restaurant | mean minutes late | 20 | 5.456 | 40 | 72% |
+| 200 | restaurant | mean food rating | 20 | 3.750 | 20 | 100% |
+| 200 | courier | excess | 20 | -0.079 | 60 | 25% |
+| 200 | courier | mean courier rating | 20 | 3.750 | 60 | 80% |
+| 400 | restaurant | excess | 20 | -0.045 | 60 | 100% |
+| 400 | restaurant | mean minutes late | 20 | 3.751 | 40 | 100% |
+| 400 | restaurant | mean food rating | 20 | 3.977 | 20 | 100% |
+| 400 | courier | excess | 20 | -0.051 | 60 | 88% |
+| 400 | courier | mean courier rating | 20 | 3.903 | 60 | 100% |
 
 ## 9. Real orders: Olist (Section V-G)
 

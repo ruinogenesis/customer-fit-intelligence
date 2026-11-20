@@ -7,7 +7,8 @@ Run from the repository root with fitcore's lab extra installed:
 It reads notebooks/results and writes fig_*.pdf beside this file: small data
 (t803_small_data.csv), one order's contributions to Fit, explained by fitcore
 with the T112 model (t112_model.json), planted couriers found in the top
-three, with standard errors over 20 populations (t804_drivers.csv), Olist
+three, with standard errors over 20 populations, beside a courier's plain
+mean rating (T811) (t804_drivers.csv), Olist
 review by days early or late, all reviews and those written before and after
 delivery (t805_review_by_gap.csv), and the profile likelihood of kappa
 (t805_kappa_profile.csv), with its 95% interval between grid points, which
@@ -84,16 +85,21 @@ def drivers() -> None:
     first = excess[excess.measure == "right first driver"].set_index(keys)["value"]
     hit = ((rank <= 3) & (first.reindex(rank.index) == 1)).astype(float)
     per_population["strict"] = hit.groupby(["size", "seed"]).mean().unstack("seed")
+    # T811: the ranking with no model, by each courier's mean courier rating.
+    per_population["rating"] = p[p.method == "mean courier rating"].pivot_table(
+        index="size", columns="seed", values="value"
+    )
     orders = r.groupby("size")["orders"].mean()
     sizes = list(per_population["excess"].index)
     xs = np.arange(len(sizes))
-    fig, ax = plt.subplots(figsize=(WIDTH, 2.3))
+    fig, ax = plt.subplots(figsize=(WIDTH, 2.2))
     frame(ax)
     style = {
         "excess": (ACCENT, "-", "o", "Excess (GET /drivers)", -0.06),
         "strict": (ACCENT, ":", "o", "Excess, naming courier conduct", 0.06),
         "fit": (MUTED, "-", "s", "Lowest average Fit", 0.0),
         "drag": (MUTED, "--", "^", "Raw contribution", 0.0),
+        "rating": (INK, "-", "D", "Mean courier rating", 0.0),
     }
     for method, (colour, dash, marker, name, shift) in style.items():
         values = per_population[method]
@@ -107,7 +113,7 @@ def drivers() -> None:
             linestyle=dash,
             linewidth=1.3,
             marker=marker,
-            markersize=3.4,
+            markersize=3.0 if method == "rating" else 3.4,
             markerfacecolor="white" if method == "strict" else colour,
             elinewidth=0.8,
             capsize=0,
@@ -141,7 +147,7 @@ def drivers() -> None:
         labelspacing=0.25,
         bbox_to_anchor=(0.55, 1.0),
     )
-    fig.subplots_adjust(left=0.13, right=0.98, top=0.79, bottom=0.235)
+    fig.subplots_adjust(left=0.13, right=0.98, top=0.78, bottom=0.245)
     fig.savefig(OUT / "fig_drivers.pdf")
     plt.close(fig)
 
@@ -172,7 +178,7 @@ def olist() -> None:
         markersize=8,
         markeredgewidth=1.4,
         color=MUTED,
-        label=r"Fitted, asymmetric gap ($\kappa$ = 7.0)",
+        label=r"Fit, $\kappa$ = 7.0",
     )
     ax.errorbar(
         r.gap,
@@ -196,7 +202,7 @@ def olist() -> None:
         markersize=3.4,
         elinewidth=0.8,
         capsize=0,
-        label="Written after delivery",
+        label="After delivery",
         zorder=4,
     )
     ax.plot(
@@ -206,7 +212,7 @@ def olist() -> None:
         marker="v",
         markersize=3.4,
         color=MUTED,
-        label="Written before delivery",
+        label="Before delivery",
         zorder=2,
     )
     ax.set_xlim(-40, 40)
@@ -221,17 +227,21 @@ def olist() -> None:
         labels.index(name)
         for name in (
             "All reviews",
-            "Written after delivery",
-            "Written before delivery",
-            r"Fitted, asymmetric gap ($\kappa$ = 7.0)",
+            "After delivery",
+            "Before delivery",
+            r"Fit, $\kappa$ = 7.0",
         )
     ]
     ax.legend(
         [handles[i] for i in order],
         [labels[i] for i in order],
-        loc="center right",
-        bbox_to_anchor=(1.0, 0.42),
-        frameon=False,
+        loc="upper left",
+        bbox_to_anchor=(0.0, 1.0),
+        frameon=True,
+        facecolor="white",
+        edgecolor=GRID,
+        framealpha=1.0,
+        fancybox=False,
         fontsize=7,
         handlelength=1.6,
         borderaxespad=0.2,
@@ -246,7 +256,7 @@ EXAMPLE = {"x1": -6.0, "x2": 10.0, "x3": -0.01, "x5": 0.5, "x6": -0.5}
 NAMES = {
     "x1": "$x_1$ speed: 6 min late",
     "x2": "$x_2$ app ease: 10 s faster",
-    "x3": "$x_3$ fee load: +1% of basket",
+    "x3": "$x_3$ fee load: +1 pp of basket",
     "x4": "$x_4$ fidelity: not measured",
     "x5": "$x_5$ courier: +0.5 star",
     "x6": "$x_6$ food: \u22120.5 star",

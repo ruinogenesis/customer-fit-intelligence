@@ -2,8 +2,8 @@
 
 *Customer Fit Intelligence: A Theory-Constrained Neural Network with Exact
 Explanations for Customer Relationships in Food Delivery* (T808, revised after
-two outside reviews in T810): 8 pages in an IEEE conference layout, 19
-references.
+two outside reviews in T810 and a third in T811): 8 pages in an IEEE
+conference layout, 21 references.
 
 - `main.pdf`: the paper, built from this folder.
 - `main.tex`: its source. Build it here with `pdflatex main.tex`, three times so
