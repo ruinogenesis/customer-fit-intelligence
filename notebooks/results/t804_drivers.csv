@@ -3119,3 +3119,2163 @@ size,seed,orders,by,method,measure,group,value
 400,2045,5268,courier,drag,rank,courier-02,1.000000
 400,2045,5268,courier,excess,right first driver,courier-02,1.000000
 400,2045,5268,courier,drag,right first driver,courier-02,1.000000
+50,2026,658,restaurant,excess,value,rest-00,-0.070711
+50,2026,658,restaurant,excess,value,rest-01,-0.112051
+50,2026,658,restaurant,excess,value,rest-02,-0.103095
+50,2026,658,restaurant,mean minutes late,precision at 2,,1.000000
+50,2026,658,restaurant,mean minutes late,rank,rest-00,2.000000
+50,2026,658,restaurant,mean minutes late,value,rest-00,4.591781
+50,2026,658,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2026,658,restaurant,mean minutes late,value,rest-01,6.587587
+50,2026,658,restaurant,mean food rating,precision at 1,,1.000000
+50,2026,658,restaurant,mean food rating,rank,rest-02,1.000000
+50,2026,658,restaurant,mean food rating,value,rest-02,3.300000
+50,2026,658,restaurant,plain means,precision at 3,,1.000000
+50,2026,658,courier,excess,value,courier-00,-0.112520
+50,2026,658,courier,excess,value,courier-01,-0.026854
+50,2026,658,courier,excess,value,courier-02,-0.110007
+50,2026,658,courier,mean courier rating,precision at 3,,1.000000
+50,2026,658,courier,mean courier rating,rank,courier-00,2.000000
+50,2026,658,courier,mean courier rating,value,courier-00,3.750000
+50,2026,658,courier,mean courier rating,rank,courier-01,3.000000
+50,2026,658,courier,mean courier rating,value,courier-01,4.000000
+50,2026,658,courier,mean courier rating,rank,courier-02,1.000000
+50,2026,658,courier,mean courier rating,value,courier-02,3.250000
+50,2027,679,restaurant,excess,value,rest-00,-0.137483
+50,2027,679,restaurant,excess,value,rest-01,-0.112194
+50,2027,679,restaurant,excess,value,rest-02,-0.211379
+50,2027,679,restaurant,mean minutes late,precision at 2,,1.000000
+50,2027,679,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2027,679,restaurant,mean minutes late,value,rest-00,7.978057
+50,2027,679,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2027,679,restaurant,mean minutes late,value,rest-01,7.181386
+50,2027,679,restaurant,mean food rating,precision at 1,,1.000000
+50,2027,679,restaurant,mean food rating,rank,rest-02,1.000000
+50,2027,679,restaurant,mean food rating,value,rest-02,3.562500
+50,2027,679,restaurant,plain means,precision at 3,,1.000000
+50,2027,679,courier,excess,value,courier-00,-0.056412
+50,2027,679,courier,excess,value,courier-01,-0.082230
+50,2027,679,courier,excess,value,courier-02,-0.083256
+50,2027,679,courier,mean courier rating,precision at 3,,0.666667
+50,2027,679,courier,mean courier rating,rank,courier-00,2.000000
+50,2027,679,courier,mean courier rating,value,courier-00,3.800000
+50,2027,679,courier,mean courier rating,rank,courier-01,1.000000
+50,2027,679,courier,mean courier rating,value,courier-01,3.583333
+50,2027,679,courier,mean courier rating,rank,courier-02,9.000000
+50,2027,679,courier,mean courier rating,value,courier-02,4.166667
+50,2028,690,restaurant,excess,value,rest-00,-0.107977
+50,2028,690,restaurant,excess,value,rest-01,-0.045150
+50,2028,690,restaurant,excess,value,rest-02,-0.210674
+50,2028,690,restaurant,mean minutes late,precision at 2,,0.500000
+50,2028,690,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2028,690,restaurant,mean minutes late,value,rest-00,6.230954
+50,2028,690,restaurant,mean minutes late,rank,rest-01,3.000000
+50,2028,690,restaurant,mean minutes late,value,rest-01,2.849404
+50,2028,690,restaurant,mean food rating,precision at 1,,1.000000
+50,2028,690,restaurant,mean food rating,rank,rest-02,1.000000
+50,2028,690,restaurant,mean food rating,value,rest-02,3.428571
+50,2028,690,restaurant,plain means,precision at 3,,0.666667
+50,2028,690,courier,excess,value,courier-00,-0.080195
+50,2028,690,courier,excess,value,courier-01,-0.152731
+50,2028,690,courier,excess,value,courier-02,-0.102785
+50,2028,690,courier,mean courier rating,precision at 3,,0.666667
+50,2028,690,courier,mean courier rating,rank,courier-00,4.000000
+50,2028,690,courier,mean courier rating,value,courier-00,3.615385
+50,2028,690,courier,mean courier rating,rank,courier-01,2.000000
+50,2028,690,courier,mean courier rating,value,courier-01,2.714286
+50,2028,690,courier,mean courier rating,rank,courier-02,3.000000
+50,2028,690,courier,mean courier rating,value,courier-02,2.875000
+50,2029,689,restaurant,excess,value,rest-00,-0.057117
+50,2029,689,restaurant,excess,value,rest-01,-0.074806
+50,2029,689,restaurant,excess,value,rest-02,-0.142052
+50,2029,689,restaurant,mean minutes late,precision at 2,,0.500000
+50,2029,689,restaurant,mean minutes late,rank,rest-00,3.000000
+50,2029,689,restaurant,mean minutes late,value,rest-00,4.514667
+50,2029,689,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2029,689,restaurant,mean minutes late,value,rest-01,5.401271
+50,2029,689,restaurant,mean food rating,precision at 1,,0.000000
+50,2029,689,restaurant,mean food rating,rank,rest-02,2.000000
+50,2029,689,restaurant,mean food rating,value,rest-02,3.636364
+50,2029,689,restaurant,plain means,precision at 3,,0.333333
+50,2029,689,courier,excess,value,courier-00,-0.101268
+50,2029,689,courier,excess,value,courier-01,-0.069145
+50,2029,689,courier,excess,value,courier-02,-0.103801
+50,2029,689,courier,mean courier rating,precision at 3,,1.000000
+50,2029,689,courier,mean courier rating,rank,courier-00,2.000000
+50,2029,689,courier,mean courier rating,value,courier-00,3.250000
+50,2029,689,courier,mean courier rating,rank,courier-01,3.000000
+50,2029,689,courier,mean courier rating,value,courier-01,3.933333
+50,2029,689,courier,mean courier rating,rank,courier-02,1.000000
+50,2029,689,courier,mean courier rating,value,courier-02,3.000000
+50,2030,542,restaurant,excess,value,rest-00,-0.153165
+50,2030,542,restaurant,excess,value,rest-01,-0.095481
+50,2030,542,restaurant,excess,value,rest-02,-0.293171
+50,2030,542,restaurant,mean minutes late,precision at 2,,1.000000
+50,2030,542,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2030,542,restaurant,mean minutes late,value,rest-00,8.103386
+50,2030,542,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2030,542,restaurant,mean minutes late,value,rest-01,6.065419
+50,2030,542,restaurant,mean food rating,precision at 1,,1.000000
+50,2030,542,restaurant,mean food rating,rank,rest-02,1.000000
+50,2030,542,restaurant,mean food rating,value,rest-02,2.933333
+50,2030,542,restaurant,plain means,precision at 3,,1.000000
+50,2030,542,courier,excess,value,courier-00,-0.025752
+50,2030,542,courier,excess,value,courier-01,-0.084897
+50,2030,542,courier,excess,value,courier-02,-0.102147
+50,2030,542,courier,mean courier rating,precision at 3,,0.333333
+50,2030,542,courier,mean courier rating,rank,courier-00,8.000000
+50,2030,542,courier,mean courier rating,value,courier-00,4.200000
+50,2030,542,courier,mean courier rating,rank,courier-01,4.000000
+50,2030,542,courier,mean courier rating,value,courier-01,3.750000
+50,2030,542,courier,mean courier rating,rank,courier-02,1.000000
+50,2030,542,courier,mean courier rating,value,courier-02,3.444444
+50,2031,567,restaurant,excess,value,rest-00,-0.032681
+50,2031,567,restaurant,excess,value,rest-01,-0.173657
+50,2031,567,restaurant,excess,value,rest-02,-0.150771
+50,2031,567,restaurant,mean minutes late,precision at 2,,0.500000
+50,2031,567,restaurant,mean minutes late,rank,rest-00,12.000000
+50,2031,567,restaurant,mean minutes late,value,rest-00,3.176622
+50,2031,567,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2031,567,restaurant,mean minutes late,value,rest-01,9.192005
+50,2031,567,restaurant,mean food rating,precision at 1,,1.000000
+50,2031,567,restaurant,mean food rating,rank,rest-02,1.000000
+50,2031,567,restaurant,mean food rating,value,rest-02,3.625000
+50,2031,567,restaurant,plain means,precision at 3,,0.666667
+50,2031,567,courier,excess,value,courier-00,-0.005662
+50,2031,567,courier,excess,value,courier-01,-0.108004
+50,2031,567,courier,excess,value,courier-02,-0.124862
+50,2031,567,courier,mean courier rating,precision at 3,,0.666667
+50,2031,567,courier,mean courier rating,rank,courier-00,18.000000
+50,2031,567,courier,mean courier rating,value,courier-00,4.285714
+50,2031,567,courier,mean courier rating,rank,courier-01,2.000000
+50,2031,567,courier,mean courier rating,value,courier-01,3.750000
+50,2031,567,courier,mean courier rating,rank,courier-02,1.000000
+50,2031,567,courier,mean courier rating,value,courier-02,3.500000
+50,2032,707,restaurant,excess,value,rest-00,-0.068277
+50,2032,707,restaurant,excess,value,rest-01,-0.063096
+50,2032,707,restaurant,excess,value,rest-02,-0.114301
+50,2032,707,restaurant,mean minutes late,precision at 2,,0.500000
+50,2032,707,restaurant,mean minutes late,rank,rest-00,4.000000
+50,2032,707,restaurant,mean minutes late,value,rest-00,4.697717
+50,2032,707,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2032,707,restaurant,mean minutes late,value,rest-01,5.519837
+50,2032,707,restaurant,mean food rating,precision at 1,,0.000000
+50,2032,707,restaurant,mean food rating,rank,rest-02,2.000000
+50,2032,707,restaurant,mean food rating,value,rest-02,3.866667
+50,2032,707,restaurant,plain means,precision at 3,,0.333333
+50,2032,707,courier,excess,value,courier-00,-0.084077
+50,2032,707,courier,excess,value,courier-01,-0.113970
+50,2032,707,courier,excess,value,courier-02,-0.081719
+50,2032,707,courier,mean courier rating,precision at 3,,1.000000
+50,2032,707,courier,mean courier rating,rank,courier-00,3.000000
+50,2032,707,courier,mean courier rating,value,courier-00,3.615385
+50,2032,707,courier,mean courier rating,rank,courier-01,1.000000
+50,2032,707,courier,mean courier rating,value,courier-01,3.250000
+50,2032,707,courier,mean courier rating,rank,courier-02,2.000000
+50,2032,707,courier,mean courier rating,value,courier-02,3.500000
+50,2033,666,restaurant,excess,value,rest-00,-0.145395
+50,2033,666,restaurant,excess,value,rest-01,-0.155622
+50,2033,666,restaurant,excess,value,rest-02,-0.160537
+50,2033,666,restaurant,mean minutes late,precision at 2,,1.000000
+50,2033,666,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2033,666,restaurant,mean minutes late,value,rest-00,7.043878
+50,2033,666,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2033,666,restaurant,mean minutes late,value,rest-01,6.639657
+50,2033,666,restaurant,mean food rating,precision at 1,,1.000000
+50,2033,666,restaurant,mean food rating,rank,rest-02,1.000000
+50,2033,666,restaurant,mean food rating,value,rest-02,3.571429
+50,2033,666,restaurant,plain means,precision at 3,,1.000000
+50,2033,666,courier,excess,value,courier-00,-0.018421
+50,2033,666,courier,excess,value,courier-01,-0.070322
+50,2033,666,courier,excess,value,courier-02,-0.100405
+50,2033,666,courier,mean courier rating,precision at 3,,1.000000
+50,2033,666,courier,mean courier rating,rank,courier-00,3.000000
+50,2033,666,courier,mean courier rating,value,courier-00,4.000000
+50,2033,666,courier,mean courier rating,rank,courier-01,2.000000
+50,2033,666,courier,mean courier rating,value,courier-01,3.333333
+50,2033,666,courier,mean courier rating,rank,courier-02,1.000000
+50,2033,666,courier,mean courier rating,value,courier-02,3.200000
+50,2034,605,restaurant,excess,value,rest-00,-0.124569
+50,2034,605,restaurant,excess,value,rest-01,-0.088310
+50,2034,605,restaurant,excess,value,rest-02,-0.194850
+50,2034,605,restaurant,mean minutes late,precision at 2,,0.500000
+50,2034,605,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2034,605,restaurant,mean minutes late,value,rest-00,6.899814
+50,2034,605,restaurant,mean minutes late,rank,rest-01,3.000000
+50,2034,605,restaurant,mean minutes late,value,rest-01,6.002176
+50,2034,605,restaurant,mean food rating,precision at 1,,1.000000
+50,2034,605,restaurant,mean food rating,rank,rest-02,1.000000
+50,2034,605,restaurant,mean food rating,value,rest-02,3.416667
+50,2034,605,restaurant,plain means,precision at 3,,0.666667
+50,2034,605,courier,excess,value,courier-00,-0.042945
+50,2034,605,courier,excess,value,courier-01,-0.012641
+50,2034,605,courier,excess,value,courier-02,-0.122638
+50,2034,605,courier,mean courier rating,precision at 3,,0.666667
+50,2034,605,courier,mean courier rating,rank,courier-00,2.000000
+50,2034,605,courier,mean courier rating,value,courier-00,3.400000
+50,2034,605,courier,mean courier rating,rank,courier-01,15.000000
+50,2034,605,courier,mean courier rating,value,courier-01,4.333333
+50,2034,605,courier,mean courier rating,rank,courier-02,1.000000
+50,2034,605,courier,mean courier rating,value,courier-02,2.833333
+50,2035,735,restaurant,excess,value,rest-00,-0.127295
+50,2035,735,restaurant,excess,value,rest-01,-0.055222
+50,2035,735,restaurant,excess,value,rest-02,-0.243314
+50,2035,735,restaurant,mean minutes late,precision at 2,,0.500000
+50,2035,735,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2035,735,restaurant,mean minutes late,value,rest-00,7.277762
+50,2035,735,restaurant,mean minutes late,rank,rest-01,3.000000
+50,2035,735,restaurant,mean minutes late,value,rest-01,4.319637
+50,2035,735,restaurant,mean food rating,precision at 1,,1.000000
+50,2035,735,restaurant,mean food rating,rank,rest-02,1.000000
+50,2035,735,restaurant,mean food rating,value,rest-02,3.480000
+50,2035,735,restaurant,plain means,precision at 3,,0.666667
+50,2035,735,courier,excess,value,courier-00,-0.033877
+50,2035,735,courier,excess,value,courier-01,-0.090206
+50,2035,735,courier,excess,value,courier-02,-0.038785
+50,2035,735,courier,mean courier rating,precision at 3,,0.666667
+50,2035,735,courier,mean courier rating,rank,courier-00,4.000000
+50,2035,735,courier,mean courier rating,value,courier-00,3.750000
+50,2035,735,courier,mean courier rating,rank,courier-01,2.000000
+50,2035,735,courier,mean courier rating,value,courier-01,3.142857
+50,2035,735,courier,mean courier rating,rank,courier-02,3.000000
+50,2035,735,courier,mean courier rating,value,courier-02,3.666667
+50,2036,626,restaurant,excess,value,rest-00,-0.105580
+50,2036,626,restaurant,excess,value,rest-01,-0.073122
+50,2036,626,restaurant,excess,value,rest-02,-0.141286
+50,2036,626,restaurant,mean minutes late,precision at 2,,0.500000
+50,2036,626,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2036,626,restaurant,mean minutes late,value,rest-00,7.496366
+50,2036,626,restaurant,mean minutes late,rank,rest-01,4.000000
+50,2036,626,restaurant,mean minutes late,value,rest-01,4.480351
+50,2036,626,restaurant,mean food rating,precision at 1,,1.000000
+50,2036,626,restaurant,mean food rating,rank,rest-02,1.000000
+50,2036,626,restaurant,mean food rating,value,rest-02,3.571429
+50,2036,626,restaurant,plain means,precision at 3,,0.666667
+50,2036,626,courier,excess,value,courier-00,-0.050356
+50,2036,626,courier,excess,value,courier-01,-0.044790
+50,2036,626,courier,excess,value,courier-02,-0.075576
+50,2036,626,courier,mean courier rating,precision at 3,,0.666667
+50,2036,626,courier,mean courier rating,rank,courier-00,2.000000
+50,2036,626,courier,mean courier rating,value,courier-00,4.000000
+50,2036,626,courier,mean courier rating,rank,courier-01,13.000000
+50,2036,626,courier,mean courier rating,value,courier-01,4.333333
+50,2036,626,courier,mean courier rating,rank,courier-02,1.000000
+50,2036,626,courier,mean courier rating,value,courier-02,3.375000
+50,2037,620,restaurant,excess,value,rest-00,-0.129548
+50,2037,620,restaurant,excess,value,rest-01,-0.026639
+50,2037,620,restaurant,excess,value,rest-02,-0.136766
+50,2037,620,restaurant,mean minutes late,precision at 2,,0.500000
+50,2037,620,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2037,620,restaurant,mean minutes late,value,rest-00,7.501894
+50,2037,620,restaurant,mean minutes late,rank,rest-01,15.000000
+50,2037,620,restaurant,mean minutes late,value,rest-01,2.641873
+50,2037,620,restaurant,mean food rating,precision at 1,,1.000000
+50,2037,620,restaurant,mean food rating,rank,rest-02,1.000000
+50,2037,620,restaurant,mean food rating,value,rest-02,3.285714
+50,2037,620,restaurant,plain means,precision at 3,,0.666667
+50,2037,620,courier,excess,value,courier-00,-0.016858
+50,2037,620,courier,excess,value,courier-01,-0.113563
+50,2037,620,courier,excess,value,courier-02,-0.128906
+50,2037,620,courier,mean courier rating,precision at 3,,0.666667
+50,2037,620,courier,mean courier rating,rank,courier-00,12.000000
+50,2037,620,courier,mean courier rating,value,courier-00,4.111111
+50,2037,620,courier,mean courier rating,rank,courier-01,1.000000
+50,2037,620,courier,mean courier rating,value,courier-01,2.250000
+50,2037,620,courier,mean courier rating,rank,courier-02,2.000000
+50,2037,620,courier,mean courier rating,value,courier-02,3.125000
+50,2038,668,restaurant,excess,value,rest-00,-0.097093
+50,2038,668,restaurant,excess,value,rest-01,-0.099834
+50,2038,668,restaurant,excess,value,rest-02,-0.076454
+50,2038,668,restaurant,mean minutes late,precision at 2,,0.500000
+50,2038,668,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2038,668,restaurant,mean minutes late,value,rest-00,5.757912
+50,2038,668,restaurant,mean minutes late,rank,rest-01,3.000000
+50,2038,668,restaurant,mean minutes late,value,rest-01,5.441316
+50,2038,668,restaurant,mean food rating,precision at 1,,0.000000
+50,2038,668,restaurant,mean food rating,rank,rest-02,4.000000
+50,2038,668,restaurant,mean food rating,value,rest-02,3.866667
+50,2038,668,restaurant,plain means,precision at 3,,0.333333
+50,2038,668,courier,excess,value,courier-00,-0.056988
+50,2038,668,courier,excess,value,courier-01,-0.075189
+50,2038,668,courier,excess,value,courier-02,-0.013606
+50,2038,668,courier,mean courier rating,precision at 3,,0.333333
+50,2038,668,courier,mean courier rating,rank,courier-00,6.000000
+50,2038,668,courier,mean courier rating,value,courier-00,4.000000
+50,2038,668,courier,mean courier rating,rank,courier-01,4.000000
+50,2038,668,courier,mean courier rating,value,courier-01,3.777778
+50,2038,668,courier,mean courier rating,rank,courier-02,3.000000
+50,2038,668,courier,mean courier rating,value,courier-02,3.750000
+50,2039,774,restaurant,excess,value,rest-00,-0.214005
+50,2039,774,restaurant,excess,value,rest-01,-0.112637
+50,2039,774,restaurant,excess,value,rest-02,-0.161766
+50,2039,774,restaurant,mean minutes late,precision at 2,,1.000000
+50,2039,774,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2039,774,restaurant,mean minutes late,value,rest-00,10.397750
+50,2039,774,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2039,774,restaurant,mean minutes late,value,rest-01,6.810939
+50,2039,774,restaurant,mean food rating,precision at 1,,1.000000
+50,2039,774,restaurant,mean food rating,rank,rest-02,1.000000
+50,2039,774,restaurant,mean food rating,value,rest-02,3.588235
+50,2039,774,restaurant,plain means,precision at 3,,1.000000
+50,2039,774,courier,excess,value,courier-00,-0.021957
+50,2039,774,courier,excess,value,courier-01,-0.091466
+50,2039,774,courier,excess,value,courier-02,-0.102293
+50,2039,774,courier,mean courier rating,precision at 3,,0.666667
+50,2039,774,courier,mean courier rating,rank,courier-00,15.000000
+50,2039,774,courier,mean courier rating,value,courier-00,4.285714
+50,2039,774,courier,mean courier rating,rank,courier-01,1.000000
+50,2039,774,courier,mean courier rating,value,courier-01,3.500000
+50,2039,774,courier,mean courier rating,rank,courier-02,2.000000
+50,2039,774,courier,mean courier rating,value,courier-02,3.500000
+50,2040,614,restaurant,excess,value,rest-00,-0.106048
+50,2040,614,restaurant,excess,value,rest-01,-0.052713
+50,2040,614,restaurant,excess,value,rest-02,-0.173257
+50,2040,614,restaurant,mean minutes late,precision at 2,,0.500000
+50,2040,614,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2040,614,restaurant,mean minutes late,value,rest-00,5.805813
+50,2040,614,restaurant,mean minutes late,rank,rest-01,6.000000
+50,2040,614,restaurant,mean minutes late,value,rest-01,4.302648
+50,2040,614,restaurant,mean food rating,precision at 1,,1.000000
+50,2040,614,restaurant,mean food rating,rank,rest-02,1.000000
+50,2040,614,restaurant,mean food rating,value,rest-02,3.388889
+50,2040,614,restaurant,plain means,precision at 3,,0.666667
+50,2040,614,courier,excess,value,courier-00,-0.115667
+50,2040,614,courier,excess,value,courier-01,-0.074512
+50,2040,614,courier,excess,value,courier-02,-0.067965
+50,2040,614,courier,mean courier rating,precision at 3,,0.666667
+50,2040,614,courier,mean courier rating,rank,courier-00,1.000000
+50,2040,614,courier,mean courier rating,value,courier-00,3.181818
+50,2040,614,courier,mean courier rating,rank,courier-01,4.000000
+50,2040,614,courier,mean courier rating,value,courier-01,3.888889
+50,2040,614,courier,mean courier rating,rank,courier-02,3.000000
+50,2040,614,courier,mean courier rating,value,courier-02,3.500000
+50,2041,651,restaurant,excess,value,rest-00,-0.081776
+50,2041,651,restaurant,excess,value,rest-01,-0.105604
+50,2041,651,restaurant,excess,value,rest-02,-0.127142
+50,2041,651,restaurant,mean minutes late,precision at 2,,0.500000
+50,2041,651,restaurant,mean minutes late,rank,rest-00,3.000000
+50,2041,651,restaurant,mean minutes late,value,rest-00,4.892888
+50,2041,651,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2041,651,restaurant,mean minutes late,value,rest-01,5.416609
+50,2041,651,restaurant,mean food rating,precision at 1,,1.000000
+50,2041,651,restaurant,mean food rating,rank,rest-02,1.000000
+50,2041,651,restaurant,mean food rating,value,rest-02,3.636364
+50,2041,651,restaurant,plain means,precision at 3,,0.666667
+50,2041,651,courier,excess,value,courier-00,-0.048250
+50,2041,651,courier,excess,value,courier-01,-0.096779
+50,2041,651,courier,excess,value,courier-02,-0.113669
+50,2041,651,courier,mean courier rating,precision at 3,,0.666667
+50,2041,651,courier,mean courier rating,rank,courier-00,23.000000
+50,2041,651,courier,mean courier rating,value,courier-00,4.500000
+50,2041,651,courier,mean courier rating,rank,courier-01,2.000000
+50,2041,651,courier,mean courier rating,value,courier-01,3.555556
+50,2041,651,courier,mean courier rating,rank,courier-02,1.000000
+50,2041,651,courier,mean courier rating,value,courier-02,3.000000
+50,2042,716,restaurant,excess,value,rest-00,-0.180983
+50,2042,716,restaurant,excess,value,rest-01,-0.030082
+50,2042,716,restaurant,excess,value,rest-02,-0.156104
+50,2042,716,restaurant,mean minutes late,precision at 2,,0.500000
+50,2042,716,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2042,716,restaurant,mean minutes late,value,rest-00,8.292513
+50,2042,716,restaurant,mean minutes late,rank,rest-01,12.000000
+50,2042,716,restaurant,mean minutes late,value,rest-01,1.544154
+50,2042,716,restaurant,mean food rating,precision at 1,,1.000000
+50,2042,716,restaurant,mean food rating,rank,rest-02,1.000000
+50,2042,716,restaurant,mean food rating,value,rest-02,3.666667
+50,2042,716,restaurant,plain means,precision at 3,,0.666667
+50,2042,716,courier,excess,value,courier-00,-0.048143
+50,2042,716,courier,excess,value,courier-01,-0.021544
+50,2042,716,courier,excess,value,courier-02,-0.184085
+50,2042,716,courier,mean courier rating,precision at 3,,0.666667
+50,2042,716,courier,mean courier rating,rank,courier-00,3.000000
+50,2042,716,courier,mean courier rating,value,courier-00,3.625000
+50,2042,716,courier,mean courier rating,rank,courier-01,4.000000
+50,2042,716,courier,mean courier rating,value,courier-01,4.000000
+50,2042,716,courier,mean courier rating,rank,courier-02,1.000000
+50,2042,716,courier,mean courier rating,value,courier-02,3.090909
+50,2043,666,restaurant,excess,value,rest-00,-0.156240
+50,2043,666,restaurant,excess,value,rest-01,-0.077254
+50,2043,666,restaurant,excess,value,rest-02,-0.176426
+50,2043,666,restaurant,mean minutes late,precision at 2,,1.000000
+50,2043,666,restaurant,mean minutes late,rank,rest-00,1.000000
+50,2043,666,restaurant,mean minutes late,value,rest-00,7.106057
+50,2043,666,restaurant,mean minutes late,rank,rest-01,2.000000
+50,2043,666,restaurant,mean minutes late,value,rest-01,3.417194
+50,2043,666,restaurant,mean food rating,precision at 1,,0.000000
+50,2043,666,restaurant,mean food rating,rank,rest-02,2.000000
+50,2043,666,restaurant,mean food rating,value,rest-02,3.526316
+50,2043,666,restaurant,plain means,precision at 3,,0.666667
+50,2043,666,courier,excess,value,courier-00,-0.039478
+50,2043,666,courier,excess,value,courier-01,-0.086499
+50,2043,666,courier,excess,value,courier-02,-0.172082
+50,2043,666,courier,mean courier rating,precision at 3,,0.666667
+50,2043,666,courier,mean courier rating,rank,courier-00,4.000000
+50,2043,666,courier,mean courier rating,value,courier-00,4.000000
+50,2043,666,courier,mean courier rating,rank,courier-01,1.000000
+50,2043,666,courier,mean courier rating,value,courier-01,3.000000
+50,2043,666,courier,mean courier rating,rank,courier-02,2.000000
+50,2043,666,courier,mean courier rating,value,courier-02,3.000000
+50,2044,609,restaurant,excess,value,rest-00,-0.069637
+50,2044,609,restaurant,excess,value,rest-01,-0.192193
+50,2044,609,restaurant,excess,value,rest-02,-0.154771
+50,2044,609,restaurant,mean minutes late,precision at 2,,1.000000
+50,2044,609,restaurant,mean minutes late,rank,rest-00,2.000000
+50,2044,609,restaurant,mean minutes late,value,rest-00,3.751437
+50,2044,609,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2044,609,restaurant,mean minutes late,value,rest-01,8.542468
+50,2044,609,restaurant,mean food rating,precision at 1,,0.000000
+50,2044,609,restaurant,mean food rating,rank,rest-02,2.000000
+50,2044,609,restaurant,mean food rating,value,rest-02,3.533333
+50,2044,609,restaurant,plain means,precision at 3,,0.666667
+50,2044,609,courier,excess,value,courier-00,-0.023420
+50,2044,609,courier,excess,value,courier-01,-0.039079
+50,2044,609,courier,excess,value,courier-02,-0.025513
+50,2044,609,courier,mean courier rating,precision at 3,,0.666667
+50,2044,609,courier,mean courier rating,rank,courier-00,18.000000
+50,2044,609,courier,mean courier rating,value,courier-00,4.333333
+50,2044,609,courier,mean courier rating,rank,courier-01,1.000000
+50,2044,609,courier,mean courier rating,value,courier-01,3.714286
+50,2044,609,courier,mean courier rating,rank,courier-02,2.000000
+50,2044,609,courier,mean courier rating,value,courier-02,4.000000
+50,2045,688,restaurant,excess,value,rest-00,-0.096521
+50,2045,688,restaurant,excess,value,rest-01,-0.120729
+50,2045,688,restaurant,excess,value,rest-02,-0.184653
+50,2045,688,restaurant,mean minutes late,precision at 2,,1.000000
+50,2045,688,restaurant,mean minutes late,rank,rest-00,2.000000
+50,2045,688,restaurant,mean minutes late,value,rest-00,6.051158
+50,2045,688,restaurant,mean minutes late,rank,rest-01,1.000000
+50,2045,688,restaurant,mean minutes late,value,rest-01,7.707308
+50,2045,688,restaurant,mean food rating,precision at 1,,1.000000
+50,2045,688,restaurant,mean food rating,rank,rest-02,1.000000
+50,2045,688,restaurant,mean food rating,value,rest-02,3.000000
+50,2045,688,restaurant,plain means,precision at 3,,1.000000
+50,2045,688,courier,excess,value,courier-00,-0.203281
+50,2045,688,courier,excess,value,courier-01,-0.022178
+50,2045,688,courier,excess,value,courier-02,-0.103590
+50,2045,688,courier,mean courier rating,precision at 3,,0.666667
+50,2045,688,courier,mean courier rating,rank,courier-00,1.000000
+50,2045,688,courier,mean courier rating,value,courier-00,2.625000
+50,2045,688,courier,mean courier rating,rank,courier-01,27.000000
+50,2045,688,courier,mean courier rating,value,courier-01,4.500000
+50,2045,688,courier,mean courier rating,rank,courier-02,2.000000
+50,2045,688,courier,mean courier rating,value,courier-02,3.625000
+100,2026,1358,restaurant,excess,value,rest-00,-0.032828
+100,2026,1358,restaurant,excess,value,rest-01,-0.133637
+100,2026,1358,restaurant,excess,value,rest-02,-0.161454
+100,2026,1358,restaurant,mean minutes late,precision at 2,,0.500000
+100,2026,1358,restaurant,mean minutes late,rank,rest-00,4.000000
+100,2026,1358,restaurant,mean minutes late,value,rest-00,3.111795
+100,2026,1358,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2026,1358,restaurant,mean minutes late,value,rest-01,7.253340
+100,2026,1358,restaurant,mean food rating,precision at 1,,1.000000
+100,2026,1358,restaurant,mean food rating,rank,rest-02,1.000000
+100,2026,1358,restaurant,mean food rating,value,rest-02,3.370370
+100,2026,1358,restaurant,plain means,precision at 3,,0.666667
+100,2026,1358,courier,excess,value,courier-00,-0.048387
+100,2026,1358,courier,excess,value,courier-01,-0.094811
+100,2026,1358,courier,excess,value,courier-02,-0.132801
+100,2026,1358,courier,mean courier rating,precision at 3,,1.000000
+100,2026,1358,courier,mean courier rating,rank,courier-00,3.000000
+100,2026,1358,courier,mean courier rating,value,courier-00,3.666667
+100,2026,1358,courier,mean courier rating,rank,courier-01,2.000000
+100,2026,1358,courier,mean courier rating,value,courier-01,3.214286
+100,2026,1358,courier,mean courier rating,rank,courier-02,1.000000
+100,2026,1358,courier,mean courier rating,value,courier-02,3.153846
+100,2027,1337,restaurant,excess,value,rest-00,-0.129758
+100,2027,1337,restaurant,excess,value,rest-01,-0.109344
+100,2027,1337,restaurant,excess,value,rest-02,-0.217627
+100,2027,1337,restaurant,mean minutes late,precision at 2,,1.000000
+100,2027,1337,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2027,1337,restaurant,mean minutes late,value,rest-00,7.121832
+100,2027,1337,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2027,1337,restaurant,mean minutes late,value,rest-01,6.433950
+100,2027,1337,restaurant,mean food rating,precision at 1,,1.000000
+100,2027,1337,restaurant,mean food rating,rank,rest-02,1.000000
+100,2027,1337,restaurant,mean food rating,value,rest-02,3.500000
+100,2027,1337,restaurant,plain means,precision at 3,,1.000000
+100,2027,1337,courier,excess,value,courier-00,-0.037667
+100,2027,1337,courier,excess,value,courier-01,-0.063026
+100,2027,1337,courier,excess,value,courier-02,-0.083787
+100,2027,1337,courier,mean courier rating,precision at 3,,0.666667
+100,2027,1337,courier,mean courier rating,rank,courier-00,4.000000
+100,2027,1337,courier,mean courier rating,value,courier-00,4.062500
+100,2027,1337,courier,mean courier rating,rank,courier-01,2.000000
+100,2027,1337,courier,mean courier rating,value,courier-01,3.533333
+100,2027,1337,courier,mean courier rating,rank,courier-02,1.000000
+100,2027,1337,courier,mean courier rating,value,courier-02,3.333333
+100,2028,1400,restaurant,excess,value,rest-00,-0.053442
+100,2028,1400,restaurant,excess,value,rest-01,-0.087868
+100,2028,1400,restaurant,excess,value,rest-02,-0.225881
+100,2028,1400,restaurant,mean minutes late,precision at 2,,1.000000
+100,2028,1400,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2028,1400,restaurant,mean minutes late,value,rest-00,4.443160
+100,2028,1400,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2028,1400,restaurant,mean minutes late,value,rest-01,5.478095
+100,2028,1400,restaurant,mean food rating,precision at 1,,1.000000
+100,2028,1400,restaurant,mean food rating,rank,rest-02,1.000000
+100,2028,1400,restaurant,mean food rating,value,rest-02,3.235294
+100,2028,1400,restaurant,plain means,precision at 3,,1.000000
+100,2028,1400,courier,excess,value,courier-00,-0.080084
+100,2028,1400,courier,excess,value,courier-01,-0.096569
+100,2028,1400,courier,excess,value,courier-02,-0.079787
+100,2028,1400,courier,mean courier rating,precision at 3,,1.000000
+100,2028,1400,courier,mean courier rating,rank,courier-00,3.000000
+100,2028,1400,courier,mean courier rating,value,courier-00,3.550000
+100,2028,1400,courier,mean courier rating,rank,courier-01,2.000000
+100,2028,1400,courier,mean courier rating,value,courier-01,3.272727
+100,2028,1400,courier,mean courier rating,rank,courier-02,1.000000
+100,2028,1400,courier,mean courier rating,value,courier-02,3.263158
+100,2029,1284,restaurant,excess,value,rest-00,-0.071843
+100,2029,1284,restaurant,excess,value,rest-01,-0.094819
+100,2029,1284,restaurant,excess,value,rest-02,-0.190243
+100,2029,1284,restaurant,mean minutes late,precision at 2,,1.000000
+100,2029,1284,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2029,1284,restaurant,mean minutes late,value,rest-00,5.000219
+100,2029,1284,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2029,1284,restaurant,mean minutes late,value,rest-01,5.888764
+100,2029,1284,restaurant,mean food rating,precision at 1,,1.000000
+100,2029,1284,restaurant,mean food rating,rank,rest-02,1.000000
+100,2029,1284,restaurant,mean food rating,value,rest-02,3.290323
+100,2029,1284,restaurant,plain means,precision at 3,,1.000000
+100,2029,1284,courier,excess,value,courier-00,-0.077566
+100,2029,1284,courier,excess,value,courier-01,-0.072134
+100,2029,1284,courier,excess,value,courier-02,-0.091379
+100,2029,1284,courier,mean courier rating,precision at 3,,1.000000
+100,2029,1284,courier,mean courier rating,rank,courier-00,1.000000
+100,2029,1284,courier,mean courier rating,value,courier-00,3.250000
+100,2029,1284,courier,mean courier rating,rank,courier-01,3.000000
+100,2029,1284,courier,mean courier rating,value,courier-01,3.750000
+100,2029,1284,courier,mean courier rating,rank,courier-02,2.000000
+100,2029,1284,courier,mean courier rating,value,courier-02,3.285714
+100,2030,1169,restaurant,excess,value,rest-00,-0.119773
+100,2030,1169,restaurant,excess,value,rest-01,-0.094029
+100,2030,1169,restaurant,excess,value,rest-02,-0.281069
+100,2030,1169,restaurant,mean minutes late,precision at 2,,1.000000
+100,2030,1169,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2030,1169,restaurant,mean minutes late,value,rest-00,7.137266
+100,2030,1169,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2030,1169,restaurant,mean minutes late,value,rest-01,6.182871
+100,2030,1169,restaurant,mean food rating,precision at 1,,1.000000
+100,2030,1169,restaurant,mean food rating,rank,rest-02,1.000000
+100,2030,1169,restaurant,mean food rating,value,rest-02,2.935484
+100,2030,1169,restaurant,plain means,precision at 3,,1.000000
+100,2030,1169,courier,excess,value,courier-00,-0.081242
+100,2030,1169,courier,excess,value,courier-01,-0.092587
+100,2030,1169,courier,excess,value,courier-02,-0.110667
+100,2030,1169,courier,mean courier rating,precision at 3,,1.000000
+100,2030,1169,courier,mean courier rating,rank,courier-00,2.000000
+100,2030,1169,courier,mean courier rating,value,courier-00,3.578947
+100,2030,1169,courier,mean courier rating,rank,courier-01,3.000000
+100,2030,1169,courier,mean courier rating,value,courier-01,3.583333
+100,2030,1169,courier,mean courier rating,rank,courier-02,1.000000
+100,2030,1169,courier,mean courier rating,value,courier-02,3.230769
+100,2031,1182,restaurant,excess,value,rest-00,-0.068992
+100,2031,1182,restaurant,excess,value,rest-01,-0.117849
+100,2031,1182,restaurant,excess,value,rest-02,-0.143821
+100,2031,1182,restaurant,mean minutes late,precision at 2,,1.000000
+100,2031,1182,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2031,1182,restaurant,mean minutes late,value,rest-00,4.981412
+100,2031,1182,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2031,1182,restaurant,mean minutes late,value,rest-01,6.853627
+100,2031,1182,restaurant,mean food rating,precision at 1,,1.000000
+100,2031,1182,restaurant,mean food rating,rank,rest-02,1.000000
+100,2031,1182,restaurant,mean food rating,value,rest-02,3.518519
+100,2031,1182,restaurant,plain means,precision at 3,,1.000000
+100,2031,1182,courier,excess,value,courier-00,-0.026874
+100,2031,1182,courier,excess,value,courier-01,-0.068129
+100,2031,1182,courier,excess,value,courier-02,-0.102310
+100,2031,1182,courier,mean courier rating,precision at 3,,0.666667
+100,2031,1182,courier,mean courier rating,rank,courier-00,5.000000
+100,2031,1182,courier,mean courier rating,value,courier-00,4.153846
+100,2031,1182,courier,mean courier rating,rank,courier-01,2.000000
+100,2031,1182,courier,mean courier rating,value,courier-01,3.636364
+100,2031,1182,courier,mean courier rating,rank,courier-02,1.000000
+100,2031,1182,courier,mean courier rating,value,courier-02,3.466667
+100,2032,1583,restaurant,excess,value,rest-00,-0.103111
+100,2032,1583,restaurant,excess,value,rest-01,-0.089117
+100,2032,1583,restaurant,excess,value,rest-02,-0.199022
+100,2032,1583,restaurant,mean minutes late,precision at 2,,1.000000
+100,2032,1583,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2032,1583,restaurant,mean minutes late,value,rest-00,5.336705
+100,2032,1583,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2032,1583,restaurant,mean minutes late,value,rest-01,5.142470
+100,2032,1583,restaurant,mean food rating,precision at 1,,1.000000
+100,2032,1583,restaurant,mean food rating,rank,rest-02,1.000000
+100,2032,1583,restaurant,mean food rating,value,rest-02,3.473684
+100,2032,1583,restaurant,plain means,precision at 3,,1.000000
+100,2032,1583,courier,excess,value,courier-00,-0.059644
+100,2032,1583,courier,excess,value,courier-01,-0.129192
+100,2032,1583,courier,excess,value,courier-02,-0.070579
+100,2032,1583,courier,mean courier rating,precision at 3,,1.000000
+100,2032,1583,courier,mean courier rating,rank,courier-00,3.000000
+100,2032,1583,courier,mean courier rating,value,courier-00,3.611111
+100,2032,1583,courier,mean courier rating,rank,courier-01,1.000000
+100,2032,1583,courier,mean courier rating,value,courier-01,3.166667
+100,2032,1583,courier,mean courier rating,rank,courier-02,2.000000
+100,2032,1583,courier,mean courier rating,value,courier-02,3.357143
+100,2033,1353,restaurant,excess,value,rest-00,-0.131225
+100,2033,1353,restaurant,excess,value,rest-01,-0.147367
+100,2033,1353,restaurant,excess,value,rest-02,-0.166343
+100,2033,1353,restaurant,mean minutes late,precision at 2,,1.000000
+100,2033,1353,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2033,1353,restaurant,mean minutes late,value,rest-00,7.762333
+100,2033,1353,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2033,1353,restaurant,mean minutes late,value,rest-01,8.454610
+100,2033,1353,restaurant,mean food rating,precision at 1,,1.000000
+100,2033,1353,restaurant,mean food rating,rank,rest-02,1.000000
+100,2033,1353,restaurant,mean food rating,value,rest-02,3.512821
+100,2033,1353,restaurant,plain means,precision at 3,,1.000000
+100,2033,1353,courier,excess,value,courier-00,-0.042217
+100,2033,1353,courier,excess,value,courier-01,-0.060159
+100,2033,1353,courier,excess,value,courier-02,-0.086922
+100,2033,1353,courier,mean courier rating,precision at 3,,1.000000
+100,2033,1353,courier,mean courier rating,rank,courier-00,3.000000
+100,2033,1353,courier,mean courier rating,value,courier-00,3.750000
+100,2033,1353,courier,mean courier rating,rank,courier-01,1.000000
+100,2033,1353,courier,mean courier rating,value,courier-01,3.285714
+100,2033,1353,courier,mean courier rating,rank,courier-02,2.000000
+100,2033,1353,courier,mean courier rating,value,courier-02,3.500000
+100,2034,1298,restaurant,excess,value,rest-00,-0.099836
+100,2034,1298,restaurant,excess,value,rest-01,-0.096932
+100,2034,1298,restaurant,excess,value,rest-02,-0.174891
+100,2034,1298,restaurant,mean minutes late,precision at 2,,1.000000
+100,2034,1298,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2034,1298,restaurant,mean minutes late,value,rest-00,5.378907
+100,2034,1298,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2034,1298,restaurant,mean minutes late,value,rest-01,5.519465
+100,2034,1298,restaurant,mean food rating,precision at 1,,1.000000
+100,2034,1298,restaurant,mean food rating,rank,rest-02,1.000000
+100,2034,1298,restaurant,mean food rating,value,rest-02,3.457143
+100,2034,1298,restaurant,plain means,precision at 3,,1.000000
+100,2034,1298,courier,excess,value,courier-00,-0.059323
+100,2034,1298,courier,excess,value,courier-01,-0.028463
+100,2034,1298,courier,excess,value,courier-02,-0.073746
+100,2034,1298,courier,mean courier rating,precision at 3,,0.666667
+100,2034,1298,courier,mean courier rating,rank,courier-00,2.000000
+100,2034,1298,courier,mean courier rating,value,courier-00,3.533333
+100,2034,1298,courier,mean courier rating,rank,courier-01,4.000000
+100,2034,1298,courier,mean courier rating,value,courier-01,4.000000
+100,2034,1298,courier,mean courier rating,rank,courier-02,1.000000
+100,2034,1298,courier,mean courier rating,value,courier-02,3.100000
+100,2035,1312,restaurant,excess,value,rest-00,-0.120280
+100,2035,1312,restaurant,excess,value,rest-01,-0.104282
+100,2035,1312,restaurant,excess,value,rest-02,-0.260026
+100,2035,1312,restaurant,mean minutes late,precision at 2,,1.000000
+100,2035,1312,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2035,1312,restaurant,mean minutes late,value,rest-00,7.655369
+100,2035,1312,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2035,1312,restaurant,mean minutes late,value,rest-01,7.366408
+100,2035,1312,restaurant,mean food rating,precision at 1,,1.000000
+100,2035,1312,restaurant,mean food rating,rank,rest-02,1.000000
+100,2035,1312,restaurant,mean food rating,value,rest-02,3.375000
+100,2035,1312,restaurant,plain means,precision at 3,,1.000000
+100,2035,1312,courier,excess,value,courier-00,-0.041944
+100,2035,1312,courier,excess,value,courier-01,-0.063334
+100,2035,1312,courier,excess,value,courier-02,-0.069628
+100,2035,1312,courier,mean courier rating,precision at 3,,1.000000
+100,2035,1312,courier,mean courier rating,rank,courier-00,3.000000
+100,2035,1312,courier,mean courier rating,value,courier-00,3.769231
+100,2035,1312,courier,mean courier rating,rank,courier-01,2.000000
+100,2035,1312,courier,mean courier rating,value,courier-01,3.571429
+100,2035,1312,courier,mean courier rating,rank,courier-02,1.000000
+100,2035,1312,courier,mean courier rating,value,courier-02,3.400000
+100,2036,1263,restaurant,excess,value,rest-00,-0.101181
+100,2036,1263,restaurant,excess,value,rest-01,-0.114755
+100,2036,1263,restaurant,excess,value,rest-02,-0.158739
+100,2036,1263,restaurant,mean minutes late,precision at 2,,1.000000
+100,2036,1263,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2036,1263,restaurant,mean minutes late,value,rest-00,7.350664
+100,2036,1263,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2036,1263,restaurant,mean minutes late,value,rest-01,7.229711
+100,2036,1263,restaurant,mean food rating,precision at 1,,1.000000
+100,2036,1263,restaurant,mean food rating,rank,rest-02,1.000000
+100,2036,1263,restaurant,mean food rating,value,rest-02,3.545455
+100,2036,1263,restaurant,plain means,precision at 3,,1.000000
+100,2036,1263,courier,excess,value,courier-00,-0.062150
+100,2036,1263,courier,excess,value,courier-01,-0.042724
+100,2036,1263,courier,excess,value,courier-02,-0.087388
+100,2036,1263,courier,mean courier rating,precision at 3,,1.000000
+100,2036,1263,courier,mean courier rating,rank,courier-00,2.000000
+100,2036,1263,courier,mean courier rating,value,courier-00,3.454545
+100,2036,1263,courier,mean courier rating,rank,courier-01,3.000000
+100,2036,1263,courier,mean courier rating,value,courier-01,3.928571
+100,2036,1263,courier,mean courier rating,rank,courier-02,1.000000
+100,2036,1263,courier,mean courier rating,value,courier-02,3.333333
+100,2037,1256,restaurant,excess,value,rest-00,-0.109255
+100,2037,1256,restaurant,excess,value,rest-01,-0.102054
+100,2037,1256,restaurant,excess,value,rest-02,-0.199542
+100,2037,1256,restaurant,mean minutes late,precision at 2,,1.000000
+100,2037,1256,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2037,1256,restaurant,mean minutes late,value,rest-00,6.599897
+100,2037,1256,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2037,1256,restaurant,mean minutes late,value,rest-01,6.066032
+100,2037,1256,restaurant,mean food rating,precision at 1,,1.000000
+100,2037,1256,restaurant,mean food rating,rank,rest-02,1.000000
+100,2037,1256,restaurant,mean food rating,value,rest-02,3.342857
+100,2037,1256,restaurant,plain means,precision at 3,,1.000000
+100,2037,1256,courier,excess,value,courier-00,-0.020072
+100,2037,1256,courier,excess,value,courier-01,-0.096926
+100,2037,1256,courier,excess,value,courier-02,-0.089807
+100,2037,1256,courier,mean courier rating,precision at 3,,0.666667
+100,2037,1256,courier,mean courier rating,rank,courier-00,7.000000
+100,2037,1256,courier,mean courier rating,value,courier-00,4.066667
+100,2037,1256,courier,mean courier rating,rank,courier-01,1.000000
+100,2037,1256,courier,mean courier rating,value,courier-01,2.750000
+100,2037,1256,courier,mean courier rating,rank,courier-02,3.000000
+100,2037,1256,courier,mean courier rating,value,courier-02,3.476190
+100,2038,1234,restaurant,excess,value,rest-00,-0.111682
+100,2038,1234,restaurant,excess,value,rest-01,-0.098220
+100,2038,1234,restaurant,excess,value,rest-02,-0.137304
+100,2038,1234,restaurant,mean minutes late,precision at 2,,1.000000
+100,2038,1234,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2038,1234,restaurant,mean minutes late,value,rest-00,6.506649
+100,2038,1234,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2038,1234,restaurant,mean minutes late,value,rest-01,5.552744
+100,2038,1234,restaurant,mean food rating,precision at 1,,1.000000
+100,2038,1234,restaurant,mean food rating,rank,rest-02,1.000000
+100,2038,1234,restaurant,mean food rating,value,rest-02,3.633333
+100,2038,1234,restaurant,plain means,precision at 3,,1.000000
+100,2038,1234,courier,excess,value,courier-00,-0.060539
+100,2038,1234,courier,excess,value,courier-01,-0.068566
+100,2038,1234,courier,excess,value,courier-02,-0.007379
+100,2038,1234,courier,mean courier rating,precision at 3,,0.666667
+100,2038,1234,courier,mean courier rating,rank,courier-00,2.000000
+100,2038,1234,courier,mean courier rating,value,courier-00,3.785714
+100,2038,1234,courier,mean courier rating,rank,courier-01,3.000000
+100,2038,1234,courier,mean courier rating,value,courier-01,3.894737
+100,2038,1234,courier,mean courier rating,rank,courier-02,7.000000
+100,2038,1234,courier,mean courier rating,value,courier-02,4.166667
+100,2039,1242,restaurant,excess,value,rest-00,-0.151332
+100,2039,1242,restaurant,excess,value,rest-01,-0.091581
+100,2039,1242,restaurant,excess,value,rest-02,-0.183538
+100,2039,1242,restaurant,mean minutes late,precision at 2,,1.000000
+100,2039,1242,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2039,1242,restaurant,mean minutes late,value,rest-00,7.345140
+100,2039,1242,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2039,1242,restaurant,mean minutes late,value,rest-01,5.273905
+100,2039,1242,restaurant,mean food rating,precision at 1,,1.000000
+100,2039,1242,restaurant,mean food rating,rank,rest-02,1.000000
+100,2039,1242,restaurant,mean food rating,value,rest-02,3.424242
+100,2039,1242,restaurant,plain means,precision at 3,,1.000000
+100,2039,1242,courier,excess,value,courier-00,-0.027205
+100,2039,1242,courier,excess,value,courier-01,-0.094414
+100,2039,1242,courier,excess,value,courier-02,-0.087316
+100,2039,1242,courier,mean courier rating,precision at 3,,0.666667
+100,2039,1242,courier,mean courier rating,rank,courier-00,6.000000
+100,2039,1242,courier,mean courier rating,value,courier-00,4.083333
+100,2039,1242,courier,mean courier rating,rank,courier-01,2.000000
+100,2039,1242,courier,mean courier rating,value,courier-01,3.526316
+100,2039,1242,courier,mean courier rating,rank,courier-02,1.000000
+100,2039,1242,courier,mean courier rating,value,courier-02,3.500000
+100,2040,1241,restaurant,excess,value,rest-00,-0.083375
+100,2040,1241,restaurant,excess,value,rest-01,-0.137265
+100,2040,1241,restaurant,excess,value,rest-02,-0.155756
+100,2040,1241,restaurant,mean minutes late,precision at 2,,1.000000
+100,2040,1241,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2040,1241,restaurant,mean minutes late,value,rest-00,5.437014
+100,2040,1241,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2040,1241,restaurant,mean minutes late,value,rest-01,7.748347
+100,2040,1241,restaurant,mean food rating,precision at 1,,1.000000
+100,2040,1241,restaurant,mean food rating,rank,rest-02,1.000000
+100,2040,1241,restaurant,mean food rating,value,rest-02,3.400000
+100,2040,1241,restaurant,plain means,precision at 3,,1.000000
+100,2040,1241,courier,excess,value,courier-00,-0.085956
+100,2040,1241,courier,excess,value,courier-01,-0.063360
+100,2040,1241,courier,excess,value,courier-02,-0.072485
+100,2040,1241,courier,mean courier rating,precision at 3,,0.666667
+100,2040,1241,courier,mean courier rating,rank,courier-00,1.000000
+100,2040,1241,courier,mean courier rating,value,courier-00,3.352941
+100,2040,1241,courier,mean courier rating,rank,courier-01,4.000000
+100,2040,1241,courier,mean courier rating,value,courier-01,3.928571
+100,2040,1241,courier,mean courier rating,rank,courier-02,2.000000
+100,2040,1241,courier,mean courier rating,value,courier-02,3.666667
+100,2041,1313,restaurant,excess,value,rest-00,-0.108736
+100,2041,1313,restaurant,excess,value,rest-01,-0.146076
+100,2041,1313,restaurant,excess,value,rest-02,-0.199237
+100,2041,1313,restaurant,mean minutes late,precision at 2,,1.000000
+100,2041,1313,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2041,1313,restaurant,mean minutes late,value,rest-00,5.621111
+100,2041,1313,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2041,1313,restaurant,mean minutes late,value,rest-01,7.849644
+100,2041,1313,restaurant,mean food rating,precision at 1,,1.000000
+100,2041,1313,restaurant,mean food rating,rank,rest-02,1.000000
+100,2041,1313,restaurant,mean food rating,value,rest-02,3.466667
+100,2041,1313,restaurant,plain means,precision at 3,,1.000000
+100,2041,1313,courier,excess,value,courier-00,-0.051844
+100,2041,1313,courier,excess,value,courier-01,-0.071439
+100,2041,1313,courier,excess,value,courier-02,-0.081735
+100,2041,1313,courier,mean courier rating,precision at 3,,1.000000
+100,2041,1313,courier,mean courier rating,rank,courier-00,2.000000
+100,2041,1313,courier,mean courier rating,value,courier-00,3.666667
+100,2041,1313,courier,mean courier rating,rank,courier-01,3.000000
+100,2041,1313,courier,mean courier rating,value,courier-01,3.666667
+100,2041,1313,courier,mean courier rating,rank,courier-02,1.000000
+100,2041,1313,courier,mean courier rating,value,courier-02,3.411765
+100,2042,1475,restaurant,excess,value,rest-00,-0.152914
+100,2042,1475,restaurant,excess,value,rest-01,-0.051921
+100,2042,1475,restaurant,excess,value,rest-02,-0.203043
+100,2042,1475,restaurant,mean minutes late,precision at 2,,1.000000
+100,2042,1475,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2042,1475,restaurant,mean minutes late,value,rest-00,7.346316
+100,2042,1475,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2042,1475,restaurant,mean minutes late,value,rest-01,3.379893
+100,2042,1475,restaurant,mean food rating,precision at 1,,1.000000
+100,2042,1475,restaurant,mean food rating,rank,rest-02,1.000000
+100,2042,1475,restaurant,mean food rating,value,rest-02,3.463415
+100,2042,1475,restaurant,plain means,precision at 3,,1.000000
+100,2042,1475,courier,excess,value,courier-00,-0.047534
+100,2042,1475,courier,excess,value,courier-01,-0.027189
+100,2042,1475,courier,excess,value,courier-02,-0.147520
+100,2042,1475,courier,mean courier rating,precision at 3,,0.666667
+100,2042,1475,courier,mean courier rating,rank,courier-00,2.000000
+100,2042,1475,courier,mean courier rating,value,courier-00,3.666667
+100,2042,1475,courier,mean courier rating,rank,courier-01,4.000000
+100,2042,1475,courier,mean courier rating,value,courier-01,4.000000
+100,2042,1475,courier,mean courier rating,rank,courier-02,1.000000
+100,2042,1475,courier,mean courier rating,value,courier-02,3.047619
+100,2043,1316,restaurant,excess,value,rest-00,-0.135294
+100,2043,1316,restaurant,excess,value,rest-01,-0.076885
+100,2043,1316,restaurant,excess,value,rest-02,-0.211750
+100,2043,1316,restaurant,mean minutes late,precision at 2,,1.000000
+100,2043,1316,restaurant,mean minutes late,rank,rest-00,1.000000
+100,2043,1316,restaurant,mean minutes late,value,rest-00,7.362396
+100,2043,1316,restaurant,mean minutes late,rank,rest-01,2.000000
+100,2043,1316,restaurant,mean minutes late,value,rest-01,4.183921
+100,2043,1316,restaurant,mean food rating,precision at 1,,1.000000
+100,2043,1316,restaurant,mean food rating,rank,rest-02,1.000000
+100,2043,1316,restaurant,mean food rating,value,rest-02,3.444444
+100,2043,1316,restaurant,plain means,precision at 3,,1.000000
+100,2043,1316,courier,excess,value,courier-00,-0.043691
+100,2043,1316,courier,excess,value,courier-01,-0.081686
+100,2043,1316,courier,excess,value,courier-02,-0.117088
+100,2043,1316,courier,mean courier rating,precision at 3,,1.000000
+100,2043,1316,courier,mean courier rating,rank,courier-00,3.000000
+100,2043,1316,courier,mean courier rating,value,courier-00,3.894737
+100,2043,1316,courier,mean courier rating,rank,courier-01,2.000000
+100,2043,1316,courier,mean courier rating,value,courier-01,3.428571
+100,2043,1316,courier,mean courier rating,rank,courier-02,1.000000
+100,2043,1316,courier,mean courier rating,value,courier-02,3.000000
+100,2044,1254,restaurant,excess,value,rest-00,-0.082104
+100,2044,1254,restaurant,excess,value,rest-01,-0.157423
+100,2044,1254,restaurant,excess,value,rest-02,-0.163983
+100,2044,1254,restaurant,mean minutes late,precision at 2,,1.000000
+100,2044,1254,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2044,1254,restaurant,mean minutes late,value,rest-00,4.510463
+100,2044,1254,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2044,1254,restaurant,mean minutes late,value,rest-01,8.442236
+100,2044,1254,restaurant,mean food rating,precision at 1,,1.000000
+100,2044,1254,restaurant,mean food rating,rank,rest-02,1.000000
+100,2044,1254,restaurant,mean food rating,value,rest-02,3.419355
+100,2044,1254,restaurant,plain means,precision at 3,,1.000000
+100,2044,1254,courier,excess,value,courier-00,-0.009536
+100,2044,1254,courier,excess,value,courier-01,-0.055449
+100,2044,1254,courier,excess,value,courier-02,-0.089165
+100,2044,1254,courier,mean courier rating,precision at 3,,0.666667
+100,2044,1254,courier,mean courier rating,rank,courier-00,24.000000
+100,2044,1254,courier,mean courier rating,value,courier-00,4.416667
+100,2044,1254,courier,mean courier rating,rank,courier-01,3.000000
+100,2044,1254,courier,mean courier rating,value,courier-01,3.615385
+100,2044,1254,courier,mean courier rating,rank,courier-02,2.000000
+100,2044,1254,courier,mean courier rating,value,courier-02,3.583333
+100,2045,1316,restaurant,excess,value,rest-00,-0.082854
+100,2045,1316,restaurant,excess,value,rest-01,-0.110588
+100,2045,1316,restaurant,excess,value,rest-02,-0.185032
+100,2045,1316,restaurant,mean minutes late,precision at 2,,1.000000
+100,2045,1316,restaurant,mean minutes late,rank,rest-00,2.000000
+100,2045,1316,restaurant,mean minutes late,value,rest-00,5.192278
+100,2045,1316,restaurant,mean minutes late,rank,rest-01,1.000000
+100,2045,1316,restaurant,mean minutes late,value,rest-01,6.899790
+100,2045,1316,restaurant,mean food rating,precision at 1,,1.000000
+100,2045,1316,restaurant,mean food rating,rank,rest-02,1.000000
+100,2045,1316,restaurant,mean food rating,value,rest-02,3.272727
+100,2045,1316,restaurant,plain means,precision at 3,,1.000000
+100,2045,1316,courier,excess,value,courier-00,-0.140794
+100,2045,1316,courier,excess,value,courier-01,-0.019225
+100,2045,1316,courier,excess,value,courier-02,-0.100840
+100,2045,1316,courier,mean courier rating,precision at 3,,1.000000
+100,2045,1316,courier,mean courier rating,rank,courier-00,1.000000
+100,2045,1316,courier,mean courier rating,value,courier-00,2.812500
+100,2045,1316,courier,mean courier rating,rank,courier-01,3.000000
+100,2045,1316,courier,mean courier rating,value,courier-01,3.777778
+100,2045,1316,courier,mean courier rating,rank,courier-02,2.000000
+100,2045,1316,courier,mean courier rating,value,courier-02,3.125000
+200,2026,2645,restaurant,excess,value,rest-00,-0.069790
+200,2026,2645,restaurant,excess,value,rest-01,-0.120444
+200,2026,2645,restaurant,excess,value,rest-02,-0.168444
+200,2026,2645,restaurant,mean minutes late,precision at 2,,1.000000
+200,2026,2645,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2026,2645,restaurant,mean minutes late,value,rest-00,4.816805
+200,2026,2645,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2026,2645,restaurant,mean minutes late,value,rest-01,6.975218
+200,2026,2645,restaurant,mean food rating,precision at 1,,1.000000
+200,2026,2645,restaurant,mean food rating,rank,rest-02,1.000000
+200,2026,2645,restaurant,mean food rating,value,rest-02,3.450000
+200,2026,2645,restaurant,plain means,precision at 3,,1.000000
+200,2026,2645,courier,excess,value,courier-00,-0.056438
+200,2026,2645,courier,excess,value,courier-01,-0.063147
+200,2026,2645,courier,excess,value,courier-02,-0.092050
+200,2026,2645,courier,mean courier rating,precision at 3,,1.000000
+200,2026,2645,courier,mean courier rating,rank,courier-00,3.000000
+200,2026,2645,courier,mean courier rating,value,courier-00,3.750000
+200,2026,2645,courier,mean courier rating,rank,courier-01,2.000000
+200,2026,2645,courier,mean courier rating,value,courier-01,3.655172
+200,2026,2645,courier,mean courier rating,rank,courier-02,1.000000
+200,2026,2645,courier,mean courier rating,value,courier-02,3.344828
+200,2027,2620,restaurant,excess,value,rest-00,-0.104807
+200,2027,2620,restaurant,excess,value,rest-01,-0.154391
+200,2027,2620,restaurant,excess,value,rest-02,-0.181389
+200,2027,2620,restaurant,mean minutes late,precision at 2,,1.000000
+200,2027,2620,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2027,2620,restaurant,mean minutes late,value,rest-00,6.356624
+200,2027,2620,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2027,2620,restaurant,mean minutes late,value,rest-01,8.179208
+200,2027,2620,restaurant,mean food rating,precision at 1,,1.000000
+200,2027,2620,restaurant,mean food rating,rank,rest-02,1.000000
+200,2027,2620,restaurant,mean food rating,value,rest-02,3.584615
+200,2027,2620,restaurant,plain means,precision at 3,,1.000000
+200,2027,2620,courier,excess,value,courier-00,-0.061454
+200,2027,2620,courier,excess,value,courier-01,-0.064894
+200,2027,2620,courier,excess,value,courier-02,-0.072783
+200,2027,2620,courier,mean courier rating,precision at 3,,1.000000
+200,2027,2620,courier,mean courier rating,rank,courier-00,3.000000
+200,2027,2620,courier,mean courier rating,value,courier-00,3.742857
+200,2027,2620,courier,mean courier rating,rank,courier-01,2.000000
+200,2027,2620,courier,mean courier rating,value,courier-01,3.548387
+200,2027,2620,courier,mean courier rating,rank,courier-02,1.000000
+200,2027,2620,courier,mean courier rating,value,courier-02,3.357143
+200,2028,2804,restaurant,excess,value,rest-00,-0.079210
+200,2028,2804,restaurant,excess,value,rest-01,-0.065612
+200,2028,2804,restaurant,excess,value,rest-02,-0.196051
+200,2028,2804,restaurant,mean minutes late,precision at 2,,1.000000
+200,2028,2804,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2028,2804,restaurant,mean minutes late,value,rest-00,4.929640
+200,2028,2804,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2028,2804,restaurant,mean minutes late,value,rest-01,4.357047
+200,2028,2804,restaurant,mean food rating,precision at 1,,1.000000
+200,2028,2804,restaurant,mean food rating,rank,rest-02,1.000000
+200,2028,2804,restaurant,mean food rating,value,rest-02,3.426230
+200,2028,2804,restaurant,plain means,precision at 3,,1.000000
+200,2028,2804,courier,excess,value,courier-00,-0.063215
+200,2028,2804,courier,excess,value,courier-01,-0.063219
+200,2028,2804,courier,excess,value,courier-02,-0.073995
+200,2028,2804,courier,mean courier rating,precision at 3,,1.000000
+200,2028,2804,courier,mean courier rating,rank,courier-00,2.000000
+200,2028,2804,courier,mean courier rating,value,courier-00,3.535714
+200,2028,2804,courier,mean courier rating,rank,courier-01,3.000000
+200,2028,2804,courier,mean courier rating,value,courier-01,3.692308
+200,2028,2804,courier,mean courier rating,rank,courier-02,1.000000
+200,2028,2804,courier,mean courier rating,value,courier-02,3.514286
+200,2029,2479,restaurant,excess,value,rest-00,-0.097977
+200,2029,2479,restaurant,excess,value,rest-01,-0.088317
+200,2029,2479,restaurant,excess,value,rest-02,-0.205722
+200,2029,2479,restaurant,mean minutes late,precision at 2,,1.000000
+200,2029,2479,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2029,2479,restaurant,mean minutes late,value,rest-00,5.523961
+200,2029,2479,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2029,2479,restaurant,mean minutes late,value,rest-01,5.514426
+200,2029,2479,restaurant,mean food rating,precision at 1,,1.000000
+200,2029,2479,restaurant,mean food rating,rank,rest-02,1.000000
+200,2029,2479,restaurant,mean food rating,value,rest-02,3.272727
+200,2029,2479,restaurant,plain means,precision at 3,,1.000000
+200,2029,2479,courier,excess,value,courier-00,-0.066643
+200,2029,2479,courier,excess,value,courier-01,-0.065884
+200,2029,2479,courier,excess,value,courier-02,-0.065642
+200,2029,2479,courier,mean courier rating,precision at 3,,1.000000
+200,2029,2479,courier,mean courier rating,rank,courier-00,2.000000
+200,2029,2479,courier,mean courier rating,value,courier-00,3.458333
+200,2029,2479,courier,mean courier rating,rank,courier-01,3.000000
+200,2029,2479,courier,mean courier rating,value,courier-01,3.750000
+200,2029,2479,courier,mean courier rating,rank,courier-02,1.000000
+200,2029,2479,courier,mean courier rating,value,courier-02,3.333333
+200,2030,2351,restaurant,excess,value,rest-00,-0.125191
+200,2030,2351,restaurant,excess,value,rest-01,-0.119025
+200,2030,2351,restaurant,excess,value,rest-02,-0.225901
+200,2030,2351,restaurant,mean minutes late,precision at 2,,1.000000
+200,2030,2351,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2030,2351,restaurant,mean minutes late,value,rest-00,7.875275
+200,2030,2351,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2030,2351,restaurant,mean minutes late,value,rest-01,7.109881
+200,2030,2351,restaurant,mean food rating,precision at 1,,1.000000
+200,2030,2351,restaurant,mean food rating,rank,rest-02,1.000000
+200,2030,2351,restaurant,mean food rating,value,rest-02,3.166667
+200,2030,2351,restaurant,plain means,precision at 3,,1.000000
+200,2030,2351,courier,excess,value,courier-00,-0.069324
+200,2030,2351,courier,excess,value,courier-01,-0.058303
+200,2030,2351,courier,excess,value,courier-02,-0.113326
+200,2030,2351,courier,mean courier rating,precision at 3,,1.000000
+200,2030,2351,courier,mean courier rating,rank,courier-00,2.000000
+200,2030,2351,courier,mean courier rating,value,courier-00,3.729730
+200,2030,2351,courier,mean courier rating,rank,courier-01,3.000000
+200,2030,2351,courier,mean courier rating,value,courier-01,3.857143
+200,2030,2351,courier,mean courier rating,rank,courier-02,1.000000
+200,2030,2351,courier,mean courier rating,value,courier-02,3.093750
+200,2031,2501,restaurant,excess,value,rest-00,-0.090687
+200,2031,2501,restaurant,excess,value,rest-01,-0.100637
+200,2031,2501,restaurant,excess,value,rest-02,-0.155222
+200,2031,2501,restaurant,mean minutes late,precision at 2,,1.000000
+200,2031,2501,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2031,2501,restaurant,mean minutes late,value,rest-00,5.311238
+200,2031,2501,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2031,2501,restaurant,mean minutes late,value,rest-01,5.552702
+200,2031,2501,restaurant,mean food rating,precision at 1,,1.000000
+200,2031,2501,restaurant,mean food rating,rank,rest-02,1.000000
+200,2031,2501,restaurant,mean food rating,value,rest-02,3.490909
+200,2031,2501,restaurant,plain means,precision at 3,,1.000000
+200,2031,2501,courier,excess,value,courier-00,-0.054987
+200,2031,2501,courier,excess,value,courier-01,-0.050432
+200,2031,2501,courier,excess,value,courier-02,-0.098049
+200,2031,2501,courier,mean courier rating,precision at 3,,1.000000
+200,2031,2501,courier,mean courier rating,rank,courier-00,3.000000
+200,2031,2501,courier,mean courier rating,value,courier-00,3.766667
+200,2031,2501,courier,mean courier rating,rank,courier-01,2.000000
+200,2031,2501,courier,mean courier rating,value,courier-01,3.727273
+200,2031,2501,courier,mean courier rating,rank,courier-02,1.000000
+200,2031,2501,courier,mean courier rating,value,courier-02,3.441176
+200,2032,2885,restaurant,excess,value,rest-00,-0.113066
+200,2032,2885,restaurant,excess,value,rest-01,-0.109072
+200,2032,2885,restaurant,excess,value,rest-02,-0.183086
+200,2032,2885,restaurant,mean minutes late,precision at 2,,1.000000
+200,2032,2885,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2032,2885,restaurant,mean minutes late,value,rest-00,6.043276
+200,2032,2885,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2032,2885,restaurant,mean minutes late,value,rest-01,5.826252
+200,2032,2885,restaurant,mean food rating,precision at 1,,1.000000
+200,2032,2885,restaurant,mean food rating,rank,rest-02,1.000000
+200,2032,2885,restaurant,mean food rating,value,rest-02,3.515625
+200,2032,2885,restaurant,plain means,precision at 3,,1.000000
+200,2032,2885,courier,excess,value,courier-00,-0.049133
+200,2032,2885,courier,excess,value,courier-01,-0.113306
+200,2032,2885,courier,excess,value,courier-02,-0.065554
+200,2032,2885,courier,mean courier rating,precision at 3,,1.000000
+200,2032,2885,courier,mean courier rating,rank,courier-00,2.000000
+200,2032,2885,courier,mean courier rating,value,courier-00,3.612903
+200,2032,2885,courier,mean courier rating,rank,courier-01,1.000000
+200,2032,2885,courier,mean courier rating,value,courier-01,3.111111
+200,2032,2885,courier,mean courier rating,rank,courier-02,3.000000
+200,2032,2885,courier,mean courier rating,value,courier-02,3.617647
+200,2033,2723,restaurant,excess,value,rest-00,-0.131783
+200,2033,2723,restaurant,excess,value,rest-01,-0.109434
+200,2033,2723,restaurant,excess,value,rest-02,-0.168296
+200,2033,2723,restaurant,mean minutes late,precision at 2,,1.000000
+200,2033,2723,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2033,2723,restaurant,mean minutes late,value,rest-00,7.270287
+200,2033,2723,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2033,2723,restaurant,mean minutes late,value,rest-01,6.158568
+200,2033,2723,restaurant,mean food rating,precision at 1,,1.000000
+200,2033,2723,restaurant,mean food rating,rank,rest-02,1.000000
+200,2033,2723,restaurant,mean food rating,value,rest-02,3.462687
+200,2033,2723,restaurant,plain means,precision at 3,,1.000000
+200,2033,2723,courier,excess,value,courier-00,-0.051486
+200,2033,2723,courier,excess,value,courier-01,-0.042458
+200,2033,2723,courier,excess,value,courier-02,-0.067146
+200,2033,2723,courier,mean courier rating,precision at 3,,1.000000
+200,2033,2723,courier,mean courier rating,rank,courier-00,1.000000
+200,2033,2723,courier,mean courier rating,value,courier-00,3.600000
+200,2033,2723,courier,mean courier rating,rank,courier-01,3.000000
+200,2033,2723,courier,mean courier rating,value,courier-01,3.653846
+200,2033,2723,courier,mean courier rating,rank,courier-02,2.000000
+200,2033,2723,courier,mean courier rating,value,courier-02,3.633333
+200,2034,2583,restaurant,excess,value,rest-00,-0.084552
+200,2034,2583,restaurant,excess,value,rest-01,-0.095136
+200,2034,2583,restaurant,excess,value,rest-02,-0.144503
+200,2034,2583,restaurant,mean minutes late,precision at 2,,1.000000
+200,2034,2583,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2034,2583,restaurant,mean minutes late,value,rest-00,4.557168
+200,2034,2583,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2034,2583,restaurant,mean minutes late,value,rest-01,4.715731
+200,2034,2583,restaurant,mean food rating,precision at 1,,1.000000
+200,2034,2583,restaurant,mean food rating,rank,rest-02,1.000000
+200,2034,2583,restaurant,mean food rating,value,rest-02,3.581818
+200,2034,2583,restaurant,plain means,precision at 3,,1.000000
+200,2034,2583,courier,excess,value,courier-00,-0.050844
+200,2034,2583,courier,excess,value,courier-01,-0.039240
+200,2034,2583,courier,excess,value,courier-02,-0.058356
+200,2034,2583,courier,mean courier rating,precision at 3,,1.000000
+200,2034,2583,courier,mean courier rating,rank,courier-00,2.000000
+200,2034,2583,courier,mean courier rating,value,courier-00,3.730769
+200,2034,2583,courier,mean courier rating,rank,courier-01,3.000000
+200,2034,2583,courier,mean courier rating,value,courier-01,3.840000
+200,2034,2583,courier,mean courier rating,rank,courier-02,1.000000
+200,2034,2583,courier,mean courier rating,value,courier-02,3.680000
+200,2035,2549,restaurant,excess,value,rest-00,-0.115935
+200,2035,2549,restaurant,excess,value,rest-01,-0.125318
+200,2035,2549,restaurant,excess,value,rest-02,-0.270568
+200,2035,2549,restaurant,mean minutes late,precision at 2,,1.000000
+200,2035,2549,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2035,2549,restaurant,mean minutes late,value,rest-00,7.023763
+200,2035,2549,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2035,2549,restaurant,mean minutes late,value,rest-01,7.433778
+200,2035,2549,restaurant,mean food rating,precision at 1,,1.000000
+200,2035,2549,restaurant,mean food rating,rank,rest-02,1.000000
+200,2035,2549,restaurant,mean food rating,value,rest-02,3.320513
+200,2035,2549,restaurant,plain means,precision at 3,,1.000000
+200,2035,2549,courier,excess,value,courier-00,-0.060929
+200,2035,2549,courier,excess,value,courier-01,-0.082349
+200,2035,2549,courier,excess,value,courier-02,-0.071054
+200,2035,2549,courier,mean courier rating,precision at 3,,1.000000
+200,2035,2549,courier,mean courier rating,rank,courier-00,3.000000
+200,2035,2549,courier,mean courier rating,value,courier-00,3.590909
+200,2035,2549,courier,mean courier rating,rank,courier-01,1.000000
+200,2035,2549,courier,mean courier rating,value,courier-01,3.444444
+200,2035,2549,courier,mean courier rating,rank,courier-02,2.000000
+200,2035,2549,courier,mean courier rating,value,courier-02,3.483871
+200,2036,2580,restaurant,excess,value,rest-00,-0.110591
+200,2036,2580,restaurant,excess,value,rest-01,-0.109183
+200,2036,2580,restaurant,excess,value,rest-02,-0.205211
+200,2036,2580,restaurant,mean minutes late,precision at 2,,1.000000
+200,2036,2580,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2036,2580,restaurant,mean minutes late,value,rest-00,7.073014
+200,2036,2580,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2036,2580,restaurant,mean minutes late,value,rest-01,6.621324
+200,2036,2580,restaurant,mean food rating,precision at 1,,1.000000
+200,2036,2580,restaurant,mean food rating,rank,rest-02,1.000000
+200,2036,2580,restaurant,mean food rating,value,rest-02,3.388889
+200,2036,2580,restaurant,plain means,precision at 3,,1.000000
+200,2036,2580,courier,excess,value,courier-00,-0.081113
+200,2036,2580,courier,excess,value,courier-01,-0.043717
+200,2036,2580,courier,excess,value,courier-02,-0.108825
+200,2036,2580,courier,mean courier rating,precision at 3,,1.000000
+200,2036,2580,courier,mean courier rating,rank,courier-00,2.000000
+200,2036,2580,courier,mean courier rating,value,courier-00,3.454545
+200,2036,2580,courier,mean courier rating,rank,courier-01,3.000000
+200,2036,2580,courier,mean courier rating,value,courier-01,3.777778
+200,2036,2580,courier,mean courier rating,rank,courier-02,1.000000
+200,2036,2580,courier,mean courier rating,value,courier-02,3.242424
+200,2037,2575,restaurant,excess,value,rest-00,-0.094442
+200,2037,2575,restaurant,excess,value,rest-01,-0.091210
+200,2037,2575,restaurant,excess,value,rest-02,-0.204856
+200,2037,2575,restaurant,mean minutes late,precision at 2,,1.000000
+200,2037,2575,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2037,2575,restaurant,mean minutes late,value,rest-00,5.561312
+200,2037,2575,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2037,2575,restaurant,mean minutes late,value,rest-01,5.652873
+200,2037,2575,restaurant,mean food rating,precision at 1,,1.000000
+200,2037,2575,restaurant,mean food rating,rank,rest-02,1.000000
+200,2037,2575,restaurant,mean food rating,value,rest-02,3.343750
+200,2037,2575,restaurant,plain means,precision at 3,,1.000000
+200,2037,2575,courier,excess,value,courier-00,-0.029670
+200,2037,2575,courier,excess,value,courier-01,-0.061903
+200,2037,2575,courier,excess,value,courier-02,-0.085626
+200,2037,2575,courier,mean courier rating,precision at 3,,1.000000
+200,2037,2575,courier,mean courier rating,rank,courier-00,3.000000
+200,2037,2575,courier,mean courier rating,value,courier-00,3.916667
+200,2037,2575,courier,mean courier rating,rank,courier-01,1.000000
+200,2037,2575,courier,mean courier rating,value,courier-01,3.363636
+200,2037,2575,courier,mean courier rating,rank,courier-02,2.000000
+200,2037,2575,courier,mean courier rating,value,courier-02,3.400000
+200,2038,2647,restaurant,excess,value,rest-00,-0.123111
+200,2038,2647,restaurant,excess,value,rest-01,-0.119032
+200,2038,2647,restaurant,excess,value,rest-02,-0.208646
+200,2038,2647,restaurant,mean minutes late,precision at 2,,1.000000
+200,2038,2647,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2038,2647,restaurant,mean minutes late,value,rest-00,6.788644
+200,2038,2647,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2038,2647,restaurant,mean minutes late,value,rest-01,6.393099
+200,2038,2647,restaurant,mean food rating,precision at 1,,1.000000
+200,2038,2647,restaurant,mean food rating,rank,rest-02,1.000000
+200,2038,2647,restaurant,mean food rating,value,rest-02,3.430769
+200,2038,2647,restaurant,plain means,precision at 3,,1.000000
+200,2038,2647,courier,excess,value,courier-00,-0.074820
+200,2038,2647,courier,excess,value,courier-01,-0.068853
+200,2038,2647,courier,excess,value,courier-02,-0.023620
+200,2038,2647,courier,mean courier rating,precision at 3,,1.000000
+200,2038,2647,courier,mean courier rating,rank,courier-00,1.000000
+200,2038,2647,courier,mean courier rating,value,courier-00,3.677419
+200,2038,2647,courier,mean courier rating,rank,courier-01,3.000000
+200,2038,2647,courier,mean courier rating,value,courier-01,3.909091
+200,2038,2647,courier,mean courier rating,rank,courier-02,2.000000
+200,2038,2647,courier,mean courier rating,value,courier-02,3.764706
+200,2039,2389,restaurant,excess,value,rest-00,-0.149103
+200,2039,2389,restaurant,excess,value,rest-01,-0.099190
+200,2039,2389,restaurant,excess,value,rest-02,-0.196811
+200,2039,2389,restaurant,mean minutes late,precision at 2,,1.000000
+200,2039,2389,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2039,2389,restaurant,mean minutes late,value,rest-00,8.196187
+200,2039,2389,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2039,2389,restaurant,mean minutes late,value,rest-01,6.312017
+200,2039,2389,restaurant,mean food rating,precision at 1,,1.000000
+200,2039,2389,restaurant,mean food rating,rank,rest-02,1.000000
+200,2039,2389,restaurant,mean food rating,value,rest-02,3.360656
+200,2039,2389,restaurant,plain means,precision at 3,,1.000000
+200,2039,2389,courier,excess,value,courier-00,-0.076900
+200,2039,2389,courier,excess,value,courier-01,-0.083737
+200,2039,2389,courier,excess,value,courier-02,-0.052937
+200,2039,2389,courier,mean courier rating,precision at 3,,1.000000
+200,2039,2389,courier,mean courier rating,rank,courier-00,1.000000
+200,2039,2389,courier,mean courier rating,value,courier-00,3.363636
+200,2039,2389,courier,mean courier rating,rank,courier-01,2.000000
+200,2039,2389,courier,mean courier rating,value,courier-01,3.593750
+200,2039,2389,courier,mean courier rating,rank,courier-02,3.000000
+200,2039,2389,courier,mean courier rating,value,courier-02,3.684211
+200,2040,2632,restaurant,excess,value,rest-00,-0.074601
+200,2040,2632,restaurant,excess,value,rest-01,-0.116700
+200,2040,2632,restaurant,excess,value,rest-02,-0.149820
+200,2040,2632,restaurant,mean minutes late,precision at 2,,1.000000
+200,2040,2632,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2040,2632,restaurant,mean minutes late,value,rest-00,4.311794
+200,2040,2632,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2040,2632,restaurant,mean minutes late,value,rest-01,5.527249
+200,2040,2632,restaurant,mean food rating,precision at 1,,1.000000
+200,2040,2632,restaurant,mean food rating,rank,rest-02,1.000000
+200,2040,2632,restaurant,mean food rating,value,rest-02,3.358491
+200,2040,2632,restaurant,plain means,precision at 3,,1.000000
+200,2040,2632,courier,excess,value,courier-00,-0.097809
+200,2040,2632,courier,excess,value,courier-01,-0.076922
+200,2040,2632,courier,excess,value,courier-02,-0.084480
+200,2040,2632,courier,mean courier rating,precision at 3,,1.000000
+200,2040,2632,courier,mean courier rating,rank,courier-00,2.000000
+200,2040,2632,courier,mean courier rating,value,courier-00,3.323529
+200,2040,2632,courier,mean courier rating,rank,courier-01,3.000000
+200,2040,2632,courier,mean courier rating,value,courier-01,3.750000
+200,2040,2632,courier,mean courier rating,rank,courier-02,1.000000
+200,2040,2632,courier,mean courier rating,value,courier-02,3.100000
+200,2041,2620,restaurant,excess,value,rest-00,-0.134268
+200,2041,2620,restaurant,excess,value,rest-01,-0.129130
+200,2041,2620,restaurant,excess,value,rest-02,-0.193150
+200,2041,2620,restaurant,mean minutes late,precision at 2,,1.000000
+200,2041,2620,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2041,2620,restaurant,mean minutes late,value,rest-00,7.295182
+200,2041,2620,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2041,2620,restaurant,mean minutes late,value,rest-01,7.358892
+200,2041,2620,restaurant,mean food rating,precision at 1,,1.000000
+200,2041,2620,restaurant,mean food rating,rank,rest-02,1.000000
+200,2041,2620,restaurant,mean food rating,value,rest-02,3.490909
+200,2041,2620,restaurant,plain means,precision at 3,,1.000000
+200,2041,2620,courier,excess,value,courier-00,-0.055730
+200,2041,2620,courier,excess,value,courier-01,-0.047870
+200,2041,2620,courier,excess,value,courier-02,-0.096199
+200,2041,2620,courier,mean courier rating,precision at 3,,1.000000
+200,2041,2620,courier,mean courier rating,rank,courier-00,2.000000
+200,2041,2620,courier,mean courier rating,value,courier-00,3.708333
+200,2041,2620,courier,mean courier rating,rank,courier-01,3.000000
+200,2041,2620,courier,mean courier rating,value,courier-01,3.787879
+200,2041,2620,courier,mean courier rating,rank,courier-02,1.000000
+200,2041,2620,courier,mean courier rating,value,courier-02,3.437500
+200,2042,2752,restaurant,excess,value,rest-00,-0.155200
+200,2042,2752,restaurant,excess,value,rest-01,-0.077698
+200,2042,2752,restaurant,excess,value,rest-02,-0.219129
+200,2042,2752,restaurant,mean minutes late,precision at 2,,1.000000
+200,2042,2752,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2042,2752,restaurant,mean minutes late,value,rest-00,7.725375
+200,2042,2752,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2042,2752,restaurant,mean minutes late,value,rest-01,4.722244
+200,2042,2752,restaurant,mean food rating,precision at 1,,1.000000
+200,2042,2752,restaurant,mean food rating,rank,rest-02,1.000000
+200,2042,2752,restaurant,mean food rating,value,rest-02,3.342466
+200,2042,2752,restaurant,plain means,precision at 3,,1.000000
+200,2042,2752,courier,excess,value,courier-00,-0.065197
+200,2042,2752,courier,excess,value,courier-01,-0.067937
+200,2042,2752,courier,excess,value,courier-02,-0.132993
+200,2042,2752,courier,mean courier rating,precision at 3,,1.000000
+200,2042,2752,courier,mean courier rating,rank,courier-00,3.000000
+200,2042,2752,courier,mean courier rating,value,courier-00,3.615385
+200,2042,2752,courier,mean courier rating,rank,courier-01,2.000000
+200,2042,2752,courier,mean courier rating,value,courier-01,3.608696
+200,2042,2752,courier,mean courier rating,rank,courier-02,1.000000
+200,2042,2752,courier,mean courier rating,value,courier-02,3.162162
+200,2043,2419,restaurant,excess,value,rest-00,-0.130052
+200,2043,2419,restaurant,excess,value,rest-01,-0.088934
+200,2043,2419,restaurant,excess,value,rest-02,-0.219623
+200,2043,2419,restaurant,mean minutes late,precision at 2,,1.000000
+200,2043,2419,restaurant,mean minutes late,rank,rest-00,1.000000
+200,2043,2419,restaurant,mean minutes late,value,rest-00,6.999711
+200,2043,2419,restaurant,mean minutes late,rank,rest-01,2.000000
+200,2043,2419,restaurant,mean minutes late,value,rest-01,4.990631
+200,2043,2419,restaurant,mean food rating,precision at 1,,1.000000
+200,2043,2419,restaurant,mean food rating,rank,rest-02,1.000000
+200,2043,2419,restaurant,mean food rating,value,rest-02,3.285714
+200,2043,2419,restaurant,plain means,precision at 3,,1.000000
+200,2043,2419,courier,excess,value,courier-00,-0.051214
+200,2043,2419,courier,excess,value,courier-01,-0.056187
+200,2043,2419,courier,excess,value,courier-02,-0.066126
+200,2043,2419,courier,mean courier rating,precision at 3,,1.000000
+200,2043,2419,courier,mean courier rating,rank,courier-00,3.000000
+200,2043,2419,courier,mean courier rating,value,courier-00,3.805556
+200,2043,2419,courier,mean courier rating,rank,courier-01,2.000000
+200,2043,2419,courier,mean courier rating,value,courier-01,3.678571
+200,2043,2419,courier,mean courier rating,rank,courier-02,1.000000
+200,2043,2419,courier,mean courier rating,value,courier-02,3.520000
+200,2044,2444,restaurant,excess,value,rest-00,-0.062626
+200,2044,2444,restaurant,excess,value,rest-01,-0.131720
+200,2044,2444,restaurant,excess,value,rest-02,-0.231896
+200,2044,2444,restaurant,mean minutes late,precision at 2,,1.000000
+200,2044,2444,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2044,2444,restaurant,mean minutes late,value,rest-00,4.091765
+200,2044,2444,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2044,2444,restaurant,mean minutes late,value,rest-01,7.638754
+200,2044,2444,restaurant,mean food rating,precision at 1,,1.000000
+200,2044,2444,restaurant,mean food rating,rank,rest-02,1.000000
+200,2044,2444,restaurant,mean food rating,value,rest-02,3.208955
+200,2044,2444,restaurant,plain means,precision at 3,,1.000000
+200,2044,2444,courier,excess,value,courier-00,-0.055733
+200,2044,2444,courier,excess,value,courier-01,-0.068168
+200,2044,2444,courier,excess,value,courier-02,-0.051451
+200,2044,2444,courier,mean courier rating,precision at 3,,1.000000
+200,2044,2444,courier,mean courier rating,rank,courier-00,3.000000
+200,2044,2444,courier,mean courier rating,value,courier-00,3.695652
+200,2044,2444,courier,mean courier rating,rank,courier-01,1.000000
+200,2044,2444,courier,mean courier rating,value,courier-01,3.617647
+200,2044,2444,courier,mean courier rating,rank,courier-02,2.000000
+200,2044,2444,courier,mean courier rating,value,courier-02,3.666667
+200,2045,2589,restaurant,excess,value,rest-00,-0.081391
+200,2045,2589,restaurant,excess,value,rest-01,-0.092090
+200,2045,2589,restaurant,excess,value,rest-02,-0.185131
+200,2045,2589,restaurant,mean minutes late,precision at 2,,1.000000
+200,2045,2589,restaurant,mean minutes late,rank,rest-00,2.000000
+200,2045,2589,restaurant,mean minutes late,value,rest-00,4.820791
+200,2045,2589,restaurant,mean minutes late,rank,rest-01,1.000000
+200,2045,2589,restaurant,mean minutes late,value,rest-01,6.234627
+200,2045,2589,restaurant,mean food rating,precision at 1,,1.000000
+200,2045,2589,restaurant,mean food rating,rank,rest-02,1.000000
+200,2045,2589,restaurant,mean food rating,value,rest-02,3.357143
+200,2045,2589,restaurant,plain means,precision at 3,,1.000000
+200,2045,2589,courier,excess,value,courier-00,-0.119907
+200,2045,2589,courier,excess,value,courier-01,-0.040220
+200,2045,2589,courier,excess,value,courier-02,-0.096953
+200,2045,2589,courier,mean courier rating,precision at 3,,1.000000
+200,2045,2589,courier,mean courier rating,rank,courier-00,2.000000
+200,2045,2589,courier,mean courier rating,value,courier-00,3.148148
+200,2045,2589,courier,mean courier rating,rank,courier-01,3.000000
+200,2045,2589,courier,mean courier rating,value,courier-01,3.708333
+200,2045,2589,courier,mean courier rating,rank,courier-02,1.000000
+200,2045,2589,courier,mean courier rating,value,courier-02,3.125000
+400,2026,5321,restaurant,excess,value,rest-00,-0.090822
+400,2026,5321,restaurant,excess,value,rest-01,-0.095249
+400,2026,5321,restaurant,excess,value,rest-02,-0.174369
+400,2026,5321,restaurant,mean minutes late,precision at 2,,1.000000
+400,2026,5321,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2026,5321,restaurant,mean minutes late,value,rest-00,5.716636
+400,2026,5321,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2026,5321,restaurant,mean minutes late,value,rest-01,5.973867
+400,2026,5321,restaurant,mean food rating,precision at 1,,1.000000
+400,2026,5321,restaurant,mean food rating,rank,rest-02,1.000000
+400,2026,5321,restaurant,mean food rating,value,rest-02,3.472000
+400,2026,5321,restaurant,plain means,precision at 3,,1.000000
+400,2026,5321,courier,excess,value,courier-00,-0.061851
+400,2026,5321,courier,excess,value,courier-01,-0.061730
+400,2026,5321,courier,excess,value,courier-02,-0.081248
+400,2026,5321,courier,mean courier rating,precision at 3,,1.000000
+400,2026,5321,courier,mean courier rating,rank,courier-00,2.000000
+400,2026,5321,courier,mean courier rating,value,courier-00,3.600000
+400,2026,5321,courier,mean courier rating,rank,courier-01,3.000000
+400,2026,5321,courier,mean courier rating,value,courier-01,3.682540
+400,2026,5321,courier,mean courier rating,rank,courier-02,1.000000
+400,2026,5321,courier,mean courier rating,value,courier-02,3.485294
+400,2027,5126,restaurant,excess,value,rest-00,-0.108670
+400,2027,5126,restaurant,excess,value,rest-01,-0.138676
+400,2027,5126,restaurant,excess,value,rest-02,-0.178940
+400,2027,5126,restaurant,mean minutes late,precision at 2,,1.000000
+400,2027,5126,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2027,5126,restaurant,mean minutes late,value,rest-00,6.507026
+400,2027,5126,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2027,5126,restaurant,mean minutes late,value,rest-01,7.504565
+400,2027,5126,restaurant,mean food rating,precision at 1,,1.000000
+400,2027,5126,restaurant,mean food rating,rank,rest-02,1.000000
+400,2027,5126,restaurant,mean food rating,value,rest-02,3.532787
+400,2027,5126,restaurant,plain means,precision at 3,,1.000000
+400,2027,5126,courier,excess,value,courier-00,-0.068433
+400,2027,5126,courier,excess,value,courier-01,-0.047353
+400,2027,5126,courier,excess,value,courier-02,-0.072843
+400,2027,5126,courier,mean courier rating,precision at 3,,1.000000
+400,2027,5126,courier,mean courier rating,rank,courier-00,2.000000
+400,2027,5126,courier,mean courier rating,value,courier-00,3.704918
+400,2027,5126,courier,mean courier rating,rank,courier-01,3.000000
+400,2027,5126,courier,mean courier rating,value,courier-01,3.754717
+400,2027,5126,courier,mean courier rating,rank,courier-02,1.000000
+400,2027,5126,courier,mean courier rating,value,courier-02,3.446429
+400,2028,5440,restaurant,excess,value,rest-00,-0.093317
+400,2028,5440,restaurant,excess,value,rest-01,-0.072273
+400,2028,5440,restaurant,excess,value,rest-02,-0.208021
+400,2028,5440,restaurant,mean minutes late,precision at 2,,1.000000
+400,2028,5440,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2028,5440,restaurant,mean minutes late,value,rest-00,5.757240
+400,2028,5440,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2028,5440,restaurant,mean minutes late,value,rest-01,4.651263
+400,2028,5440,restaurant,mean food rating,precision at 1,,1.000000
+400,2028,5440,restaurant,mean food rating,rank,rest-02,1.000000
+400,2028,5440,restaurant,mean food rating,value,rest-02,3.301587
+400,2028,5440,restaurant,plain means,precision at 3,,1.000000
+400,2028,5440,courier,excess,value,courier-00,-0.053327
+400,2028,5440,courier,excess,value,courier-01,-0.059704
+400,2028,5440,courier,excess,value,courier-02,-0.059265
+400,2028,5440,courier,mean courier rating,precision at 3,,1.000000
+400,2028,5440,courier,mean courier rating,rank,courier-00,1.000000
+400,2028,5440,courier,mean courier rating,value,courier-00,3.666667
+400,2028,5440,courier,mean courier rating,rank,courier-01,3.000000
+400,2028,5440,courier,mean courier rating,value,courier-01,3.827586
+400,2028,5440,courier,mean courier rating,rank,courier-02,2.000000
+400,2028,5440,courier,mean courier rating,value,courier-02,3.742857
+400,2029,4908,restaurant,excess,value,rest-00,-0.097095
+400,2029,4908,restaurant,excess,value,rest-01,-0.099913
+400,2029,4908,restaurant,excess,value,rest-02,-0.184425
+400,2029,4908,restaurant,mean minutes late,precision at 2,,1.000000
+400,2029,4908,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2029,4908,restaurant,mean minutes late,value,rest-00,5.614298
+400,2029,4908,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2029,4908,restaurant,mean minutes late,value,rest-01,6.009615
+400,2029,4908,restaurant,mean food rating,precision at 1,,1.000000
+400,2029,4908,restaurant,mean food rating,rank,rest-02,1.000000
+400,2029,4908,restaurant,mean food rating,value,rest-02,3.301887
+400,2029,4908,restaurant,plain means,precision at 3,,1.000000
+400,2029,4908,courier,excess,value,courier-00,-0.074170
+400,2029,4908,courier,excess,value,courier-01,-0.071099
+400,2029,4908,courier,excess,value,courier-02,-0.070385
+400,2029,4908,courier,mean courier rating,precision at 3,,1.000000
+400,2029,4908,courier,mean courier rating,rank,courier-00,1.000000
+400,2029,4908,courier,mean courier rating,value,courier-00,3.428571
+400,2029,4908,courier,mean courier rating,rank,courier-01,3.000000
+400,2029,4908,courier,mean courier rating,value,courier-01,3.676056
+400,2029,4908,courier,mean courier rating,rank,courier-02,2.000000
+400,2029,4908,courier,mean courier rating,value,courier-02,3.434783
+400,2030,4905,restaurant,excess,value,rest-00,-0.091598
+400,2030,4905,restaurant,excess,value,rest-01,-0.103157
+400,2030,4905,restaurant,excess,value,rest-02,-0.214214
+400,2030,4905,restaurant,mean minutes late,precision at 2,,1.000000
+400,2030,4905,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2030,4905,restaurant,mean minutes late,value,rest-00,6.103533
+400,2030,4905,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2030,4905,restaurant,mean minutes late,value,rest-01,6.494443
+400,2030,4905,restaurant,mean food rating,precision at 1,,1.000000
+400,2030,4905,restaurant,mean food rating,rank,rest-02,1.000000
+400,2030,4905,restaurant,mean food rating,value,rest-02,3.258333
+400,2030,4905,restaurant,plain means,precision at 3,,1.000000
+400,2030,4905,courier,excess,value,courier-00,-0.061915
+400,2030,4905,courier,excess,value,courier-01,-0.069348
+400,2030,4905,courier,excess,value,courier-02,-0.087807
+400,2030,4905,courier,mean courier rating,precision at 3,,1.000000
+400,2030,4905,courier,mean courier rating,rank,courier-00,3.000000
+400,2030,4905,courier,mean courier rating,value,courier-00,3.689655
+400,2030,4905,courier,mean courier rating,rank,courier-01,2.000000
+400,2030,4905,courier,mean courier rating,value,courier-01,3.678571
+400,2030,4905,courier,mean courier rating,rank,courier-02,1.000000
+400,2030,4905,courier,mean courier rating,value,courier-02,3.318182
+400,2031,5126,restaurant,excess,value,rest-00,-0.114854
+400,2031,5126,restaurant,excess,value,rest-01,-0.095023
+400,2031,5126,restaurant,excess,value,rest-02,-0.172429
+400,2031,5126,restaurant,mean minutes late,precision at 2,,1.000000
+400,2031,5126,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2031,5126,restaurant,mean minutes late,value,rest-00,6.477471
+400,2031,5126,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2031,5126,restaurant,mean minutes late,value,rest-01,5.289840
+400,2031,5126,restaurant,mean food rating,precision at 1,,1.000000
+400,2031,5126,restaurant,mean food rating,rank,rest-02,1.000000
+400,2031,5126,restaurant,mean food rating,value,rest-02,3.439252
+400,2031,5126,restaurant,plain means,precision at 3,,1.000000
+400,2031,5126,courier,excess,value,courier-00,-0.063517
+400,2031,5126,courier,excess,value,courier-01,-0.064973
+400,2031,5126,courier,excess,value,courier-02,-0.088298
+400,2031,5126,courier,mean courier rating,precision at 3,,1.000000
+400,2031,5126,courier,mean courier rating,rank,courier-00,3.000000
+400,2031,5126,courier,mean courier rating,value,courier-00,3.731343
+400,2031,5126,courier,mean courier rating,rank,courier-01,2.000000
+400,2031,5126,courier,mean courier rating,value,courier-01,3.530612
+400,2031,5126,courier,mean courier rating,rank,courier-02,1.000000
+400,2031,5126,courier,mean courier rating,value,courier-02,3.516667
+400,2032,5515,restaurant,excess,value,rest-00,-0.111229
+400,2032,5515,restaurant,excess,value,rest-01,-0.099637
+400,2032,5515,restaurant,excess,value,rest-02,-0.203784
+400,2032,5515,restaurant,mean minutes late,precision at 2,,1.000000
+400,2032,5515,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2032,5515,restaurant,mean minutes late,value,rest-00,6.500577
+400,2032,5515,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2032,5515,restaurant,mean minutes late,value,rest-01,5.591835
+400,2032,5515,restaurant,mean food rating,precision at 1,,1.000000
+400,2032,5515,restaurant,mean food rating,rank,rest-02,1.000000
+400,2032,5515,restaurant,mean food rating,value,rest-02,3.370079
+400,2032,5515,restaurant,plain means,precision at 3,,1.000000
+400,2032,5515,courier,excess,value,courier-00,-0.045112
+400,2032,5515,courier,excess,value,courier-01,-0.085379
+400,2032,5515,courier,excess,value,courier-02,-0.070857
+400,2032,5515,courier,mean courier rating,precision at 3,,1.000000
+400,2032,5515,courier,mean courier rating,rank,courier-00,3.000000
+400,2032,5515,courier,mean courier rating,value,courier-00,3.672727
+400,2032,5515,courier,mean courier rating,rank,courier-01,1.000000
+400,2032,5515,courier,mean courier rating,value,courier-01,3.338235
+400,2032,5515,courier,mean courier rating,rank,courier-02,2.000000
+400,2032,5515,courier,mean courier rating,value,courier-02,3.528302
+400,2033,5247,restaurant,excess,value,rest-00,-0.117873
+400,2033,5247,restaurant,excess,value,rest-01,-0.100801
+400,2033,5247,restaurant,excess,value,rest-02,-0.187889
+400,2033,5247,restaurant,mean minutes late,precision at 2,,1.000000
+400,2033,5247,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2033,5247,restaurant,mean minutes late,value,rest-00,6.598126
+400,2033,5247,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2033,5247,restaurant,mean minutes late,value,rest-01,5.481636
+400,2033,5247,restaurant,mean food rating,precision at 1,,1.000000
+400,2033,5247,restaurant,mean food rating,rank,rest-02,1.000000
+400,2033,5247,restaurant,mean food rating,value,rest-02,3.412698
+400,2033,5247,restaurant,plain means,precision at 3,,1.000000
+400,2033,5247,courier,excess,value,courier-00,-0.041360
+400,2033,5247,courier,excess,value,courier-01,-0.049685
+400,2033,5247,courier,excess,value,courier-02,-0.056000
+400,2033,5247,courier,mean courier rating,precision at 3,,1.000000
+400,2033,5247,courier,mean courier rating,rank,courier-00,3.000000
+400,2033,5247,courier,mean courier rating,value,courier-00,3.795455
+400,2033,5247,courier,mean courier rating,rank,courier-01,2.000000
+400,2033,5247,courier,mean courier rating,value,courier-01,3.775862
+400,2033,5247,courier,mean courier rating,rank,courier-02,1.000000
+400,2033,5247,courier,mean courier rating,value,courier-02,3.701754
+400,2034,4896,restaurant,excess,value,rest-00,-0.089987
+400,2034,4896,restaurant,excess,value,rest-01,-0.101386
+400,2034,4896,restaurant,excess,value,rest-02,-0.155143
+400,2034,4896,restaurant,mean minutes late,precision at 2,,1.000000
+400,2034,4896,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2034,4896,restaurant,mean minutes late,value,rest-00,4.928703
+400,2034,4896,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2034,4896,restaurant,mean minutes late,value,rest-01,5.316458
+400,2034,4896,restaurant,mean food rating,precision at 1,,1.000000
+400,2034,4896,restaurant,mean food rating,rank,rest-02,1.000000
+400,2034,4896,restaurant,mean food rating,value,rest-02,3.594340
+400,2034,4896,restaurant,plain means,precision at 3,,1.000000
+400,2034,4896,courier,excess,value,courier-00,-0.061789
+400,2034,4896,courier,excess,value,courier-01,-0.052518
+400,2034,4896,courier,excess,value,courier-02,-0.057519
+400,2034,4896,courier,mean courier rating,precision at 3,,1.000000
+400,2034,4896,courier,mean courier rating,rank,courier-00,1.000000
+400,2034,4896,courier,mean courier rating,value,courier-00,3.588235
+400,2034,4896,courier,mean courier rating,rank,courier-01,3.000000
+400,2034,4896,courier,mean courier rating,value,courier-01,3.702128
+400,2034,4896,courier,mean courier rating,rank,courier-02,2.000000
+400,2034,4896,courier,mean courier rating,value,courier-02,3.625000
+400,2035,4956,restaurant,excess,value,rest-00,-0.124518
+400,2035,4956,restaurant,excess,value,rest-01,-0.085546
+400,2035,4956,restaurant,excess,value,rest-02,-0.213376
+400,2035,4956,restaurant,mean minutes late,precision at 2,,1.000000
+400,2035,4956,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2035,4956,restaurant,mean minutes late,value,rest-00,7.219403
+400,2035,4956,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2035,4956,restaurant,mean minutes late,value,rest-01,5.745686
+400,2035,4956,restaurant,mean food rating,precision at 1,,1.000000
+400,2035,4956,restaurant,mean food rating,rank,rest-02,1.000000
+400,2035,4956,restaurant,mean food rating,value,rest-02,3.428571
+400,2035,4956,restaurant,plain means,precision at 3,,1.000000
+400,2035,4956,courier,excess,value,courier-00,-0.060451
+400,2035,4956,courier,excess,value,courier-01,-0.073942
+400,2035,4956,courier,excess,value,courier-02,-0.076073
+400,2035,4956,courier,mean courier rating,precision at 3,,1.000000
+400,2035,4956,courier,mean courier rating,rank,courier-00,3.000000
+400,2035,4956,courier,mean courier rating,value,courier-00,3.522727
+400,2035,4956,courier,mean courier rating,rank,courier-01,1.000000
+400,2035,4956,courier,mean courier rating,value,courier-01,3.446809
+400,2035,4956,courier,mean courier rating,rank,courier-02,2.000000
+400,2035,4956,courier,mean courier rating,value,courier-02,3.483333
+400,2036,5014,restaurant,excess,value,rest-00,-0.134633
+400,2036,5014,restaurant,excess,value,rest-01,-0.108445
+400,2036,5014,restaurant,excess,value,rest-02,-0.208669
+400,2036,5014,restaurant,mean minutes late,precision at 2,,1.000000
+400,2036,5014,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2036,5014,restaurant,mean minutes late,value,rest-00,7.585388
+400,2036,5014,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2036,5014,restaurant,mean minutes late,value,rest-01,6.672828
+400,2036,5014,restaurant,mean food rating,precision at 1,,1.000000
+400,2036,5014,restaurant,mean food rating,rank,rest-02,1.000000
+400,2036,5014,restaurant,mean food rating,value,rest-02,3.341667
+400,2036,5014,restaurant,plain means,precision at 3,,1.000000
+400,2036,5014,courier,excess,value,courier-00,-0.075714
+400,2036,5014,courier,excess,value,courier-01,-0.059910
+400,2036,5014,courier,excess,value,courier-02,-0.087129
+400,2036,5014,courier,mean courier rating,precision at 3,,1.000000
+400,2036,5014,courier,mean courier rating,rank,courier-00,1.000000
+400,2036,5014,courier,mean courier rating,value,courier-00,3.396226
+400,2036,5014,courier,mean courier rating,rank,courier-01,3.000000
+400,2036,5014,courier,mean courier rating,value,courier-01,3.566038
+400,2036,5014,courier,mean courier rating,rank,courier-02,2.000000
+400,2036,5014,courier,mean courier rating,value,courier-02,3.539683
+400,2037,5127,restaurant,excess,value,rest-00,-0.083013
+400,2037,5127,restaurant,excess,value,rest-01,-0.104523
+400,2037,5127,restaurant,excess,value,rest-02,-0.181878
+400,2037,5127,restaurant,mean minutes late,precision at 2,,1.000000
+400,2037,5127,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2037,5127,restaurant,mean minutes late,value,rest-00,5.484539
+400,2037,5127,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2037,5127,restaurant,mean minutes late,value,rest-01,6.316888
+400,2037,5127,restaurant,mean food rating,precision at 1,,1.000000
+400,2037,5127,restaurant,mean food rating,rank,rest-02,1.000000
+400,2037,5127,restaurant,mean food rating,value,rest-02,3.336364
+400,2037,5127,restaurant,plain means,precision at 3,,1.000000
+400,2037,5127,courier,excess,value,courier-00,-0.065596
+400,2037,5127,courier,excess,value,courier-01,-0.060204
+400,2037,5127,courier,excess,value,courier-02,-0.070381
+400,2037,5127,courier,mean courier rating,precision at 3,,1.000000
+400,2037,5127,courier,mean courier rating,rank,courier-00,2.000000
+400,2037,5127,courier,mean courier rating,value,courier-00,3.581818
+400,2037,5127,courier,mean courier rating,rank,courier-01,1.000000
+400,2037,5127,courier,mean courier rating,value,courier-01,3.545455
+400,2037,5127,courier,mean courier rating,rank,courier-02,3.000000
+400,2037,5127,courier,mean courier rating,value,courier-02,3.588235
+400,2038,5030,restaurant,excess,value,rest-00,-0.101606
+400,2038,5030,restaurant,excess,value,rest-01,-0.084247
+400,2038,5030,restaurant,excess,value,rest-02,-0.202697
+400,2038,5030,restaurant,mean minutes late,precision at 2,,1.000000
+400,2038,5030,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2038,5030,restaurant,mean minutes late,value,rest-00,5.655743
+400,2038,5030,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2038,5030,restaurant,mean minutes late,value,rest-01,5.097889
+400,2038,5030,restaurant,mean food rating,precision at 1,,1.000000
+400,2038,5030,restaurant,mean food rating,rank,rest-02,1.000000
+400,2038,5030,restaurant,mean food rating,value,rest-02,3.338983
+400,2038,5030,restaurant,plain means,precision at 3,,1.000000
+400,2038,5030,courier,excess,value,courier-00,-0.077156
+400,2038,5030,courier,excess,value,courier-01,-0.070522
+400,2038,5030,courier,excess,value,courier-02,-0.039487
+400,2038,5030,courier,mean courier rating,precision at 3,,1.000000
+400,2038,5030,courier,mean courier rating,rank,courier-00,1.000000
+400,2038,5030,courier,mean courier rating,value,courier-00,3.610169
+400,2038,5030,courier,mean courier rating,rank,courier-01,3.000000
+400,2038,5030,courier,mean courier rating,value,courier-01,3.758065
+400,2038,5030,courier,mean courier rating,rank,courier-02,2.000000
+400,2038,5030,courier,mean courier rating,value,courier-02,3.628571
+400,2039,5154,restaurant,excess,value,rest-00,-0.139070
+400,2039,5154,restaurant,excess,value,rest-01,-0.103255
+400,2039,5154,restaurant,excess,value,rest-02,-0.199303
+400,2039,5154,restaurant,mean minutes late,precision at 2,,1.000000
+400,2039,5154,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2039,5154,restaurant,mean minutes late,value,rest-00,7.876783
+400,2039,5154,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2039,5154,restaurant,mean minutes late,value,rest-01,6.324714
+400,2039,5154,restaurant,mean food rating,precision at 1,,1.000000
+400,2039,5154,restaurant,mean food rating,rank,rest-02,1.000000
+400,2039,5154,restaurant,mean food rating,value,rest-02,3.312977
+400,2039,5154,restaurant,plain means,precision at 3,,1.000000
+400,2039,5154,courier,excess,value,courier-00,-0.080953
+400,2039,5154,courier,excess,value,courier-01,-0.088137
+400,2039,5154,courier,excess,value,courier-02,-0.061729
+400,2039,5154,courier,mean courier rating,precision at 3,,1.000000
+400,2039,5154,courier,mean courier rating,rank,courier-00,1.000000
+400,2039,5154,courier,mean courier rating,value,courier-00,3.350877
+400,2039,5154,courier,mean courier rating,rank,courier-01,2.000000
+400,2039,5154,courier,mean courier rating,value,courier-01,3.486486
+400,2039,5154,courier,mean courier rating,rank,courier-02,3.000000
+400,2039,5154,courier,mean courier rating,value,courier-02,3.622642
+400,2040,5182,restaurant,excess,value,rest-00,-0.106833
+400,2040,5182,restaurant,excess,value,rest-01,-0.117796
+400,2040,5182,restaurant,excess,value,rest-02,-0.184846
+400,2040,5182,restaurant,mean minutes late,precision at 2,,1.000000
+400,2040,5182,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2040,5182,restaurant,mean minutes late,value,rest-00,5.955315
+400,2040,5182,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2040,5182,restaurant,mean minutes late,value,rest-01,5.998109
+400,2040,5182,restaurant,mean food rating,precision at 1,,1.000000
+400,2040,5182,restaurant,mean food rating,rank,rest-02,1.000000
+400,2040,5182,restaurant,mean food rating,value,rest-02,3.349593
+400,2040,5182,restaurant,plain means,precision at 3,,1.000000
+400,2040,5182,courier,excess,value,courier-00,-0.092233
+400,2040,5182,courier,excess,value,courier-01,-0.078350
+400,2040,5182,courier,excess,value,courier-02,-0.082350
+400,2040,5182,courier,mean courier rating,precision at 3,,1.000000
+400,2040,5182,courier,mean courier rating,rank,courier-00,2.000000
+400,2040,5182,courier,mean courier rating,value,courier-00,3.521127
+400,2040,5182,courier,mean courier rating,rank,courier-01,3.000000
+400,2040,5182,courier,mean courier rating,value,courier-01,3.718750
+400,2040,5182,courier,mean courier rating,rank,courier-02,1.000000
+400,2040,5182,courier,mean courier rating,value,courier-02,3.416667
+400,2041,4975,restaurant,excess,value,rest-00,-0.117730
+400,2041,4975,restaurant,excess,value,rest-01,-0.132116
+400,2041,4975,restaurant,excess,value,rest-02,-0.201493
+400,2041,4975,restaurant,mean minutes late,precision at 2,,1.000000
+400,2041,4975,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2041,4975,restaurant,mean minutes late,value,rest-00,6.731598
+400,2041,4975,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2041,4975,restaurant,mean minutes late,value,rest-01,7.126122
+400,2041,4975,restaurant,mean food rating,precision at 1,,1.000000
+400,2041,4975,restaurant,mean food rating,rank,rest-02,1.000000
+400,2041,4975,restaurant,mean food rating,value,rest-02,3.381818
+400,2041,4975,restaurant,plain means,precision at 3,,1.000000
+400,2041,4975,courier,excess,value,courier-00,-0.059959
+400,2041,4975,courier,excess,value,courier-01,-0.061899
+400,2041,4975,courier,excess,value,courier-02,-0.079275
+400,2041,4975,courier,mean courier rating,precision at 3,,1.000000
+400,2041,4975,courier,mean courier rating,rank,courier-00,2.000000
+400,2041,4975,courier,mean courier rating,value,courier-00,3.584906
+400,2041,4975,courier,mean courier rating,rank,courier-01,3.000000
+400,2041,4975,courier,mean courier rating,value,courier-01,3.644068
+400,2041,4975,courier,mean courier rating,rank,courier-02,1.000000
+400,2041,4975,courier,mean courier rating,value,courier-02,3.467742
+400,2042,5351,restaurant,excess,value,rest-00,-0.156373
+400,2042,5351,restaurant,excess,value,rest-01,-0.088259
+400,2042,5351,restaurant,excess,value,rest-02,-0.217893
+400,2042,5351,restaurant,mean minutes late,precision at 2,,1.000000
+400,2042,5351,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2042,5351,restaurant,mean minutes late,value,rest-00,8.056816
+400,2042,5351,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2042,5351,restaurant,mean minutes late,value,rest-01,4.817099
+400,2042,5351,restaurant,mean food rating,precision at 1,,1.000000
+400,2042,5351,restaurant,mean food rating,rank,rest-02,1.000000
+400,2042,5351,restaurant,mean food rating,value,rest-02,3.368421
+400,2042,5351,restaurant,plain means,precision at 3,,1.000000
+400,2042,5351,courier,excess,value,courier-00,-0.056861
+400,2042,5351,courier,excess,value,courier-01,-0.081688
+400,2042,5351,courier,excess,value,courier-02,-0.102467
+400,2042,5351,courier,mean courier rating,precision at 3,,1.000000
+400,2042,5351,courier,mean courier rating,rank,courier-00,3.000000
+400,2042,5351,courier,mean courier rating,value,courier-00,3.705882
+400,2042,5351,courier,mean courier rating,rank,courier-01,2.000000
+400,2042,5351,courier,mean courier rating,value,courier-01,3.450980
+400,2042,5351,courier,mean courier rating,rank,courier-02,1.000000
+400,2042,5351,courier,mean courier rating,value,courier-02,3.205882
+400,2043,5100,restaurant,excess,value,rest-00,-0.130221
+400,2043,5100,restaurant,excess,value,rest-01,-0.097228
+400,2043,5100,restaurant,excess,value,rest-02,-0.174855
+400,2043,5100,restaurant,mean minutes late,precision at 2,,1.000000
+400,2043,5100,restaurant,mean minutes late,rank,rest-00,1.000000
+400,2043,5100,restaurant,mean minutes late,value,rest-00,6.864123
+400,2043,5100,restaurant,mean minutes late,rank,rest-01,2.000000
+400,2043,5100,restaurant,mean minutes late,value,rest-01,5.246386
+400,2043,5100,restaurant,mean food rating,precision at 1,,1.000000
+400,2043,5100,restaurant,mean food rating,rank,rest-02,1.000000
+400,2043,5100,restaurant,mean food rating,value,rest-02,3.322917
+400,2043,5100,restaurant,plain means,precision at 3,,1.000000
+400,2043,5100,courier,excess,value,courier-00,-0.049766
+400,2043,5100,courier,excess,value,courier-01,-0.052003
+400,2043,5100,courier,excess,value,courier-02,-0.068993
+400,2043,5100,courier,mean courier rating,precision at 3,,1.000000
+400,2043,5100,courier,mean courier rating,rank,courier-00,3.000000
+400,2043,5100,courier,mean courier rating,value,courier-00,3.830769
+400,2043,5100,courier,mean courier rating,rank,courier-01,2.000000
+400,2043,5100,courier,mean courier rating,value,courier-01,3.604167
+400,2043,5100,courier,mean courier rating,rank,courier-02,1.000000
+400,2043,5100,courier,mean courier rating,value,courier-02,3.568966
+400,2044,5006,restaurant,excess,value,rest-00,-0.081889
+400,2044,5006,restaurant,excess,value,rest-01,-0.124245
+400,2044,5006,restaurant,excess,value,rest-02,-0.215560
+400,2044,5006,restaurant,mean minutes late,precision at 2,,1.000000
+400,2044,5006,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2044,5006,restaurant,mean minutes late,value,rest-00,4.668620
+400,2044,5006,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2044,5006,restaurant,mean minutes late,value,rest-01,6.762732
+400,2044,5006,restaurant,mean food rating,precision at 1,,1.000000
+400,2044,5006,restaurant,mean food rating,rank,rest-02,1.000000
+400,2044,5006,restaurant,mean food rating,value,rest-02,3.266667
+400,2044,5006,restaurant,plain means,precision at 3,,1.000000
+400,2044,5006,courier,excess,value,courier-00,-0.062789
+400,2044,5006,courier,excess,value,courier-01,-0.067717
+400,2044,5006,courier,excess,value,courier-02,-0.065011
+400,2044,5006,courier,mean courier rating,precision at 3,,1.000000
+400,2044,5006,courier,mean courier rating,rank,courier-00,2.000000
+400,2044,5006,courier,mean courier rating,value,courier-00,3.509434
+400,2044,5006,courier,mean courier rating,rank,courier-01,3.000000
+400,2044,5006,courier,mean courier rating,value,courier-01,3.603448
+400,2044,5006,courier,mean courier rating,rank,courier-02,1.000000
+400,2044,5006,courier,mean courier rating,value,courier-02,3.428571
+400,2045,5268,restaurant,excess,value,rest-00,-0.097365
+400,2045,5268,restaurant,excess,value,rest-01,-0.120582
+400,2045,5268,restaurant,excess,value,rest-02,-0.191667
+400,2045,5268,restaurant,mean minutes late,precision at 2,,1.000000
+400,2045,5268,restaurant,mean minutes late,rank,rest-00,2.000000
+400,2045,5268,restaurant,mean minutes late,value,rest-00,5.785814
+400,2045,5268,restaurant,mean minutes late,rank,rest-01,1.000000
+400,2045,5268,restaurant,mean minutes late,value,rest-01,7.117638
+400,2045,5268,restaurant,mean food rating,precision at 1,,1.000000
+400,2045,5268,restaurant,mean food rating,rank,rest-02,1.000000
+400,2045,5268,restaurant,mean food rating,value,rest-02,3.358333
+400,2045,5268,restaurant,plain means,precision at 3,,1.000000
+400,2045,5268,courier,excess,value,courier-00,-0.091715
+400,2045,5268,courier,excess,value,courier-01,-0.036418
+400,2045,5268,courier,excess,value,courier-02,-0.096183
+400,2045,5268,courier,mean courier rating,precision at 3,,1.000000
+400,2045,5268,courier,mean courier rating,rank,courier-00,2.000000
+400,2045,5268,courier,mean courier rating,value,courier-00,3.438596
+400,2045,5268,courier,mean courier rating,rank,courier-01,3.000000
+400,2045,5268,courier,mean courier rating,value,courier-01,3.862745
+400,2045,5268,courier,mean courier rating,rank,courier-02,1.000000
+400,2045,5268,courier,mean courier rating,value,courier-02,3.163934
+50,2026,658,restaurant,excess,"worst value, nothing planted",rest-12,-0.052288
+50,2026,658,restaurant,mean minutes late,"worst value, nothing planted",rest-09,4.603289
+50,2026,658,restaurant,mean food rating,"worst value, nothing planted",rest-28,3.750000
+50,2026,658,courier,excess,"worst value, nothing planted",courier-00,-0.068966
+50,2026,658,courier,mean courier rating,"worst value, nothing planted",courier-20,2.500000
+50,2027,679,restaurant,excess,"worst value, nothing planted",rest-13,-0.059448
+50,2027,679,restaurant,mean minutes late,"worst value, nothing planted",rest-11,5.202868
+50,2027,679,restaurant,mean food rating,"worst value, nothing planted",rest-28,4.000000
+50,2027,679,courier,excess,"worst value, nothing planted",courier-04,-0.119047
+50,2027,679,courier,mean courier rating,"worst value, nothing planted",courier-10,3.750000
+50,2028,690,restaurant,excess,"worst value, nothing planted",rest-04,-0.051556
+50,2028,690,restaurant,mean minutes late,"worst value, nothing planted",rest-39,3.294026
+50,2028,690,restaurant,mean food rating,"worst value, nothing planted",rest-23,3.333333
+50,2028,690,courier,excess,"worst value, nothing planted",courier-08,-0.132253
+50,2028,690,courier,mean courier rating,"worst value, nothing planted",courier-23,2.000000
+50,2029,689,restaurant,excess,"worst value, nothing planted",rest-30,-0.082429
+50,2029,689,restaurant,mean minutes late,"worst value, nothing planted",rest-01,4.593695
+50,2029,689,restaurant,mean food rating,"worst value, nothing planted",rest-08,3.333333
+50,2029,689,courier,excess,"worst value, nothing planted",courier-51,-0.089973
+50,2029,689,courier,mean courier rating,"worst value, nothing planted",courier-22,2.000000
+50,2030,542,restaurant,excess,"worst value, nothing planted",rest-30,-0.098440
+50,2030,542,restaurant,mean minutes late,"worst value, nothing planted",rest-30,5.922020
+50,2030,542,restaurant,mean food rating,"worst value, nothing planted",rest-11,3.500000
+50,2030,542,courier,excess,"worst value, nothing planted",courier-35,-0.136250
+50,2030,542,courier,mean courier rating,"worst value, nothing planted",courier-49,2.000000
+50,2031,567,restaurant,excess,"worst value, nothing planted",rest-38,-0.064521
+50,2031,567,restaurant,mean minutes late,"worst value, nothing planted",rest-32,5.125110
+50,2031,567,restaurant,mean food rating,"worst value, nothing planted",rest-39,3.500000
+50,2031,567,courier,excess,"worst value, nothing planted",courier-19,-0.140194
+50,2031,567,courier,mean courier rating,"worst value, nothing planted",courier-46,3.500000
+50,2032,707,restaurant,excess,"worst value, nothing planted",rest-19,-0.093943
+50,2032,707,restaurant,mean minutes late,"worst value, nothing planted",rest-19,6.217029
+50,2032,707,restaurant,mean food rating,"worst value, nothing planted",rest-21,3.666667
+50,2032,707,courier,excess,"worst value, nothing planted",courier-11,-0.125567
+50,2032,707,courier,mean courier rating,"worst value, nothing planted",courier-43,3.000000
+50,2033,666,restaurant,excess,"worst value, nothing planted",rest-07,-0.099501
+50,2033,666,restaurant,mean minutes late,"worst value, nothing planted",rest-07,5.475665
+50,2033,666,restaurant,mean food rating,"worst value, nothing planted",rest-08,3.666667
+50,2033,666,courier,excess,"worst value, nothing planted",courier-18,-0.102751
+50,2033,666,courier,mean courier rating,"worst value, nothing planted",courier-27,3.000000
+50,2034,605,restaurant,excess,"worst value, nothing planted",rest-21,-0.083957
+50,2034,605,restaurant,mean minutes late,"worst value, nothing planted",rest-21,5.724857
+50,2034,605,restaurant,mean food rating,"worst value, nothing planted",rest-26,3.500000
+50,2034,605,courier,excess,"worst value, nothing planted",courier-21,-0.132184
+50,2034,605,courier,mean courier rating,"worst value, nothing planted",courier-30,3.500000
+50,2035,735,restaurant,excess,"worst value, nothing planted",rest-16,-0.090974
+50,2035,735,restaurant,mean minutes late,"worst value, nothing planted",rest-06,5.093559
+50,2035,735,restaurant,mean food rating,"worst value, nothing planted",rest-39,3.666667
+50,2035,735,courier,excess,"worst value, nothing planted",courier-29,-0.102947
+50,2035,735,courier,mean courier rating,"worst value, nothing planted",courier-57,3.000000
+50,2036,626,restaurant,excess,"worst value, nothing planted",rest-03,-0.089743
+50,2036,626,restaurant,mean minutes late,"worst value, nothing planted",rest-08,6.350732
+50,2036,626,restaurant,mean food rating,"worst value, nothing planted",rest-03,3.750000
+50,2036,626,courier,excess,"worst value, nothing planted",courier-33,-0.118334
+50,2036,626,courier,mean courier rating,"worst value, nothing planted",courier-22,3.666667
+50,2037,620,restaurant,excess,"worst value, nothing planted",rest-29,-0.080855
+50,2037,620,restaurant,mean minutes late,"worst value, nothing planted",rest-10,5.400741
+50,2037,620,restaurant,mean food rating,"worst value, nothing planted",rest-29,3.666667
+50,2037,620,courier,excess,"worst value, nothing planted",courier-14,-0.103786
+50,2037,620,courier,mean courier rating,"worst value, nothing planted",courier-43,2.000000
+50,2038,668,restaurant,excess,"worst value, nothing planted",rest-28,-0.107314
+50,2038,668,restaurant,mean minutes late,"worst value, nothing planted",rest-28,5.533318
+50,2038,668,restaurant,mean food rating,"worst value, nothing planted",rest-13,3.666667
+50,2038,668,courier,excess,"worst value, nothing planted",courier-33,-0.093736
+50,2038,668,courier,mean courier rating,"worst value, nothing planted",courier-22,3.500000
+50,2039,774,restaurant,excess,"worst value, nothing planted",rest-34,-0.105774
+50,2039,774,restaurant,mean minutes late,"worst value, nothing planted",rest-37,5.295759
+50,2039,774,restaurant,mean food rating,"worst value, nothing planted",rest-18,3.666667
+50,2039,774,courier,excess,"worst value, nothing planted",courier-02,-0.152797
+50,2039,774,courier,mean courier rating,"worst value, nothing planted",courier-47,3.200000
+50,2040,614,restaurant,excess,"worst value, nothing planted",rest-05,-0.094745
+50,2040,614,restaurant,mean minutes late,"worst value, nothing planted",rest-21,5.852063
+50,2040,614,restaurant,mean food rating,"worst value, nothing planted",rest-38,3.666667
+50,2040,614,courier,excess,"worst value, nothing planted",courier-06,-0.179852
+50,2040,614,courier,mean courier rating,"worst value, nothing planted",courier-39,3.333333
+50,2041,651,restaurant,excess,"worst value, nothing planted",rest-20,-0.101483
+50,2041,651,restaurant,mean minutes late,"worst value, nothing planted",rest-20,6.193986
+50,2041,651,restaurant,mean food rating,"worst value, nothing planted",rest-35,3.333333
+50,2041,651,courier,excess,"worst value, nothing planted",courier-18,-0.159488
+50,2041,651,courier,mean courier rating,"worst value, nothing planted",courier-09,3.500000
+50,2042,716,restaurant,excess,"worst value, nothing planted",rest-05,-0.061128
+50,2042,716,restaurant,mean minutes late,"worst value, nothing planted",rest-15,3.522014
+50,2042,716,restaurant,mean food rating,"worst value, nothing planted",rest-28,3.600000
+50,2042,716,courier,excess,"worst value, nothing planted",courier-40,-0.110938
+50,2042,716,courier,mean courier rating,"worst value, nothing planted",courier-26,3.000000
+50,2043,666,restaurant,excess,"worst value, nothing planted",rest-04,-0.070315
+50,2043,666,restaurant,mean minutes late,"worst value, nothing planted",rest-38,3.560512
+50,2043,666,restaurant,mean food rating,"worst value, nothing planted",rest-24,3.000000
+50,2043,666,courier,excess,"worst value, nothing planted",courier-25,-0.105039
+50,2043,666,courier,mean courier rating,"worst value, nothing planted",courier-43,3.500000
+50,2044,609,restaurant,excess,"worst value, nothing planted",rest-14,-0.119968
+50,2044,609,restaurant,mean minutes late,"worst value, nothing planted",rest-01,3.438358
+50,2044,609,restaurant,mean food rating,"worst value, nothing planted",rest-14,3.400000
+50,2044,609,courier,excess,"worst value, nothing planted",courier-16,-0.160989
+50,2044,609,courier,mean courier rating,"worst value, nothing planted",courier-11,2.000000
+50,2045,688,restaurant,excess,"worst value, nothing planted",rest-23,-0.113175
+50,2045,688,restaurant,mean minutes late,"worst value, nothing planted",rest-19,5.194991
+50,2045,688,restaurant,mean food rating,"worst value, nothing planted",rest-23,3.500000
+50,2045,688,courier,excess,"worst value, nothing planted",courier-50,-0.111994
+50,2045,688,courier,mean courier rating,"worst value, nothing planted",courier-00,3.000000
+100,2026,1358,restaurant,excess,"worst value, nothing planted",rest-01,-0.049933
+100,2026,1358,restaurant,mean minutes late,"worst value, nothing planted",rest-01,3.776153
+100,2026,1358,restaurant,mean food rating,"worst value, nothing planted",rest-03,3.928571
+100,2026,1358,courier,excess,"worst value, nothing planted",courier-33,-0.070937
+100,2026,1358,courier,mean courier rating,"worst value, nothing planted",courier-20,3.500000
+100,2027,1337,restaurant,excess,"worst value, nothing planted",rest-22,-0.056871
+100,2027,1337,restaurant,mean minutes late,"worst value, nothing planted",rest-22,4.148284
+100,2027,1337,restaurant,mean food rating,"worst value, nothing planted",rest-16,3.833333
+100,2027,1337,courier,excess,"worst value, nothing planted",courier-25,-0.073414
+100,2027,1337,courier,mean courier rating,"worst value, nothing planted",courier-11,3.875000
+100,2028,1400,restaurant,excess,"worst value, nothing planted",rest-18,-0.053610
+100,2028,1400,restaurant,mean minutes late,"worst value, nothing planted",rest-30,4.250658
+100,2028,1400,restaurant,mean food rating,"worst value, nothing planted",rest-05,3.875000
+100,2028,1400,courier,excess,"worst value, nothing planted",courier-08,-0.059284
+100,2028,1400,courier,mean courier rating,"worst value, nothing planted",courier-26,3.750000
+100,2029,1284,restaurant,excess,"worst value, nothing planted",rest-30,-0.070342
+100,2029,1284,restaurant,mean minutes late,"worst value, nothing planted",rest-04,4.396589
+100,2029,1284,restaurant,mean food rating,"worst value, nothing planted",rest-25,3.700000
+100,2029,1284,courier,excess,"worst value, nothing planted",courier-27,-0.061713
+100,2029,1284,courier,mean courier rating,"worst value, nothing planted",courier-05,3.600000
+100,2030,1169,restaurant,excess,"worst value, nothing planted",rest-38,-0.065355
+100,2030,1169,restaurant,mean minutes late,"worst value, nothing planted",rest-38,4.849886
+100,2030,1169,restaurant,mean food rating,"worst value, nothing planted",rest-11,3.666667
+100,2030,1169,courier,excess,"worst value, nothing planted",courier-52,-0.069988
+100,2030,1169,courier,mean courier rating,"worst value, nothing planted",courier-46,2.000000
+100,2031,1182,restaurant,excess,"worst value, nothing planted",rest-34,-0.080153
+100,2031,1182,restaurant,mean minutes late,"worst value, nothing planted",rest-34,5.851698
+100,2031,1182,restaurant,mean food rating,"worst value, nothing planted",rest-12,3.666667
+100,2031,1182,courier,excess,"worst value, nothing planted",courier-37,-0.086370
+100,2031,1182,courier,mean courier rating,"worst value, nothing planted",courier-49,3.714286
+100,2032,1583,restaurant,excess,"worst value, nothing planted",rest-34,-0.039908
+100,2032,1583,restaurant,mean minutes late,"worst value, nothing planted",rest-28,3.167190
+100,2032,1583,restaurant,mean food rating,"worst value, nothing planted",rest-31,4.000000
+100,2032,1583,courier,excess,"worst value, nothing planted",courier-13,-0.070572
+100,2032,1583,courier,mean courier rating,"worst value, nothing planted",courier-22,3.833333
+100,2033,1353,restaurant,excess,"worst value, nothing planted",rest-07,-0.066510
+100,2033,1353,restaurant,mean minutes late,"worst value, nothing planted",rest-07,5.685292
+100,2033,1353,restaurant,mean food rating,"worst value, nothing planted",rest-08,3.727273
+100,2033,1353,courier,excess,"worst value, nothing planted",courier-53,-0.080153
+100,2033,1353,courier,mean courier rating,"worst value, nothing planted",courier-23,3.666667
+100,2034,1298,restaurant,excess,"worst value, nothing planted",rest-16,-0.065436
+100,2034,1298,restaurant,mean minutes late,"worst value, nothing planted",rest-16,4.074394
+100,2034,1298,restaurant,mean food rating,"worst value, nothing planted",rest-25,3.500000
+100,2034,1298,courier,excess,"worst value, nothing planted",courier-24,-0.092138
+100,2034,1298,courier,mean courier rating,"worst value, nothing planted",courier-12,3.666667
+100,2035,1312,restaurant,excess,"worst value, nothing planted",rest-13,-0.058929
+100,2035,1312,restaurant,mean minutes late,"worst value, nothing planted",rest-06,4.931687
+100,2035,1312,restaurant,mean food rating,"worst value, nothing planted",rest-09,3.900000
+100,2035,1312,courier,excess,"worst value, nothing planted",courier-34,-0.093632
+100,2035,1312,courier,mean courier rating,"worst value, nothing planted",courier-27,3.666667
+100,2036,1263,restaurant,excess,"worst value, nothing planted",rest-02,-0.075577
+100,2036,1263,restaurant,mean minutes late,"worst value, nothing planted",rest-02,6.348313
+100,2036,1263,restaurant,mean food rating,"worst value, nothing planted",rest-03,3.888889
+100,2036,1263,courier,excess,"worst value, nothing planted",courier-08,-0.094254
+100,2036,1263,courier,mean courier rating,"worst value, nothing planted",courier-57,3.833333
+100,2037,1256,restaurant,excess,"worst value, nothing planted",rest-32,-0.055952
+100,2037,1256,restaurant,mean minutes late,"worst value, nothing planted",rest-25,4.105184
+100,2037,1256,restaurant,mean food rating,"worst value, nothing planted",rest-32,3.714286
+100,2037,1256,courier,excess,"worst value, nothing planted",courier-58,-0.077392
+100,2037,1256,courier,mean courier rating,"worst value, nothing planted",courier-07,3.000000
+100,2038,1234,restaurant,excess,"worst value, nothing planted",rest-30,-0.062893
+100,2038,1234,restaurant,mean minutes late,"worst value, nothing planted",rest-25,4.473101
+100,2038,1234,restaurant,mean food rating,"worst value, nothing planted",rest-18,3.833333
+100,2038,1234,courier,excess,"worst value, nothing planted",courier-59,-0.074307
+100,2038,1234,courier,mean courier rating,"worst value, nothing planted",courier-48,3.714286
+100,2039,1242,restaurant,excess,"worst value, nothing planted",rest-00,-0.062302
+100,2039,1242,restaurant,mean minutes late,"worst value, nothing planted",rest-37,3.338207
+100,2039,1242,restaurant,mean food rating,"worst value, nothing planted",rest-00,3.900000
+100,2039,1242,courier,excess,"worst value, nothing planted",courier-02,-0.111853
+100,2039,1242,courier,mean courier rating,"worst value, nothing planted",courier-47,3.500000
+100,2040,1241,restaurant,excess,"worst value, nothing planted",rest-02,-0.084415
+100,2040,1241,restaurant,mean minutes late,"worst value, nothing planted",rest-02,5.479241
+100,2040,1241,restaurant,mean food rating,"worst value, nothing planted",rest-01,3.818182
+100,2040,1241,courier,excess,"worst value, nothing planted",courier-22,-0.109050
+100,2040,1241,courier,mean courier rating,"worst value, nothing planted",courier-39,3.857143
+100,2041,1313,restaurant,excess,"worst value, nothing planted",rest-39,-0.059159
+100,2041,1313,restaurant,mean minutes late,"worst value, nothing planted",rest-39,4.682199
+100,2041,1313,restaurant,mean food rating,"worst value, nothing planted",rest-06,3.600000
+100,2041,1313,courier,excess,"worst value, nothing planted",courier-18,-0.079271
+100,2041,1313,courier,mean courier rating,"worst value, nothing planted",courier-09,3.500000
+100,2042,1475,restaurant,excess,"worst value, nothing planted",rest-14,-0.045396
+100,2042,1475,restaurant,mean minutes late,"worst value, nothing planted",rest-38,3.111282
+100,2042,1475,restaurant,mean food rating,"worst value, nothing planted",rest-19,3.700000
+100,2042,1475,courier,excess,"worst value, nothing planted",courier-24,-0.089863
+100,2042,1475,courier,mean courier rating,"worst value, nothing planted",courier-26,3.500000
+100,2043,1316,restaurant,excess,"worst value, nothing planted",rest-12,-0.042178
+100,2043,1316,restaurant,mean minutes late,"worst value, nothing planted",rest-11,3.315758
+100,2043,1316,restaurant,mean food rating,"worst value, nothing planted",rest-17,3.900000
+100,2043,1316,courier,excess,"worst value, nothing planted",courier-30,-0.091443
+100,2043,1316,courier,mean courier rating,"worst value, nothing planted",courier-03,3.875000
+100,2044,1254,restaurant,excess,"worst value, nothing planted",rest-14,-0.043801
+100,2044,1254,restaurant,mean minutes late,"worst value, nothing planted",rest-17,3.007525
+100,2044,1254,restaurant,mean food rating,"worst value, nothing planted",rest-01,3.750000
+100,2044,1254,courier,excess,"worst value, nothing planted",courier-15,-0.083343
+100,2044,1254,courier,mean courier rating,"worst value, nothing planted",courier-16,3.000000
+100,2045,1316,restaurant,excess,"worst value, nothing planted",rest-14,-0.070107
+100,2045,1316,restaurant,mean minutes late,"worst value, nothing planted",rest-14,5.401083
+100,2045,1316,restaurant,mean food rating,"worst value, nothing planted",rest-23,3.600000
+100,2045,1316,courier,excess,"worst value, nothing planted",courier-07,-0.097807
+100,2045,1316,courier,mean courier rating,"worst value, nothing planted",courier-30,3.714286
+200,2026,2645,restaurant,excess,"worst value, nothing planted",rest-16,-0.038177
+200,2026,2645,restaurant,mean minutes late,"worst value, nothing planted",rest-16,3.774367
+200,2026,2645,restaurant,mean food rating,"worst value, nothing planted",rest-17,3.939394
+200,2026,2645,courier,excess,"worst value, nothing planted",courier-49,-0.049154
+200,2026,2645,courier,mean courier rating,"worst value, nothing planted",courier-20,4.000000
+200,2027,2620,restaurant,excess,"worst value, nothing planted",rest-06,-0.039029
+200,2027,2620,restaurant,mean minutes late,"worst value, nothing planted",rest-01,3.541902
+200,2027,2620,restaurant,mean food rating,"worst value, nothing planted",rest-02,4.090909
+200,2027,2620,courier,excess,"worst value, nothing planted",courier-25,-0.045084
+200,2027,2620,courier,mean courier rating,"worst value, nothing planted",courier-11,3.923077
+200,2028,2804,restaurant,excess,"worst value, nothing planted",rest-18,-0.033992
+200,2028,2804,restaurant,mean minutes late,"worst value, nothing planted",rest-23,3.183685
+200,2028,2804,restaurant,mean food rating,"worst value, nothing planted",rest-31,4.050000
+200,2028,2804,courier,excess,"worst value, nothing planted",courier-43,-0.048451
+200,2028,2804,courier,mean courier rating,"worst value, nothing planted",courier-03,4.000000
+200,2029,2479,restaurant,excess,"worst value, nothing planted",rest-04,-0.029774
+200,2029,2479,restaurant,mean minutes late,"worst value, nothing planted",rest-04,3.047442
+200,2029,2479,restaurant,mean food rating,"worst value, nothing planted",rest-21,3.900000
+200,2029,2479,courier,excess,"worst value, nothing planted",courier-38,-0.066053
+200,2029,2479,courier,mean courier rating,"worst value, nothing planted",courier-22,3.923077
+200,2030,2351,restaurant,excess,"worst value, nothing planted",rest-05,-0.039129
+200,2030,2351,restaurant,mean minutes late,"worst value, nothing planted",rest-21,3.722302
+200,2030,2351,restaurant,mean food rating,"worst value, nothing planted",rest-08,3.962963
+200,2030,2351,courier,excess,"worst value, nothing planted",courier-37,-0.041936
+200,2030,2351,courier,mean courier rating,"worst value, nothing planted",courier-02,4.000000
+200,2031,2501,restaurant,excess,"worst value, nothing planted",rest-34,-0.047638
+200,2031,2501,restaurant,mean minutes late,"worst value, nothing planted",rest-34,4.123344
+200,2031,2501,restaurant,mean food rating,"worst value, nothing planted",rest-38,4.000000
+200,2031,2501,courier,excess,"worst value, nothing planted",courier-47,-0.060485
+200,2031,2501,courier,mean courier rating,"worst value, nothing planted",courier-49,3.909091
+200,2032,2885,restaurant,excess,"worst value, nothing planted",rest-28,-0.029424
+200,2032,2885,restaurant,mean minutes late,"worst value, nothing planted",rest-28,2.890586
+200,2032,2885,restaurant,mean food rating,"worst value, nothing planted",rest-34,4.074074
+200,2032,2885,courier,excess,"worst value, nothing planted",courier-24,-0.046513
+200,2032,2885,courier,mean courier rating,"worst value, nothing planted",courier-21,4.040000
+200,2033,2723,restaurant,excess,"worst value, nothing planted",rest-08,-0.041879
+200,2033,2723,restaurant,mean minutes late,"worst value, nothing planted",rest-04,3.604064
+200,2033,2723,restaurant,mean food rating,"worst value, nothing planted",rest-08,4.033333
+200,2033,2723,courier,excess,"worst value, nothing planted",courier-53,-0.048063
+200,2033,2723,courier,mean courier rating,"worst value, nothing planted",courier-23,4.000000
+200,2034,2583,restaurant,excess,"worst value, nothing planted",rest-04,-0.040592
+200,2034,2583,restaurant,mean minutes late,"worst value, nothing planted",rest-04,2.929543
+200,2034,2583,restaurant,mean food rating,"worst value, nothing planted",rest-25,3.842105
+200,2034,2583,courier,excess,"worst value, nothing planted",courier-21,-0.067848
+200,2034,2583,courier,mean courier rating,"worst value, nothing planted",courier-28,4.100000
+200,2035,2549,restaurant,excess,"worst value, nothing planted",rest-20,-0.039116
+200,2035,2549,restaurant,mean minutes late,"worst value, nothing planted",rest-12,3.537303
+200,2035,2549,restaurant,mean food rating,"worst value, nothing planted",rest-36,4.038462
+200,2035,2549,courier,excess,"worst value, nothing planted",courier-11,-0.045092
+200,2035,2549,courier,mean courier rating,"worst value, nothing planted",courier-27,3.789474
+200,2036,2580,restaurant,excess,"worst value, nothing planted",rest-15,-0.043378
+200,2036,2580,restaurant,mean minutes late,"worst value, nothing planted",rest-15,4.008300
+200,2036,2580,restaurant,mean food rating,"worst value, nothing planted",rest-12,3.928571
+200,2036,2580,courier,excess,"worst value, nothing planted",courier-08,-0.058208
+200,2036,2580,courier,mean courier rating,"worst value, nothing planted",courier-26,3.937500
+200,2037,2575,restaurant,excess,"worst value, nothing planted",rest-32,-0.039475
+200,2037,2575,restaurant,mean minutes late,"worst value, nothing planted",rest-05,3.282415
+200,2037,2575,restaurant,mean food rating,"worst value, nothing planted",rest-08,4.000000
+200,2037,2575,courier,excess,"worst value, nothing planted",courier-56,-0.050678
+200,2037,2575,courier,mean courier rating,"worst value, nothing planted",courier-39,4.000000
+200,2038,2647,restaurant,excess,"worst value, nothing planted",rest-30,-0.034114
+200,2038,2647,restaurant,mean minutes late,"worst value, nothing planted",rest-32,3.348326
+200,2038,2647,restaurant,mean food rating,"worst value, nothing planted",rest-10,4.047619
+200,2038,2647,courier,excess,"worst value, nothing planted",courier-18,-0.068540
+200,2038,2647,courier,mean courier rating,"worst value, nothing planted",courier-22,3.900000
+200,2039,2389,restaurant,excess,"worst value, nothing planted",rest-25,-0.070109
+200,2039,2389,restaurant,mean minutes late,"worst value, nothing planted",rest-25,5.455618
+200,2039,2389,restaurant,mean food rating,"worst value, nothing planted",rest-16,3.826087
+200,2039,2389,courier,excess,"worst value, nothing planted",courier-29,-0.039564
+200,2039,2389,courier,mean courier rating,"worst value, nothing planted",courier-55,3.833333
+200,2040,2632,restaurant,excess,"worst value, nothing planted",rest-18,-0.026829
+200,2040,2632,restaurant,mean minutes late,"worst value, nothing planted",rest-21,2.892511
+200,2040,2632,restaurant,mean food rating,"worst value, nothing planted",rest-36,3.894737
+200,2040,2632,courier,excess,"worst value, nothing planted",courier-46,-0.056120
+200,2040,2632,courier,mean courier rating,"worst value, nothing planted",courier-49,4.062500
+200,2041,2620,restaurant,excess,"worst value, nothing planted",rest-06,-0.037411
+200,2041,2620,restaurant,mean minutes late,"worst value, nothing planted",rest-16,3.399755
+200,2041,2620,restaurant,mean food rating,"worst value, nothing planted",rest-06,3.750000
+200,2041,2620,courier,excess,"worst value, nothing planted",courier-01,-0.051031
+200,2041,2620,courier,mean courier rating,"worst value, nothing planted",courier-13,3.812500
+200,2042,2752,restaurant,excess,"worst value, nothing planted",rest-28,-0.028808
+200,2042,2752,restaurant,mean minutes late,"worst value, nothing planted",rest-16,2.552384
+200,2042,2752,restaurant,mean food rating,"worst value, nothing planted",rest-19,3.894737
+200,2042,2752,courier,excess,"worst value, nothing planted",courier-15,-0.046292
+200,2042,2752,courier,mean courier rating,"worst value, nothing planted",courier-52,4.000000
+200,2043,2419,restaurant,excess,"worst value, nothing planted",rest-04,-0.043794
+200,2043,2419,restaurant,mean minutes late,"worst value, nothing planted",rest-11,3.256104
+200,2043,2419,restaurant,mean food rating,"worst value, nothing planted",rest-04,3.958333
+200,2043,2419,courier,excess,"worst value, nothing planted",courier-30,-0.079371
+200,2043,2419,courier,mean courier rating,"worst value, nothing planted",courier-49,4.000000
+200,2044,2444,restaurant,excess,"worst value, nothing planted",rest-26,-0.037534
+200,2044,2444,restaurant,mean minutes late,"worst value, nothing planted",rest-18,3.327015
+200,2044,2444,restaurant,mean food rating,"worst value, nothing planted",rest-32,3.869565
+200,2044,2444,courier,excess,"worst value, nothing planted",courier-14,-0.051644
+200,2044,2444,courier,mean courier rating,"worst value, nothing planted",courier-16,3.750000
+200,2045,2589,restaurant,excess,"worst value, nothing planted",rest-14,-0.056297
+200,2045,2589,restaurant,mean minutes late,"worst value, nothing planted",rest-14,4.352251
+200,2045,2589,restaurant,mean food rating,"worst value, nothing planted",rest-39,3.954545
+200,2045,2589,courier,excess,"worst value, nothing planted",courier-10,-0.047090
+200,2045,2589,courier,mean courier rating,"worst value, nothing planted",courier-30,4.000000
+400,2026,5321,restaurant,excess,"worst value, nothing planted",rest-27,-0.024408
+400,2026,5321,restaurant,mean minutes late,"worst value, nothing planted",rest-19,3.250396
+400,2026,5321,restaurant,mean food rating,"worst value, nothing planted",rest-17,4.000000
+400,2026,5321,courier,excess,"worst value, nothing planted",courier-19,-0.030988
+400,2026,5321,courier,mean courier rating,"worst value, nothing planted",courier-29,4.083333
+400,2027,5126,restaurant,excess,"worst value, nothing planted",rest-18,-0.037276
+400,2027,5126,restaurant,mean minutes late,"worst value, nothing planted",rest-18,3.258386
+400,2027,5126,restaurant,mean food rating,"worst value, nothing planted",rest-13,4.166667
+400,2027,5126,courier,excess,"worst value, nothing planted",courier-27,-0.036050
+400,2027,5126,courier,mean courier rating,"worst value, nothing planted",courier-11,4.133333
+400,2028,5440,restaurant,excess,"worst value, nothing planted",rest-31,-0.019947
+400,2028,5440,restaurant,mean minutes late,"worst value, nothing planted",rest-23,2.535207
+400,2028,5440,restaurant,mean food rating,"worst value, nothing planted",rest-31,4.071429
+400,2028,5440,courier,excess,"worst value, nothing planted",courier-23,-0.040207
+400,2028,5440,courier,mean courier rating,"worst value, nothing planted",courier-08,4.166667
+400,2029,4908,restaurant,excess,"worst value, nothing planted",rest-37,-0.038159
+400,2029,4908,restaurant,mean minutes late,"worst value, nothing planted",rest-37,3.372905
+400,2029,4908,restaurant,mean food rating,"worst value, nothing planted",rest-19,4.054054
+400,2029,4908,courier,excess,"worst value, nothing planted",courier-58,-0.051361
+400,2029,4908,courier,mean courier rating,"worst value, nothing planted",courier-06,3.903226
+400,2030,4905,restaurant,excess,"worst value, nothing planted",rest-22,-0.036460
+400,2030,4905,restaurant,mean minutes late,"worst value, nothing planted",rest-22,3.236684
+400,2030,4905,restaurant,mean food rating,"worst value, nothing planted",rest-20,3.977273
+400,2030,4905,courier,excess,"worst value, nothing planted",courier-47,-0.030882
+400,2030,4905,courier,mean courier rating,"worst value, nothing planted",courier-16,4.034483
+400,2031,5126,restaurant,excess,"worst value, nothing planted",rest-35,-0.023120
+400,2031,5126,restaurant,mean minutes late,"worst value, nothing planted",rest-34,2.939525
+400,2031,5126,restaurant,mean food rating,"worst value, nothing planted",rest-01,4.040816
+400,2031,5126,courier,excess,"worst value, nothing planted",courier-47,-0.028069
+400,2031,5126,courier,mean courier rating,"worst value, nothing planted",courier-52,4.117647
+400,2032,5515,restaurant,excess,"worst value, nothing planted",rest-10,-0.030008
+400,2032,5515,restaurant,mean minutes late,"worst value, nothing planted",rest-20,2.853590
+400,2032,5515,restaurant,mean food rating,"worst value, nothing planted",rest-37,4.102041
+400,2032,5515,courier,excess,"worst value, nothing planted",courier-12,-0.034805
+400,2032,5515,courier,mean courier rating,"worst value, nothing planted",courier-39,4.105263
+400,2033,5247,restaurant,excess,"worst value, nothing planted",rest-16,-0.029418
+400,2033,5247,restaurant,mean minutes late,"worst value, nothing planted",rest-16,2.851586
+400,2033,5247,restaurant,mean food rating,"worst value, nothing planted",rest-09,4.027027
+400,2033,5247,courier,excess,"worst value, nothing planted",courier-25,-0.040679
+400,2033,5247,courier,mean courier rating,"worst value, nothing planted",courier-10,4.130435
+400,2034,4896,restaurant,excess,"worst value, nothing planted",rest-23,-0.025836
+400,2034,4896,restaurant,mean minutes late,"worst value, nothing planted",rest-23,2.567233
+400,2034,4896,restaurant,mean food rating,"worst value, nothing planted",rest-25,4.000000
+400,2034,4896,courier,excess,"worst value, nothing planted",courier-24,-0.042615
+400,2034,4896,courier,mean courier rating,"worst value, nothing planted",courier-42,4.033333
+400,2035,4956,restaurant,excess,"worst value, nothing planted",rest-20,-0.042098
+400,2035,4956,restaurant,mean minutes late,"worst value, nothing planted",rest-20,3.750874
+400,2035,4956,restaurant,mean food rating,"worst value, nothing planted",rest-39,4.116279
+400,2035,4956,courier,excess,"worst value, nothing planted",courier-44,-0.037302
+400,2035,4956,courier,mean courier rating,"worst value, nothing planted",courier-27,4.117647
+400,2036,5014,restaurant,excess,"worst value, nothing planted",rest-36,-0.030023
+400,2036,5014,restaurant,mean minutes late,"worst value, nothing planted",rest-19,3.022337
+400,2036,5014,restaurant,mean food rating,"worst value, nothing planted",rest-36,4.036364
+400,2036,5014,courier,excess,"worst value, nothing planted",courier-27,-0.038354
+400,2036,5014,courier,mean courier rating,"worst value, nothing planted",courier-03,3.909091
+400,2037,5127,restaurant,excess,"worst value, nothing planted",rest-32,-0.023498
+400,2037,5127,restaurant,mean minutes late,"worst value, nothing planted",rest-05,2.919695
+400,2037,5127,restaurant,mean food rating,"worst value, nothing planted",rest-32,4.025000
+400,2037,5127,courier,excess,"worst value, nothing planted",courier-34,-0.035097
+400,2037,5127,courier,mean courier rating,"worst value, nothing planted",courier-54,4.081081
+400,2038,5030,restaurant,excess,"worst value, nothing planted",rest-26,-0.024647
+400,2038,5030,restaurant,mean minutes late,"worst value, nothing planted",rest-26,2.524209
+400,2038,5030,restaurant,mean food rating,"worst value, nothing planted",rest-15,4.065217
+400,2038,5030,courier,excess,"worst value, nothing planted",courier-22,-0.047811
+400,2038,5030,courier,mean courier rating,"worst value, nothing planted",courier-22,4.066667
+400,2039,5154,restaurant,excess,"worst value, nothing planted",rest-25,-0.028274
+400,2039,5154,restaurant,mean minutes late,"worst value, nothing planted",rest-25,3.163383
+400,2039,5154,restaurant,mean food rating,"worst value, nothing planted",rest-16,4.022222
+400,2039,5154,courier,excess,"worst value, nothing planted",courier-33,-0.024587
+400,2039,5154,courier,mean courier rating,"worst value, nothing planted",courier-43,4.093750
+400,2040,5182,restaurant,excess,"worst value, nothing planted",rest-05,-0.023285
+400,2040,5182,restaurant,mean minutes late,"worst value, nothing planted",rest-17,2.436930
+400,2040,5182,restaurant,mean food rating,"worst value, nothing planted",rest-24,3.976744
+400,2040,5182,courier,excess,"worst value, nothing planted",courier-13,-0.038286
+400,2040,5182,courier,mean courier rating,"worst value, nothing planted",courier-37,4.217391
+400,2041,4975,restaurant,excess,"worst value, nothing planted",rest-06,-0.027467
+400,2041,4975,restaurant,mean minutes late,"worst value, nothing planted",rest-16,2.654154
+400,2041,4975,restaurant,mean food rating,"worst value, nothing planted",rest-06,3.979592
+400,2041,4975,courier,excess,"worst value, nothing planted",courier-01,-0.041421
+400,2041,4975,courier,mean courier rating,"worst value, nothing planted",courier-13,4.071429
+400,2042,5351,restaurant,excess,"worst value, nothing planted",rest-32,-0.020182
+400,2042,5351,restaurant,mean minutes late,"worst value, nothing planted",rest-00,2.157290
+400,2042,5351,restaurant,mean food rating,"worst value, nothing planted",rest-28,4.052632
+400,2042,5351,courier,excess,"worst value, nothing planted",courier-24,-0.039932
+400,2042,5351,courier,mean courier rating,"worst value, nothing planted",courier-54,4.138889
+400,2043,5100,restaurant,excess,"worst value, nothing planted",rest-23,-0.027855
+400,2043,5100,restaurant,mean minutes late,"worst value, nothing planted",rest-38,2.558617
+400,2043,5100,restaurant,mean food rating,"worst value, nothing planted",rest-07,4.065217
+400,2043,5100,courier,excess,"worst value, nothing planted",courier-17,-0.039458
+400,2043,5100,courier,mean courier rating,"worst value, nothing planted",courier-12,4.117647
+400,2044,5006,restaurant,excess,"worst value, nothing planted",rest-26,-0.044847
+400,2044,5006,restaurant,mean minutes late,"worst value, nothing planted",rest-26,3.375167
+400,2044,5006,restaurant,mean food rating,"worst value, nothing planted",rest-10,4.040816
+400,2044,5006,courier,excess,"worst value, nothing planted",courier-14,-0.041097
+400,2044,5006,courier,mean courier rating,"worst value, nothing planted",courier-11,4.000000
+400,2045,5268,restaurant,excess,"worst value, nothing planted",rest-14,-0.024951
+400,2045,5268,restaurant,mean minutes late,"worst value, nothing planted",rest-14,2.965531
+400,2045,5268,restaurant,mean food rating,"worst value, nothing planted",rest-22,4.044444
+400,2045,5268,courier,excess,"worst value, nothing planted",courier-50,-0.030136
+400,2045,5268,courier,mean courier rating,"worst value, nothing planted",courier-24,4.131579

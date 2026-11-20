@@ -3,6 +3,8 @@ seed,measure,value
 2026,training orders,35707.000000
 2026,held-out customers,400.000000
 2026,held-out orders,8520.000000
+2026,"converged: CFI, outcome labels only",1.000000
+2026,"converged: CFI, a kappa per input",1.000000
 2026,churn rate,0.039870
 2026,"churn rate, closed windows",0.044010
 2026,"churn rate, open windows",0.000000
@@ -20,6 +22,41 @@ seed,measure,value
 2026,"nps log loss, no inputs",1.953014
 2026,nps rank correlation with Fit,0.517810
 2026,nps rank correlation with the true Fit,0.518055
+2026,recovery respect: every input measured,0.984775
+2026,recovery love: every input measured,0.983331
+2026,recovery convenience: every input measured,0.988415
+2026,recovery trust: every input measured,0.975663
+2026,recovery fit: every input measured,0.987077
+2026,recovery respect: outcome labels only,0.982586
+2026,recovery love: outcome labels only,0.965803
+2026,recovery convenience: outcome labels only,0.986355
+2026,recovery trust: outcome labels only,0.975718
+2026,recovery fit: outcome labels only,0.983055
+2026,recovery respect: a kappa per input,0.984625
+2026,recovery love: a kappa per input,0.984295
+2026,recovery convenience: a kappa per input,0.987796
+2026,recovery trust: a kappa per input,0.976063
+2026,recovery fit: a kappa per input,0.986772
+2026,"recovery respect: as deployed, event-measured gaps",0.749313
+2026,"recovery love: as deployed, event-measured gaps",0.665407
+2026,"recovery convenience: as deployed, event-measured gaps",0.954971
+2026,"recovery trust: as deployed, event-measured gaps",0.707677
+2026,"recovery fit: as deployed, event-measured gaps",0.807549
+2026,"recovery respect: retrained, event-measured gaps",0.750418
+2026,"recovery love: retrained, event-measured gaps",0.669702
+2026,"recovery convenience: retrained, event-measured gaps",0.947022
+2026,"recovery trust: retrained, event-measured gaps",0.711773
+2026,"recovery fit: retrained, event-measured gaps",0.802978
+2026,kappa,1.604038
+2026,kappa: outcome labels only,3.118843
+2026,kappa of x1: a kappa per input,1.401876
+2026,kappa of x2: a kappa per input,1.064785
+2026,kappa of x3: a kappa per input,2.300168
+2026,kappa of x4: a kappa per input,2.133620
+2026,kappa of x5: a kappa per input,2.289495
+2026,kappa of x6: a kappa per input,1.430778
+2026,kappa of x7: a kappa per input,1.004328
+2026,kappa of x8: a kappa per input,2.040077
 2026,respect as expected,0.898839
 2026,love as expected,0.829186
 2026,"respect of unrated orders, quantile 0.05",0.674618
@@ -30,6 +67,8 @@ seed,measure,value
 2027,training orders,34208.000000
 2027,held-out customers,400.000000
 2027,held-out orders,8936.000000
+2027,"converged: CFI, outcome labels only",1.000000
+2027,"converged: CFI, a kappa per input",1.000000
 2027,churn rate,0.037684
 2027,"churn rate, closed windows",0.041572
 2027,"churn rate, open windows",0.000000
@@ -47,6 +86,41 @@ seed,measure,value
 2027,"nps log loss, no inputs",1.954537
 2027,nps rank correlation with Fit,0.478207
 2027,nps rank correlation with the true Fit,0.494202
+2027,recovery respect: every input measured,0.980420
+2027,recovery love: every input measured,0.986068
+2027,recovery convenience: every input measured,0.987657
+2027,recovery trust: every input measured,0.975435
+2027,recovery fit: every input measured,0.983479
+2027,recovery respect: outcome labels only,0.955080
+2027,recovery love: outcome labels only,0.932734
+2027,recovery convenience: outcome labels only,0.979240
+2027,recovery trust: outcome labels only,0.980327
+2027,recovery fit: outcome labels only,0.986697
+2027,recovery respect: a kappa per input,0.981103
+2027,recovery love: a kappa per input,0.987269
+2027,recovery convenience: a kappa per input,0.987750
+2027,recovery trust: a kappa per input,0.976153
+2027,recovery fit: a kappa per input,0.984035
+2027,"recovery respect: as deployed, event-measured gaps",0.739868
+2027,"recovery love: as deployed, event-measured gaps",0.661379
+2027,"recovery convenience: as deployed, event-measured gaps",0.952574
+2027,"recovery trust: as deployed, event-measured gaps",0.702658
+2027,"recovery fit: as deployed, event-measured gaps",0.802904
+2027,"recovery respect: retrained, event-measured gaps",0.745887
+2027,"recovery love: retrained, event-measured gaps",0.657875
+2027,"recovery convenience: retrained, event-measured gaps",0.952974
+2027,"recovery trust: retrained, event-measured gaps",0.708075
+2027,"recovery fit: retrained, event-measured gaps",0.806392
+2027,kappa,1.671238
+2027,kappa: outcome labels only,2.667070
+2027,kappa of x1: a kappa per input,1.837972
+2027,kappa of x2: a kappa per input,1.532885
+2027,kappa of x3: a kappa per input,2.114488
+2027,kappa of x4: a kappa per input,2.194696
+2027,kappa of x5: a kappa per input,1.409522
+2027,kappa of x6: a kappa per input,1.698470
+2027,kappa of x7: a kappa per input,1.126708
+2027,kappa of x8: a kappa per input,1.570331
 2027,respect as expected,0.917482
 2027,love as expected,0.831684
 2027,"respect of unrated orders, quantile 0.05",0.705188
@@ -57,6 +131,8 @@ seed,measure,value
 2028,training orders,36293.000000
 2028,held-out customers,400.000000
 2028,held-out orders,8672.000000
+2028,"converged: CFI, outcome labels only",1.000000
+2028,"converged: CFI, a kappa per input",1.000000
 2028,churn rate,0.042470
 2028,"churn rate, closed windows",0.047324
 2028,"churn rate, open windows",0.000000
@@ -74,6 +150,41 @@ seed,measure,value
 2028,"nps log loss, no inputs",1.840476
 2028,nps rank correlation with Fit,0.381741
 2028,nps rank correlation with the true Fit,0.383834
+2028,recovery respect: every input measured,0.984081
+2028,recovery love: every input measured,0.984120
+2028,recovery convenience: every input measured,0.988623
+2028,recovery trust: every input measured,0.976932
+2028,recovery fit: every input measured,0.985837
+2028,recovery respect: outcome labels only,0.928423
+2028,recovery love: outcome labels only,0.944201
+2028,recovery convenience: outcome labels only,0.982849
+2028,recovery trust: outcome labels only,0.966629
+2028,recovery fit: outcome labels only,0.987565
+2028,recovery respect: a kappa per input,0.984561
+2028,recovery love: a kappa per input,0.985428
+2028,recovery convenience: a kappa per input,0.987683
+2028,recovery trust: a kappa per input,0.977341
+2028,recovery fit: a kappa per input,0.985759
+2028,"recovery respect: as deployed, event-measured gaps",0.748632
+2028,"recovery love: as deployed, event-measured gaps",0.640013
+2028,"recovery convenience: as deployed, event-measured gaps",0.954562
+2028,"recovery trust: as deployed, event-measured gaps",0.696979
+2028,"recovery fit: as deployed, event-measured gaps",0.796638
+2028,"recovery respect: retrained, event-measured gaps",0.750573
+2028,"recovery love: retrained, event-measured gaps",0.641680
+2028,"recovery convenience: retrained, event-measured gaps",0.947414
+2028,"recovery trust: retrained, event-measured gaps",0.701737
+2028,"recovery fit: retrained, event-measured gaps",0.798385
+2028,kappa,1.414265
+2028,kappa: outcome labels only,2.438951
+2028,kappa of x1: a kappa per input,1.133901
+2028,kappa of x2: a kappa per input,1.055327
+2028,kappa of x3: a kappa per input,1.760794
+2028,kappa of x4: a kappa per input,1.705759
+2028,kappa of x5: a kappa per input,1.421094
+2028,kappa of x6: a kappa per input,1.661837
+2028,kappa of x7: a kappa per input,1.000008
+2028,kappa of x8: a kappa per input,1.681481
 2028,respect as expected,0.888848
 2028,love as expected,0.819137
 2028,"respect of unrated orders, quantile 0.05",0.669361
@@ -84,6 +195,8 @@ seed,measure,value
 2029,training orders,33885.000000
 2029,held-out customers,400.000000
 2029,held-out orders,8908.000000
+2029,"converged: CFI, outcome labels only",1.000000
+2029,"converged: CFI, a kappa per input",1.000000
 2029,churn rate,0.038116
 2029,"churn rate, closed windows",0.042333
 2029,"churn rate, open windows",0.000000
@@ -101,6 +214,41 @@ seed,measure,value
 2029,"nps log loss, no inputs",2.005691
 2029,nps rank correlation with Fit,0.474878
 2029,nps rank correlation with the true Fit,0.476922
+2029,recovery respect: every input measured,0.983631
+2029,recovery love: every input measured,0.985037
+2029,recovery convenience: every input measured,0.989864
+2029,recovery trust: every input measured,0.972975
+2029,recovery fit: every input measured,0.985715
+2029,recovery respect: outcome labels only,0.920108
+2029,recovery love: outcome labels only,0.926293
+2029,recovery convenience: outcome labels only,0.979840
+2029,recovery trust: outcome labels only,0.959852
+2029,recovery fit: outcome labels only,0.985585
+2029,recovery respect: a kappa per input,0.982921
+2029,recovery love: a kappa per input,0.986409
+2029,recovery convenience: a kappa per input,0.987744
+2029,recovery trust: a kappa per input,0.972990
+2029,recovery fit: a kappa per input,0.984420
+2029,"recovery respect: as deployed, event-measured gaps",0.744064
+2029,"recovery love: as deployed, event-measured gaps",0.667536
+2029,"recovery convenience: as deployed, event-measured gaps",0.956899
+2029,"recovery trust: as deployed, event-measured gaps",0.713167
+2029,"recovery fit: as deployed, event-measured gaps",0.810057
+2029,"recovery respect: retrained, event-measured gaps",0.745512
+2029,"recovery love: retrained, event-measured gaps",0.667434
+2029,"recovery convenience: retrained, event-measured gaps",0.952851
+2029,"recovery trust: retrained, event-measured gaps",0.711302
+2029,"recovery fit: retrained, event-measured gaps",0.807853
+2029,kappa,1.525811
+2029,kappa: outcome labels only,2.506456
+2029,kappa of x1: a kappa per input,1.063902
+2029,kappa of x2: a kappa per input,1.689618
+2029,kappa of x3: a kappa per input,2.357294
+2029,kappa of x4: a kappa per input,2.365764
+2029,kappa of x5: a kappa per input,1.184680
+2029,kappa of x6: a kappa per input,1.536052
+2029,kappa of x7: a kappa per input,1.000401
+2029,kappa of x8: a kappa per input,1.764821
 2029,respect as expected,0.893342
 2029,love as expected,0.827300
 2029,"respect of unrated orders, quantile 0.05",0.652893
@@ -111,6 +259,8 @@ seed,measure,value
 2030,training orders,35133.000000
 2030,held-out customers,400.000000
 2030,held-out orders,8269.000000
+2030,"converged: CFI, outcome labels only",1.000000
+2030,"converged: CFI, a kappa per input",1.000000
 2030,churn rate,0.041563
 2030,"churn rate, closed windows",0.046687
 2030,"churn rate, open windows",0.000000
@@ -128,6 +278,41 @@ seed,measure,value
 2030,"nps log loss, no inputs",1.988577
 2030,nps rank correlation with Fit,0.500339
 2030,nps rank correlation with the true Fit,0.493434
+2030,recovery respect: every input measured,0.982279
+2030,recovery love: every input measured,0.989043
+2030,recovery convenience: every input measured,0.987613
+2030,recovery trust: every input measured,0.975721
+2030,recovery fit: every input measured,0.986175
+2030,recovery respect: outcome labels only,0.934814
+2030,recovery love: outcome labels only,0.918010
+2030,recovery convenience: outcome labels only,0.975372
+2030,recovery trust: outcome labels only,0.970669
+2030,recovery fit: outcome labels only,0.985267
+2030,recovery respect: a kappa per input,0.982702
+2030,recovery love: a kappa per input,0.990226
+2030,recovery convenience: a kappa per input,0.987604
+2030,recovery trust: a kappa per input,0.976590
+2030,recovery fit: a kappa per input,0.986398
+2030,"recovery respect: as deployed, event-measured gaps",0.747939
+2030,"recovery love: as deployed, event-measured gaps",0.647505
+2030,"recovery convenience: as deployed, event-measured gaps",0.953053
+2030,"recovery trust: as deployed, event-measured gaps",0.702804
+2030,"recovery fit: as deployed, event-measured gaps",0.800660
+2030,"recovery respect: retrained, event-measured gaps",0.746965
+2030,"recovery love: retrained, event-measured gaps",0.647590
+2030,"recovery convenience: retrained, event-measured gaps",0.946197
+2030,"recovery trust: retrained, event-measured gaps",0.707843
+2030,"recovery fit: retrained, event-measured gaps",0.804348
+2030,kappa,1.518849
+2030,kappa: outcome labels only,2.960904
+2030,kappa of x1: a kappa per input,1.310102
+2030,kappa of x2: a kappa per input,1.334404
+2030,kappa of x3: a kappa per input,2.111964
+2030,kappa of x4: a kappa per input,1.735262
+2030,kappa of x5: a kappa per input,1.506104
+2030,kappa of x6: a kappa per input,1.434826
+2030,kappa of x7: a kappa per input,1.047374
+2030,kappa of x8: a kappa per input,1.819941
 2030,respect as expected,0.896466
 2030,love as expected,0.824662
 2030,"respect of unrated orders, quantile 0.05",0.667910
@@ -138,6 +323,8 @@ seed,measure,value
 2031,training orders,34367.000000
 2031,held-out customers,400.000000
 2031,held-out orders,8937.000000
+2031,"converged: CFI, outcome labels only",1.000000
+2031,"converged: CFI, a kappa per input",1.000000
 2031,churn rate,0.038056
 2031,"churn rate, closed windows",0.042358
 2031,"churn rate, open windows",0.000000
@@ -155,6 +342,41 @@ seed,measure,value
 2031,"nps log loss, no inputs",1.948164
 2031,nps rank correlation with Fit,0.460253
 2031,nps rank correlation with the true Fit,0.468149
+2031,recovery respect: every input measured,0.985506
+2031,recovery love: every input measured,0.987341
+2031,recovery convenience: every input measured,0.989115
+2031,recovery trust: every input measured,0.975002
+2031,recovery fit: every input measured,0.985534
+2031,recovery respect: outcome labels only,0.961703
+2031,recovery love: outcome labels only,0.964399
+2031,recovery convenience: outcome labels only,0.980226
+2031,recovery trust: outcome labels only,0.969090
+2031,recovery fit: outcome labels only,0.983219
+2031,recovery respect: a kappa per input,0.984215
+2031,recovery love: a kappa per input,0.988045
+2031,recovery convenience: a kappa per input,0.988920
+2031,recovery trust: a kappa per input,0.974592
+2031,recovery fit: a kappa per input,0.985332
+2031,"recovery respect: as deployed, event-measured gaps",0.745833
+2031,"recovery love: as deployed, event-measured gaps",0.659848
+2031,"recovery convenience: as deployed, event-measured gaps",0.953949
+2031,"recovery trust: as deployed, event-measured gaps",0.707143
+2031,"recovery fit: as deployed, event-measured gaps",0.807322
+2031,"recovery respect: retrained, event-measured gaps",0.750005
+2031,"recovery love: retrained, event-measured gaps",0.654856
+2031,"recovery convenience: retrained, event-measured gaps",0.953315
+2031,"recovery trust: retrained, event-measured gaps",0.712928
+2031,"recovery fit: retrained, event-measured gaps",0.809736
+2031,kappa,1.671013
+2031,kappa: outcome labels only,3.419164
+2031,kappa of x1: a kappa per input,1.363298
+2031,kappa of x2: a kappa per input,1.490740
+2031,kappa of x3: a kappa per input,2.125336
+2031,kappa of x4: a kappa per input,8.713673
+2031,kappa of x5: a kappa per input,1.171624
+2031,kappa of x6: a kappa per input,1.774930
+2031,kappa of x7: a kappa per input,1.077328
+2031,kappa of x8: a kappa per input,1.591664
 2031,respect as expected,0.897708
 2031,love as expected,0.838001
 2031,"respect of unrated orders, quantile 0.05",0.679478
@@ -165,6 +387,8 @@ seed,measure,value
 2032,training orders,35280.000000
 2032,held-out customers,400.000000
 2032,held-out orders,9015.000000
+2032,"converged: CFI, outcome labels only",1.000000
+2032,"converged: CFI, a kappa per input",1.000000
 2032,churn rate,0.038330
 2032,"churn rate, closed windows",0.042529
 2032,"churn rate, open windows",0.000000
@@ -182,6 +406,41 @@ seed,measure,value
 2032,"nps log loss, no inputs",1.923329
 2032,nps rank correlation with Fit,0.544030
 2032,nps rank correlation with the true Fit,0.554923
+2032,recovery respect: every input measured,0.981931
+2032,recovery love: every input measured,0.990079
+2032,recovery convenience: every input measured,0.988762
+2032,recovery trust: every input measured,0.976010
+2032,recovery fit: every input measured,0.985446
+2032,recovery respect: outcome labels only,0.953977
+2032,recovery love: outcome labels only,0.940921
+2032,recovery convenience: outcome labels only,0.978201
+2032,recovery trust: outcome labels only,0.974193
+2032,recovery fit: outcome labels only,0.983482
+2032,recovery respect: a kappa per input,0.982260
+2032,recovery love: a kappa per input,0.991205
+2032,recovery convenience: a kappa per input,0.988109
+2032,recovery trust: a kappa per input,0.976205
+2032,recovery fit: a kappa per input,0.985039
+2032,"recovery respect: as deployed, event-measured gaps",0.748350
+2032,"recovery love: as deployed, event-measured gaps",0.665169
+2032,"recovery convenience: as deployed, event-measured gaps",0.953962
+2032,"recovery trust: as deployed, event-measured gaps",0.717232
+2032,"recovery fit: as deployed, event-measured gaps",0.806088
+2032,"recovery respect: retrained, event-measured gaps",0.751087
+2032,"recovery love: retrained, event-measured gaps",0.666625
+2032,"recovery convenience: retrained, event-measured gaps",0.947988
+2032,"recovery trust: retrained, event-measured gaps",0.723588
+2032,"recovery fit: retrained, event-measured gaps",0.811871
+2032,kappa,1.609347
+2032,kappa: outcome labels only,2.954850
+2032,kappa of x1: a kappa per input,1.256311
+2032,kappa of x2: a kappa per input,1.473012
+2032,kappa of x3: a kappa per input,1.640306
+2032,kappa of x4: a kappa per input,3.185668
+2032,kappa of x5: a kappa per input,1.590409
+2032,kappa of x6: a kappa per input,1.683412
+2032,kappa of x7: a kappa per input,1.000022
+2032,kappa of x8: a kappa per input,2.179459
 2032,respect as expected,0.906773
 2032,love as expected,0.817102
 2032,"respect of unrated orders, quantile 0.05",0.684898
@@ -192,6 +451,8 @@ seed,measure,value
 2033,training orders,35219.000000
 2033,held-out customers,400.000000
 2033,held-out orders,8445.000000
+2033,"converged: CFI, outcome labels only",1.000000
+2033,"converged: CFI, a kappa per input",1.000000
 2033,churn rate,0.040759
 2033,"churn rate, closed windows",0.045430
 2033,"churn rate, open windows",0.000000
@@ -209,6 +470,41 @@ seed,measure,value
 2033,"nps log loss, no inputs",1.856980
 2033,nps rank correlation with Fit,0.395702
 2033,nps rank correlation with the true Fit,0.422832
+2033,recovery respect: every input measured,0.983371
+2033,recovery love: every input measured,0.986952
+2033,recovery convenience: every input measured,0.991152
+2033,recovery trust: every input measured,0.975011
+2033,recovery fit: every input measured,0.985613
+2033,recovery respect: outcome labels only,0.969516
+2033,recovery love: outcome labels only,0.978896
+2033,recovery convenience: outcome labels only,0.983524
+2033,recovery trust: outcome labels only,0.976858
+2033,recovery fit: outcome labels only,0.986109
+2033,recovery respect: a kappa per input,0.983095
+2033,recovery love: a kappa per input,0.987917
+2033,recovery convenience: a kappa per input,0.990057
+2033,recovery trust: a kappa per input,0.975220
+2033,recovery fit: a kappa per input,0.984973
+2033,"recovery respect: as deployed, event-measured gaps",0.744120
+2033,"recovery love: as deployed, event-measured gaps",0.665413
+2033,"recovery convenience: as deployed, event-measured gaps",0.954575
+2033,"recovery trust: as deployed, event-measured gaps",0.712277
+2033,"recovery fit: as deployed, event-measured gaps",0.807973
+2033,"recovery respect: retrained, event-measured gaps",0.745987
+2033,"recovery love: retrained, event-measured gaps",0.654274
+2033,"recovery convenience: retrained, event-measured gaps",0.952050
+2033,"recovery trust: retrained, event-measured gaps",0.716215
+2033,"recovery fit: retrained, event-measured gaps",0.807313
+2033,kappa,1.548341
+2033,kappa: outcome labels only,3.253068
+2033,kappa of x1: a kappa per input,1.177559
+2033,kappa of x2: a kappa per input,1.533244
+2033,kappa of x3: a kappa per input,2.349426
+2033,kappa of x4: a kappa per input,2.635239
+2033,kappa of x5: a kappa per input,1.720323
+2033,kappa of x6: a kappa per input,1.373112
+2033,kappa of x7: a kappa per input,1.013929
+2033,kappa of x8: a kappa per input,1.832249
 2033,respect as expected,0.900671
 2033,love as expected,0.811329
 2033,"respect of unrated orders, quantile 0.05",0.683788
@@ -219,6 +515,8 @@ seed,measure,value
 2034,training orders,34344.000000
 2034,held-out customers,400.000000
 2034,held-out orders,8299.000000
+2034,"converged: CFI, outcome labels only",1.000000
+2034,"converged: CFI, a kappa per input",1.000000
 2034,churn rate,0.042032
 2034,"churn rate, closed windows",0.046678
 2034,"churn rate, open windows",0.000000
@@ -236,6 +534,41 @@ seed,measure,value
 2034,"nps log loss, no inputs",1.976764
 2034,nps rank correlation with Fit,0.564233
 2034,nps rank correlation with the true Fit,0.576358
+2034,recovery respect: every input measured,0.984298
+2034,recovery love: every input measured,0.989542
+2034,recovery convenience: every input measured,0.989558
+2034,recovery trust: every input measured,0.975387
+2034,recovery fit: every input measured,0.985350
+2034,recovery respect: outcome labels only,0.920864
+2034,recovery love: outcome labels only,0.914321
+2034,recovery convenience: outcome labels only,0.975080
+2034,recovery trust: outcome labels only,0.964068
+2034,recovery fit: outcome labels only,0.984772
+2034,recovery respect: a kappa per input,0.984381
+2034,recovery love: a kappa per input,0.990256
+2034,recovery convenience: a kappa per input,0.988059
+2034,recovery trust: a kappa per input,0.975659
+2034,recovery fit: a kappa per input,0.984409
+2034,"recovery respect: as deployed, event-measured gaps",0.750743
+2034,"recovery love: as deployed, event-measured gaps",0.667942
+2034,"recovery convenience: as deployed, event-measured gaps",0.956124
+2034,"recovery trust: as deployed, event-measured gaps",0.712198
+2034,"recovery fit: as deployed, event-measured gaps",0.806944
+2034,"recovery respect: retrained, event-measured gaps",0.754124
+2034,"recovery love: retrained, event-measured gaps",0.664168
+2034,"recovery convenience: retrained, event-measured gaps",0.952554
+2034,"recovery trust: retrained, event-measured gaps",0.716129
+2034,"recovery fit: retrained, event-measured gaps",0.808901
+2034,kappa,1.643955
+2034,kappa: outcome labels only,3.237688
+2034,kappa of x1: a kappa per input,1.141156
+2034,kappa of x2: a kappa per input,1.856707
+2034,kappa of x3: a kappa per input,2.143361
+2034,kappa of x4: a kappa per input,2.752738
+2034,kappa of x5: a kappa per input,1.287680
+2034,kappa of x6: a kappa per input,1.398342
+2034,kappa of x7: a kappa per input,1.354940
+2034,kappa of x8: a kappa per input,2.312481
 2034,respect as expected,0.900057
 2034,love as expected,0.823388
 2034,"respect of unrated orders, quantile 0.05",0.717810
@@ -246,6 +579,8 @@ seed,measure,value
 2035,training orders,34173.000000
 2035,held-out customers,400.000000
 2035,held-out orders,9057.000000
+2035,"converged: CFI, outcome labels only",1.000000
+2035,"converged: CFI, a kappa per input",1.000000
 2035,churn rate,0.037637
 2035,"churn rate, closed windows",0.041599
 2035,"churn rate, open windows",0.000000
@@ -263,6 +598,41 @@ seed,measure,value
 2035,"nps log loss, no inputs",1.954472
 2035,nps rank correlation with Fit,0.482766
 2035,nps rank correlation with the true Fit,0.493601
+2035,recovery respect: every input measured,0.983536
+2035,recovery love: every input measured,0.982595
+2035,recovery convenience: every input measured,0.987006
+2035,recovery trust: every input measured,0.971914
+2035,recovery fit: every input measured,0.983060
+2035,recovery respect: outcome labels only,0.967109
+2035,recovery love: outcome labels only,0.928756
+2035,recovery convenience: outcome labels only,0.977593
+2035,recovery trust: outcome labels only,0.980225
+2035,recovery fit: outcome labels only,0.985179
+2035,recovery respect: a kappa per input,0.984021
+2035,recovery love: a kappa per input,0.982978
+2035,recovery convenience: a kappa per input,0.986871
+2035,recovery trust: a kappa per input,0.972676
+2035,recovery fit: a kappa per input,0.983453
+2035,"recovery respect: as deployed, event-measured gaps",0.720113
+2035,"recovery love: as deployed, event-measured gaps",0.650169
+2035,"recovery convenience: as deployed, event-measured gaps",0.947614
+2035,"recovery trust: as deployed, event-measured gaps",0.692232
+2035,"recovery fit: as deployed, event-measured gaps",0.793055
+2035,"recovery respect: retrained, event-measured gaps",0.723298
+2035,"recovery love: retrained, event-measured gaps",0.655598
+2035,"recovery convenience: retrained, event-measured gaps",0.944638
+2035,"recovery trust: retrained, event-measured gaps",0.702784
+2035,"recovery fit: retrained, event-measured gaps",0.791307
+2035,kappa,1.645363
+2035,kappa: outcome labels only,3.059364
+2035,kappa of x1: a kappa per input,1.659554
+2035,kappa of x2: a kappa per input,1.737560
+2035,kappa of x3: a kappa per input,1.598586
+2035,kappa of x4: a kappa per input,2.529015
+2035,kappa of x5: a kappa per input,1.363409
+2035,kappa of x6: a kappa per input,1.427974
+2035,kappa of x7: a kappa per input,1.600888
+2035,kappa of x8: a kappa per input,2.036937
 2035,respect as expected,0.906519
 2035,love as expected,0.833653
 2035,"respect of unrated orders, quantile 0.05",0.696981
@@ -273,6 +643,8 @@ seed,measure,value
 2036,training orders,34299.000000
 2036,held-out customers,400.000000
 2036,held-out orders,8229.000000
+2036,"converged: CFI, outcome labels only",1.000000
+2036,"converged: CFI, a kappa per input",1.000000
 2036,churn rate,0.041708
 2036,"churn rate, closed windows",0.046473
 2036,"churn rate, open windows",0.000000
@@ -290,6 +662,41 @@ seed,measure,value
 2036,"nps log loss, no inputs",2.024471
 2036,nps rank correlation with Fit,0.544527
 2036,nps rank correlation with the true Fit,0.539621
+2036,recovery respect: every input measured,0.983229
+2036,recovery love: every input measured,0.986055
+2036,recovery convenience: every input measured,0.989488
+2036,recovery trust: every input measured,0.976041
+2036,recovery fit: every input measured,0.985181
+2036,recovery respect: outcome labels only,0.960385
+2036,recovery love: outcome labels only,0.967214
+2036,recovery convenience: outcome labels only,0.975121
+2036,recovery trust: outcome labels only,0.967613
+2036,recovery fit: outcome labels only,0.982321
+2036,recovery respect: a kappa per input,0.982676
+2036,recovery love: a kappa per input,0.985283
+2036,recovery convenience: a kappa per input,0.989243
+2036,recovery trust: a kappa per input,0.975544
+2036,recovery fit: a kappa per input,0.984777
+2036,"recovery respect: as deployed, event-measured gaps",0.745838
+2036,"recovery love: as deployed, event-measured gaps",0.673883
+2036,"recovery convenience: as deployed, event-measured gaps",0.953750
+2036,"recovery trust: as deployed, event-measured gaps",0.716278
+2036,"recovery fit: as deployed, event-measured gaps",0.808007
+2036,"recovery respect: retrained, event-measured gaps",0.747268
+2036,"recovery love: retrained, event-measured gaps",0.671799
+2036,"recovery convenience: retrained, event-measured gaps",0.946664
+2036,"recovery trust: retrained, event-measured gaps",0.714954
+2036,"recovery fit: retrained, event-measured gaps",0.803540
+2036,kappa,1.492623
+2036,kappa: outcome labels only,3.513240
+2036,kappa of x1: a kappa per input,1.266638
+2036,kappa of x2: a kappa per input,1.090614
+2036,kappa of x3: a kappa per input,2.009778
+2036,kappa of x4: a kappa per input,2.153121
+2036,kappa of x5: a kappa per input,2.636430
+2036,kappa of x6: a kappa per input,1.460269
+2036,kappa of x7: a kappa per input,1.296696
+2036,kappa of x8: a kappa per input,1.257263
 2036,respect as expected,0.904474
 2036,love as expected,0.819751
 2036,"respect of unrated orders, quantile 0.05",0.683687
@@ -300,6 +707,8 @@ seed,measure,value
 2037,training orders,35461.000000
 2037,held-out customers,400.000000
 2037,held-out orders,8751.000000
+2037,"converged: CFI, outcome labels only",1.000000
+2037,"converged: CFI, a kappa per input",1.000000
 2037,churn rate,0.037033
 2037,"churn rate, closed windows",0.041183
 2037,"churn rate, open windows",0.000000
@@ -317,6 +726,41 @@ seed,measure,value
 2037,"nps log loss, no inputs",1.993889
 2037,nps rank correlation with Fit,0.490395
 2037,nps rank correlation with the true Fit,0.486691
+2037,recovery respect: every input measured,0.983578
+2037,recovery love: every input measured,0.987727
+2037,recovery convenience: every input measured,0.987081
+2037,recovery trust: every input measured,0.976050
+2037,recovery fit: every input measured,0.987032
+2037,recovery respect: outcome labels only,0.951938
+2037,recovery love: outcome labels only,0.977913
+2037,recovery convenience: outcome labels only,0.982291
+2037,recovery trust: outcome labels only,0.957274
+2037,recovery fit: outcome labels only,0.986590
+2037,recovery respect: a kappa per input,0.983804
+2037,recovery love: a kappa per input,0.988160
+2037,recovery convenience: a kappa per input,0.986104
+2037,recovery trust: a kappa per input,0.976438
+2037,recovery fit: a kappa per input,0.986717
+2037,"recovery respect: as deployed, event-measured gaps",0.748857
+2037,"recovery love: as deployed, event-measured gaps",0.663884
+2037,"recovery convenience: as deployed, event-measured gaps",0.952373
+2037,"recovery trust: as deployed, event-measured gaps",0.709652
+2037,"recovery fit: as deployed, event-measured gaps",0.805393
+2037,"recovery respect: retrained, event-measured gaps",0.749865
+2037,"recovery love: retrained, event-measured gaps",0.664656
+2037,"recovery convenience: retrained, event-measured gaps",0.949328
+2037,"recovery trust: retrained, event-measured gaps",0.714153
+2037,"recovery fit: retrained, event-measured gaps",0.804665
+2037,kappa,1.520624
+2037,kappa: outcome labels only,2.785471
+2037,kappa of x1: a kappa per input,1.310147
+2037,kappa of x2: a kappa per input,2.126768
+2037,kappa of x3: a kappa per input,2.155230
+2037,kappa of x4: a kappa per input,1.975764
+2037,kappa of x5: a kappa per input,1.276100
+2037,kappa of x6: a kappa per input,1.456977
+2037,kappa of x7: a kappa per input,1.000018
+2037,kappa of x8: a kappa per input,1.613884
 2037,respect as expected,0.900937
 2037,love as expected,0.819347
 2037,"respect of unrated orders, quantile 0.05",0.672316
@@ -327,6 +771,8 @@ seed,measure,value
 2038,training orders,34605.000000
 2038,held-out customers,400.000000
 2038,held-out orders,8687.000000
+2038,"converged: CFI, outcome labels only",1.000000
+2038,"converged: CFI, a kappa per input",1.000000
 2038,churn rate,0.036901
 2038,"churn rate, closed windows",0.041473
 2038,"churn rate, open windows",0.000000
@@ -344,6 +790,41 @@ seed,measure,value
 2038,"nps log loss, no inputs",1.924492
 2038,nps rank correlation with Fit,0.407543
 2038,nps rank correlation with the true Fit,0.426571
+2038,recovery respect: every input measured,0.984118
+2038,recovery love: every input measured,0.987917
+2038,recovery convenience: every input measured,0.989737
+2038,recovery trust: every input measured,0.976405
+2038,recovery fit: every input measured,0.987348
+2038,recovery respect: outcome labels only,0.934088
+2038,recovery love: outcome labels only,0.938883
+2038,recovery convenience: outcome labels only,0.981631
+2038,recovery trust: outcome labels only,0.967478
+2038,recovery fit: outcome labels only,0.988893
+2038,recovery respect: a kappa per input,0.983080
+2038,recovery love: a kappa per input,0.988386
+2038,recovery convenience: a kappa per input,0.988491
+2038,recovery trust: a kappa per input,0.975393
+2038,recovery fit: a kappa per input,0.986044
+2038,"recovery respect: as deployed, event-measured gaps",0.718214
+2038,"recovery love: as deployed, event-measured gaps",0.647281
+2038,"recovery convenience: as deployed, event-measured gaps",0.951878
+2038,"recovery trust: as deployed, event-measured gaps",0.694563
+2038,"recovery fit: as deployed, event-measured gaps",0.798741
+2038,"recovery respect: retrained, event-measured gaps",0.724531
+2038,"recovery love: retrained, event-measured gaps",0.646771
+2038,"recovery convenience: retrained, event-measured gaps",0.947738
+2038,"recovery trust: retrained, event-measured gaps",0.701514
+2038,"recovery fit: retrained, event-measured gaps",0.793703
+2038,kappa,1.682397
+2038,kappa: outcome labels only,2.447050
+2038,kappa of x1: a kappa per input,1.226572
+2038,kappa of x2: a kappa per input,1.797535
+2038,kappa of x3: a kappa per input,1.742456
+2038,kappa of x4: a kappa per input,6.287980
+2038,kappa of x5: a kappa per input,1.430375
+2038,kappa of x6: a kappa per input,2.012226
+2038,kappa of x7: a kappa per input,1.000093
+2038,kappa of x8: a kappa per input,1.770042
 2038,respect as expected,0.905533
 2038,love as expected,0.823383
 2038,"respect of unrated orders, quantile 0.05",0.727478
@@ -354,6 +835,8 @@ seed,measure,value
 2039,training orders,34048.000000
 2039,held-out customers,400.000000
 2039,held-out orders,8522.000000
+2039,"converged: CFI, outcome labels only",1.000000
+2039,"converged: CFI, a kappa per input",1.000000
 2039,churn rate,0.040834
 2039,"churn rate, closed windows",0.045297
 2039,"churn rate, open windows",0.000000
@@ -371,6 +854,41 @@ seed,measure,value
 2039,"nps log loss, no inputs",2.023136
 2039,nps rank correlation with Fit,0.564349
 2039,nps rank correlation with the true Fit,0.557466
+2039,recovery respect: every input measured,0.979736
+2039,recovery love: every input measured,0.989817
+2039,recovery convenience: every input measured,0.989012
+2039,recovery trust: every input measured,0.977500
+2039,recovery fit: every input measured,0.986958
+2039,recovery respect: outcome labels only,0.952378
+2039,recovery love: outcome labels only,0.944691
+2039,recovery convenience: outcome labels only,0.984418
+2039,recovery trust: outcome labels only,0.975695
+2039,recovery fit: outcome labels only,0.987438
+2039,recovery respect: a kappa per input,0.979843
+2039,recovery love: a kappa per input,0.990645
+2039,recovery convenience: a kappa per input,0.988184
+2039,recovery trust: a kappa per input,0.978135
+2039,recovery fit: a kappa per input,0.986258
+2039,"recovery respect: as deployed, event-measured gaps",0.743873
+2039,"recovery love: as deployed, event-measured gaps",0.686398
+2039,"recovery convenience: as deployed, event-measured gaps",0.955427
+2039,"recovery trust: as deployed, event-measured gaps",0.722785
+2039,"recovery fit: as deployed, event-measured gaps",0.815350
+2039,"recovery respect: retrained, event-measured gaps",0.749817
+2039,"recovery love: retrained, event-measured gaps",0.686089
+2039,"recovery convenience: retrained, event-measured gaps",0.951536
+2039,"recovery trust: retrained, event-measured gaps",0.727357
+2039,"recovery fit: retrained, event-measured gaps",0.813921
+2039,kappa,1.535209
+2039,kappa: outcome labels only,3.094063
+2039,kappa of x1: a kappa per input,1.315708
+2039,kappa of x2: a kappa per input,1.765846
+2039,kappa of x3: a kappa per input,2.373429
+2039,kappa of x4: a kappa per input,2.486935
+2039,kappa of x5: a kappa per input,1.310667
+2039,kappa of x6: a kappa per input,1.314175
+2039,kappa of x7: a kappa per input,1.000081
+2039,kappa of x8: a kappa per input,1.951866
 2039,respect as expected,0.910991
 2039,love as expected,0.807294
 2039,"respect of unrated orders, quantile 0.05",0.699993
@@ -381,6 +899,8 @@ seed,measure,value
 2040,training orders,35201.000000
 2040,held-out customers,400.000000
 2040,held-out orders,8761.000000
+2040,"converged: CFI, outcome labels only",1.000000
+2040,"converged: CFI, a kappa per input",1.000000
 2040,churn rate,0.037939
 2040,"churn rate, closed windows",0.042034
 2040,"churn rate, open windows",0.000000
@@ -398,6 +918,41 @@ seed,measure,value
 2040,"nps log loss, no inputs",1.946336
 2040,nps rank correlation with Fit,0.493625
 2040,nps rank correlation with the true Fit,0.501081
+2040,recovery respect: every input measured,0.981656
+2040,recovery love: every input measured,0.986930
+2040,recovery convenience: every input measured,0.986127
+2040,recovery trust: every input measured,0.976276
+2040,recovery fit: every input measured,0.985868
+2040,recovery respect: outcome labels only,0.978332
+2040,recovery love: outcome labels only,0.973092
+2040,recovery convenience: outcome labels only,0.986301
+2040,recovery trust: outcome labels only,0.979052
+2040,recovery fit: outcome labels only,0.984858
+2040,recovery respect: a kappa per input,0.981698
+2040,recovery love: a kappa per input,0.986556
+2040,recovery convenience: a kappa per input,0.986254
+2040,recovery trust: a kappa per input,0.976107
+2040,recovery fit: a kappa per input,0.985305
+2040,"recovery respect: as deployed, event-measured gaps",0.744255
+2040,"recovery love: as deployed, event-measured gaps",0.674115
+2040,"recovery convenience: as deployed, event-measured gaps",0.948549
+2040,"recovery trust: as deployed, event-measured gaps",0.717091
+2040,"recovery fit: as deployed, event-measured gaps",0.803415
+2040,"recovery respect: retrained, event-measured gaps",0.743953
+2040,"recovery love: retrained, event-measured gaps",0.669165
+2040,"recovery convenience: retrained, event-measured gaps",0.944259
+2040,"recovery trust: retrained, event-measured gaps",0.713618
+2040,"recovery fit: retrained, event-measured gaps",0.803065
+2040,kappa,1.445111
+2040,kappa: outcome labels only,2.996500
+2040,kappa of x1: a kappa per input,1.388981
+2040,kappa of x2: a kappa per input,1.762179
+2040,kappa of x3: a kappa per input,2.119088
+2040,kappa of x4: a kappa per input,1.800940
+2040,kappa of x5: a kappa per input,1.000004
+2040,kappa of x6: a kappa per input,1.176340
+2040,kappa of x7: a kappa per input,1.474057
+2040,kappa of x8: a kappa per input,1.733309
 2040,respect as expected,0.893537
 2040,love as expected,0.807480
 2040,"respect of unrated orders, quantile 0.05",0.662355
@@ -408,6 +963,8 @@ seed,measure,value
 2041,training orders,34664.000000
 2041,held-out customers,400.000000
 2041,held-out orders,8962.000000
+2041,"converged: CFI, outcome labels only",1.000000
+2041,"converged: CFI, a kappa per input",1.000000
 2041,churn rate,0.037313
 2041,"churn rate, closed windows",0.041219
 2041,"churn rate, open windows",0.000000
@@ -425,6 +982,41 @@ seed,measure,value
 2041,"nps log loss, no inputs",1.966007
 2041,nps rank correlation with Fit,0.533751
 2041,nps rank correlation with the true Fit,0.540689
+2041,recovery respect: every input measured,0.986199
+2041,recovery love: every input measured,0.988243
+2041,recovery convenience: every input measured,0.990154
+2041,recovery trust: every input measured,0.979503
+2041,recovery fit: every input measured,0.987757
+2041,recovery respect: outcome labels only,0.970936
+2041,recovery love: outcome labels only,0.960441
+2041,recovery convenience: outcome labels only,0.986373
+2041,recovery trust: outcome labels only,0.971652
+2041,recovery fit: outcome labels only,0.987521
+2041,recovery respect: a kappa per input,0.984496
+2041,recovery love: a kappa per input,0.989615
+2041,recovery convenience: a kappa per input,0.989623
+2041,recovery trust: a kappa per input,0.979003
+2041,recovery fit: a kappa per input,0.986812
+2041,"recovery respect: as deployed, event-measured gaps",0.739435
+2041,"recovery love: as deployed, event-measured gaps",0.648421
+2041,"recovery convenience: as deployed, event-measured gaps",0.953079
+2041,"recovery trust: as deployed, event-measured gaps",0.701904
+2041,"recovery fit: as deployed, event-measured gaps",0.803367
+2041,"recovery respect: retrained, event-measured gaps",0.740659
+2041,"recovery love: retrained, event-measured gaps",0.649146
+2041,"recovery convenience: retrained, event-measured gaps",0.946507
+2041,"recovery trust: retrained, event-measured gaps",0.709221
+2041,"recovery fit: retrained, event-measured gaps",0.800717
+2041,kappa,1.524549
+2041,kappa: outcome labels only,3.068027
+2041,kappa of x1: a kappa per input,1.287463
+2041,kappa of x2: a kappa per input,1.527986
+2041,kappa of x3: a kappa per input,1.624423
+2041,kappa of x4: a kappa per input,1.315410
+2041,kappa of x5: a kappa per input,2.243574
+2041,kappa of x6: a kappa per input,1.573216
+2041,kappa of x7: a kappa per input,1.089995
+2041,kappa of x8: a kappa per input,1.915140
 2041,respect as expected,0.888484
 2041,love as expected,0.814197
 2041,"respect of unrated orders, quantile 0.05",0.674533
@@ -435,6 +1027,8 @@ seed,measure,value
 2042,training orders,34948.000000
 2042,held-out customers,400.000000
 2042,held-out orders,9040.000000
+2042,"converged: CFI, outcome labels only",1.000000
+2042,"converged: CFI, a kappa per input",1.000000
 2042,churn rate,0.035645
 2042,"churn rate, closed windows",0.039898
 2042,"churn rate, open windows",0.000000
@@ -452,6 +1046,41 @@ seed,measure,value
 2042,"nps log loss, no inputs",1.978419
 2042,nps rank correlation with Fit,0.490034
 2042,nps rank correlation with the true Fit,0.496212
+2042,recovery respect: every input measured,0.983369
+2042,recovery love: every input measured,0.986958
+2042,recovery convenience: every input measured,0.989762
+2042,recovery trust: every input measured,0.977180
+2042,recovery fit: every input measured,0.988591
+2042,recovery respect: outcome labels only,0.928771
+2042,recovery love: outcome labels only,0.896441
+2042,recovery convenience: outcome labels only,0.970339
+2042,recovery trust: outcome labels only,0.957546
+2042,recovery fit: outcome labels only,0.981125
+2042,recovery respect: a kappa per input,0.984076
+2042,recovery love: a kappa per input,0.987339
+2042,recovery convenience: a kappa per input,0.988428
+2042,recovery trust: a kappa per input,0.977847
+2042,recovery fit: a kappa per input,0.988409
+2042,"recovery respect: as deployed, event-measured gaps",0.744933
+2042,"recovery love: as deployed, event-measured gaps",0.676030
+2042,"recovery convenience: as deployed, event-measured gaps",0.951975
+2042,"recovery trust: as deployed, event-measured gaps",0.719718
+2042,"recovery fit: as deployed, event-measured gaps",0.809054
+2042,"recovery respect: retrained, event-measured gaps",0.751332
+2042,"recovery love: retrained, event-measured gaps",0.678858
+2042,"recovery convenience: retrained, event-measured gaps",0.950274
+2042,"recovery trust: retrained, event-measured gaps",0.728591
+2042,"recovery fit: retrained, event-measured gaps",0.813464
+2042,kappa,1.626786
+2042,kappa: outcome labels only,4.449872
+2042,kappa of x1: a kappa per input,1.594398
+2042,kappa of x2: a kappa per input,1.094032
+2042,kappa of x3: a kappa per input,2.932249
+2042,kappa of x4: a kappa per input,2.423406
+2042,kappa of x5: a kappa per input,1.069212
+2042,kappa of x6: a kappa per input,1.322629
+2042,kappa of x7: a kappa per input,1.434196
+2042,kappa of x8: a kappa per input,2.026671
 2042,respect as expected,0.904270
 2042,love as expected,0.826496
 2042,"respect of unrated orders, quantile 0.05",0.683440
@@ -462,6 +1091,8 @@ seed,measure,value
 2043,training orders,34026.000000
 2043,held-out customers,400.000000
 2043,held-out orders,8256.000000
+2043,"converged: CFI, outcome labels only",1.000000
+2043,"converged: CFI, a kappa per input",1.000000
 2043,churn rate,0.038548
 2043,"churn rate, closed windows",0.043026
 2043,"churn rate, open windows",0.000000
@@ -479,6 +1110,41 @@ seed,measure,value
 2043,"nps log loss, no inputs",1.913692
 2043,nps rank correlation with Fit,0.445878
 2043,nps rank correlation with the true Fit,0.443681
+2043,recovery respect: every input measured,0.984059
+2043,recovery love: every input measured,0.986901
+2043,recovery convenience: every input measured,0.989047
+2043,recovery trust: every input measured,0.979145
+2043,recovery fit: every input measured,0.986416
+2043,recovery respect: outcome labels only,0.940615
+2043,recovery love: outcome labels only,0.976797
+2043,recovery convenience: outcome labels only,0.971371
+2043,recovery trust: outcome labels only,0.962557
+2043,recovery fit: outcome labels only,0.989247
+2043,recovery respect: a kappa per input,0.984107
+2043,recovery love: a kappa per input,0.986875
+2043,recovery convenience: a kappa per input,0.989205
+2043,recovery trust: a kappa per input,0.979109
+2043,recovery fit: a kappa per input,0.986360
+2043,"recovery respect: as deployed, event-measured gaps",0.753815
+2043,"recovery love: as deployed, event-measured gaps",0.683785
+2043,"recovery convenience: as deployed, event-measured gaps",0.952857
+2043,"recovery trust: as deployed, event-measured gaps",0.724611
+2043,"recovery fit: as deployed, event-measured gaps",0.806925
+2043,"recovery respect: retrained, event-measured gaps",0.755596
+2043,"recovery love: retrained, event-measured gaps",0.684413
+2043,"recovery convenience: retrained, event-measured gaps",0.949525
+2043,"recovery trust: retrained, event-measured gaps",0.724894
+2043,"recovery fit: retrained, event-measured gaps",0.808495
+2043,kappa,1.498429
+2043,kappa: outcome labels only,2.559310
+2043,kappa of x1: a kappa per input,1.391249
+2043,kappa of x2: a kappa per input,1.390986
+2043,kappa of x3: a kappa per input,1.631955
+2043,kappa of x4: a kappa per input,1.714112
+2043,kappa of x5: a kappa per input,1.815982
+2043,kappa of x6: a kappa per input,1.603451
+2043,kappa of x7: a kappa per input,1.208821
+2043,kappa of x8: a kappa per input,1.371969
 2043,respect as expected,0.895181
 2043,love as expected,0.817476
 2043,"respect of unrated orders, quantile 0.05",0.682405
@@ -489,6 +1155,8 @@ seed,measure,value
 2044,training orders,36304.000000
 2044,held-out customers,400.000000
 2044,held-out orders,8343.000000
+2044,"converged: CFI, outcome labels only",1.000000
+2044,"converged: CFI, a kappa per input",1.000000
 2044,churn rate,0.041482
 2044,"churn rate, closed windows",0.046007
 2044,"churn rate, open windows",0.000000
@@ -506,6 +1174,41 @@ seed,measure,value
 2044,"nps log loss, no inputs",1.968065
 2044,nps rank correlation with Fit,0.502908
 2044,nps rank correlation with the true Fit,0.507386
+2044,recovery respect: every input measured,0.986653
+2044,recovery love: every input measured,0.988854
+2044,recovery convenience: every input measured,0.989304
+2044,recovery trust: every input measured,0.978922
+2044,recovery fit: every input measured,0.986807
+2044,recovery respect: outcome labels only,0.967501
+2044,recovery love: outcome labels only,0.964996
+2044,recovery convenience: outcome labels only,0.978087
+2044,recovery trust: outcome labels only,0.975913
+2044,recovery fit: outcome labels only,0.988125
+2044,recovery respect: a kappa per input,0.986294
+2044,recovery love: a kappa per input,0.988795
+2044,recovery convenience: a kappa per input,0.988236
+2044,recovery trust: a kappa per input,0.978950
+2044,recovery fit: a kappa per input,0.986139
+2044,"recovery respect: as deployed, event-measured gaps",0.747954
+2044,"recovery love: as deployed, event-measured gaps",0.680762
+2044,"recovery convenience: as deployed, event-measured gaps",0.954434
+2044,"recovery trust: as deployed, event-measured gaps",0.721506
+2044,"recovery fit: as deployed, event-measured gaps",0.812916
+2044,"recovery respect: retrained, event-measured gaps",0.749485
+2044,"recovery love: retrained, event-measured gaps",0.683728
+2044,"recovery convenience: retrained, event-measured gaps",0.951141
+2044,"recovery trust: retrained, event-measured gaps",0.727135
+2044,"recovery fit: retrained, event-measured gaps",0.812705
+2044,kappa,1.513601
+2044,kappa: outcome labels only,3.216551
+2044,kappa of x1: a kappa per input,1.614776
+2044,kappa of x2: a kappa per input,2.335504
+2044,kappa of x3: a kappa per input,1.575216
+2044,kappa of x4: a kappa per input,4.042979
+2044,kappa of x5: a kappa per input,1.178037
+2044,kappa of x6: a kappa per input,1.167728
+2044,kappa of x7: a kappa per input,1.000044
+2044,kappa of x8: a kappa per input,2.216527
 2044,respect as expected,0.890809
 2044,love as expected,0.817708
 2044,"respect of unrated orders, quantile 0.05",0.687806
@@ -516,6 +1219,8 @@ seed,measure,value
 2045,training orders,34865.000000
 2045,held-out customers,400.000000
 2045,held-out orders,8286.000000
+2045,"converged: CFI, outcome labels only",1.000000
+2045,"converged: CFI, a kappa per input",1.000000
 2045,churn rate,0.042574
 2045,"churn rate, closed windows",0.047481
 2045,"churn rate, open windows",0.000000
@@ -533,6 +1238,41 @@ seed,measure,value
 2045,"nps log loss, no inputs",1.968700
 2045,nps rank correlation with Fit,0.546638
 2045,nps rank correlation with the true Fit,0.549518
+2045,recovery respect: every input measured,0.983180
+2045,recovery love: every input measured,0.991145
+2045,recovery convenience: every input measured,0.988818
+2045,recovery trust: every input measured,0.978229
+2045,recovery fit: every input measured,0.983495
+2045,recovery respect: outcome labels only,0.916220
+2045,recovery love: outcome labels only,0.944016
+2045,recovery convenience: outcome labels only,0.979782
+2045,recovery trust: outcome labels only,0.947868
+2045,recovery fit: outcome labels only,0.987300
+2045,recovery respect: a kappa per input,0.983748
+2045,recovery love: a kappa per input,0.991736
+2045,recovery convenience: a kappa per input,0.988936
+2045,recovery trust: a kappa per input,0.978606
+2045,recovery fit: a kappa per input,0.983539
+2045,"recovery respect: as deployed, event-measured gaps",0.746643
+2045,"recovery love: as deployed, event-measured gaps",0.669634
+2045,"recovery convenience: as deployed, event-measured gaps",0.954049
+2045,"recovery trust: as deployed, event-measured gaps",0.712626
+2045,"recovery fit: as deployed, event-measured gaps",0.804679
+2045,"recovery respect: retrained, event-measured gaps",0.748518
+2045,"recovery love: retrained, event-measured gaps",0.663532
+2045,"recovery convenience: retrained, event-measured gaps",0.950722
+2045,"recovery trust: retrained, event-measured gaps",0.714067
+2045,"recovery fit: retrained, event-measured gaps",0.806039
+2045,kappa,1.512690
+2045,kappa: outcome labels only,2.686540
+2045,kappa of x1: a kappa per input,1.681919
+2045,kappa of x2: a kappa per input,1.265780
+2045,kappa of x3: a kappa per input,1.868044
+2045,kappa of x4: a kappa per input,2.573375
+2045,kappa of x5: a kappa per input,1.196231
+2045,kappa of x6: a kappa per input,1.605248
+2045,kappa of x7: a kappa per input,1.000024
+2045,kappa of x8: a kappa per input,1.541284
 2045,respect as expected,0.902102
 2045,love as expected,0.813098
 2045,"respect of unrated orders, quantile 0.05",0.670577

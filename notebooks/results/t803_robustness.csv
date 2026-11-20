@@ -6,14 +6,28 @@ baseline,2026,kappa,,1.604055
 baseline,2026,mean true fit,,0.580233
 baseline,2026,auc churn 30d,CFI (15 paths),0.788569
 baseline,2026,auc churn 30d,logistic regression,0.775373
+baseline,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.786759
 baseline,2026,auc churn 30d,gradient boosting,0.774899
 baseline,2026,auc churn 30d,unconstrained network,0.779354
 baseline,2026,auc churn 30d,true Fit (ceiling),0.787421
+baseline,2026,log loss churn 30d,CFI (15 paths),0.145031
+baseline,2026,log loss churn 30d,logistic regression,0.147371
+baseline,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.146160
+baseline,2026,log loss churn 30d,gradient boosting,0.148657
+baseline,2026,log loss churn 30d,unconstrained network,0.146817
+baseline,2026,log loss churn 30d,true Fit (ceiling),0.144650
 baseline,2026,auc reorder 14d,CFI (15 paths),0.710618
 baseline,2026,auc reorder 14d,logistic regression,0.707160
+baseline,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.713784
 baseline,2026,auc reorder 14d,gradient boosting,0.702090
 baseline,2026,auc reorder 14d,unconstrained network,0.710442
 baseline,2026,auc reorder 14d,true Fit (ceiling),0.711795
+baseline,2026,log loss reorder 14d,CFI (15 paths),0.338660
+baseline,2026,log loss reorder 14d,logistic regression,0.339945
+baseline,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.338193
+baseline,2026,log loss reorder 14d,gradient boosting,0.341720
+baseline,2026,log loss reorder 14d,unconstrained network,0.339803
+baseline,2026,log loss reorder 14d,true Fit (ceiling),0.337878
 baseline,2027,recovery respect,,0.980421
 baseline,2027,recovery love,,0.986067
 baseline,2027,recovery fit,,0.983479
@@ -21,14 +35,28 @@ baseline,2027,kappa,,1.671267
 baseline,2027,mean true fit,,0.576274
 baseline,2027,auc churn 30d,CFI (15 paths),0.797636
 baseline,2027,auc churn 30d,logistic regression,0.801271
+baseline,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.808474
 baseline,2027,auc churn 30d,gradient boosting,0.782768
 baseline,2027,auc churn 30d,unconstrained network,0.804293
 baseline,2027,auc churn 30d,true Fit (ceiling),0.804055
+baseline,2027,log loss churn 30d,CFI (15 paths),0.136921
+baseline,2027,log loss churn 30d,logistic regression,0.138280
+baseline,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.137653
+baseline,2027,log loss churn 30d,gradient boosting,0.141465
+baseline,2027,log loss churn 30d,unconstrained network,0.136508
+baseline,2027,log loss churn 30d,true Fit (ceiling),0.136108
 baseline,2027,auc reorder 14d,CFI (15 paths),0.723538
 baseline,2027,auc reorder 14d,logistic regression,0.717065
+baseline,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.725501
 baseline,2027,auc reorder 14d,gradient boosting,0.713968
 baseline,2027,auc reorder 14d,unconstrained network,0.721685
 baseline,2027,auc reorder 14d,true Fit (ceiling),0.726166
+baseline,2027,log loss reorder 14d,CFI (15 paths),0.319817
+baseline,2027,log loss reorder 14d,logistic regression,0.322426
+baseline,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.320152
+baseline,2027,log loss reorder 14d,gradient boosting,0.323826
+baseline,2027,log loss reorder 14d,unconstrained network,0.320198
+baseline,2027,log loss reorder 14d,true Fit (ceiling),0.318569
 baseline,2028,recovery respect,,0.984081
 baseline,2028,recovery love,,0.984120
 baseline,2028,recovery fit,,0.985836
@@ -36,14 +64,28 @@ baseline,2028,kappa,,1.414267
 baseline,2028,mean true fit,,0.582115
 baseline,2028,auc churn 30d,CFI (15 paths),0.785519
 baseline,2028,auc churn 30d,logistic regression,0.782323
+baseline,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.787509
 baseline,2028,auc churn 30d,gradient boosting,0.760202
 baseline,2028,auc churn 30d,unconstrained network,0.773134
 baseline,2028,auc churn 30d,true Fit (ceiling),0.788415
+baseline,2028,log loss churn 30d,CFI (15 paths),0.151804
+baseline,2028,log loss churn 30d,logistic regression,0.152482
+baseline,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.152156
+baseline,2028,log loss churn 30d,gradient boosting,0.156275
+baseline,2028,log loss churn 30d,unconstrained network,0.153440
+baseline,2028,log loss churn 30d,true Fit (ceiling),0.150954
 baseline,2028,auc reorder 14d,CFI (15 paths),0.717848
 baseline,2028,auc reorder 14d,logistic regression,0.712413
+baseline,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.720792
 baseline,2028,auc reorder 14d,gradient boosting,0.709314
 baseline,2028,auc reorder 14d,unconstrained network,0.718192
 baseline,2028,auc reorder 14d,true Fit (ceiling),0.719633
+baseline,2028,log loss reorder 14d,CFI (15 paths),0.336414
+baseline,2028,log loss reorder 14d,logistic regression,0.338444
+baseline,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.336249
+baseline,2028,log loss reorder 14d,gradient boosting,0.339563
+baseline,2028,log loss reorder 14d,unconstrained network,0.336592
+baseline,2028,log loss reorder 14d,true Fit (ceiling),0.335728
 missing paths,2026,recovery respect,,0.984455
 missing paths,2026,recovery love,,0.897076
 missing paths,2026,recovery fit,,0.970697
@@ -51,14 +93,28 @@ missing paths,2026,kappa,,1.900180
 missing paths,2026,mean true fit,,0.564205
 missing paths,2026,auc churn 30d,CFI (15 paths),0.799632
 missing paths,2026,auc churn 30d,logistic regression,0.797941
+missing paths,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.803053
 missing paths,2026,auc churn 30d,gradient boosting,0.790240
 missing paths,2026,auc churn 30d,unconstrained network,0.798499
 missing paths,2026,auc churn 30d,true Fit (ceiling),0.806673
+missing paths,2026,log loss churn 30d,CFI (15 paths),0.159838
+missing paths,2026,log loss churn 30d,logistic regression,0.161405
+missing paths,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.160721
+missing paths,2026,log loss churn 30d,gradient boosting,0.161683
+missing paths,2026,log loss churn 30d,unconstrained network,0.159842
+missing paths,2026,log loss churn 30d,true Fit (ceiling),0.157538
 missing paths,2026,auc reorder 14d,CFI (15 paths),0.721672
 missing paths,2026,auc reorder 14d,logistic regression,0.720492
+missing paths,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.728355
 missing paths,2026,auc reorder 14d,gradient boosting,0.717882
 missing paths,2026,auc reorder 14d,unconstrained network,0.724619
 missing paths,2026,auc reorder 14d,true Fit (ceiling),0.727905
+missing paths,2026,log loss reorder 14d,CFI (15 paths),0.365446
+missing paths,2026,log loss reorder 14d,logistic regression,0.365839
+missing paths,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.363798
+missing paths,2026,log loss reorder 14d,gradient boosting,0.366893
+missing paths,2026,log loss reorder 14d,unconstrained network,0.364803
+missing paths,2026,log loss reorder 14d,true Fit (ceiling),0.362123
 missing paths,2027,recovery respect,,0.980937
 missing paths,2027,recovery love,,0.899231
 missing paths,2027,recovery fit,,0.976502
@@ -66,14 +122,28 @@ missing paths,2027,kappa,,1.859309
 missing paths,2027,mean true fit,,0.559736
 missing paths,2027,auc churn 30d,CFI (15 paths),0.808245
 missing paths,2027,auc churn 30d,logistic regression,0.805947
+missing paths,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.816342
 missing paths,2027,auc churn 30d,gradient boosting,0.799223
 missing paths,2027,auc churn 30d,unconstrained network,0.813222
 missing paths,2027,auc churn 30d,true Fit (ceiling),0.816759
+missing paths,2027,log loss churn 30d,CFI (15 paths),0.155863
+missing paths,2027,log loss churn 30d,logistic regression,0.158265
+missing paths,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.157008
+missing paths,2027,log loss churn 30d,gradient boosting,0.159160
+missing paths,2027,log loss churn 30d,unconstrained network,0.155289
+missing paths,2027,log loss churn 30d,true Fit (ceiling),0.153553
 missing paths,2027,auc reorder 14d,CFI (15 paths),0.745255
 missing paths,2027,auc reorder 14d,logistic regression,0.739143
+missing paths,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.750005
 missing paths,2027,auc reorder 14d,gradient boosting,0.738536
 missing paths,2027,auc reorder 14d,unconstrained network,0.745474
 missing paths,2027,auc reorder 14d,true Fit (ceiling),0.751172
+missing paths,2027,log loss reorder 14d,CFI (15 paths),0.335245
+missing paths,2027,log loss reorder 14d,logistic regression,0.337541
+missing paths,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.334267
+missing paths,2027,log loss reorder 14d,gradient boosting,0.337447
+missing paths,2027,log loss reorder 14d,unconstrained network,0.333373
+missing paths,2027,log loss reorder 14d,true Fit (ceiling),0.331563
 missing paths,2028,recovery respect,,0.984811
 missing paths,2028,recovery love,,0.900508
 missing paths,2028,recovery fit,,0.973199
@@ -81,14 +151,28 @@ missing paths,2028,kappa,,1.536702
 missing paths,2028,mean true fit,,0.566781
 missing paths,2028,auc churn 30d,CFI (15 paths),0.806580
 missing paths,2028,auc churn 30d,logistic regression,0.809209
+missing paths,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.815256
 missing paths,2028,auc churn 30d,gradient boosting,0.793452
 missing paths,2028,auc churn 30d,unconstrained network,0.804694
 missing paths,2028,auc churn 30d,true Fit (ceiling),0.816659
+missing paths,2028,log loss churn 30d,CFI (15 paths),0.167948
+missing paths,2028,log loss churn 30d,logistic regression,0.167386
+missing paths,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.167471
+missing paths,2028,log loss churn 30d,gradient boosting,0.169349
+missing paths,2028,log loss churn 30d,unconstrained network,0.167283
+missing paths,2028,log loss churn 30d,true Fit (ceiling),0.164725
 missing paths,2028,auc reorder 14d,CFI (15 paths),0.744313
 missing paths,2028,auc reorder 14d,logistic regression,0.741126
+missing paths,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.753183
 missing paths,2028,auc reorder 14d,gradient boosting,0.743054
 missing paths,2028,auc reorder 14d,unconstrained network,0.746436
 missing paths,2028,auc reorder 14d,true Fit (ceiling),0.752442
+missing paths,2028,log loss reorder 14d,CFI (15 paths),0.349274
+missing paths,2028,log loss reorder 14d,logistic regression,0.349275
+missing paths,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.345994
+missing paths,2028,log loss reorder 14d,gradient boosting,0.347931
+missing paths,2028,log loss reorder 14d,unconstrained network,0.347582
+missing paths,2028,log loss reorder 14d,true Fit (ceiling),0.344596
 flipped sign,2026,recovery respect,,0.932508
 flipped sign,2026,recovery love,,0.982326
 flipped sign,2026,recovery fit,,0.966898
@@ -96,14 +180,28 @@ flipped sign,2026,kappa,,1.511291
 flipped sign,2026,mean true fit,,0.591847
 flipped sign,2026,auc churn 30d,CFI (15 paths),0.801024
 flipped sign,2026,auc churn 30d,logistic regression,0.788739
+flipped sign,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.796241
 flipped sign,2026,auc churn 30d,gradient boosting,0.783438
 flipped sign,2026,auc churn 30d,unconstrained network,0.787399
 flipped sign,2026,auc churn 30d,true Fit (ceiling),0.799212
+flipped sign,2026,log loss churn 30d,CFI (15 paths),0.130441
+flipped sign,2026,log loss churn 30d,logistic regression,0.131983
+flipped sign,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.131228
+flipped sign,2026,log loss churn 30d,gradient boosting,0.133353
+flipped sign,2026,log loss churn 30d,unconstrained network,0.131857
+flipped sign,2026,log loss churn 30d,true Fit (ceiling),0.129861
 flipped sign,2026,auc reorder 14d,CFI (15 paths),0.706753
 flipped sign,2026,auc reorder 14d,logistic regression,0.702366
+flipped sign,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.709936
 flipped sign,2026,auc reorder 14d,gradient boosting,0.698772
 flipped sign,2026,auc reorder 14d,unconstrained network,0.705686
 flipped sign,2026,auc reorder 14d,true Fit (ceiling),0.709190
+flipped sign,2026,log loss reorder 14d,CFI (15 paths),0.330946
+flipped sign,2026,log loss reorder 14d,logistic regression,0.331716
+flipped sign,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.329985
+flipped sign,2026,log loss reorder 14d,gradient boosting,0.333453
+flipped sign,2026,log loss reorder 14d,unconstrained network,0.331482
+flipped sign,2026,log loss reorder 14d,true Fit (ceiling),0.329806
 flipped sign,2027,recovery respect,,0.927132
 flipped sign,2027,recovery love,,0.984878
 flipped sign,2027,recovery fit,,0.965245
@@ -111,14 +209,28 @@ flipped sign,2027,kappa,,1.637125
 flipped sign,2027,mean true fit,,0.589069
 flipped sign,2027,auc churn 30d,CFI (15 paths),0.790840
 flipped sign,2027,auc churn 30d,logistic regression,0.797346
+flipped sign,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.804295
 flipped sign,2027,auc churn 30d,gradient boosting,0.778621
 flipped sign,2027,auc churn 30d,unconstrained network,0.796443
 flipped sign,2027,auc churn 30d,true Fit (ceiling),0.801034
+flipped sign,2027,log loss churn 30d,CFI (15 paths),0.135190
+flipped sign,2027,log loss churn 30d,logistic regression,0.136700
+flipped sign,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.136060
+flipped sign,2027,log loss churn 30d,gradient boosting,0.139827
+flipped sign,2027,log loss churn 30d,unconstrained network,0.135176
+flipped sign,2027,log loss churn 30d,true Fit (ceiling),0.134167
 flipped sign,2027,auc reorder 14d,CFI (15 paths),0.725603
 flipped sign,2027,auc reorder 14d,logistic regression,0.723701
+flipped sign,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.733776
 flipped sign,2027,auc reorder 14d,gradient boosting,0.722951
 flipped sign,2027,auc reorder 14d,unconstrained network,0.729003
 flipped sign,2027,auc reorder 14d,true Fit (ceiling),0.733459
+flipped sign,2027,log loss reorder 14d,CFI (15 paths),0.313024
+flipped sign,2027,log loss reorder 14d,logistic regression,0.314384
+flipped sign,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.311759
+flipped sign,2027,log loss reorder 14d,gradient boosting,0.314580
+flipped sign,2027,log loss reorder 14d,unconstrained network,0.312316
+flipped sign,2027,log loss reorder 14d,true Fit (ceiling),0.310503
 flipped sign,2028,recovery respect,,0.928327
 flipped sign,2028,recovery love,,0.985210
 flipped sign,2028,recovery fit,,0.965145
@@ -126,14 +238,28 @@ flipped sign,2028,kappa,,1.369607
 flipped sign,2028,mean true fit,,0.594040
 flipped sign,2028,auc churn 30d,CFI (15 paths),0.797139
 flipped sign,2028,auc churn 30d,logistic regression,0.794757
+flipped sign,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.799531
 flipped sign,2028,auc churn 30d,gradient boosting,0.785585
 flipped sign,2028,auc churn 30d,unconstrained network,0.791347
 flipped sign,2028,auc churn 30d,true Fit (ceiling),0.800370
+flipped sign,2028,log loss churn 30d,CFI (15 paths),0.134826
+flipped sign,2028,log loss churn 30d,logistic regression,0.135109
+flipped sign,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.134977
+flipped sign,2028,log loss churn 30d,gradient boosting,0.137735
+flipped sign,2028,log loss churn 30d,unconstrained network,0.135692
+flipped sign,2028,log loss churn 30d,true Fit (ceiling),0.134162
 flipped sign,2028,auc reorder 14d,CFI (15 paths),0.721074
 flipped sign,2028,auc reorder 14d,logistic regression,0.717170
+flipped sign,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.725644
 flipped sign,2028,auc reorder 14d,gradient boosting,0.717466
 flipped sign,2028,auc reorder 14d,unconstrained network,0.722143
 flipped sign,2028,auc reorder 14d,true Fit (ceiling),0.723810
+flipped sign,2028,log loss reorder 14d,CFI (15 paths),0.321815
+flipped sign,2028,log loss reorder 14d,logistic regression,0.324107
+flipped sign,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.322125
+flipped sign,2028,log loss reorder 14d,gradient boosting,0.324191
+flipped sign,2028,log loss reorder 14d,unconstrained network,0.322571
+flipped sign,2028,log loss reorder 14d,true Fit (ceiling),0.321167
 interaction,2026,recovery respect,,0.983835
 interaction,2026,recovery love,,0.986673
 interaction,2026,recovery fit,,0.989933
@@ -141,14 +267,28 @@ interaction,2026,kappa,,1.644097
 interaction,2026,mean true fit,,0.584004
 interaction,2026,auc churn 30d,CFI (15 paths),0.832975
 interaction,2026,auc churn 30d,logistic regression,0.821853
+interaction,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.829740
 interaction,2026,auc churn 30d,gradient boosting,0.816021
 interaction,2026,auc churn 30d,unconstrained network,0.823520
 interaction,2026,auc churn 30d,true Fit (ceiling),0.831713
+interaction,2026,log loss churn 30d,CFI (15 paths),0.164866
+interaction,2026,log loss churn 30d,logistic regression,0.172159
+interaction,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.171372
+interaction,2026,log loss churn 30d,gradient boosting,0.171360
+interaction,2026,log loss churn 30d,unconstrained network,0.168598
+interaction,2026,log loss churn 30d,true Fit (ceiling),0.165575
 interaction,2026,auc reorder 14d,CFI (15 paths),0.759863
 interaction,2026,auc reorder 14d,logistic regression,0.755467
+interaction,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.761590
 interaction,2026,auc reorder 14d,gradient boosting,0.752911
 interaction,2026,auc reorder 14d,unconstrained network,0.758985
 interaction,2026,auc reorder 14d,true Fit (ceiling),0.761041
+interaction,2026,log loss reorder 14d,CFI (15 paths),0.349018
+interaction,2026,log loss reorder 14d,logistic regression,0.354498
+interaction,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.353087
+interaction,2026,log loss reorder 14d,gradient boosting,0.353761
+interaction,2026,log loss reorder 14d,unconstrained network,0.350284
+interaction,2026,log loss reorder 14d,true Fit (ceiling),0.348621
 interaction,2027,recovery respect,,0.980676
 interaction,2027,recovery love,,0.985354
 interaction,2027,recovery fit,,0.986736
@@ -156,14 +296,28 @@ interaction,2027,kappa,,1.728151
 interaction,2027,mean true fit,,0.577733
 interaction,2027,auc churn 30d,CFI (15 paths),0.829698
 interaction,2027,auc churn 30d,logistic regression,0.830185
+interaction,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.834560
 interaction,2027,auc churn 30d,gradient boosting,0.817600
 interaction,2027,auc churn 30d,unconstrained network,0.830761
 interaction,2027,auc churn 30d,true Fit (ceiling),0.834208
+interaction,2027,log loss churn 30d,CFI (15 paths),0.154510
+interaction,2027,log loss churn 30d,logistic regression,0.157844
+interaction,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.157438
+interaction,2027,log loss churn 30d,gradient boosting,0.158714
+interaction,2027,log loss churn 30d,unconstrained network,0.154722
+interaction,2027,log loss churn 30d,true Fit (ceiling),0.153432
 interaction,2027,auc reorder 14d,CFI (15 paths),0.777758
 interaction,2027,auc reorder 14d,logistic regression,0.771198
+interaction,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.779861
 interaction,2027,auc reorder 14d,gradient boosting,0.772288
 interaction,2027,auc reorder 14d,unconstrained network,0.778220
 interaction,2027,auc reorder 14d,true Fit (ceiling),0.780815
+interaction,2027,log loss reorder 14d,CFI (15 paths),0.318734
+interaction,2027,log loss reorder 14d,logistic regression,0.323071
+interaction,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.320327
+interaction,2027,log loss reorder 14d,gradient boosting,0.322458
+interaction,2027,log loss reorder 14d,unconstrained network,0.318705
+interaction,2027,log loss reorder 14d,true Fit (ceiling),0.316965
 interaction,2028,recovery respect,,0.984689
 interaction,2028,recovery love,,0.985533
 interaction,2028,recovery fit,,0.989820
@@ -171,14 +325,28 @@ interaction,2028,kappa,,1.435106
 interaction,2028,mean true fit,,0.586702
 interaction,2028,auc churn 30d,CFI (15 paths),0.834116
 interaction,2028,auc churn 30d,logistic regression,0.827295
+interaction,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.833464
 interaction,2028,auc churn 30d,gradient boosting,0.819878
 interaction,2028,auc churn 30d,unconstrained network,0.833059
 interaction,2028,auc churn 30d,true Fit (ceiling),0.835616
+interaction,2028,log loss churn 30d,CFI (15 paths),0.167217
+interaction,2028,log loss churn 30d,logistic regression,0.170809
+interaction,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.170629
+interaction,2028,log loss churn 30d,gradient boosting,0.172595
+interaction,2028,log loss churn 30d,unconstrained network,0.168526
+interaction,2028,log loss churn 30d,true Fit (ceiling),0.166491
 interaction,2028,auc reorder 14d,CFI (15 paths),0.773351
 interaction,2028,auc reorder 14d,logistic regression,0.765608
+interaction,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.774456
 interaction,2028,auc reorder 14d,gradient boosting,0.763989
 interaction,2028,auc reorder 14d,unconstrained network,0.771493
 interaction,2028,auc reorder 14d,true Fit (ceiling),0.774902
+interaction,2028,log loss reorder 14d,CFI (15 paths),0.336612
+interaction,2028,log loss reorder 14d,logistic regression,0.341721
+interaction,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.339217
+interaction,2028,log loss reorder 14d,gradient boosting,0.341114
+interaction,2028,log loss reorder 14d,unconstrained network,0.338113
+interaction,2028,log loss reorder 14d,true Fit (ceiling),0.335697
 weak anchors,2026,recovery respect,,0.992107
 weak anchors,2026,recovery love,,0.975412
 weak anchors,2026,recovery fit,,0.987607
@@ -186,14 +354,28 @@ weak anchors,2026,kappa,,1.799501
 weak anchors,2026,mean true fit,,0.580233
 weak anchors,2026,auc churn 30d,CFI (15 paths),0.787112
 weak anchors,2026,auc churn 30d,logistic regression,0.775373
+weak anchors,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.786759
 weak anchors,2026,auc churn 30d,gradient boosting,0.774899
 weak anchors,2026,auc churn 30d,unconstrained network,0.779354
 weak anchors,2026,auc churn 30d,true Fit (ceiling),0.787421
+weak anchors,2026,log loss churn 30d,CFI (15 paths),0.145260
+weak anchors,2026,log loss churn 30d,logistic regression,0.147371
+weak anchors,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.146160
+weak anchors,2026,log loss churn 30d,gradient boosting,0.148657
+weak anchors,2026,log loss churn 30d,unconstrained network,0.146817
+weak anchors,2026,log loss churn 30d,true Fit (ceiling),0.144650
 weak anchors,2026,auc reorder 14d,CFI (15 paths),0.711022
 weak anchors,2026,auc reorder 14d,logistic regression,0.707160
+weak anchors,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.713784
 weak anchors,2026,auc reorder 14d,gradient boosting,0.702090
 weak anchors,2026,auc reorder 14d,unconstrained network,0.710442
 weak anchors,2026,auc reorder 14d,true Fit (ceiling),0.711795
+weak anchors,2026,log loss reorder 14d,CFI (15 paths),0.338809
+weak anchors,2026,log loss reorder 14d,logistic regression,0.339945
+weak anchors,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.338193
+weak anchors,2026,log loss reorder 14d,gradient boosting,0.341720
+weak anchors,2026,log loss reorder 14d,unconstrained network,0.339803
+weak anchors,2026,log loss reorder 14d,true Fit (ceiling),0.337878
 weak anchors,2027,recovery respect,,0.987702
 weak anchors,2027,recovery love,,0.979165
 weak anchors,2027,recovery fit,,0.986373
@@ -201,14 +383,28 @@ weak anchors,2027,kappa,,1.692505
 weak anchors,2027,mean true fit,,0.576274
 weak anchors,2027,auc churn 30d,CFI (15 paths),0.800731
 weak anchors,2027,auc churn 30d,logistic regression,0.801271
+weak anchors,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.808474
 weak anchors,2027,auc churn 30d,gradient boosting,0.782768
 weak anchors,2027,auc churn 30d,unconstrained network,0.804293
 weak anchors,2027,auc churn 30d,true Fit (ceiling),0.804055
+weak anchors,2027,log loss churn 30d,CFI (15 paths),0.136685
+weak anchors,2027,log loss churn 30d,logistic regression,0.138280
+weak anchors,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.137653
+weak anchors,2027,log loss churn 30d,gradient boosting,0.141465
+weak anchors,2027,log loss churn 30d,unconstrained network,0.136508
+weak anchors,2027,log loss churn 30d,true Fit (ceiling),0.136108
 weak anchors,2027,auc reorder 14d,CFI (15 paths),0.724476
 weak anchors,2027,auc reorder 14d,logistic regression,0.717065
+weak anchors,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.725501
 weak anchors,2027,auc reorder 14d,gradient boosting,0.713968
 weak anchors,2027,auc reorder 14d,unconstrained network,0.721685
 weak anchors,2027,auc reorder 14d,true Fit (ceiling),0.726166
+weak anchors,2027,log loss reorder 14d,CFI (15 paths),0.319822
+weak anchors,2027,log loss reorder 14d,logistic regression,0.322426
+weak anchors,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.320152
+weak anchors,2027,log loss reorder 14d,gradient boosting,0.323826
+weak anchors,2027,log loss reorder 14d,unconstrained network,0.320198
+weak anchors,2027,log loss reorder 14d,true Fit (ceiling),0.318569
 weak anchors,2028,recovery respect,,0.991006
 weak anchors,2028,recovery love,,0.983275
 weak anchors,2028,recovery fit,,0.989435
@@ -216,14 +412,28 @@ weak anchors,2028,kappa,,1.496759
 weak anchors,2028,mean true fit,,0.582115
 weak anchors,2028,auc churn 30d,CFI (15 paths),0.786567
 weak anchors,2028,auc churn 30d,logistic regression,0.782323
+weak anchors,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.787509
 weak anchors,2028,auc churn 30d,gradient boosting,0.760202
 weak anchors,2028,auc churn 30d,unconstrained network,0.773134
 weak anchors,2028,auc churn 30d,true Fit (ceiling),0.788415
+weak anchors,2028,log loss churn 30d,CFI (15 paths),0.151827
+weak anchors,2028,log loss churn 30d,logistic regression,0.152482
+weak anchors,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.152156
+weak anchors,2028,log loss churn 30d,gradient boosting,0.156275
+weak anchors,2028,log loss churn 30d,unconstrained network,0.153440
+weak anchors,2028,log loss churn 30d,true Fit (ceiling),0.150954
 weak anchors,2028,auc reorder 14d,CFI (15 paths),0.717904
 weak anchors,2028,auc reorder 14d,logistic regression,0.712413
+weak anchors,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.720792
 weak anchors,2028,auc reorder 14d,gradient boosting,0.709314
 weak anchors,2028,auc reorder 14d,unconstrained network,0.718192
 weak anchors,2028,auc reorder 14d,true Fit (ceiling),0.719633
+weak anchors,2028,log loss reorder 14d,CFI (15 paths),0.336610
+weak anchors,2028,log loss reorder 14d,logistic regression,0.338444
+weak anchors,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.336249
+weak anchors,2028,log loss reorder 14d,gradient boosting,0.339563
+weak anchors,2028,log loss reorder 14d,unconstrained network,0.336592
+weak anchors,2028,log loss reorder 14d,true Fit (ceiling),0.335728
 noisy labels,2026,recovery respect,,0.984677
 noisy labels,2026,recovery love,,0.983312
 noisy labels,2026,recovery fit,,0.988246
@@ -231,14 +441,28 @@ noisy labels,2026,kappa,,1.601329
 noisy labels,2026,mean true fit,,0.580233
 noisy labels,2026,auc churn 30d,CFI (15 paths),0.788555
 noisy labels,2026,auc churn 30d,logistic regression,0.771052
+noisy labels,2026,auc churn 30d,"logistic regression, surplus and shortfall",0.785137
 noisy labels,2026,auc churn 30d,gradient boosting,0.756275
 noisy labels,2026,auc churn 30d,unconstrained network,0.757337
 noisy labels,2026,auc churn 30d,true Fit (ceiling),0.787421
+noisy labels,2026,log loss churn 30d,CFI (15 paths),0.205812
+noisy labels,2026,log loss churn 30d,logistic regression,0.206394
+noisy labels,2026,log loss churn 30d,"logistic regression, surplus and shortfall",0.204798
+noisy labels,2026,log loss churn 30d,gradient boosting,0.206471
+noisy labels,2026,log loss churn 30d,unconstrained network,0.203651
+noisy labels,2026,log loss churn 30d,true Fit (ceiling),0.205169
 noisy labels,2026,auc reorder 14d,CFI (15 paths),0.710886
 noisy labels,2026,auc reorder 14d,logistic regression,0.706902
+noisy labels,2026,auc reorder 14d,"logistic regression, surplus and shortfall",0.711313
 noisy labels,2026,auc reorder 14d,gradient boosting,0.693470
 noisy labels,2026,auc reorder 14d,unconstrained network,0.690879
 noisy labels,2026,auc reorder 14d,true Fit (ceiling),0.711795
+noisy labels,2026,log loss reorder 14d,CFI (15 paths),0.363988
+noisy labels,2026,log loss reorder 14d,logistic regression,0.365148
+noisy labels,2026,log loss reorder 14d,"logistic regression, surplus and shortfall",0.363238
+noisy labels,2026,log loss reorder 14d,gradient boosting,0.366143
+noisy labels,2026,log loss reorder 14d,unconstrained network,0.365556
+noisy labels,2026,log loss reorder 14d,true Fit (ceiling),0.362989
 noisy labels,2027,recovery respect,,0.980332
 noisy labels,2027,recovery love,,0.986028
 noisy labels,2027,recovery fit,,0.984230
@@ -246,14 +470,28 @@ noisy labels,2027,kappa,,1.667312
 noisy labels,2027,mean true fit,,0.576274
 noisy labels,2027,auc churn 30d,CFI (15 paths),0.797526
 noisy labels,2027,auc churn 30d,logistic regression,0.799090
+noisy labels,2027,auc churn 30d,"logistic regression, surplus and shortfall",0.799444
 noisy labels,2027,auc churn 30d,gradient boosting,0.759210
 noisy labels,2027,auc churn 30d,unconstrained network,0.745244
 noisy labels,2027,auc churn 30d,true Fit (ceiling),0.804055
+noisy labels,2027,log loss churn 30d,CFI (15 paths),0.200958
+noisy labels,2027,log loss churn 30d,logistic regression,0.201351
+noisy labels,2027,log loss churn 30d,"logistic regression, surplus and shortfall",0.200362
+noisy labels,2027,log loss churn 30d,gradient boosting,0.202105
+noisy labels,2027,log loss churn 30d,unconstrained network,0.200637
+noisy labels,2027,log loss churn 30d,true Fit (ceiling),0.200373
 noisy labels,2027,auc reorder 14d,CFI (15 paths),0.723428
 noisy labels,2027,auc reorder 14d,logistic regression,0.715916
+noisy labels,2027,auc reorder 14d,"logistic regression, surplus and shortfall",0.725343
 noisy labels,2027,auc reorder 14d,gradient boosting,0.702269
 noisy labels,2027,auc reorder 14d,unconstrained network,0.713834
 noisy labels,2027,auc reorder 14d,true Fit (ceiling),0.726166
+noisy labels,2027,log loss reorder 14d,CFI (15 paths),0.351575
+noisy labels,2027,log loss reorder 14d,logistic regression,0.353486
+noisy labels,2027,log loss reorder 14d,"logistic regression, surplus and shortfall",0.350996
+noisy labels,2027,log loss reorder 14d,gradient boosting,0.355480
+noisy labels,2027,log loss reorder 14d,unconstrained network,0.351197
+noisy labels,2027,log loss reorder 14d,true Fit (ceiling),0.350435
 noisy labels,2028,recovery respect,,0.983962
 noisy labels,2028,recovery love,,0.984061
 noisy labels,2028,recovery fit,,0.986684
@@ -261,11 +499,25 @@ noisy labels,2028,kappa,,1.409596
 noisy labels,2028,mean true fit,,0.582115
 noisy labels,2028,auc churn 30d,CFI (15 paths),0.785624
 noisy labels,2028,auc churn 30d,logistic regression,0.782207
+noisy labels,2028,auc churn 30d,"logistic regression, surplus and shortfall",0.784392
 noisy labels,2028,auc churn 30d,gradient boosting,0.741937
 noisy labels,2028,auc churn 30d,unconstrained network,0.758978
 noisy labels,2028,auc churn 30d,true Fit (ceiling),0.788415
+noisy labels,2028,log loss churn 30d,CFI (15 paths),0.208048
+noisy labels,2028,log loss churn 30d,logistic regression,0.208830
+noisy labels,2028,log loss churn 30d,"logistic regression, surplus and shortfall",0.207044
+noisy labels,2028,log loss churn 30d,gradient boosting,0.208346
+noisy labels,2028,log loss churn 30d,unconstrained network,0.205581
+noisy labels,2028,log loss churn 30d,true Fit (ceiling),0.207473
 noisy labels,2028,auc reorder 14d,CFI (15 paths),0.717937
 noisy labels,2028,auc reorder 14d,logistic regression,0.712653
+noisy labels,2028,auc reorder 14d,"logistic regression, surplus and shortfall",0.721077
 noisy labels,2028,auc reorder 14d,gradient boosting,0.702734
 noisy labels,2028,auc reorder 14d,unconstrained network,0.702642
 noisy labels,2028,auc reorder 14d,true Fit (ceiling),0.719633
+noisy labels,2028,log loss reorder 14d,CFI (15 paths),0.358318
+noisy labels,2028,log loss reorder 14d,logistic regression,0.360284
+noisy labels,2028,log loss reorder 14d,"logistic regression, surplus and shortfall",0.357767
+noisy labels,2028,log loss reorder 14d,gradient boosting,0.361793
+noisy labels,2028,log loss reorder 14d,unconstrained network,0.358767
+noisy labels,2028,log loss reorder 14d,true Fit (ceiling),0.357520

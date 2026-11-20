@@ -1,0 +1,21 @@
+size,by,method,populations,threshold,planted_groups,found
+50,restaurant,excess,20,-0.119968,60,0.500000
+50,restaurant,mean minutes late,20,6.350732,40,0.425000
+50,restaurant,mean food rating,20,3.000000,20,0.050000
+50,courier,excess,20,-0.179852,60,0.033333
+50,courier,mean courier rating,20,2.000000,60,0.000000
+100,restaurant,excess,20,-0.084415,60,0.850000
+100,restaurant,mean minutes late,20,6.348313,40,0.500000
+100,restaurant,mean food rating,20,3.500000,20,0.750000
+100,courier,excess,20,-0.111853,60,0.083333
+100,courier,mean courier rating,20,2.000000,60,0.000000
+200,restaurant,excess,20,-0.070109,60,0.950000
+200,restaurant,mean minutes late,20,5.455618,40,0.725000
+200,restaurant,mean food rating,20,3.750000,20,1.000000
+200,courier,excess,20,-0.079371,60,0.250000
+200,courier,mean courier rating,20,3.750000,60,0.800000
+400,restaurant,excess,20,-0.044847,60,1.000000
+400,restaurant,mean minutes late,20,3.750874,40,1.000000
+400,restaurant,mean food rating,20,3.976744,20,1.000000
+400,courier,excess,20,-0.051361,60,0.883333
+400,courier,mean courier rating,20,3.903226,60,1.000000
