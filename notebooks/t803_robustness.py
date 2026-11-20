@@ -20,11 +20,18 @@
 #   labels flipped; the held-out labels stay true.
 #
 # For each: churn and reorder AUC on the held-out customers for CFI and the
-# three models that see the same eight gaps (logistic regression, gradient
-# boosting, the tuned unconstrained network), the true Fit as a ceiling, and
+# models that see the same eight gaps (logistic regression, gradient
+# boosting, the tuned unconstrained network), the true Fit on its own, and
 # how closely CFI's Respect, Love and Fit follow the truth (Pearson per
-# order). Saves notebooks/results/t803_robustness.csv. About half an hour on
-# two CPU cores.
+# order). The file labels the true Fit a ceiling; it is not one, since
+# outcomes also follow each customer's own pace.
+#
+# T811 adds the model that leads T802: logistic regression on each gap's
+# surplus and shortfall, in every world. And every model's log loss, which
+# shows what flipped training labels do to the chances and AUC cannot.
+#
+# Saves notebooks/results/t803_robustness.csv. About half an hour on two CPU
+# cores.
 
 # %%
 import dataclasses
@@ -109,6 +116,11 @@ def tuned_network_chance(seed, x_train, y_train, customer_train, x_test) -> np.n
         losses[alpha] = log_loss(p, y[inner])
     best = min(losses, key=losses.__getitem__)
     return network(best, seed).fit(x, y).predict_proba(x_test)[:, 1]
+
+
+def surplus_and_shortfall(gaps: np.ndarray) -> np.ndarray:
+    """Each gap as two columns: what it is above 0, and what it is below."""
+    return np.column_stack([np.maximum(gaps, 0.0), np.minimum(gaps, 0.0)])
 
 
 def fitted_chance(model, x_train, y_train, x_test) -> np.ndarray:
@@ -233,6 +245,7 @@ for scenario, change in SCENARIOS.items():
             "reorder 14d": data.reorder[in_test],
         }
         true_fit = true_latents[:, [FIT]]
+        both = surplus_and_shortfall(gaps)
         for outcome, y_test in test_labels.items():
             y_train = train_labels[outcome]
             chance = {
@@ -242,6 +255,12 @@ for scenario, change in SCENARIOS.items():
                     gaps[~in_test],
                     y_train,
                     gaps[in_test],
+                ),
+                "logistic regression, surplus and shortfall": fitted_chance(
+                    make_pipeline(StandardScaler(), LogisticRegression(max_iter=4000)),
+                    both[~in_test],
+                    y_train,
+                    both[in_test],
                 ),
                 "gradient boosting": fitted_chance(
                     HistGradientBoostingClassifier(random_state=seed),
@@ -265,6 +284,15 @@ for scenario, change in SCENARIOS.items():
                         "value": auc(p, y_test),
                     }
                 )
+            for model_name, p in chance.items():
+                rows.append(
+                    {
+                        **base,
+                        "measure": f"log loss {outcome}",
+                        "model": model_name,
+                        "value": log_loss(p, y_test),
+                    }
+                )
         print(f"{scenario}, seed {seed}: {time.perf_counter() - started:.0f} s so far")
 
 # %% Save
@@ -283,7 +311,16 @@ print(
         sort=False,
     )[list(SCENARIOS)].round(3)
 )
-other = results[~results["measure"].str.startswith("auc")]
+losses = results[results["measure"].str.startswith("log loss")]
+print(
+    losses.pivot_table(
+        index=["measure", "model"],
+        columns="scenario",
+        values="value",
+        sort=False,
+    )[list(SCENARIOS)].round(4)
+)
+other = results[results["model"].isna()]
 print(
     other.pivot_table(index="measure", columns="scenario", values="value", sort=False)[
         list(SCENARIOS)

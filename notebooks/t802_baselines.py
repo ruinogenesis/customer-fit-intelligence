@@ -37,6 +37,15 @@
 # rates, the NPS head, what an unrated order scores, how often a quadrant
 # changes), and CFI's paired difference from every comparator.
 #
+# T811 adds three rows the third review asked for, and what comes with them
+# for free. With every input measured: CFI trained on the reorder and churn
+# labels alone (no survey answer and no behaviour, so the difference from
+# CFI is what the anchors cost), and CFI with a kappa per input (what sharing
+# one costs). With history: logistic regression on each gap's surplus and
+# shortfall. Then the true Fit on its own, and how closely each CFI's states
+# follow the simulator's on the held-out orders. The outcome-only CFI is
+# paired against every comparator as CFI is, by the same rule.
+#
 # Saves notebooks/results/t802_baselines.csv, t802_paired.csv,
 # t802_facts.csv, t802_display.csv and t802_calibration.csv. One population
 # takes about five minutes on one CPU core; populations run side by side.
@@ -64,7 +73,15 @@ from fitcore.baselines import (
 )
 from fitcore.dataset import TrainingSet, from_simulation, split_by_customer
 from fitcore.features import INPUTS
-from fitcore.model import PATHS, ModelParams, forward, masks_without, outcomes, quadrant
+from fitcore.model import (
+    LATENTS,
+    PATHS,
+    ModelParams,
+    forward,
+    masks_without,
+    outcomes,
+    quadrant,
+)
 from fitcore.sim_behaviour import simulate_behaviour
 from fitcore.sim_events import RATING_RATE
 from fitcore.sim_orders import DAYS, START, simulate_orders, simulate_profiles
@@ -89,6 +106,11 @@ WINDOW_DAYS = {"churn 30d": 30, "reorder 14d": 14}
 # A better gap can only raise the chance of a reorder and lower that of churn.
 DIRECTION = {"churn 30d": -1, "reorder 14d": 1}
 CFI = "CFI (15 paths)"
+# T811: the same network trained two other ways, every input measured.
+OUTCOMES_ONLY = "CFI, outcome labels only"
+KAPPA_PER_INPUT = "CFI, a kappa per input"
+OUTCOME_TERMS = ("reorder", "churn")
+SPLIT_LOGISTIC = "logistic regression, surplus and shortfall"
 # Populations side by side: half the cores, since each also runs threads.
 JOBS = min(len(SEEDS), max(1, (os.cpu_count() or 2) // 2))
 
@@ -148,6 +170,21 @@ def train_cfi(train: TrainingSet, events_only: bool = False) -> ModelParams:
     if not result.converged:
         raise RuntimeError("CFI did not converge")
     return export_params(model)
+
+
+def train_variant(
+    train: TrainingSet,
+    *,
+    terms: tuple[str, ...] | None = None,
+    shared_kappa: bool = True,
+) -> tuple[ModelParams, bool]:
+    """CFI trained another way (T811), every input measured: on some terms of
+    the loss only, or with a kappa per input. Its parameters, and whether
+    training converged; it need not, since with no anchor nothing fixes a
+    state's scale."""
+    model = FitModel.for_training_set(train, shared_kappa=shared_kappa)
+    converged = fit_model(model, train, terms=terms).converged
+    return export_params(model), converged
 
 
 def classifier(kind: str, seed: int, outcome: str):
@@ -214,7 +251,7 @@ def comparators(seed, outcome, x, y, customer, in_test) -> dict[str, np.ndarray]
 
     return {
         "logistic regression": fitted("logistic", x),
-        "logistic regression, surplus and shortfall": fitted("logistic", both),
+        SPLIT_LOGISTIC: fitted("logistic", both),
         "gradient boosting": fitted("boosting", x),
         "gradient boosting, monotone": fitted("monotone boosting", x),
         "unconstrained network": tuned_network_chance(
@@ -342,6 +379,18 @@ def population(seed: int) -> dict:
         },
     }
 
+    # T811: the same network trained two other ways, every input measured.
+    # They are trained after the models above, which they leave as they were.
+    variants = {
+        OUTCOMES_ONLY: train_variant(train, terms=OUTCOME_TERMS),
+        KAPPA_PER_INPUT: train_variant(train, shared_kappa=False),
+    }
+    other_ways = {}
+    for name, (variant, converged) in variants.items():
+        said = outcomes(variant, forward(variant, gaps[in_test])[:, FIT])
+        other_ways[name] = {"churn 30d": said.churn, "reorder 14d": said.reorder}
+        facts[f"converged: {name}"] = float(converged)
+
     true_fit = truth[:, FIT]
     calibration = []
     for outcome, y in labels.items():
@@ -358,6 +407,8 @@ def population(seed: int) -> dict:
             seed, outcome, gaps, y, data.customer, in_test
         ).items():
             chance[(model, "gaps")] = p
+        for model, by_outcome in other_ways.items():
+            chance[(model, "gaps")] = by_outcome[outcome]
         chance[("order rate", "history")] = logistic(hist[:, :1])
         chance[("BG/NBD", "history")] = bg[outcome]
         chance[("gradient boosting", "gaps + history")] = fitted_chance(
@@ -371,9 +422,13 @@ def population(seed: int) -> dict:
         chance[("CFI Fit + history", "gaps + history")] = logistic(
             np.column_stack([fit_all, hist])
         )
+        chance[(SPLIT_LOGISTIC, "gaps + history")] = logistic(
+            np.column_stack([surplus_and_shortfall(gaps), hist])
+        )
         chance[("true Fit + history (ceiling)", "truth + history")] = logistic(
             np.column_stack([true_fit, hist])
         )
+        chance[("true Fit", "truth")] = logistic(true_fit[:, None])
         for model, by_outcome in on_events.items():
             chance[(model, "event-measured gaps")] = by_outcome[outcome]
         for model, p in comparators(
@@ -433,6 +488,26 @@ def population(seed: int) -> dict:
     facts["nps rank correlation with the true Fit"] = float(
         spearmanr(true_fit[in_test][answered], nps[answered])[0]
     )
+
+    # How closely each CFI's states follow the simulator's on the held-out
+    # orders (T811): Pearson's r, state by state. And the kappa each learned.
+    assert truth.shape[1] == len(LATENTS)
+    followed = {
+        "every input measured": latents[in_test],
+        "outcome labels only": forward(variants[OUTCOMES_ONLY][0], gaps[in_test]),
+        "a kappa per input": forward(variants[KAPPA_PER_INPUT][0], gaps[in_test]),
+        "as deployed, event-measured gaps": forward(params, event_gaps[in_test]),
+        "retrained, event-measured gaps": forward(event_params, event_gaps[in_test]),
+    }
+    for how, states in followed.items():
+        for column, name in enumerate(LATENTS):
+            facts[f"recovery {name}: {how}"] = float(
+                np.corrcoef(states[:, column], truth[in_test][:, column])[0, 1]
+            )
+    facts["kappa"] = float(params.kappa[0])
+    facts["kappa: outcome labels only"] = float(variants[OUTCOMES_ONLY][0].kappa[0])
+    for key, value in zip(INPUTS, variants[KAPPA_PER_INPUT][0].kappa, strict=True):
+        facts[f"kappa of {key}: a kappa per input"] = float(value)
 
     # What an order scores when it is exactly as expected, and when it has
     # no rating (x5 and x6 unmeasured, but x1 still measured).
@@ -535,9 +610,10 @@ curve.to_csv(RESULTS / "t802_calibration.csv", index=False, float_format="%.6f")
 # A paired difference: both models are judged on the same held-out orders of
 # the same population, so what the populations share cancels. Its standard
 # error is the differences' standard deviation over the square root of the
-# number of populations.
+# number of populations. Each reference model is paired with every other
+# model on its inputs; two references are paired once, the earlier first.
 REFERENCES = {
-    "gaps": (CFI,),
+    "gaps": (CFI, OUTCOMES_ONLY),
     "gaps + history": ("CFI Fit + history",),
     "event-measured gaps": ("CFI as deployed (15 paths)", "CFI retrained (13 paths)"),
 }
@@ -552,10 +628,10 @@ for (outcome, inputs), group in results.groupby(["outcome", "inputs"], sort=Fals
         group = pd.concat([group, results[ceiling]])
     measures = ["auc", "log_loss", "auc_closed"]
     wide = group.pivot(index="seed", columns="model", values=measures)
-    for reference in REFERENCES[inputs]:
+    for position, reference in enumerate(REFERENCES[inputs]):
         for other in group["model"].unique():
-            if other in REFERENCES[inputs]:
-                continue
+            if other in REFERENCES[inputs][: position + 1]:
+                continue  # itself, or a reference already paired with it
             for measure in measures:
                 d = wide[(measure, reference)] - wide[(measure, other)]
                 better = d < 0 if measure == "log_loss" else d > 0
@@ -607,3 +683,23 @@ print(
         )
     ),
 )
+
+# %% T811's rows: the paired AUC difference in thousandths, with its standard error
+for model, against, inputs in (
+    (CFI, OUTCOMES_ONLY, "gaps"),
+    (OUTCOMES_ONLY, SPLIT_LOGISTIC, "gaps"),
+    (CFI, KAPPA_PER_INPUT, "gaps"),
+    ("CFI Fit + history", SPLIT_LOGISTIC, "gaps + history"),
+):
+    chosen = pairs[
+        (pairs["model"] == model)
+        & (pairs["against"] == against)
+        & (pairs["inputs"] == inputs)
+        & (pairs["measure"] == "auc")
+    ]
+    for row in chosen.itertuples():
+        print(
+            f"T811 {row.outcome}: {model} minus {against}: "
+            f"{1000 * row.difference:+.1f} ({1000 * row.standard_error:.1f}), "
+            f"ahead in {row.better_in} of {row.populations}"
+        )
