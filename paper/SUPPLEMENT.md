@@ -1,6 +1,6 @@
 # Supplement: Customer Fit Intelligence
 
-This supplement goes with the paper in `main.pdf`. It gives every setting
+This supplement goes with the paper, `main.tex`. It gives every setting
 the page limit leaves out and the full tables behind the paper's numbers.
 Every number here is printed from a result file in `notebooks/results/`;
 `SOURCES.md` says which notebook writes which file. Section and table
