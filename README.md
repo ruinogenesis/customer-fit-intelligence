@@ -1,8 +1,17 @@
 # Customer Fit Intelligence
 
+**Live dashboard: https://cfi-dev-th26.web.app** (sign-in only; all data is simulated)
+
 The product measures how the services fit each customer.
 It points out why each customer's fit changes.
-It does all the act automatically with measured actions.
+Automated actions, tested against a holdout before they go live, are planned but not built yet.
+
+## Live dashboard
+
+- Sign-in only. An admin creates each account, and there is no sign-up.
+  To ask for a read-only viewer account, open an issue on this repository.
+- Every customer there is simulated. No real customer data is stored.
+- The API's health check is open to all: https://cfi-dev-th26.web.app/api/v1/health
 
 ## Layout
 
