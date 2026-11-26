@@ -83,6 +83,12 @@ scrolls sideways inside its panel. Under 48rem (phones, narrow windows) the
 screens become a row of tabs under a two-row header, and everything is one
 column.
 
+Samsung Internet, with the phone in dark mode, darkens pages by itself, over
+both themes (the Theme switch then seems to do nothing). `index.html` asks
+it not to, with `<meta name="color-scheme" content="light dark">`, which
+some versions respect; otherwise Settings, Labs, "Use website dark theme"
+shows the dashboard's own Dark.
+
 ## Themes and keyboard (T409)
 
 Every colour is a variable at the top of `src/styles.css`, light and dark at

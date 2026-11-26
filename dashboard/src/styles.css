@@ -1042,6 +1042,29 @@ table.bars {
   width: auto;
 }
 
+.card h1 {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 20px;
+}
+
+.card h2 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 15px;
+}
+
+/* On a phone the versions table scrolls sideways, and its buttons sit at the
+   far right: an opened card stays in view at the panel's left edge and wraps
+   at the panel's width. A confirm's question wraps there too. */
+.models .card-row > td > * {
+  position: sticky;
+  left: 0.9rem;
+  max-width: min(60rem, calc(100vw - 4.5rem));
+}
+
+.models .confirm > td > p {
+  max-width: min(60rem, calc(100vw - 4.5rem));
+}
+
 /* --- Phones and narrow windows (T412): the screens as a row of tabs under
    the header, everything one column; wide tables scroll in their panel. --- */
 
