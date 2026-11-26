@@ -40,12 +40,13 @@ function contrast(a: string, b: string): number {
 /** Text, and where it is drawn. */
 const TEXT: Record<string, string[]> = {
   ink: ["page", "surface", "tint", "badge", "pill", "pill-live", "caution"],
-  "ink-muted": ["page", "surface", "tint", "pill"],
+  // On badge: the Lovemark quadrant's note (T412).
+  "ink-muted": ["page", "surface", "tint", "pill", "badge"],
   link: ["page", "surface", "tint"],
   danger: ["page", "surface"],
   success: ["page", "surface"],
-  // A pressed picker button: the page's colours swapped.
-  surface: ["ink"],
+  // A primary button (T412).
+  "on-accent": ["accent"],
 };
 
 /** Marks (dots, lines, bars, keys, the focus ring), and where they are drawn. */
@@ -55,6 +56,10 @@ const MARKS: Record<string, string[]> = {
   critical: ["page", "surface"],
   focus: ["page", "surface", "tint"],
   rule: ["surface", "tint"],
+  // The mark, the open screen's bar, a pressed button's edge (T412).
+  accent: ["page", "surface"],
+  // The edge of a field or a button (T412).
+  control: ["page", "surface"],
 };
 
 /** Hairlines that only separate (dataviz skill: recessive grid and frame),

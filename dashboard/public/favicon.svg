@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+  <!-- The mark in App.tsx, in the accent of src/styles.css (light, then dark). -->
+  <style>
+    rect { fill: none; stroke: #2b6a59; stroke-width: 1.5; }
+    .lovemark { fill: #2b6a59; }
+    @media (prefers-color-scheme: dark) {
+      rect { stroke: #86c3ae; }
+      .lovemark { fill: #86c3ae; }
+    }
+  </style>
+  <rect x="1" y="1" width="8" height="8" rx="1.5" />
+  <rect class="lovemark" x="11" y="1" width="8" height="8" rx="1.5" />
+  <rect x="1" y="11" width="8" height="8" rx="1.5" />
+  <rect x="11" y="11" width="8" height="8" rx="1.5" />
+</svg>

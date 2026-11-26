@@ -244,7 +244,7 @@ function ProfileView({ profile, moreOrders }: { profile: Profile; moreOrders: ()
   return (
     <>
       <p className="updated">
-        Updated {clock(at)} · checks for new orders every {REFRESH_MS / 1000} seconds
+        Updated {clock(at)}. Checks for new orders every {REFRESH_MS / 1000} seconds.
       </p>
       {stale !== null && (
         <p role="alert">

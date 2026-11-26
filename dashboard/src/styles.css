@@ -2,34 +2,42 @@
    dark at once; light-dark() picks by color-scheme. Without a choice the
    system setting decides; the switch in the header sets data-theme on
    <html> (src/theme.ts). tests/contrast.test.ts checks each text and mark
-   against the backgrounds it sits on, in both themes. Dark steps follow the
-   dataviz skill's palette (chart surface #1a1a19). */
+   against the backgrounds it sits on, in both themes. The neutrals lean
+   towards celadon, the grey-green glaze of Thai stoneware, and so does the
+   accent (T412); the chart colours follow the dataviz skill's palette. */
 :root {
   color-scheme: light dark;
-  --page: light-dark(#f6f7f9, #0d0d0d);
-  --surface: light-dark(#fff, #1a1a19);
-  --ink: light-dark(#1f2328, #f0efec);
-  --ink-muted: light-dark(#57606a, #c3c2b7);
-  --link: light-dark(#1c5cab, #86b6ef);
-  --line: light-dark(#d0d7de, #383835);
-  --grid: light-dark(#e4e2dd, #2c2c2a);
-  --frame: light-dark(#c3c2b7, #4a4945);
-  --rule: light-dark(#6e7781, #898781);
+  --page: light-dark(#eef2f0, #0e1311);
+  --surface: light-dark(#fff, #171d1a);
+  --ink: light-dark(#14201b, #e4ebe7);
+  --ink-muted: light-dark(#56655f, #a7b4ae);
+  --link: light-dark(#1b5aa6, #86b6ef);
+  --line: light-dark(#d4dcd8, #2a3430);
+  --grid: light-dark(#e3e9e6, #232b28);
+  --frame: light-dark(#bcc7c2, #44504b);
+  --rule: light-dark(#66756f, #87948e);
+  /* Borders of fields and buttons: 3:1 on what they sit on. */
+  --control: light-dark(#7a8983, #66736d);
+  --accent: light-dark(#2b6a59, #86c3ae);
+  --on-accent: light-dark(#fff, #0e1311);
   --focus: light-dark(#2a78d6, #3987e5);
   --series: light-dark(#2a78d6, #3987e5);
   --worse: light-dark(#e34948, #e66767);
   --critical: #d03b3b;
-  --tint: light-dark(#eef4fc, #1d2b3f);
+  --tint: light-dark(#e7effa, #1b2a3c);
   /* The series blue at about a sixth, on the chart surface (T410). */
   --band: light-dark(#dde9f8, #202e3e);
-  --badge: light-dark(#ddf4ff, #1d3550);
-  --pill: light-dark(#f0efec, #383835);
-  --pill-live: light-dark(#e5f4e4, #1e3a1e);
+  /* The accent, faint: the role, pressed buttons, the Lovemark quadrant. */
+  --badge: light-dark(#dbeae4, #213a31);
+  --pill: light-dark(#e8eeeb, #27302c);
+  --pill-live: light-dark(#dcf0e1, #1e3a24);
   --caution: light-dark(#f9eeda, #3d3220);
-  --success: light-dark(#1a7f37, #3fb950);
+  --success: light-dark(#187634, #3fb950);
   --danger: light-dark(#b42318, #f47067);
 
-  font-family: system-ui, sans-serif;
+  font-family: "Anuphan Variable", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
   color: var(--ink);
   background: var(--page);
 }
@@ -42,12 +50,62 @@
   color-scheme: dark;
 }
 
+/* --- Type: 13, 14, 15, 17, 26 and 30px (T412) --- */
+
 body {
   margin: 0;
 }
 
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  margin: 2.25rem 0 0.75rem;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0.5rem 0;
+}
+
 a {
   color: var(--link);
+  text-underline-offset: 0.2em;
+}
+
+/* Ids and versions in the text face: its figures are all one width. */
+:not(pre) > code {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.lede {
+  max-width: 68ch;
+  margin: 0.25rem 0 1.25rem;
+  color: var(--ink-muted);
+}
+
+.updated,
+.note,
+.legend,
+.soon {
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+.sum {
+  font-weight: 600;
+}
+
+.read-only {
+  color: var(--ink-muted);
 }
 
 /* One focus ring for everything a keyboard reaches. */
@@ -56,111 +114,12 @@ a {
   outline-offset: 2px;
 }
 
-.startup {
-  padding: 2rem;
-}
-
-.skip {
-  position: absolute;
-  top: -10rem;
-  left: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  background: var(--surface);
-}
-
-.skip:focus {
-  top: 0.5rem;
-}
-
-.sign-in {
-  max-width: 22rem;
-  margin: 10vh auto;
-  padding: 2rem;
-  background: var(--surface);
-  border-radius: 8px;
-}
-
-.sign-in form,
-.sign-in label {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.sign-in form {
-  gap: 1rem;
-}
-
 [role="alert"] {
   color: var(--danger);
-  margin: 0;
 }
 
-.shell {
-  display: grid;
-  /* minmax(0, 1fr): wide tables scroll in their own box, not the page. */
-  grid-template: "header header" auto "nav main" 1fr / 12rem minmax(0, 1fr);
-  min-height: 100vh;
-}
-
-.shell header {
-  grid-area: header;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  padding: 0.75rem 1.5rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
-}
-
-.shell header .who {
-  margin-left: auto;
-}
-
-.role {
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: var(--badge);
-  font-size: 0.85em;
-}
-
-.shell nav {
-  grid-area: nav;
-  display: grid;
-  align-content: start;
-  gap: 0.25rem;
-  padding: 1rem;
-}
-
-.shell nav a {
-  padding: 0.4rem 0.75rem;
-  border-radius: 6px;
-  color: inherit;
-  text-decoration: none;
-}
-
-.shell nav a.active {
-  background: var(--surface);
-  font-weight: 600;
-}
-
-.shell main {
-  grid-area: main;
-  padding: 1.5rem 2rem;
-}
-
-/* The skip link's target: no ring around the whole page. */
-.shell main:focus {
-  outline: none;
-}
-
-.read-only {
-  color: var(--ink-muted);
-}
-
-.soon {
-  color: var(--ink-muted);
-  font-size: 0.9em;
+.notice {
+  color: var(--success);
 }
 
 .visually-hidden {
@@ -172,112 +131,449 @@ a {
   white-space: nowrap;
 }
 
-.models table {
-  border-collapse: collapse;
-  width: 100%;
+/* --- Controls --- */
+
+button,
+input,
+select {
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+button {
+  min-height: 2rem;
+  padding: 0.25rem 0.85rem;
+  border: 1px solid var(--control);
+  border-radius: 6px;
+  background: var(--surface);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--page);
+}
+
+button:disabled {
+  color: var(--ink-muted);
+  cursor: default;
+}
+
+/* A choice that is on: the picker, the score tabs, the spans. */
+button[aria-pressed="true"],
+button[aria-pressed="true"]:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--badge);
+  font-weight: 600;
+}
+
+button.primary,
+button.primary:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+input:not([type="radio"]),
+select {
+  min-height: 2rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--control);
+  border-radius: 6px;
   background: var(--surface);
 }
 
-.models th,
-.models td {
-  padding: 0.5rem 0.75rem;
+input[type="radio"] {
+  accent-color: var(--accent);
+}
+
+label {
+  font-size: 14px;
+}
+
+/* --- The shell (T401): a header, the screens, the page --- */
+
+.startup {
+  padding: 2rem;
+}
+
+.skip {
+  position: absolute;
+  top: -10rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.skip:focus {
+  top: 0.5rem;
+}
+
+/* The product's mark: the four quadrants, Lovemark filled. */
+.mark {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.mark rect {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.mark .lovemark {
+  fill: var(--accent);
+}
+
+.wordmark {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  font-weight: 600;
+}
+
+.shell {
+  display: grid;
+  /* minmax(0, 1fr): wide tables scroll in their own box, not the page. */
+  grid-template: "header header" auto "nav main" 1fr / 13rem minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.shell header {
+  grid-area: header;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.5rem;
+  padding: 0.5rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.account {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.who {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.who .email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role {
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  background: var(--badge);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.theme {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  color: var(--ink-muted);
+}
+
+.shell nav {
+  grid-area: nav;
+  display: grid;
+  align-content: start;
+  gap: 0.125rem;
+  padding: 1.25rem 0.75rem;
+}
+
+.shell nav a {
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.shell nav a:hover {
+  color: var(--ink);
+}
+
+.shell nav a.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    inset 3px 0 0 var(--accent),
+    0 0 0 1px var(--line);
+}
+
+.shell main {
+  grid-area: main;
+  max-width: 82rem;
+  padding: 1.75rem 2.5rem 4rem;
+}
+
+/* The skip link's target: no ring around the whole page. */
+.shell main:focus {
+  outline: none;
+}
+
+/* --- Sign-in (T401), with guest view (T411) --- */
+
+.sign-in {
+  display: grid;
+  grid-template-columns: minmax(0, 28rem) minmax(0, 22rem);
+  gap: 3rem 4rem;
+  align-items: start;
+  justify-content: center;
+  padding: 12vh 1.5rem 3rem;
+}
+
+.sign-in:has(> .panel:only-child) {
+  grid-template-columns: minmax(0, 26rem);
+}
+
+.sign-in h1.wordmark {
+  gap: 0.75rem;
+}
+
+.sign-in .lede {
+  margin: 1rem 0 2rem;
+  font-size: 17px;
+}
+
+.sign-in .panel {
+  padding: 1.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.sign-in h2 {
+  margin: 0 0 1.25rem;
+}
+
+.sign-in form,
+.sign-in label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sign-in form {
+  gap: 1rem;
+}
+
+.sign-in input,
+.sign-in button {
+  min-height: 2.5rem;
+}
+
+.sign-in [role="alert"] {
+  margin: 0;
+}
+
+.guest {
+  display: grid;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.guest p {
+  margin: 0.5rem 0 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+/* --- Numbers in a strip, and the quadrants as the matrix draws them --- */
+
+/* One panel, the tiles divided by hairlines (each draws its left and top
+   edge; the panel clips those on its own edges). */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.tile {
+  padding: 0.9rem 1.1rem;
+  box-shadow: -1px -1px 0 0 var(--line);
+}
+
+.tile .label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tile .note {
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+.tile .value {
+  margin: 0.15rem 0;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.quadrant-map {
+  display: grid;
+  grid-template: "love map" 1fr ". respect" auto / 1.5rem minmax(0, 34rem);
+}
+
+.quadrant-map .axis {
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+.quadrant-map .love {
+  grid-area: love;
+  align-self: center;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+}
+
+.quadrant-map .respect {
+  grid-area: respect;
+  justify-self: center;
+  margin-top: 0.25rem;
+}
+
+.quadrants {
+  grid-area: map;
+  grid-template: "fad lovemark" auto "product brand" auto / 1fr 1fr;
+}
+
+.quadrants .lovemark {
+  grid-area: lovemark;
+  background: var(--badge);
+}
+
+.quadrants .brand {
+  grid-area: brand;
+}
+
+.quadrants .fad {
+  grid-area: fad;
+}
+
+.quadrants .product {
+  grid-area: product;
+}
+
+/* The sign-in page's key: the same four, named and explained. */
+dl.quadrants {
+  display: grid;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+dl.quadrants > div {
+  padding: 0.8rem 1rem;
+  box-shadow: -1px -1px 0 0 var(--line);
+}
+
+dl.quadrants dt {
+  font-weight: 600;
+}
+
+dl.quadrants dd {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+
+/* --- Tables: each in a panel of its own, scrolling sideways if it must --- */
+
+/* relative: hidden labels (position: absolute) stay inside the panel too. */
+.table-scroll {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+main table {
+  border-collapse: collapse;
+  background: var(--surface);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+main th,
+main td {
+  padding: 0.5rem 0.9rem;
   border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
 }
 
-/* Versions, dates and buttons stay on one line; the confirm and card rows wrap. */
-.models th,
-.models tr:not(.confirm, .card-row) > td {
+main thead th {
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom-color: var(--frame);
   white-space: nowrap;
 }
 
-.models .actions {
+/* The panel draws the last line. */
+.table-scroll > table > tbody > tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* Numbers line up on the right. */
+.customer-table :is(th, td):nth-child(n + 2):nth-child(-n + 3),
+.overview details :is(th, td):nth-child(n + 2),
+.movement td,
+.ranking > * > tr > :is(th, td):nth-child(n + 2):nth-child(-n + 3),
+.orders :is(th, td):nth-child(n + 4):nth-child(-n + 5) {
   text-align: right;
 }
 
-.models .actions button + button {
-  margin-left: 0.5rem;
+.customer-table td,
+.orders td {
+  white-space: nowrap;
 }
 
-.status {
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.85em;
-  background: var(--pill);
+details summary {
+  width: fit-content;
+  margin: 0.75rem 0;
+  color: var(--link);
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.status.live {
-  background: var(--pill-live);
-  font-weight: 600;
-}
-
-.status.retired {
-  color: var(--ink-muted);
-}
-
-.notice {
-  color: var(--success);
-}
-
-.confirm td {
-  background: var(--caution);
-}
-
-.confirm button {
-  margin-right: 0.5rem;
-}
-
-.card {
-  max-width: 60rem;
-}
-
-.card table {
-  width: auto;
-}
-
-/* Overview (T402) */
-
-.overview h2,
-.customer h2,
-.matrix h2,
-.drivers h2 {
-  margin-top: 2rem;
-  font-size: 1.1rem;
-}
-
-.updated {
-  color: var(--ink-muted);
-  font-size: 0.9em;
-}
-
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: 0.75rem;
-}
-
-.tile {
-  padding: 0.75rem 1rem;
-  background: var(--surface);
-  border-radius: 8px;
-}
-
-.tile .label,
-.tile .note {
-  color: var(--ink-muted);
-  font-size: 0.85em;
-}
-
-.tile .value {
-  font-size: 1.75rem;
-  font-weight: 600;
-}
+/* --- Charts (T402, T404) --- */
 
 .charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 /* Charts stop growing at 36rem: an SVG's text grows with its width, and
@@ -285,12 +581,14 @@ a {
 .line-chart {
   max-width: 36rem;
   margin: 0;
-  padding: 0.75rem 1rem;
-  background: var(--surface);
+  padding: 0.9rem 1.1rem 0.6rem;
+  border: 1px solid var(--line);
   border-radius: 8px;
+  background: var(--surface);
 }
 
 .line-chart figcaption {
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -346,7 +644,7 @@ a {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 6px;
-  font-size: 0.85em;
+  font-size: 13px;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -355,116 +653,25 @@ a {
   color: var(--ink-muted);
 }
 
-.overview details {
-  margin-top: 0.75rem;
-}
+/* --- Each input's share (Bars.tsx): a bar from the middle line, at most
+   14px thick, its free end rounded (dataviz skill); blue good news, red bad. */
 
-.overview table,
-.customers table,
-.customer table,
-.matrix table,
-.drivers table {
-  border-collapse: collapse;
-  background: var(--surface);
-}
-
-.overview th,
-.overview td,
-.customers th,
-.customers td,
-.customer th,
-.customer td,
-.matrix th,
-.matrix td,
-.drivers th,
-.drivers td {
-  padding: 0.4rem 0.75rem;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Customers and one customer's profile (T404) */
-
-.filter {
-  display: inline-block;
-  margin-bottom: 0.75rem;
-}
-
-.customers button,
-.customer button {
-  margin-top: 0.75rem;
-}
-
-.score-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.score-tabs button {
-  margin: 0;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.score-tabs button[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--surface);
-}
-
-.stepper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.stepper button {
-  margin: 0;
-}
-
-.mode {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 0.75rem 0;
-  padding: 0;
-  border: 0;
-}
-
-.mode legend {
-  float: left;
-  font-weight: 600;
-}
-
-.sum {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.customer .note,
-.drivers .note,
-.legend {
-  color: var(--ink-muted);
-  font-size: 0.85em;
-}
-
-/* Each input's share (Bars.tsx): a bar from the middle line, at most 14px
-   thick, its free end rounded (dataviz skill); blue good news, red bad. */
 table.bars {
   width: 100%;
   max-width: 42rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .bars th {
   font-weight: normal;
   white-space: nowrap;
+}
+
+.bars tr:last-child > * {
+  border-bottom: 0;
 }
 
 .bars td.track {
@@ -522,27 +729,99 @@ table.bars {
   vertical-align: -0.05em;
 }
 
-.table-scroll {
-  overflow-x: auto;
+/* --- Filters and pickers --- */
+
+.filter {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
-.orders td {
-  white-space: nowrap;
+.picker,
+.score-tabs,
+.days,
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
 }
 
-.customer tr.picked td {
-  background: var(--tint);
+.picker {
+  margin-bottom: 0.75rem;
 }
 
-/* The love matrix (T403) */
+.days {
+  gap: 0.5rem 0.75rem;
+}
+
+.days label {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.score-tabs {
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.score-tabs button {
+  border-radius: 999px;
+}
+
+.mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0.75rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.mode legend {
+  float: left;
+  margin-right: 0.25rem;
+  font-weight: 600;
+}
+
+.mode label {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+/* What this role may do here, and what isn't built yet. */
+.action {
+  max-width: 68ch;
+  margin: 1.25rem 0;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.action.read-only {
+  border-left-color: var(--frame);
+}
+
+.customers > button,
+.customer > button {
+  margin-top: 0.75rem;
+}
+
+/* --- The love matrix (T403) --- */
 
 .matrix-plot {
   display: block;
   width: 100%;
   max-width: 40rem;
   aspect-ratio: 1;
-  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 8px;
+  background: var(--surface);
   font-size: 14px;
 }
 
@@ -630,6 +909,10 @@ table.bars {
   }
 }
 
+.legend {
+  max-width: 80ch;
+}
+
 .legend .key.customer,
 .legend .key.at-risk,
 .legend .key.as-expected {
@@ -652,42 +935,8 @@ table.bars {
   box-shadow: 0 0 0 0.25em var(--band);
 }
 
-.picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.picker button {
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.picker button[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--surface);
-}
-
-.days {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.days button[aria-pressed="true"] {
-  font-weight: 600;
-}
-
-.matrix .note {
-  color: var(--ink-muted);
-  font-size: 0.85em;
+.movement th[scope="row"] {
+  font-weight: 500;
 }
 
 .movement td.stayed {
@@ -699,20 +948,31 @@ table.bars {
   font-weight: 600;
 }
 
-/* Drivers (T405) */
+/* --- One customer's profile (T404) --- */
+
+.customer tr.picked td {
+  background: var(--tint);
+}
+
+/* --- Drivers (T405) --- */
 
 .drivers .days {
   margin-bottom: 0.5rem;
 }
 
 .drivers .row-toggle {
+  min-height: 0;
   padding: 0;
   border: 0;
   background: none;
   color: var(--link);
   font: inherit;
   text-decoration: underline;
-  cursor: pointer;
+  text-underline-offset: 0.2em;
+}
+
+.drivers .row-toggle:hover {
+  background: none;
 }
 
 /* The open row and its inputs, tinted together. */
@@ -728,4 +988,167 @@ table.bars {
 
 .drivers .ranking > tbody > tr > th {
   font-weight: normal;
+}
+
+/* --- Models (T407) --- */
+
+.models table {
+  width: 100%;
+}
+
+/* Versions, dates and buttons stay on one line; the confirm and card rows wrap. */
+.models th,
+.models tr:not(.confirm, .card-row) > td {
+  white-space: nowrap;
+}
+
+.models .actions {
+  text-align: right;
+}
+
+.models .actions button + button {
+  margin-left: 0.5rem;
+}
+
+.status {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--pill);
+  font-size: 13px;
+}
+
+.status.live {
+  background: var(--pill-live);
+  font-weight: 600;
+}
+
+.status.retired {
+  color: var(--ink-muted);
+}
+
+.confirm td {
+  background: var(--caution);
+}
+
+.confirm button {
+  margin-right: 0.5rem;
+}
+
+.card {
+  max-width: 60rem;
+}
+
+.card table {
+  width: auto;
+}
+
+/* --- Phones and narrow windows (T412): the screens as a row of tabs under
+   the header, everything one column; wide tables scroll in their panel. --- */
+
+@media (max-width: 47.99rem) {
+  .shell {
+    grid-template: "header" auto "nav" auto "main" 1fr / minmax(0, 1fr);
+  }
+
+  /* The header in two rows: the mark and signing out, then who and the theme. */
+  .shell header {
+    display: grid;
+    grid-template: "wordmark out" auto "who theme" auto / minmax(0, 1fr) auto;
+    gap: 0.5rem 0.75rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .account {
+    display: contents;
+  }
+
+  .shell header .wordmark {
+    grid-area: wordmark;
+    font-size: 14px;
+  }
+
+  .who {
+    grid-area: who;
+  }
+
+  .theme {
+    grid-area: theme;
+  }
+
+  .account > button {
+    grid-area: out;
+  }
+
+  .shell nav {
+    display: flex;
+    gap: 0;
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    scrollbar-width: none;
+  }
+
+  .shell nav a {
+    flex: none;
+    padding: 0.7rem 0.75rem;
+    border-radius: 0;
+  }
+
+  .shell nav a.active {
+    background: none;
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  .shell main {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quadrants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tile .value {
+    font-size: 26px;
+  }
+
+  .sign-in {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    padding: 2rem 1rem;
+  }
+
+  .sign-in:has(> .panel:only-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sign-in .lede {
+    margin: 0.75rem 0 1.5rem;
+    font-size: 15px;
+  }
+
+  .sign-in .panel {
+    padding: 1.25rem;
+  }
+
+  /* Text inside the SVGs keeps a readable size as they shrink. */
+  .line-chart svg {
+    font-size: 15px;
+  }
+
+  .matrix-plot {
+    font-size: 17px;
+  }
+
+  .charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

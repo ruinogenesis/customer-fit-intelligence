@@ -86,7 +86,7 @@ export function DriversPage() {
   return (
     <section className="drivers">
       <h1>Drivers</h1>
-      <p>
+      <p className="lede">
         Which inputs pull fit down at each restaurant or courier, compared with every order in
         the span.
       </p>
