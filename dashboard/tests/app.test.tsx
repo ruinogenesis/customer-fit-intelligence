@@ -122,6 +122,37 @@ test("signing out returns to the sign-in form", () => {
   expect(screen.getByRole("button", { name: "Sign in" })).toBeTruthy();
 });
 
+// --- T411 ---
+
+test("a guest sees every screen read-only, and can leave", async () => {
+  const auth = new FakeAuth();
+  open(auth, "/automations");
+  auth.answer(null);
+  fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+  expect(await screen.findByRole("heading", { level: 1, name: "Automations" })).toBeTruthy();
+  expect(auth.signedIn).toEqual({ email: "", role: "viewer", guest: true });
+  expect(screen.getByRole("banner").textContent).toContain("Guest viewer");
+  expect(screen.getByText(/Read-only for you: only admins/)).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Exit guest view" }));
+  expect(await screen.findByRole("button", { name: "View as guest" })).toBeTruthy();
+  expect(auth.signedIn).toBeNull();
+});
+
+test("where guest view is turned off, the guest button says so", async () => {
+  const auth = new FakeAuth();
+  auth.guestRefusal = "auth/admin-restricted-operation";
+  open(auth);
+  auth.answer(null);
+  fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+  expect((await screen.findByRole("alert")).textContent).toBe(
+    "Guest view is turned off on this site. Sign in with a staff account.",
+  );
+  expect(auth.signedIn).toBeNull();
+  expect((screen.getByRole("button", { name: "View as guest" }) as HTMLButtonElement).disabled).toBe(
+    false,
+  );
+});
+
 // --- T409 ---
 
 test("the theme switch shows Light or Dark at once and keeps it; System forgets", () => {

@@ -17,6 +17,21 @@ screens fill in with T402 to T407.
 Screens call the API as the person signed in (`src/api.ts`): same origin,
 `/api/v1/...`, with their ID token as `Authorization: Bearer`.
 
+## Guest view (T411)
+
+View as guest, under the sign-in form, signs in anonymously with Firebase
+Auth, so anyone can look around without an account. A guest reads as a
+viewer everywhere: the dashboard shows "Guest" and the viewer's read-only
+screens, `firestore.rules` lets an anonymous sign-in read what every role
+reads, and the API (`cfi_api.access`) ranks one as a viewer. A role claim on
+a guest's token counts for nothing.
+
+Guests get in only where the project's Firebase Auth allows anonymous
+sign-in (one-time setup below); elsewhere the button says guest view is
+turned off. Turning the Anonymous provider off again stops new guests at
+once, with no deploy. Nothing yet limits how much a guest can read (no App
+Check, no quota per visitor).
+
 ## Overview (T402)
 
 Today's numbers from `GET /overview`: customers, average fit, average churn
@@ -110,6 +125,13 @@ With the emulators:
 Register the dashboard as a web app, so Hosting can serve its config:
 
     firebase apps:create WEB "CFI dashboard" --project cfi-dev-th26
+
+For guest view (T411), on the projects that should have it only: in the
+Firebase console, Authentication, Sign-in method, add the Anonymous
+provider. If Settings, User actions has "Enable create (sign-up)" off,
+anonymous sign-in is refused too (`auth/admin-restricted-operation`), so
+turn it on; an email account made that way still has no role, so it sees
+"No dashboard access".
 
 ## The live customer feed (T403)
 

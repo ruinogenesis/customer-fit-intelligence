@@ -10,12 +10,12 @@ import {
   connectAuthEmulator,
   getAuth,
   onAuthStateChanged,
+  signInAnonymously,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 
-import { SignInError, signInMessage, type AuthService } from "./auth";
-import { roleFrom } from "./roles";
+import { guestMessage, SignInError, sessionOf, signInMessage, type AuthService } from "./auth";
 
 const DEMO: FirebaseOptions = {
   apiKey: "demo-key",
@@ -44,10 +44,9 @@ export async function firebaseAuth(): Promise<AuthService> {
           callback(null);
           return;
         }
-        // The role is a custom claim on the ID token (python -m cfi_api.roles).
-        void user
-          .getIdTokenResult()
-          .then((token) => callback({ email: user.email ?? "", role: roleFrom(token.claims) }));
+        // The role is a custom claim on the ID token (python -m cfi_api.roles);
+        // a guest, signed in anonymously, reads as a viewer (T411).
+        void user.getIdTokenResult().then((token) => callback(sessionOf(user, token.claims)));
       }),
     signIn: async (email, password) => {
       try {
@@ -55,6 +54,14 @@ export async function firebaseAuth(): Promise<AuthService> {
       } catch (error) {
         const code = error instanceof FirebaseError ? error.code : "unknown";
         throw new SignInError(signInMessage(code));
+      }
+    },
+    signInAsGuest: async () => {
+      try {
+        await signInAnonymously(auth);
+      } catch (error) {
+        const code = error instanceof FirebaseError ? error.code : "unknown";
+        throw new SignInError(guestMessage(code));
       }
     },
     signOut: () => signOut(auth),

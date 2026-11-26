@@ -34,24 +34,34 @@ def _part(data: dict[str, Any]) -> str:
     return base64.urlsafe_b64encode(json.dumps(data).encode()).rstrip(b"=").decode()
 
 
-def token(role: object = None, project: str = PROJECT) -> str:
+def token(
+    role: object = None, project: str = PROJECT, provider: str = "password"
+) -> str:
     """An emulator ID token for project, with role as its role claim if set."""
     now = int(time.time())
-    claims = {
+    claims: dict[str, Any] = {
         "iss": f"https://securetoken.google.com/{project}",
         "aud": project,
         "sub": "staff-1",
         "iat": now,
         "exp": now + 3600,
         "auth_time": now,
+        "firebase": {"sign_in_provider": provider, "identities": {}},
     }
     if role is not None:
         claims["role"] = role
     return f"{_part({'alg': 'none', 'typ': 'JWT'})}.{_part(claims)}."
 
 
-def bearer(role: object = None, project: str = PROJECT) -> dict[str, str]:
-    return {"Authorization": f"Bearer {token(role, project)}"}
+def bearer(
+    role: object = None, project: str = PROJECT, provider: str = "password"
+) -> dict[str, str]:
+    return {"Authorization": f"Bearer {token(role, project, provider)}"}
+
+
+def guest(role: object = None) -> dict[str, str]:
+    """A guest's header (T411): signed in anonymously."""
+    return bearer(role, provider="anonymous")
 
 
 @pytest.fixture(autouse=True)
@@ -197,6 +207,19 @@ def test_the_dashboard_reads_need_a_staff_role(client: FlaskClient) -> None:
         assert client.get(path).status_code == 401
         assert client.get(path, headers=bearer()).status_code == 403  # no role
         assert client.get(path, headers=bearer("viewer")).status_code == 200
+
+
+def test_a_guest_reads_as_a_viewer_and_does_nothing_more(client: FlaskClient) -> None:
+    assert client.post(EVENTS, json=EVENT, headers=bearer("admin")).status_code == 201
+    customer = f"/api/v1/customers/{EVENT['customer_id']}"
+    for path in ["/api/v1/customers", customer, f"{customer}/scores", "/api/v1/matrix"]:
+        assert client.get(path, headers=guest()).status_code == 200
+    # A role claim on a guest's token counts for nothing: a guest is a viewer.
+    for headers in [guest(), guest("admin")]:
+        assert client.post(SCORE, json={}, headers=headers).status_code == 403
+        assert client.post(EVENTS, json=EVENT, headers=headers).status_code == 403
+        promote = "/api/v1/models/t112-sim/promote"
+        assert client.post(promote, headers=headers).status_code == 403
 
 
 def test_a_path_nobody_serves_answers_404_or_405(client: FlaskClient) -> None:

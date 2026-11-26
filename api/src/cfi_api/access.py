@@ -7,6 +7,9 @@ that takes calls without Google credentials (T205). So with AUTH set to
 - Staff send a Firebase ID token in the header Authorization: Bearer
   <token>. Its role claim, which python -m cfi_api.roles sets, must rank at
   least as high as the rule's role: viewer < analyst < admin.
+- A guest of the dashboard (T411) signs in anonymously, where the project
+  allows it (the Anonymous provider in Firebase Auth), and ranks as a
+  viewer: it reads what every role reads, and nothing more.
 - The ordering app may send events with the integration key in the header
   X-CFI-Key instead (WRITE_KEY, from Secret Manager), as it has no staff
   account. The key opens POST /events and nothing else.
@@ -194,8 +197,22 @@ def require_access(
                 message=f"This request needs a staff sign-in token{needs}.",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        elif rank(claims.get("role")) < RANKS[rule.role]:
+        elif rank(role_of(claims)) < RANKS[rule.role]:
             abort(403, message=f"This request needs the {rule.role} role or higher.")
+
+
+GUEST = "viewer"
+
+
+def role_of(claims: Mapping[str, Any]) -> object:
+    """The role a token carries: a guest's is GUEST, whatever else it says."""
+    firebase = claims.get("firebase")
+    if (
+        isinstance(firebase, Mapping)
+        and firebase.get("sign_in_provider") == "anonymous"
+    ):
+        return GUEST
+    return claims.get("role")
 
 
 def rank(role: object) -> int:

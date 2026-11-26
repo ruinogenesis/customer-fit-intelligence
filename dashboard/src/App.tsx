@@ -1,5 +1,6 @@
-// The staff dashboard's shell (T401): sign-in, then every screen in a nav,
-// each saying what this person's role lets them do there.
+// The staff dashboard's shell (T401): sign-in, or a guest view that reads as a
+// viewer (T411), then every screen in a nav, each saying what this person's
+// role lets them do there.
 import { lazy, Suspense, useEffect, useState, type ComponentType, type FormEvent } from "react";
 import {
   createBrowserRouter,
@@ -82,7 +83,16 @@ export function App({
   const signOut = () => void auth.signOut();
   if (session.role === null) return <NoAccess email={session.email} signOut={signOut} />;
   return (
-    <StaffContext value={{ email: session.email, role: session.role, signOut, api: client, feed }}>
+    <StaffContext
+      value={{
+        email: session.email,
+        role: session.role,
+        guest: session.guest === true,
+        signOut,
+        api: client,
+        feed,
+      }}
+    >
       <RouterProvider router={router} />
     </StaffContext>
   );
@@ -92,23 +102,27 @@ function SignIn({ auth }: { auth: AuthService }) {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
+  async function attempt(signIn: () => Promise<void>) {
     setBusy(true);
     setError(null);
     try {
-      await auth.signIn(String(form.get("email")), String(form.get("password")));
+      await signIn();
     } catch (failure) {
       setError(failure instanceof SignInError ? failure.message : "Couldn't sign in.");
       setBusy(false);
     }
   }
 
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    void attempt(() => auth.signIn(String(form.get("email")), String(form.get("password"))));
+  }
+
   return (
     <main className="sign-in">
       <h1>Customer Fit Intelligence</h1>
-      <form onSubmit={(event) => void submit(event)}>
+      <form onSubmit={submit}>
         <label>
           Email
           <input name="email" type="email" autoComplete="username" required />
@@ -122,6 +136,12 @@ function SignIn({ auth }: { auth: AuthService }) {
           {busy ? "Signing in…" : "Sign in"}
         </button>
       </form>
+      <div className="guest">
+        <button type="button" disabled={busy} onClick={() => void attempt(() => auth.signInAsGuest())}>
+          View as guest
+        </button>
+        <p>Every screen, read-only, without an account.</p>
+      </div>
     </main>
   );
 }
@@ -142,7 +162,7 @@ function NoAccess({ email, signOut }: { email: string; signOut: () => void }) {
 }
 
 function Shell() {
-  const { email, role, signOut } = useStaff();
+  const { email, role, guest, signOut } = useStaff();
   return (
     <div className="shell">
       <a
@@ -158,11 +178,11 @@ function Shell() {
       <header>
         <strong>Customer Fit Intelligence</strong>
         <span className="who">
-          {email} <span className="role">{role}</span>
+          {guest ? "Guest" : email} <span className="role">{role}</span>
         </span>
         <ThemeSwitch />
         <button type="button" onClick={signOut}>
-          Sign out
+          {guest ? "Exit guest view" : "Sign out"}
         </button>
       </header>
       <nav aria-label="Screens">

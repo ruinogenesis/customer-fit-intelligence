@@ -31,15 +31,18 @@ emulator = pytest.mark.skipif(
 )
 
 STAFF = frozenset({"viewer", "analyst", "admin"})
+# Who reads what the dashboard shows: staff, and guests (T411).
+READS = STAFF | {"guest", "guest with a role"}
 
 # Who may read each collection, a document or the whole listing. Every role
 # reads what the dashboard shows; nobody reads what nothing writes yet, or
-# the outbox, which only the API uses (T306). Staff also read their own
-# users/{uid}, which a test below checks on its own.
+# the outbox, which only the API uses (T306). Guests (T411) read what every
+# role reads and no more, even with a role claim. Staff also read their own
+# users/{uid}, which a test below checks on its own; guests have none.
 READERS: dict[str, frozenset[str]] = {
-    "customers": STAFF,
-    "scores": STAFF,
-    "orders": STAFF,
+    "customers": READS,
+    "scores": READS,
+    "orders": READS,
     "events": frozenset({"admin"}),
     "users": frozenset({"admin"}),
     "rules": frozenset(),
@@ -57,6 +60,11 @@ CALLERS: dict[str, dict[str, Any] | None] = {
     "viewer": {"role": "viewer"},
     "analyst": {"role": "analyst"},
     "admin": {"role": "admin"},
+    "guest": {"firebase": {"sign_in_provider": "anonymous", "identities": {}}},
+    "guest with a role": {
+        "role": "admin",
+        "firebase": {"sign_in_provider": "anonymous", "identities": {}},
+    },
 }
 
 
