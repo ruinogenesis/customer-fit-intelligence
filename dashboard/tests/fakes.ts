@@ -2,7 +2,13 @@
 import { act } from "@testing-library/react";
 
 import { ApiError, type Api } from "../src/api";
-import { SignInError, signInMessage, type AuthService, type Session } from "../src/auth";
+import {
+  guestMessage,
+  SignInError,
+  signInMessage,
+  type AuthService,
+  type Session,
+} from "../src/auth";
 import type { CustomerFeed } from "../src/feed";
 import type { FeedCustomer } from "../src/matrix";
 import type { ModelVersion } from "../src/models";
@@ -13,6 +19,8 @@ export class FakeAuth implements AuthService {
   signedIn: Session | null = null;
   private listener: ((session: Session | null) => void) | null = null;
   private accounts: Record<string, { password: string; role: Role | null }>;
+  /** Why the next guest sign-in fails, as Firebase's error code; null lets it in. */
+  guestRefusal: string | null = null;
 
   constructor(accounts: Record<string, { password: string; role: Role | null }> = {}) {
     this.accounts = accounts;
@@ -36,6 +44,12 @@ export class FakeAuth implements AuthService {
       throw new SignInError(signInMessage("auth/invalid-credential"));
     }
     this.signedIn = { email, role: account.role };
+    this.listener?.(this.signedIn);
+  }
+
+  async signInAsGuest(): Promise<void> {
+    if (this.guestRefusal !== null) throw new SignInError(guestMessage(this.guestRefusal));
+    this.signedIn = { email: "", role: "viewer", guest: true };
     this.listener?.(this.signedIn);
   }
 

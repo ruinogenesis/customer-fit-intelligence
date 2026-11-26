@@ -2,16 +2,29 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // A guest of the dashboard (T411) signs in anonymously, where the
+    // project allows it (the Anonymous provider in Firebase Auth), and
+    // reads what every role reads: no more, whatever else its token says.
+    function isGuest() {
+      return request.auth != null
+        && request.auth.token.get('firebase', {}).get('sign_in_provider', '') == 'anonymous';
+    }
+
     // Staff carry a role claim, set by python -m cfi_api.roles (T303):
     // viewer < analyst < admin. An account without one, such as a customer
-    // of the ordering app, may read nothing here.
+    // of the ordering app, may read nothing here; a guest's counts for nothing.
     function isStaff() {
       return request.auth != null
+        && !isGuest()
         && request.auth.token.role in ['admin', 'analyst', 'viewer'];
     }
 
     function isAdmin() {
-      return request.auth != null && request.auth.token.role == 'admin';
+      return isStaff() && request.auth.token.role == 'admin';
+    }
+
+    function isReader() {
+      return isStaff() || isGuest();
     }
 
     // Who may read what (T304). Every role reads what the dashboard shows;
@@ -22,15 +35,15 @@ service cloud.firestore {
     // collection against every kind of caller.
 
     match /customers/{customerId} {
-      allow read: if isStaff();
+      allow read: if isReader();
 
       match /scores/{eventId} {
-        allow read: if isStaff();
+        allow read: if isReader();
       }
     }
 
     match /orders/{orderId} {
-      allow read: if isStaff();
+      allow read: if isReader();
     }
 
     // Events as received, for an admin looking into a problem.

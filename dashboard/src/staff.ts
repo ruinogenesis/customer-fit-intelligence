@@ -8,6 +8,8 @@ import type { Role } from "./roles";
 export interface Staff {
   email: string;
   role: Role;
+  /** A guest (T411): no account, reading as a viewer. */
+  guest: boolean;
   signOut: () => void;
   api: Api;
   /** Every customer, live (T403). */
