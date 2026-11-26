@@ -8,6 +8,7 @@ import {
   NavLink,
   Outlet,
   RouterProvider,
+  useRouteError,
   type RouteObject,
 } from "react-router";
 
@@ -53,10 +54,16 @@ export const routes: RouteObject[] = [
     path: "/",
     element: <Shell />,
     children: [
-      { index: true, element: <Navigate to={SCREENS[0].path} replace /> },
-      ...SCREENS.map((screen) => ({ path: screen.path, element: page(screen) })),
-      { path: "customers/:customerId", element: loaded(Profile) },
-      { path: "*", element: <NotFound /> },
+      {
+        // A screen that fails shows why inside the shell, with the nav kept.
+        errorElement: <ScreenError />,
+        children: [
+          { index: true, element: <Navigate to={SCREENS[0].path} replace /> },
+          ...SCREENS.map((screen) => ({ path: screen.path, element: page(screen) })),
+          { path: "customers/:customerId", element: loaded(Profile) },
+          { path: "*", element: <NotFound /> },
+        ],
+      },
     ],
   },
 ];
@@ -282,6 +289,27 @@ function ScreenPage({ screen }: { screen: Screen }) {
           : `Read-only for you: only ${whoMay(screen.actionRole)} can ${screen.action.toLowerCase()}.`}
       </p>
       <p className="soon">This screen isn't built yet.</p>
+    </section>
+  );
+}
+
+/** A screen that failed to load or to show (staleBuild.ts reloads once first,
+ * when a deploy replaced the screen's file). */
+function ScreenError() {
+  const error = useRouteError();
+  return (
+    <section>
+      <h1>This screen couldn't load</h1>
+      <p className="lede">
+        If the dashboard was updated while this page was open, reloading gets the new version.
+      </p>
+      <button type="button" className="primary" onClick={() => window.location.reload()}>
+        Reload the page
+      </button>
+      <details>
+        <summary>What went wrong</summary>
+        <p className="note">{error instanceof Error ? error.message : String(error)}</p>
+      </details>
     </section>
   );
 }

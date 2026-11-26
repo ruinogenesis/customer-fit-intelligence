@@ -4,7 +4,10 @@ import { createRoot } from "react-dom/client";
 
 import { App } from "./App";
 import { firebaseAuth } from "./firebase";
+import { reloadOnStaleBuild } from "./staleBuild";
 import "./styles.css";
+
+reloadOnStaleBuild();
 
 const root = createRoot(document.getElementById("root")!);
 try {
