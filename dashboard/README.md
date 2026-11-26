@@ -17,6 +17,12 @@ screens fill in with T402 to T407.
 Screens call the API as the person signed in (`src/api.ts`): same origin,
 `/api/v1/...`, with their ID token as `Authorization: Bearer`.
 
+Each screen is a file of its own, loaded when first opened, and a deploy
+replaces those files. A tab opened before a deploy therefore reloads once
+when it opens a screen it hasn't loaded yet, to get the new build
+(`src/staleBuild.ts`, T412). A screen that still fails says so inside the
+shell, with a button to reload, instead of a bare error page.
+
 ## Guest view (T411)
 
 View as guest, under the sign-in form, signs in anonymously with Firebase
