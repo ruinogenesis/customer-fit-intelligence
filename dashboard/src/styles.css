@@ -510,6 +510,7 @@ dl.quadrants dd {
 /* relative: hidden labels (position: absolute) stay inside the panel too. */
 .table-scroll {
   position: relative;
+  box-sizing: border-box;
   width: fit-content;
   max-width: 100%;
   overflow-x: auto;
@@ -1036,6 +1037,10 @@ table.bars {
 
 .card {
   max-width: 60rem;
+}
+
+.card .table-scroll {
+  margin: 0.75rem 0;
 }
 
 .card table {

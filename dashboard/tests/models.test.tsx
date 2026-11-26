@@ -138,6 +138,8 @@ test("a model card is rendered from markdown, with anything unsafe removed", asy
   expect(await screen.findByRole("heading", { name: "Model card t112-sim" })).toBeTruthy();
   const rendered = document.querySelector<HTMLElement>(".card")!;
   expect(within(rendered).getByRole("cell", { name: "churn AUC" })).toBeTruthy(); // a table
+  // In a panel of its own, which scrolls sideways when the card is narrower (T412).
+  expect(rendered.querySelector(".table-scroll > table")).not.toBeNull();
   expect(document.querySelector(".card script")).toBeNull();
   expect(document.querySelector(".card img")?.getAttribute("onerror")).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Model card for t112-sim" }));
