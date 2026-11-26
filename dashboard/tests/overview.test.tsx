@@ -103,7 +103,7 @@ test("today's numbers come from the API", async () => {
   expect(tile("At risk (churn ≥ 10%)")).toBe("At risk (churn ≥ 10%) | 12 | 8% of scored");
   expect(tile("Lovemark")).toBe("Lovemark | 90 | 56% of scored");
   expect(tile("Product")).toBe("Product | 15 | 9% of scored");
-  expect(screen.getByText(/^Updated \d\d:\d\d:\d\d · refreshes every 30 seconds$/)).toBeTruthy();
+  expect(screen.getByText(/^Updated \d\d:\d\d:\d\d\. Refreshes every 30 seconds\.$/)).toBeTruthy();
 });
 
 test("axe finds nothing on the overview, with the numbers table open (T409)", async () => {

@@ -146,7 +146,7 @@ function Now({
     <>
       <p className="updated">
         Live: {whole(dots.length)} customers placed, {whole(customers.length - dots.length)} not
-        scored yet · updated {clock(at)}
+        scored yet. Updated {clock(at)}.
       </p>
       {stopped !== null && (
         <p role="alert">
@@ -525,36 +525,38 @@ function MovementTable({ movement }: { movement: Movement }) {
         {whole(stayed)} stayed in their quadrant, {whole(moved)} moved to another,{" "}
         {whole(scored)} scored for the first time.
       </p>
-      <table className="movement">
-        <thead>
-          <tr>
-            <th scope="col">
-              On {movement.from} ↓ · on {movement.to} →
-            </th>
-            {QUADRANTS.map((q) => (
-              <th key={q} scope="col">
-                {QUADRANT_NAMES[q]}
+      <div className="table-scroll">
+        <table className="movement">
+          <thead>
+            <tr>
+              <th scope="col">
+                On {movement.from} ↓ · on {movement.to} →
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((was) => (
-            <tr key={was}>
-              <th scope="row">{name(was)}</th>
-              {QUADRANTS.map((now) => {
-                const n = movement.moves[was][now];
-                const kind = was === now ? "stayed" : n > 0 ? "moved" : undefined;
-                return (
-                  <td key={now} className={kind}>
-                    {whole(n)}
-                  </td>
-                );
-              })}
+              {QUADRANTS.map((q) => (
+                <th key={q} scope="col">
+                  {QUADRANT_NAMES[q]}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((was) => (
+              <tr key={was}>
+                <th scope="row">{name(was)}</th>
+                {QUADRANTS.map((now) => {
+                  const n = movement.moves[was][now];
+                  const kind = was === now ? "stayed" : n > 0 ? "moved" : undefined;
+                  return (
+                    <td key={now} className={kind}>
+                      {whole(n)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

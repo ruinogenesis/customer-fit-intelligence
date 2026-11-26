@@ -16,7 +16,7 @@ import {
   type OverviewNow,
   type Trend,
 } from "./overview";
-import { CustomerTable, Tile } from "./parts";
+import { CustomerTable, QuadrantMap, Tile } from "./parts";
 import { useStaff } from "./staff";
 
 export const REFRESH_MS = 30_000;
@@ -106,7 +106,7 @@ function Today({ overview, at, stale }: { overview: OverviewNow; at: Date; stale
   return (
     <>
       <p className="updated">
-        Updated {clock(at)} · refreshes every {REFRESH_MS / 1000} seconds
+        Updated {clock(at)}. Refreshes every {REFRESH_MS / 1000} seconds.
       </p>
       {stale !== null && (
         <p role="alert">
@@ -124,16 +124,19 @@ function Today({ overview, at, stale }: { overview: OverviewNow; at: Date; stale
         />
       </div>
       <h2>Quadrants now</h2>
-      <div className="tiles">
-        {QUADRANTS.map((quadrant) => (
-          <Tile
-            key={quadrant}
-            label={QUADRANT_NAMES[quadrant]}
-            value={whole(overview.quadrants[quadrant])}
-            note={`${share(overview.quadrants[quadrant], scored)} of scored`}
-          />
-        ))}
-      </div>
+      <QuadrantMap>
+        <div className="tiles quadrants">
+          {QUADRANTS.map((quadrant) => (
+            <Tile
+              key={quadrant}
+              className={quadrant}
+              label={QUADRANT_NAMES[quadrant]}
+              value={whole(overview.quadrants[quadrant])}
+              note={`${share(overview.quadrants[quadrant], scored)} of scored`}
+            />
+          ))}
+        </div>
+      </QuadrantMap>
     </>
   );
 }
@@ -154,7 +157,7 @@ function TrendView({ daily }: { daily: Daily }) {
   const churn = trend.days.map((d) => ({ label: d.day, value: d.average_churn_risk }));
   return (
     <>
-      <p>
+      <p className="note">
         {trend.from} to {trend.to}, from the daily snapshots written at 02:00 Bangkok.
       </p>
       <div className="charts">
@@ -175,26 +178,28 @@ function TrendView({ daily }: { daily: Daily }) {
       </div>
       <details>
         <summary>Show the numbers</summary>
-        <table>
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Customers</th>
-              <th>Average fit</th>
-              <th>Average churn risk</th>
-            </tr>
-          </thead>
-          <tbody>
-            {trend.days.map((d) => (
-              <tr key={d.day}>
-                <td>{d.day}</td>
-                <td>{whole(d.customers)}</td>
-                <td>{decimal(d.average_fit)}</td>
-                <td>{percent(d.average_churn_risk)}</td>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Customers</th>
+                <th>Average fit</th>
+                <th>Average churn risk</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {trend.days.map((d) => (
+                <tr key={d.day}>
+                  <td>{d.day}</td>
+                  <td>{whole(d.customers)}</td>
+                  <td>{decimal(d.average_fit)}</td>
+                  <td>{percent(d.average_churn_risk)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </details>
     </>
   );

@@ -79,7 +79,7 @@ export function ModelsPage() {
   return (
     <section className="models">
       <h1>Models</h1>
-      <p>
+      <p className="lede">
         Versions, metrics and model cards.{" "}
         {admin
           ? "Promote a candidate, or roll back to an earlier version."
@@ -138,109 +138,112 @@ function Versions(props: {
   const live = models.find((model) => model.status === "live")?.version ?? null;
   const columns = 5 + metrics.length;
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Version</th>
-          <th>Status</th>
-          {metrics.map((name) => (
-            <th key={name}>{name}</th>
-          ))}
-          <th>Trained</th>
-          <th>Promoted</th>
-          <th>
-            <span className="visually-hidden">Actions</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {models.map((model) => {
-          const label = promoteLabel(model);
-          const card = cards[model.version];
-          return (
-            <Fragment key={model.version}>
-              <tr className={model.status}>
-                <td>
-                  <code>{model.version}</code>
-                </td>
-                <td>
-                  <span className={`status ${model.status}`}>{model.status}</span>
-                </td>
-                {metrics.map((name) => (
-                  <td key={name}>{model.metrics[name]?.toFixed(3) ?? "—"}</td>
-                ))}
-                <td>{bangkok(model.created_at)}</td>
-                <td>{bangkok(model.promoted_at)}</td>
-                <td className="actions">
-                  <button
-                    type="button"
-                    aria-label={`Model card for ${model.version}`}
-                    aria-expanded={open === model.version}
-                    onClick={() => props.onCard(model.version)}
-                  >
-                    {open === model.version ? "Hide card" : "Model card"}
-                  </button>
-                  {admin && label !== null && (
-                    <button
-                      type="button"
-                      id={`promote-${model.version}`}
-                      aria-label={`${label} ${model.version}`}
-                      aria-expanded={confirming === model.version}
-                      disabled={busy}
-                      onClick={() => props.onPromote(model.version)}
-                    >
-                      {label}
-                    </button>
-                  )}
-                </td>
-              </tr>
-              {confirming === model.version && (
-                <tr className="confirm">
-                  {/* Focus goes to the confirm button; Cancel or Escape brings it
-                      back to the button that asked (T409). */}
-                  <td
-                    colSpan={columns}
-                    onKeyDown={(event) => {
-                      if (event.key === "Escape" && !busy) cancel(model.version);
-                    }}
-                  >
-                    <p id={`confirm-${model.version}`}>
-                      Make <code>{model.version}</code> live? Every event from then on, on every
-                      instance, is scored by it
-                      {live === null ? "." : <>; <code>{live}</code> is retired.</>}
-                    </p>
-                    <button
-                      type="button"
-                      autoFocus
-                      aria-describedby={`confirm-${model.version}`}
-                      disabled={busy}
-                      onClick={() => props.onConfirm(model.version)}
-                    >
-                      {busy ? "Promoting…" : `Make ${model.version} live`}
-                    </button>
-                    <button type="button" disabled={busy} onClick={() => cancel(model.version)}>
-                      Cancel
-                    </button>
+    <div className="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Status</th>
+            {metrics.map((name) => (
+              <th key={name}>{name}</th>
+            ))}
+            <th>Trained</th>
+            <th>Promoted</th>
+            <th>
+              <span className="visually-hidden">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {models.map((model) => {
+            const label = promoteLabel(model);
+            const card = cards[model.version];
+            return (
+              <Fragment key={model.version}>
+                <tr className={model.status}>
+                  <td>
+                    <code>{model.version}</code>
                   </td>
-                </tr>
-              )}
-              {open === model.version && (
-                <tr className="card-row">
-                  <td colSpan={columns}>
-                    {card === undefined ? (
-                      <p>Loading the model card…</p>
-                    ) : "html" in card ? (
-                      <div className="card" dangerouslySetInnerHTML={{ __html: card.html }} />
-                    ) : (
-                      <p>{card.message}</p>
+                  <td>
+                    <span className={`status ${model.status}`}>{model.status}</span>
+                  </td>
+                  {metrics.map((name) => (
+                    <td key={name}>{model.metrics[name]?.toFixed(3) ?? "—"}</td>
+                  ))}
+                  <td>{bangkok(model.created_at)}</td>
+                  <td>{bangkok(model.promoted_at)}</td>
+                  <td className="actions">
+                    <button
+                      type="button"
+                      aria-label={`Model card for ${model.version}`}
+                      aria-expanded={open === model.version}
+                      onClick={() => props.onCard(model.version)}
+                    >
+                      {open === model.version ? "Hide card" : "Model card"}
+                    </button>
+                    {admin && label !== null && (
+                      <button
+                        type="button"
+                        id={`promote-${model.version}`}
+                        aria-label={`${label} ${model.version}`}
+                        aria-expanded={confirming === model.version}
+                        disabled={busy}
+                        onClick={() => props.onPromote(model.version)}
+                      >
+                        {label}
+                      </button>
                     )}
                   </td>
                 </tr>
-              )}
-            </Fragment>
-          );
-        })}
-      </tbody>
-    </table>
+                {confirming === model.version && (
+                  <tr className="confirm">
+                    {/* Focus goes to the confirm button; Cancel or Escape brings it
+                        back to the button that asked (T409). */}
+                    <td
+                      colSpan={columns}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape" && !busy) cancel(model.version);
+                      }}
+                    >
+                      <p id={`confirm-${model.version}`}>
+                        Make <code>{model.version}</code> live? Every event from then on, on every
+                        instance, is scored by it
+                        {live === null ? "." : <>; <code>{live}</code> is retired.</>}
+                      </p>
+                      <button
+                        type="button"
+                        className="primary"
+                        autoFocus
+                        aria-describedby={`confirm-${model.version}`}
+                        disabled={busy}
+                        onClick={() => props.onConfirm(model.version)}
+                      >
+                        {busy ? "Promoting…" : `Make ${model.version} live`}
+                      </button>
+                      <button type="button" disabled={busy} onClick={() => cancel(model.version)}>
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                )}
+                {open === model.version && (
+                  <tr className="card-row">
+                    <td colSpan={columns}>
+                      {card === undefined ? (
+                        <p>Loading the model card…</p>
+                      ) : "html" in card ? (
+                        <div className="card" dangerouslySetInnerHTML={{ __html: card.html }} />
+                      ) : (
+                        <p>{card.message}</p>
+                      )}
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }

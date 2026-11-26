@@ -67,6 +67,22 @@ build: on Hosting the app fetches the project's own from
 `/__/firebase/init.json`, which needs a registered web app (one-time setup
 below). `npm run dev` uses the emulators' demo project instead.
 
+## The look, on phones too (T412)
+
+One typeface, Anuphan (Cadson Demak, Bangkok; SIL Open Font License),
+served from the build by `@fontsource-variable/anuphan`: its Latin and Thai
+letters match, and its figures are all one width, so numbers line up. The
+neutrals and the accent lean towards celadon; the chart colours stay those
+of the dataviz palette. The mark, in the header, on the sign-in page and as
+`public/favicon.svg`, is the four quadrants with Lovemark filled, and the
+Overview's quadrant counts sit where the love matrix draws them.
+
+Numbers sit in one panel divided by hairlines; tables, charts and the
+matrix each sit in a panel of their own, and a table wider than the screen
+scrolls sideways inside its panel. Under 48rem (phones, narrow windows) the
+screens become a row of tabs under a two-row header, and everything is one
+column.
+
 ## Themes and keyboard (T409)
 
 Every colour is a variable at the top of `src/styles.css`, light and dark at

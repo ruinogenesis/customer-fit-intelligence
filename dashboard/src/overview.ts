@@ -11,6 +11,14 @@ export const QUADRANT_NAMES: Record<Quadrant, string> = {
   product: "Product",
 };
 
+/** What each quadrant means: where Love and Respect sit (D5). */
+export const QUADRANT_MEANING: Record<Quadrant, string> = {
+  lovemark: "Loved and respected",
+  brand: "Respected, not loved",
+  fad: "Loved, not respected",
+  product: "Neither loved nor respected",
+};
+
 export interface OverviewNow {
   customers: number;
   unscored: number;

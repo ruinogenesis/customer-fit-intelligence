@@ -14,6 +14,8 @@ import {
 import { httpApi, type Api } from "./api";
 import { SignInError, type AuthService, type Session } from "./auth";
 import { firestoreFeed, type CustomerFeed } from "./feed";
+import { QUADRANT_MEANING, QUADRANT_NAMES, QUADRANTS } from "./overview";
+import { QuadrantMap } from "./parts";
 import { atLeast, SCREENS, whoMay, type Screen } from "./roles";
 import { StaffContext, useStaff } from "./staff";
 import { chooseTheme, keptTheme, THEME_NAMES, THEMES, type Theme } from "./theme";
@@ -121,42 +123,81 @@ function SignIn({ auth }: { auth: AuthService }) {
 
   return (
     <main className="sign-in">
-      <h1>Customer Fit Intelligence</h1>
-      <form onSubmit={submit}>
-        <label>
-          Email
-          <input name="email" type="email" autoComplete="username" required />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" autoComplete="current-password" required />
-        </label>
-        {error !== null && <p role="alert">{error}</p>}
-        <button type="submit" disabled={busy}>
-          {busy ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
-      <div className="guest">
-        <button type="button" disabled={busy} onClick={() => void attempt(() => auth.signInAsGuest())}>
-          View as guest
-        </button>
-        <p>Every screen, read-only, without an account.</p>
-      </div>
+      <section className="intro">
+        <h1 className="wordmark">
+          <Mark /> Customer Fit Intelligence
+        </h1>
+        <p className="lede">
+          How much each customer loves and respects the service, who is likely to stop ordering,
+          and what pulls them down.
+        </p>
+        <QuadrantMap>
+          <dl className="quadrants">
+            {QUADRANTS.map((quadrant) => (
+              <div key={quadrant} className={quadrant}>
+                <dt>{QUADRANT_NAMES[quadrant]}</dt>
+                <dd>{QUADRANT_MEANING[quadrant]}</dd>
+              </div>
+            ))}
+          </dl>
+        </QuadrantMap>
+      </section>
+      <section className="panel" aria-labelledby="sign-in-title">
+        <h2 id="sign-in-title">Staff sign-in</h2>
+        <form onSubmit={submit}>
+          <label>
+            Email
+            <input name="email" type="email" autoComplete="username" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autoComplete="current-password" required />
+          </label>
+          {error !== null && <p role="alert">{error}</p>}
+          <button type="submit" className="primary" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+        <div className="guest">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void attempt(() => auth.signInAsGuest())}
+          >
+            View as guest
+          </button>
+          <p>See every screen read-only, without an account.</p>
+        </div>
+      </section>
     </main>
+  );
+}
+
+/** The product's mark: the four quadrants, Lovemark filled (D5). */
+function Mark() {
+  return (
+    <svg className="mark" viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="1" y="1" width="8" height="8" rx="1.5" />
+      <rect className="lovemark" x="11" y="1" width="8" height="8" rx="1.5" />
+      <rect x="1" y="11" width="8" height="8" rx="1.5" />
+      <rect x="11" y="11" width="8" height="8" rx="1.5" />
+    </svg>
   );
 }
 
 function NoAccess({ email, signOut }: { email: string; signOut: () => void }) {
   return (
     <main className="sign-in">
-      <h1>No dashboard access</h1>
-      <p>
-        You're signed in as {email}, but this account has no dashboard role. Ask an admin to
-        grant you one.
-      </p>
-      <button type="button" onClick={signOut}>
-        Sign out
-      </button>
+      <section className="panel">
+        <h1>No dashboard access</h1>
+        <p>
+          You're signed in as {email}, but this account has no dashboard role. Ask an admin to
+          grant you one.
+        </p>
+        <button type="button" onClick={signOut}>
+          Sign out
+        </button>
+      </section>
     </main>
   );
 }
@@ -176,14 +217,19 @@ function Shell() {
         Skip to content
       </a>
       <header>
-        <strong>Customer Fit Intelligence</strong>
-        <span className="who">
-          {guest ? "Guest" : email} <span className="role">{role}</span>
+        <span className="wordmark">
+          <Mark /> Customer Fit Intelligence
         </span>
-        <ThemeSwitch />
-        <button type="button" onClick={signOut}>
-          {guest ? "Exit guest view" : "Sign out"}
-        </button>
+        <div className="account">
+          <span className="who">
+            <span className="email">{guest ? "Guest" : email}</span>{" "}
+            <span className="role">{role}</span>
+          </span>
+          <ThemeSwitch />
+          <button type="button" onClick={signOut}>
+            {guest ? "Exit guest view" : "Sign out"}
+          </button>
+        </div>
       </header>
       <nav aria-label="Screens">
         {SCREENS.map((screen) => (
@@ -227,15 +273,15 @@ function ScreenPage({ screen }: { screen: Screen }) {
   const { role } = useStaff();
   const allowed = atLeast(role, screen.actionRole);
   return (
-    <section>
+    <section className="placeholder">
       <h1>{screen.title}</h1>
-      <p>{screen.shows}.</p>
+      <p className="lede">{screen.shows}.</p>
       <p className={allowed ? "action" : "action read-only"}>
         {allowed
           ? `Main action: ${screen.action}.`
           : `Read-only for you: only ${whoMay(screen.actionRole)} can ${screen.action.toLowerCase()}.`}
       </p>
-      <p className="soon">This screen comes with {screen.task}.</p>
+      <p className="soon">This screen isn't built yet.</p>
     </section>
   );
 }

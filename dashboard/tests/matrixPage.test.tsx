@@ -137,7 +137,7 @@ test("every scored customer is a dot; those at risk drawn larger, on top", async
     { id: "c-d", className: "dot at-risk", r: "6", transform: "translate(161.6px, 161.6px)" },
     { id: "c-e", className: "dot at-risk", r: "6", transform: "translate(108.8px, 478.4px)" },
   ]);
-  expect(screen.getByText(/^Live: 5 customers placed, 1 not scored yet · updated 10:00:00$/)).toBeTruthy();
+  expect(screen.getByText(/^Live: 5 customers placed, 1 not scored yet\. Updated 10:00:00\.$/)).toBeTruthy();
   expect(document.querySelector(".legend")?.textContent).toBe(
     " customer (2)  at risk: churn risk 10% or more (3). Click a dot to open the customer, or move through them with the arrow keys.",
   );
@@ -158,7 +158,7 @@ test("dots move as customers change, each the same dot gliding", async () => {
   expect(dots()[0]).toEqual({ id: "c-a", className: "dot", r: "4", transform: "translate(214.4px, 108.8px)" });
   expect(document.querySelector("circle.dot")).toBe(before);
   expect(picker()).toEqual(["Lovemark 1", "Brand 1", "Fad 2", "Product 1"]);
-  expect(screen.getByText(/updated 10:00:30$/)).toBeTruthy();
+  expect(screen.getByText(/Updated 10:00:30\.$/)).toBeTruthy();
 });
 
 test("picking a quadrant lists its customers, riskiest first, and fades the rest", async () => {

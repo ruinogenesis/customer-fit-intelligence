@@ -63,7 +63,9 @@ export function CustomersPage() {
   return (
     <section className="customers">
       <h1>Customers</h1>
-      <p>Riskiest first. Open a customer to see why their scores sit where they do.</p>
+      <p className="lede">
+        Riskiest first. Open a customer to see why their scores sit where they do.
+      </p>
       <label className="filter">
         Quadrant{" "}
         <select
