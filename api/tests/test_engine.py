@@ -3,8 +3,9 @@ on a new scoring; its decision is logged once per order, with a stable arm,
 and always as a dry run until the guardrails (T502) and channels (T504).
 """
 
+import dataclasses
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import pytest
@@ -42,6 +43,12 @@ def consent(store: MemoryStore, customer_id: str, marketing: bool | None) -> Non
         "customer_id": customer_id,
         "consent": answer,
     }
+
+
+def guard(store: MemoryStore, **changes: Any) -> None:
+    """Change the guardrails' settings from their defaults (T502)."""
+    settings = engine.Guardrails.from_document(store.automation_settings())
+    store.set_automation_settings(dataclasses.replace(settings, **changes).document(T0))
 
 
 def store_with(**statuses: str) -> MemoryStore:
@@ -103,7 +110,7 @@ def test_a_condition_overrides_the_default_numbers() -> None:
 
 
 def test_a_condition_the_logic_does_not_know_is_refused() -> None:
-    with pytest.raises(ValueError, match="unknown condition"):
+    with pytest.raises(ValueError, match="unknown"):
         fee_sensitivity(scoring(), {"min_fee": 0.02})
 
 
@@ -127,6 +134,8 @@ def test_a_rule_that_fires_is_logged_as_an_action() -> None:
             "channel": "voucher",
             "dry_run": True,
             "decided_at": T0,
+            "cost": 4_000,
+            "send_at": T0,  # 13:00 in Bangkok: not quiet hours
             "outcome": None,
         }
     ]
@@ -165,6 +174,7 @@ def test_a_rule_with_a_bad_condition_is_skipped_and_the_others_still_decide(
 
 def test_latest_actions_come_newest_first() -> None:
     store = store_with(fee_sensitivity="dry_run")
+    guard(store, cap_actions=10)
     for n in range(3):
         later = datetime(2026, 11, 28, 6, n, tzinfo=UTC)
         decide(store, scoring(order_id=f"ord_{n}"), later)
@@ -228,6 +238,7 @@ def test_consent_is_read_once_and_only_when_a_marketing_rule_fires(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
+    guard(store, cap_actions=10)
     monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
     reads: list[str] = []
     read = store.customer_document
@@ -245,3 +256,188 @@ def test_consent_is_read_once_and_only_when_a_marketing_rule_fires(
     reads.clear()
     assert decide(store, scoring(quadrant="brand", order_id="ord_10"), T0) == []
     assert reads == []
+
+
+# --- The guardrails (T502): each one blocks ---
+
+BANGKOK_EVENING = datetime(2026, 11, 28, 15, 0, tzinfo=UTC)  # 22:00 in Bangkok
+BANGKOK_NIGHT = datetime(2026, 11, 28, 20, 30, tzinfo=UTC)  # 03:30 next day
+EIGHT_AM = datetime(2026, 11, 29, 1, 0, tzinfo=UTC)  # 08:00 on the 29th
+
+
+def customers_in(
+    arm_name: str, count: int, rule_id: str = "fee-sensitivity"
+) -> list[str]:
+    """The first count customers the rule puts in arm_name at a 0.5 share."""
+    found = (f"cust_{n}" for n in range(1_000))
+    return [c for c in found if arm(rule_id, c, 0.5) == arm_name][:count]
+
+
+def test_with_no_settings_the_defaults_hold() -> None:
+    defaults = engine.Guardrails()
+    assert engine.Guardrails.from_document(None) == defaults
+    assert (defaults.cap_actions, defaults.cap_days) == (2, 7)
+    assert (defaults.quiet_start, defaults.quiet_end) == ("21:00", "08:00")
+    assert defaults.daily_budget == 500_000
+    assert engine.Guardrails.from_document(defaults.document(T0)) == defaults
+
+
+def test_the_global_kill_switch_stops_every_rule(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    store = store_with(fee_sensitivity="live", service_recovery="live")
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    guard(store, enabled=False)
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert decide(store, scoring(), T0) == []
+    assert "Automations are paused: nothing decided for cust_1" in caplog.text
+    reads = []
+    monkeypatch.setattr(store, "list_rules", lambda: reads.append(1) or [])
+    decide(store, scoring(order_id="ord_2"), T0)
+    assert reads == []  # paused, it reads no rule at all
+    monkeypatch.undo()
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    guard(store, enabled=True)
+    assert len(decide(store, scoring(), T0)) == 2
+
+
+def test_a_rules_own_kill_switch_stops_only_that_rule(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(fee_sensitivity="off", service_recovery="live")
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    assert [a["rule_id"] for a in decide(store, scoring(), T0)] == ["service-recovery"]
+
+
+def test_the_frequency_cap_holds_back_the_next_marketing_decision(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    assert len(decide(store, scoring(order_id="ord_1"), T0)) == 2  # both rules
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert decide(store, scoring(order_id="ord_2"), T0 + timedelta(days=6)) == []
+    assert "held back for cust_1: frequency cap (2 in 7 days)" in caplog.text
+    # Seven days on, the first two no longer count.
+    later = decide(store, scoring(order_id="ord_3"), T0 + timedelta(days=7, minutes=1))
+    assert len(later) == 2
+
+
+def test_an_order_scored_again_is_not_held_back_by_its_own_decision(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    guard(store, cap_actions=1)
+    assert len(decide(store, scoring(order_id="ord_1"), T0)) == 1
+    rated = scoring(order_id="ord_1", event_id="00000000-0000-4000-8000-000000000009")
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert decide(store, rated, T0) == []
+        assert decide(store, scoring(order_id="ord_2"), T0) == []
+    assert caplog.text.count("frequency cap") == 1  # for ord_2 only
+
+
+def test_the_cap_counts_both_arms_and_spares_service_rules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(fee_sensitivity="dry_run", service_recovery="dry_run")
+    guard(store, cap_actions=1)
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    held_out = customers_in("holdout", 1)[0]
+    consent(store, held_out, True)
+    first = decide(store, scoring(customer_id=held_out, order_id="ord_1"), T0)
+    assert {a["arm"] for a in first if a["rule_id"] == "fee-sensitivity"} == {"holdout"}
+    second = decide(store, scoring(customer_id=held_out, order_id="ord_2"), T0)
+    assert [a["rule_id"] for a in second] == ["service-recovery"]  # exempt
+
+
+def test_the_daily_budget_stops_both_arms_once_it_would_be_passed(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    guard(store, daily_budget=10_000, cap_actions=10)  # 100 baht; vouchers are 40
+    treated, held = customers_in("treatment", 3), customers_in("holdout", 2)
+    for customer in treated + held:
+        consent(store, customer, True)
+
+    def decide_for(customer: str, at: datetime = T0) -> list[str]:
+        new = scoring(customer_id=customer, order_id=f"ord_{customer}_{at:%d}")
+        return [action["arm"] for action in decide(store, new, at)]
+
+    assert decide_for(held[0]) == ["holdout"]
+    assert store.spent_on("2026-11-28") == 0  # the holdout spends nothing
+    assert decide_for(treated[0]) + decide_for(treated[1]) == ["treatment"] * 2
+    assert store.spent_on("2026-11-28") == 8_000
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert decide_for(treated[2]) == []  # 80 + 40 > 100 baht
+        assert decide_for(held[1]) == []  # nor a holdout, so the arms stay alike
+    assert caplog.text.count("daily budget (2026-11-28)") == 2
+    assert store.spent_on("2026-11-28") == 8_000
+    assert decide_for(treated[2], T0 + timedelta(days=1)) == ["treatment"]
+    assert store.spent_on("2026-11-29") == 4_000
+
+
+def test_a_message_costs_nothing_so_the_budget_never_stops_it(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(win_back="dry_run")
+    guard(store, daily_budget=0)
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    decided = decide(store, scoring(), T0)
+    assert [(a["rule_id"], a["cost"]) for a in decided] == [("win-back", 0)]
+
+
+def test_a_rules_action_map_sets_what_it_costs(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    path = "rules/fee-sensitivity"
+    store.documents[path] = {**store.documents[path], "action": {"value": 2_500}}
+    assert [a["cost"] for a in decide(store, scoring(), T0)] == [2_500]
+    for bad in ({"value": -1}, {"value": 25.0}, {"value": True}, {"worth": 1}):
+        store.documents[path] = {**store.documents[path], "action": bad}
+        with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
+            assert decide(store, scoring(order_id=f"ord_{bad}"), T0) == []
+    assert caplog.text.count("Rule fee-sensitivity was skipped") == 4
+
+
+@pytest.mark.parametrize(
+    ("now", "send_at"),
+    [
+        (T0, T0),  # 13:00 in Bangkok
+        (BANGKOK_EVENING, EIGHT_AM),
+        (BANGKOK_NIGHT, EIGHT_AM),
+        (EIGHT_AM, EIGHT_AM),  # 08:00 sharp: quiet hours are over
+        (
+            datetime(2026, 11, 28, 13, 59, tzinfo=UTC),
+            datetime(2026, 11, 28, 13, 59, tzinfo=UTC),
+        ),
+    ],
+    ids=["afternoon", "evening", "night", "eight sharp", "20:59"],
+)
+def test_quiet_hours_hold_a_marketing_action_until_they_end(
+    now: datetime, send_at: datetime
+) -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    assert [a["send_at"] for a in decide(store, scoring(), now)] == [send_at]
+
+
+def test_service_actions_go_at_once_even_in_quiet_hours(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(service_recovery="dry_run")
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    assert [a["send_at"] for a in decide(store, scoring(), BANGKOK_EVENING)] == [
+        BANGKOK_EVENING
+    ]
+
+
+def test_quiet_hours_within_one_day_and_none_at_all() -> None:
+    afternoon = engine.Guardrails(quiet_start="13:00", quiet_end="15:00")
+    assert afternoon.quiet_until(T0) == datetime(2026, 11, 28, 8, 0, tzinfo=UTC)
+    assert afternoon.quiet_until(T0 + timedelta(hours=3)) is None  # 16:00
+    assert (
+        engine.Guardrails(quiet_start="21:00", quiet_end="21:00").quiet_until(
+            BANGKOK_EVENING
+        )
+        is None
+    )

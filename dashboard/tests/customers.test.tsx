@@ -12,6 +12,7 @@ import {
   baht,
   changeOf,
   consentLine,
+  count,
   delivery,
   INPUTS,
   mergeScorings,
@@ -310,6 +311,14 @@ test("a link opens the profile", async () => {
 });
 
 // --- The profile ---
+
+test("one of a thing is singular", () => {
+  expect([count(1, "order"), count(2, "order"), count(0, "scoring")]).toEqual([
+    "1 order",
+    "2 orders",
+    "0 scorings",
+  ]);
+});
 
 test("consent reads as given, declined, withdrawn or never asked (T610)", () => {
   const at = "2026-11-28T06:00:00+00:00";

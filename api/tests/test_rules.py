@@ -9,7 +9,7 @@ against the Firestore emulator.
 import os
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import pytest
@@ -191,13 +191,80 @@ def test_the_command_line_sets_a_status_and_lists_decisions(
         "channel": "voucher",
         "dry_run": True,
         "decided_at": T0,
+        "cost": 4_000,
+        "send_at": T0,
         "outcome": None,
     }
     assert store.add_action(action)
     assert not store.add_action(action)
     assert rules.main(["actions"], store=store) == 0
     assert capsys.readouterr().out == (
-        "  2026-11-28 05:00:00  fee-sensitivity    cust_1               holdout   voucher\n"
+        "  2026-11-28 05:00:00  fee-sensitivity    cust_1               holdout   voucher"
+        " 40.00 baht\n"
+    )
+
+
+def test_the_command_line_pauses_resumes_and_sets_the_guardrails(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store = MemoryStore()
+    assert rules.main(["guardrails"], store=store) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("Automations: on (defaults: nothing has been set)\n")
+    assert "  frequency cap  2 marketing actions per customer in 7 days\n" in out
+    assert "  quiet hours    21:00 to 08:00 (Asia/Bangkok)\n" in out
+    assert "  daily budget   5,000.00 baht; spent on " in out
+    assert store.automation_settings() is None  # showing writes nothing
+
+    assert rules.main(["pause"], store=store) == 0
+    assert capsys.readouterr().out.startswith(
+        "Automations: paused (the global kill switch is on)\n"
+    )
+    assert store.automation_settings()["enabled"] is False  # type: ignore[index]
+    argv = ["guardrails", "--cap", "1", "--cap-days", "3", "--quiet", "22:00-07:00"]
+    assert rules.main([*argv, "--budget", "1000"], store=store) == 0
+    out = capsys.readouterr().out
+    assert "paused" in out  # changing settings keeps the switch as it was
+    assert "  frequency cap  1 marketing actions per customer in 3 days\n" in out
+    assert "  quiet hours    22:00 to 07:00 (Asia/Bangkok)\n" in out
+    assert "  daily budget   1,000.00 baht;" in out
+    assert rules.main(["resume"], store=store) == 0
+    assert capsys.readouterr().out.startswith("Automations: on\n")
+    settings = store.automation_settings()
+    assert settings is not None
+    assert settings["frequency_cap"] == {"actions": 1, "days": 3}
+    assert settings["daily_budget"] == 100_000
+
+    assert rules.main(["guardrails", "--cap", "0"], store=store) == 1
+    assert "Refused" in capsys.readouterr().err
+    assert rules.main(["guardrails", "--quiet", "25:00-07:00"], store=store) == 1
+    capsys.readouterr()
+    with pytest.raises(SystemExit):
+        rules.main(["guardrails", "--quiet", "late"], store=store)
+    assert store.automation_settings() == settings  # nothing refused was kept
+
+
+def test_actions_say_what_they_cost_and_when_they_wait(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store = MemoryStore()
+    action = {
+        "action_id": "fee-sensitivity--ord_1",
+        "rule_id": "fee-sensitivity",
+        "customer_id": "cust_1",
+        "arm": "treatment",
+        "channel": "voucher",
+        "dry_run": True,
+        "decided_at": T0,
+        "cost": 4_000,
+        "send_at": T0.replace(hour=1, minute=0) + timedelta(days=1),
+        "outcome": None,
+    }
+    store.add_action(action)
+    assert rules.main(["actions"], store=store) == 0
+    assert capsys.readouterr().out == (
+        "  2026-11-28 05:00:00  fee-sensitivity    cust_1               treatment voucher"
+        " 40.00 baht, waits until 2026-11-29 01:00 UTC\n"
     )
 
 

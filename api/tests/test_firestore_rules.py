@@ -50,6 +50,8 @@ READERS: dict[str, frozenset[str]] = {
     "actions": frozenset(),
     "models": frozenset(),
     "outbox": frozenset(),
+    "settings": frozenset(),
+    "budget": frozenset(),
 }
 
 # Each kind of caller, by the claims its token adds; None is no sign-in.

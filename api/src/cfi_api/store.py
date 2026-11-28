@@ -30,7 +30,9 @@ Store lists, adds and promotes versions.
 
 So do the automation rules (T406): a Browser lists them, by name, for
 GET /rules, and a Store adds one (python -m cfi_api.rules seed) and sets
-its status. The rules engine (T501) logs each decision as an action, once.
+its status. The rules engine (T501) logs each decision as an action, once,
+reads the guardrails' settings and a customer's recent actions, and counts
+each day's spend in budget/{day} as it logs a decision (T502).
 """
 
 import copy
@@ -314,9 +316,39 @@ class Store(Reader, Browser, Protocol):
         UnknownRule, or ValueError for a status the schema refuses (T501)."""
         ...
 
-    def add_action(self, document: dict[str, Any]) -> bool:
+    def add_action(
+        self,
+        document: dict[str, Any],
+        *,
+        day: str | None = None,
+        budget: int | None = None,
+    ) -> bool:
         """Add actions/{action_id}, checked first; False if it is there
-        already, unchanged (T501)."""
+        already, unchanged (T501).
+
+        With a day and a budget (T502): raise OverBudget, adding nothing, if
+        the action's cost would take budget/{day} past budget, whichever its
+        arm; a treatment action's cost is added to that day's spend in the
+        same unit as the action itself.
+        """
+        ...
+
+    def customer_actions(
+        self, customer_id: str, since: datetime
+    ) -> list[dict[str, Any]]:
+        """A customer's actions decided at since or later (T502)."""
+        ...
+
+    def automation_settings(self) -> dict[str, Any] | None:
+        """settings/automations, or None if it was never set (T502)."""
+        ...
+
+    def set_automation_settings(self, document: dict[str, Any]) -> None:
+        """Write settings/automations, checked first (T502)."""
+        ...
+
+    def spent_on(self, day: str) -> int:
+        """What the treatment arm spent on day, in satang (T502)."""
         ...
 
     def list_actions(self, limit: int) -> list[dict[str, Any]]:
@@ -351,6 +383,30 @@ def by_name(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 class UnknownRule(KeyError):
     """No rule has this rule_id."""
+
+
+class OverBudget(Exception):
+    """An action's cost would take the day past the daily budget (T502)."""
+
+
+TREATMENT = "treatment"  # the arm that acts, so the one that spends
+
+
+def spend(
+    action: dict[str, Any], day: str, spent: int, budget: int
+) -> dict[str, Any] | None:
+    """The budget/{day} document after logging action, given what the day had
+    spent: None if the action spends nothing. Raises OverBudget."""
+    worth = action["cost"]
+    if worth == 0:
+        return None
+    if spent + worth > budget:
+        raise OverBudget(f"{day}: {spent} + {worth} > {budget} satang")
+    if action["arm"] != TREATMENT:
+        return None
+    document = {"day": day, "spent": spent + worth, "updated_at": action["decided_at"]}
+    check("budget", document)
+    return document
 
 
 def with_status(rule: dict[str, Any], status: str, now: datetime) -> dict[str, Any]:
@@ -621,16 +677,53 @@ class MemoryStore:
             self.documents[path] = _as_firestore(changed)
             return copy.deepcopy(self.documents[path])
 
-    # --- The rules engine's decisions (T501) ---
+    # --- The rules engine's decisions (T501) and guardrails (T502) ---
 
-    def add_action(self, document: dict[str, Any]) -> bool:
+    def add_action(
+        self,
+        document: dict[str, Any],
+        *,
+        day: str | None = None,
+        budget: int | None = None,
+    ) -> bool:
         check("actions", document)
         path = f"actions/{document['action_id']}"
         with self._lock:
             if path in self.documents:
                 return False
+            if day is not None and budget is not None:
+                spent = self.documents.get(f"budget/{day}", {}).get("spent", 0)
+                day_after = spend(document, day, spent, budget)
+                if day_after is not None:
+                    self.documents[f"budget/{day}"] = _as_firestore(day_after)
             self.documents[path] = _as_firestore(document)
             return True
+
+    def customer_actions(
+        self, customer_id: str, since: datetime
+    ) -> list[dict[str, Any]]:
+        found = self._found(
+            lambda path, doc: (
+                path.startswith("actions/")
+                and doc["customer_id"] == customer_id
+                and doc["decided_at"] >= since
+            )
+        )
+        return copy.deepcopy(found)
+
+    def automation_settings(self) -> dict[str, Any] | None:
+        with self._lock:
+            return copy.deepcopy(self.documents.get("settings/automations"))
+
+    def set_automation_settings(self, document: dict[str, Any]) -> None:
+        check("settings", document)
+        with self._lock:
+            self.documents["settings/automations"] = _as_firestore(document)
+
+    def spent_on(self, day: str) -> int:
+        with self._lock:
+            found = self.documents.get(f"budget/{day}")
+        return 0 if found is None else int(found["spent"])
 
     def list_actions(self, limit: int) -> list[dict[str, Any]]:
         found = self._found(lambda path, _: path.startswith("actions/"))

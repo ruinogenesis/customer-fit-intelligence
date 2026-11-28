@@ -188,6 +188,11 @@ export function consentLine(consent: Consent | null | undefined): string {
   return consent.marketing ? line : `${line} No marketing rule acts for them.`;
 }
 
+/** A count and its noun, singular for 1: "1 order", "3 orders". */
+export function count(n: number, noun: string): string {
+  return `${n} ${noun}${n === 1 ? "" : "s"}`;
+}
+
 /** Satang as baht: 19118 -> "฿191.18". */
 export function baht(satang: number): string {
   const amount = (satang / 100).toLocaleString("en-US", {

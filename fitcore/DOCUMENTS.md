@@ -118,14 +118,14 @@ One per automation rule, written by the API, for admins: an automation rule (T50
 | `kind` | string | one of `service`, `marketing` | service rules skip the marketing consent and frequency cap |
 | `status` | string | one of `dry_run`, `test`, `live`, `off` | dry_run logs only; test and live act; off is the kill switch |
 | `holdout_share` | number | 0 to 1 | Share of customers held out: 0.5 in test, 0.1 when live |
-| `condition` | map |  | When it fires; its form is set by T501 |
-| `action` | map |  | What it sends; its form is set by T501 |
-| `caps` | map |  | Its own limits; their form is set by T502 |
+| `condition` | map |  | The numbers its logic fires on, over the logic's own defaults (cfi_api.engine, T501) |
+| `action` | map |  | What it sends: value, a voucher's or credit's worth in satang, over the logic's own default (T502) |
+| `caps` | map |  | Not used: the guardrails are the same for every rule (settings/automations, T502) |
 | `updated_at` | timestamp |  | When it last changed |
 
 ## `actions/{action_id}`
 
-One per rule decision, written by Cloud Functions: one decision of one rule, holdouts included.
+One per rule decision, written by the rules service: one decision of one rule, holdouts included.
 
 | Field | Type | Values | Meaning |
 | --- | --- | --- | --- |
@@ -136,7 +136,36 @@ One per rule decision, written by Cloud Functions: one decision of one rule, hol
 | `channel` | string | one of `push`, `in_app`, `email`, `voucher` | Where it goes |
 | `dry_run` | boolean |  | True if the rule was in dry_run, so nothing was sent |
 | `decided_at` | timestamp |  | When the rule decided |
+| `cost` | integer | 0 or more | What it spends from the daily budget if sent: a voucher's or credit's worth; 0 for a message (T502) |
+| `send_at` | timestamp |  | When it may go out: at once, or when quiet hours end for a marketing action (T502) |
 | `outcome` | string | one of `delivered`, `opened`, `clicked`, `redeemed`, `failed`; or null | The furthest it got; null until known |
+
+## `settings/automations`
+
+One per group of settings (one: automations), written by admins: the guardrails every rule shares (T502).
+
+| Field | Type | Values | Meaning |
+| --- | --- | --- | --- |
+| `enabled` | boolean |  | False is the global kill switch: no rule decides anything |
+| `frequency_cap` | map |  | Service rules are exempt |
+| `frequency_cap.actions` | integer | 1 or more | At most this many marketing decisions per customer |
+| `frequency_cap.days` | integer | 1 or more | over the last this many days, both arms counted |
+| `quiet_hours` | map |  | A marketing action decided then waits until they end |
+| `quiet_hours.start` | string |  | When they start, HH:MM local time |
+| `quiet_hours.end` | string |  | When they end, HH:MM; before start means the next morning |
+| `quiet_hours.time_zone` | string | one of `Asia/Bangkok` | The customers' time zone (one market, D7) |
+| `daily_budget` | integer | 0 or more | Vouchers and credits the treatment arm may spend per local day; once it is spent, no rule that spends decides again that day |
+| `updated_at` | timestamp |  | When it last changed |
+
+## `budget/{day}`
+
+One per local day of spending, written by the rules service: what the rules spent on one local day (T502).
+
+| Field | Type | Values | Meaning |
+| --- | --- | --- | --- |
+| `day` | string |  | The local day, YYYY-MM-DD |
+| `spent` | integer | 0 or more | The treatment arm's vouchers and credits that day, so far |
+| `updated_at` | timestamp |  | When it last changed |
 
 ## `models/{version}`
 

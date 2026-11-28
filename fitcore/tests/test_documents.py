@@ -128,8 +128,22 @@ def _examples() -> dict[str, dict[str, Any]]:
             "channel": "push",
             "dry_run": True,
             "decided_at": T0,
+            "cost": 4000,
+            "send_at": T0,
             "outcome": None,
         },
+        "settings": {
+            "enabled": True,
+            "frequency_cap": {"actions": 2, "days": 7},
+            "quiet_hours": {
+                "start": "21:00",
+                "end": "08:00",
+                "time_zone": "Asia/Bangkok",
+            },
+            "daily_budget": 500_000,
+            "updated_at": T0,
+        },
+        "budget": {"day": "2026-11-28", "spent": 4000, "updated_at": T0},
         "models": {
             "version": "t112-sim",
             "status": "live",
@@ -156,7 +170,7 @@ def _examples() -> dict[str, dict[str, Any]]:
 # --- Every collection ---
 
 
-def test_there_are_nine_collections_with_an_example_each() -> None:
+def test_there_are_eleven_collections_with_an_example_each() -> None:
     assert (
         set(COLLECTIONS)
         == set(_examples())
@@ -170,6 +184,8 @@ def test_there_are_nine_collections_with_an_example_each() -> None:
             "models",
             "users",
             "outbox",
+            "settings",
+            "budget",
         }
     )
 
@@ -239,6 +255,46 @@ def _refused(collection: str, change: dict[str, Any], match: str) -> None:
         ("rules", {"status": "paused"}, "status"),
         ("rules", {"holdout_share": 10}, "holdout_share"),
         ("actions", {"arm": "control"}, "arm"),
+        ("actions", {"cost": -1}, "cost"),
+        ("actions", {"cost": 40.0}, "cost"),
+        ("settings", {"frequency_cap": {"actions": 0, "days": 7}}, "frequency_cap"),
+        (
+            "settings",
+            {
+                "quiet_hours": {
+                    "start": "9pm",
+                    "end": "08:00",
+                    "time_zone": "Asia/Bangkok",
+                }
+            },
+            "quiet_hours",
+        ),
+        (
+            "settings",
+            {
+                "quiet_hours": {
+                    "start": "24:00",
+                    "end": "08:00",
+                    "time_zone": "Asia/Bangkok",
+                }
+            },
+            "quiet_hours",
+        ),
+        (
+            "settings",
+            {
+                "quiet_hours": {
+                    "start": "21:00",
+                    "end": "08:00",
+                    "time_zone": "Europe/Paris",
+                }
+            },
+            "quiet_hours",
+        ),
+        ("settings", {"daily_budget": -1}, "daily_budget"),
+        ("settings", {"enabled": "no"}, "enabled"),
+        ("budget", {"day": "28/11/2026"}, "day"),
+        ("budget", {"spent": -5}, "spent"),
         ("models", {"path": "/tmp/model.json"}, "path"),
         ("users", {"role": "owner"}, "role"),
         ("users", {"email": "not an email"}, "email"),

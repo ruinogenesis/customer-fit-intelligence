@@ -112,6 +112,9 @@ Run it locally with the reference model, from the repo root:
       python -m cfi_api.rules --project cfi-dev-th26 list
       python -m cfi_api.rules --project cfi-dev-th26 set fee-sensitivity dry_run
       python -m cfi_api.rules --project cfi-dev-th26 actions --limit 10
+      python -m cfi_api.rules --project cfi-dev-th26 guardrails
+      python -m cfi_api.rules --project cfi-dev-th26 pause
+      python -m cfi_api.rules --project cfi-dev-th26 resume
 
 - Rules engine (T501): every saved document goes to the topic `raw-changes`
   with its collection as the attribute `collection` (T306). The push
@@ -125,10 +128,25 @@ Run it locally with the reference model, from the repo root:
   hash of rule and customer puts the rule's `holdout_share` in the holdout
   (T503). A rule decides at most once per order, so a retry or a later
   scoring of the same order logs nothing more. A condition overrides the
-  logic's numbers (`{"min_fee_drag": 0.02}`). Until the guardrails (T502)
-  and the channels (T504), every decision is a dry run, whatever the
-  rule's status: nothing is sent. Pub/Sub retries a push the service
-  answers with 500, for up to 7 days.
+  logic's numbers (`{"min_fee_drag": 0.02}`), and an action map what a
+  decision is worth (`{"value": 2500}`, in satang; Fee sensitivity's
+  voucher is 40 baht). Until the channels (T504), every decision is a dry
+  run, whatever the rule's status: nothing is sent. Pub/Sub retries a push
+  the service answers with 500, for up to 7 days.
+- Guardrails (T502): before a decision is logged it passes, in order, the
+  global kill switch (`pause`, `resume`), the rule's own (status `off`),
+  marketing consent (T610), the frequency cap (by default 2 marketing
+  decisions per customer in 7 days, both arms counted; service rules are
+  exempt) and the daily budget (by default 5,000 baht a Bangkok day: only the
+  treatment arm spends, counted in `budget/{day}` in the decision's own
+  transaction, and once a decision would pass it neither arm decides that
+  day). One that fails logs a "held back" line and nothing else. A marketing
+  decision made in quiet hours (by default 21:00 to 08:00 Bangkok time) gets
+  `send_at` at their end; service decisions go at once. The settings live
+  in `settings/automations`; `guardrails --cap N --cap-days D --quiet
+  HH:MM-HH:MM --budget BAHT` changes them, and with no settings saved the
+  defaults hold. The cap reads a customer's actions by time, through the
+  composite index on `actions` (customer_id, decided_at) that CI deploys.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
