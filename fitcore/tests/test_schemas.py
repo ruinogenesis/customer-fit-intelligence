@@ -106,6 +106,7 @@ VALID_PAYLOADS = {
         "satisfaction": 4,
     },
     "survey_response": {"item_id": "love_miss_app", "value": 6},
+    "consent_changed": {"marketing": True, "source": "sign_up"},
     "action_sent": {
         "action_id": "act_1",
         "rule_id": "service_recovery",
@@ -138,6 +139,9 @@ def test_valid_payload_loads(event_type):
         ("action_sent", {"arm": "maybe"}, "arm"),
         ("recommendation_shown", {"items": []}, "items"),
         ("order_delivered", {"tip": 2000}, "tip"),  # unknown field
+        ("consent_changed", {"marketing": "yes"}, "marketing"),  # T610
+        ("consent_changed", {"marketing": 1}, "marketing"),
+        ("consent_changed", {"source": "email"}, "source"),
     ],
 )
 def test_malformed_payload_is_rejected(event_type, changes, bad_field):

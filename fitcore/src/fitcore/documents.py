@@ -22,7 +22,7 @@ fitcore.scoring's Customer and Order, for the API and for Cloud Functions.
 
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any
 
 from marshmallow import Schema, ValidationError, fields, validate, validates_schema
@@ -34,6 +34,7 @@ from fitcore.schemas import (
     ACTION_RESULTS,
     ARMS,
     CHANNELS,
+    CONSENT_SOURCES,
     ISSUE_TYPES,
     RATINGS,
     EventSchema,
@@ -41,7 +42,15 @@ from fitcore.schemas import (
     StrictSchema,
     check_id,
 )
-from fitcore.scoring import DRIVERS, PRIORS, Customer, Issue, Order, Scores
+from fitcore.scoring import (
+    DRIVERS,
+    PRIORS,
+    Consent,
+    Customer,
+    Issue,
+    Order,
+    Scores,
+)
 
 ROLES: tuple[str, ...] = ("admin", "analyst", "viewer")
 MODEL_STATUSES: tuple[str, ...] = ("candidate", "live", "retired")
@@ -208,6 +217,15 @@ class EventResultSchema(StrictSchema):
     model_version = _text("The model that scored it")
 
 
+class ConsentSchema(StrictSchema):
+    marketing = StrictBoolean(
+        required=True,
+        metadata={"description": "True if given, false if withdrawn"},
+    )
+    at = _time("When the customer gave or withdrew it")
+    source = _choice(CONSENT_SOURCES, "Where they did")
+
+
 class ExpectationSchema(StrictSchema):
     """One input's expectation (fitcore.expectations.Baseline)."""
 
@@ -288,6 +306,12 @@ class CustomerDocument(StrictSchema):
         allow_none=True,
     )
     model_version = _text("The model behind the scores")
+    consent = _nested(
+        ConsentSchema,
+        "Their latest marketing consent (T610); null when never asked, which "
+        "counts as no consent",
+        allow_none=True,
+    )
 
     @validates_schema
     def parts_go_together(self, data: dict[str, Any], **kwargs: Any) -> None:
@@ -538,6 +562,7 @@ def customer_document(customer: Customer, model_version: str) -> dict[str, Any]:
         "churn_risk": None if scores is None else scores.churn_risk,
         "quadrant": None if scores is None else scores.quadrant,
         "model_version": model_version,
+        "consent": None if customer.consent is None else asdict(customer.consent),
     }
 
 
@@ -557,6 +582,10 @@ def customer_from_document(document: Mapping[str, Any]) -> Customer:
         latest_order_id=document["latest_order_id"],
         latest_placed_at=document["latest_placed_at"],
         scores=scores,
+        # Customers saved before T610 have no consent field: never asked.
+        consent=None
+        if document.get("consent") is None
+        else Consent(**document["consent"]),
     )
 
 

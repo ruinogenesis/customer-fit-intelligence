@@ -9,8 +9,9 @@ The events come from fitcore.sim_events, in time order, and are replayed at
 days, in about a minute. Sending the same run again changes nothing, as
 every event comes back as already received, so a stopped run can be resumed
 by starting it again. A new --seed adds new customers; --plant gives most of some incidents to a
-few restaurants and couriers (T315). Uses only the
-standard library to talk HTTP.
+few restaurants and couriers (T315); --consent has every customer answer the
+marketing consent question at sign-up, and some withdraw it later (T610).
+Uses only the standard library to talk HTTP.
 
 An API with a write key (on Cloud Run, T205) needs it as --key, or in the
 environment as CFI_WRITE_KEY. A dropped connection is retried, and so is an
@@ -218,6 +219,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="give most late, cold and rude orders to a few restaurants and "
         "couriers, for /drivers to find (fitcore.sim_events.PLANTED)",
     )
+    parser.add_argument(
+        "--consent",
+        action="store_true",
+        help="ask every customer for marketing consent at sign-up; some say no, "
+        "and some withdraw it later (fitcore.sim_events.CONSENT_RATE)",
+    )
     args = parser.parse_args(argv)
     if args.customers < 1:
         parser.error("--customers must be at least 1")
@@ -225,8 +232,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--days must be positive")
     if not args.speed > 0:
         parser.error("--speed must be positive")
-    events = simulate_events(args.customers, args.seed, args.days, plant=args.plant)
+    events = simulate_events(
+        args.customers, args.seed, args.days, plant=args.plant, consent=args.consent
+    )
     planted = ", planted" if args.plant else ""
+    planted += ", with consent" if args.consent else ""
     print(
         f"Sending {len(events)} events from {args.customers} customers' first "
         f"{args.days:g} days (seed {args.seed}{planted}) to {args.url}, "

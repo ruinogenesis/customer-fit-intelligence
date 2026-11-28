@@ -22,6 +22,11 @@ restaurants and couriers (PLANTED), so a check can tell whether /drivers
 finds them. Only who made or brought those orders changes: every gap, time
 and event id stays as it is without planting.
 
+With consent=True (T610), each customer is also asked for marketing consent
+when they sign up, CONSENT_LEAD before their first order: CONSENT_RATE say
+yes, and WITHDRAW_RATE of those withdraw it later (consent_changed events).
+Without it, the events are exactly as before.
+
 The seed decides everything, so the same arguments always give the same
 events, ids included. Ids carry the seed ("sim1-000003"), so runs with
 different seeds never share a customer. A customer's orders, and the details
@@ -78,6 +83,44 @@ PLANT_SHARE = 0.8
 
 # Event ids are uuid5 names in this namespace, so they never change.
 NAMESPACE = uuid.UUID("0b6f3f0e-7a1d-4c2e-9f5a-2d8c4e6b1a37")
+
+# Marketing consent (T610), with consent=True: asked at sign-up, CONSENT_LEAD
+# before the first order. A withdrawal comes at a uniform time within DAYS of
+# signing up, the simulator's whole period, and is sent only if it falls
+# inside the run, so a shorter run's events are still part of a longer one's.
+CONSENT_RATE = 0.6
+WITHDRAW_RATE = 0.1
+CONSENT_LEAD = timedelta(minutes=5)
+
+
+def _consent_events(
+    customer_id: str, first_order: datetime, end: datetime, rng: np.random.Generator
+) -> list[tuple[datetime, dict[str, Any]]]:
+    """A customer's consent_changed events: the answer at sign-up, and a later
+    withdrawal if they gave it and take it back before end."""
+    agrees = bool(rng.random() < CONSENT_RATE)
+    withdraws = agrees and bool(rng.random() < WITHDRAW_RATE)
+    later = timedelta(days=float(rng.random()) * DAYS)
+    signed_up = first_order - CONSENT_LEAD
+    answers = [(signed_up, agrees, "sign_up")]
+    if withdraws and signed_up + later < end:
+        answers.append((signed_up + later, False, "settings"))
+    return [
+        (
+            at,
+            {
+                "event_id": str(
+                    uuid.uuid5(NAMESPACE, f"{customer_id}/consent_changed/{n}")
+                ),
+                "type": "consent_changed",
+                "customer_id": customer_id,
+                "occurred_at": at.isoformat(),
+                "schema_version": SCHEMA_VERSION,
+                "payload": {"marketing": marketing, "source": source},
+            },
+        )
+        for n, (at, marketing, source) in enumerate(answers)
+    ]
 
 
 def stars(value: float) -> int:
@@ -193,14 +236,21 @@ def _order_events(
 
 
 def simulate_events(
-    customers: int, seed: int, days: float = DAYS, *, plant: bool = False
+    customers: int,
+    seed: int,
+    days: float = DAYS,
+    *,
+    plant: bool = False,
+    consent: bool = False,
 ) -> list[dict[str, Any]]:
     """The raw events of `customers` simulated customers over `days` days.
 
     The orders come from fitcore.sim_orders (simulate_profiles, then
     simulate_orders from its START), and the events are in time order. With
     plant, PLANTED restaurants and couriers take most of their incidents
-    (T315). Raises ValueError if customers is below 1 or days is not positive.
+    (T315). With consent, every customer who orders also answers the
+    marketing consent question at sign-up, and some withdraw it (T610).
+    Raises ValueError if customers is below 1 or days is not positive.
     """
     profiles = simulate_profiles(customers, seed)
     orders = simulate_orders(profiles, seed, start=START, days=days)
@@ -227,5 +277,17 @@ def simulate_events(
                 else None
             ),
         )
+    if consent:
+        first: dict[str, datetime] = {}
+        for row, sim_id in enumerate(orders.customer_ids):
+            placed = orders.placed_at[row]
+            if sim_id not in first or placed < first[sim_id]:
+                first[sim_id] = placed
+        end = START + timedelta(days=days)
+        for sim_id, first_order in first.items():
+            customer_id = f"sim{seed}-{position[sim_id]:06d}"
+            # The customer's own consent stream: no order draws from it.
+            stream = np.random.default_rng([seed, position[sim_id], 0, 2])
+            timed += _consent_events(customer_id, first_order, end, stream)
     timed.sort(key=lambda pair: pair[0])
     return [event for _, event in timed]

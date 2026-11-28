@@ -20,6 +20,10 @@ What each event measures, in the units the model was trained on:
 x4 and x7 have no measure in the training units yet. order_issue and the
 other event types measure nothing, so they change no score.
 
+consent_changed (T610) measures nothing either: it sets the customer's
+marketing consent, unless the customer already holds a later one, so an
+event that arrives late never undoes a newer choice.
+
 Each order also keeps its record (T301): restaurant, basket, fees and promo
 from order_placed; courier and delivery time from order_delivered; every
 order_issue; and the latest score of each kind from rating_submitted.
@@ -179,8 +183,19 @@ class Order:
 
 
 @dataclass(frozen=True)
+class Consent:
+    """A customer's latest marketing consent (T610): given or withdrawn, when
+    and where (fitcore.schemas.CONSENT_SOURCES)."""
+
+    marketing: bool
+    at: datetime
+    source: str
+
+
+@dataclass(frozen=True)
 class Customer:
-    """One customer's expectations (x2..x8), latest order and scores.
+    """One customer's expectations (x2..x8), latest order and scores, and
+    their marketing consent (None: never asked, which is no consent).
 
     Use Customer.new for a customer with no history yet.
     """
@@ -190,6 +205,7 @@ class Customer:
     latest_order_id: str | None = None
     latest_placed_at: datetime | None = None
     scores: Scores | None = None
+    consent: Consent | None = None
 
     def __post_init__(self) -> None:
         if set(self.baselines) != set(PRIORS):
@@ -397,6 +413,9 @@ def apply_event(
     latest_scores = customer.scores
     if scored is not None and changed is not None and changed.order_id == latest_id:
         latest_scores = scored
+    consent = customer.consent
+    if kind == "consent_changed" and (consent is None or at >= consent.at):
+        consent = Consent(payload["marketing"], at, payload["source"])
     return Applied(
         customer=replace(
             customer,
@@ -404,6 +423,7 @@ def apply_event(
             latest_order_id=latest_id,
             latest_placed_at=latest_at,
             scores=latest_scores,
+            consent=consent,
         ),
         order=changed,
         scored=scored,

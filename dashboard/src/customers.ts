@@ -32,6 +32,13 @@ export const SCORE_NAMES: Record<Score, string> = {
 
 export type Latents = Record<Exclude<Score, "churn_risk">, number>;
 
+/** A customer's latest marketing consent (T610). */
+export interface Consent {
+  marketing: boolean;
+  at: string;
+  source: "sign_up" | "settings" | "support";
+}
+
 /** customers/{id}, as GET /customers/{id} answers it. */
 export interface CustomerState {
   customer_id: string;
@@ -41,6 +48,8 @@ export interface CustomerState {
   churn_risk: number | null;
   quadrant: Quadrant | null;
   model_version: string;
+  /** Null when never asked; missing on customers saved before T610. */
+  consent?: Consent | null;
 }
 
 /** One scoring of one order (customers/{id}/scores/{event_id}). */
@@ -162,6 +171,21 @@ export function when(iso: string): string {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(iso));
+}
+
+const CONSENT_SOURCES: Record<Consent["source"], string> = {
+  sign_up: "at sign-up",
+  settings: "in settings",
+  support: "through support",
+};
+
+/** A customer's marketing consent in words, and whether marketing rules may
+ * act for them (T610). Never asked counts as no. */
+export function consentLine(consent: Consent | null | undefined): string {
+  if (consent == null) return "Marketing consent: never asked, so no marketing rule acts for them.";
+  const answer = consent.marketing ? "given" : consent.source === "sign_up" ? "declined" : "withdrawn";
+  const line = `Marketing consent: ${answer} ${CONSENT_SOURCES[consent.source]}, ${when(consent.at)}.`;
+  return consent.marketing ? line : `${line} No marketing rule acts for them.`;
 }
 
 /** Satang as baht: 19118 -> "฿191.18". */

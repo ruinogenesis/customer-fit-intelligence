@@ -1,6 +1,7 @@
 """T301: the Firestore documents, their checks, and their reference."""
 
 import copy
+import dataclasses
 import uuid
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -24,6 +25,7 @@ from fitcore.model import SCORES as SCORE_NAMES
 from fitcore.model import ModelParams
 from fitcore.schemas import load_event
 from fitcore.scoring import (
+    Consent,
     Customer,
     Issue,
     Order,
@@ -290,6 +292,26 @@ def test_a_customer_round_trips_through_its_document() -> None:
     assert customer_from_document(document) == customer
     assert customer_from_document(customer_document(new, "v")) == new
     check("customers", customer_document(new, "v"))
+
+
+def test_a_customers_consent_round_trips_and_an_old_document_has_none() -> None:
+    # T610: the latest marketing consent, or null when never asked.
+    given = dataclasses.replace(_customer(), consent=Consent(False, T0, "settings"))
+    document = customer_document(given, "t112-sim")
+    assert document["consent"] == {"marketing": False, "at": T0, "source": "settings"}
+    check("customers", document)
+    assert customer_from_document(document) == given
+    assert customer_document(_customer(), "v")["consent"] is None
+    old = customer_document(_customer(), "v")
+    del old["consent"]  # saved before T610
+    assert customer_from_document(old).consent is None
+    for bad in (
+        {"marketing": "yes", "at": T0, "source": "sign_up"},
+        {"marketing": True, "at": T0, "source": "email"},
+        {"marketing": True, "source": "sign_up"},
+    ):
+        with pytest.raises(DocumentError):
+            check("customers", {**document, "consent": bad})
 
 
 def test_an_order_round_trips_through_its_document() -> None:

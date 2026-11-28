@@ -418,6 +418,11 @@ def test_rule_status_and_actions_in_firestore() -> None:
         "contributions": {"fit": {"x3": -0.2}},
     }
     new = Scoring(f"cust_{tag}", "00000000-0000-4000-8000-000000000001", entry)
+    # A marketing rule decides only for a customer with consent (T610).
+    assert decide(store, new, T0) == []
+    given = {"marketing": True, "at": T0, "source": "sign_up"}
+    customer = firestore.Client(project="demo-cfi").document(f"customers/cust_{tag}")
+    customer.set({"customer_id": f"cust_{tag}", "consent": given})
     assert len(decide(store, new, T0)) == 1
     assert decide(store, new, T0) == []
     store.set_rule_status("fee-sensitivity", "off", T0)
