@@ -369,3 +369,55 @@ def test_rules_are_added_once_and_listed_by_name_in_firestore() -> None:
     before = store.list_rules()
     assert seed(store, T0) == []
     assert store.list_rules() == before
+
+
+@needs_emulator
+def test_rule_status_and_actions_in_firestore() -> None:
+    from cfi_api.engine import Scoring, decide
+    from cfi_api.firestore_store import FirestoreStore
+    from cfi_api.rules import StarterRule, rule_document
+    from cfi_api.store import UnknownRule
+
+    store = FirestoreStore(firestore.Client(project="demo-cfi"))
+    tag = uuid.uuid4().hex[:8]
+    rule = rule_document(StarterRule(f"r-{tag}", f"Rule {tag}", "marketing"), T0)
+    store.add_rule(rule)
+    later = T0 + timedelta(hours=1)
+    changed = store.set_rule_status(f"r-{tag}", "dry_run", later)
+    assert (changed["status"], changed["updated_at"]) == ("dry_run", later)
+    found = next(r for r in store.list_rules() if r["rule_id"] == f"r-{tag}")
+    assert (found["status"], found["updated_at"]) == ("dry_run", later)
+    with pytest.raises(UnknownRule):
+        store.set_rule_status(f"none-{tag}", "off", T0)
+    with pytest.raises(DocumentError):
+        store.set_rule_status(f"r-{tag}", "on", T0)
+
+    action = {
+        "action_id": f"r-{tag}--ord_1",
+        "rule_id": f"r-{tag}",
+        "customer_id": f"cust_{tag}",
+        "arm": "treatment",
+        "channel": "push",
+        "dry_run": True,
+        "decided_at": datetime.now(UTC) + timedelta(days=3650),
+        "outcome": None,
+    }
+    assert store.add_action(action)
+    assert not store.add_action({**action, "arm": "holdout"})
+    assert store.list_actions(1) == [action]  # newest first, and kept as first written
+
+    # The engine on Firestore: a fee-sensitivity decision, once per order.
+    if not any(r["rule_id"] == "fee-sensitivity" for r in store.list_rules()):
+        from cfi_api.rules import seed
+
+        seed(store, T0)
+    store.set_rule_status("fee-sensitivity", "dry_run", T0)
+    entry = {
+        "order_id": f"ord_{tag}",
+        "quadrant": "product",
+        "contributions": {"fit": {"x3": -0.2}},
+    }
+    new = Scoring(f"cust_{tag}", "00000000-0000-4000-8000-000000000001", entry)
+    assert len(decide(store, new, T0)) == 1
+    assert decide(store, new, T0) == []
+    store.set_rule_status("fee-sensitivity", "off", T0)

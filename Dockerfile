@@ -26,5 +26,7 @@ USER cfi
 # process with eight threads; Cloud Run adds instances when it needs more.
 # exec makes gunicorn the main process, so it gets Cloud Run's SIGTERM and
 # shuts down cleanly. A container needs no gunicorn control socket.
+# APP_MODULE picks the app: the API by default, or the rules service
+# (cfi-rules, T501) with APP_MODULE="cfi_api.rules_service:create_rules_app()".
 CMD exec gunicorn --bind ":${PORT:-8080}" --workers 1 --threads 8 --timeout 0 \
-    --no-control-socket "cfi_api:create_app()"
+    --no-control-socket "${APP_MODULE:-cfi_api:create_app()}"

@@ -178,9 +178,29 @@ jobs:
           JSON
           grep -q '"quadrant":"lovemark"' /tmp/event.json
 
-      - name: Show the server's log
+      - name: The same image runs the rules service
+        # APP_MODULE picks the app (T501); a push of a non-score change is
+        # acknowledged with 204 and nothing done.
+        run: |
+          docker run --detach --name rules --publish 8081:8080 --env PORT=8080 \
+            --env CFI_STORE=memory --env 'APP_MODULE=cfi_api.rules_service:create_rules_app()' \
+            cfi-api
+          for _ in $(seq 30); do
+            curl --silent --output /dev/null http://127.0.0.1:8081/ && break
+            sleep 1
+          done
+          data=$(printf '{"collection": "events", "path": "events/ci"}' | base64 --wrap 0)
+          curl --silent --output /dev/null --write-out '%{http_code}\n' \
+            --header "Content-Type: application/json" \
+            --data "{\"message\": {\"data\": \"$data\"}}" \
+            http://127.0.0.1:8081/push | tee /tmp/push.txt
+          grep -qx 204 /tmp/push.txt
+
+      - name: Show the servers' logs
         if: always()
-        run: docker logs api
+        run: |
+          docker logs api
+          docker logs rules || true
 
   pre-commit:
     name: pre-commit (format, lint, types)
@@ -257,6 +277,16 @@ jobs:
           --set-env-vars "CFI_STORE=firestore,CFI_AUTH=firebase,CFI_PROJECT=$PROJECT,CFI_TOPIC=raw-changes,CFI_HISTORY=bigquery,CFI_REGISTRY=gcs"
           --set-secrets CFI_WRITE_KEY=cfi-write-key:latest
 
+      - name: Deploy the same image as the rules service
+        # cfi-rules (T501): private, so Cloud Run lets in only the push
+        # subscription's account, granted once by hand (api/README.md).
+        run: >-
+          gcloud run deploy cfi-rules --image "$IMAGE" --quiet
+          --project "$PROJECT" --region "$REGION"
+          --service-account cfi-rules@cfi-dev-th26.iam.gserviceaccount.com
+          --min-instances 0 --max-instances 2 --cpu 1 --memory 512Mi
+          --set-env-vars "CFI_STORE=firestore,CFI_PROJECT=$PROJECT,APP_MODULE=cfi_api.rules_service:create_rules_app()"
+
       - name: Set up Node (for the Firebase CLI)
         uses: actions/setup-node@v6
         with:
@@ -279,6 +309,15 @@ jobs:
           gcloud run services describe cfi-api --project "$PROJECT" --region "$REGION" \
             --format 'value(spec.template.spec.containers[0].image)' | tee /tmp/image.txt
           grep -q "$GITHUB_SHA" /tmp/image.txt
+          # The rules service runs this commit too, and lets no one else in.
+          gcloud run services describe cfi-rules --project "$PROJECT" --region "$REGION" \
+            --format 'value(spec.template.spec.containers[0].image,status.url)' \
+            | tee /tmp/rules.txt
+          grep -q "$GITHUB_SHA" /tmp/rules.txt
+          curl --silent --output /dev/null --write-out '%{http_code}\n' \
+            --retry 5 --retry-all-errors --request POST \
+            "$(awk '{print $2}' /tmp/rules.txt)/push" | tee /tmp/rules_push.txt
+          grep -qx 403 /tmp/rules_push.txt
           curl --silent --fail --retry 5 --retry-all-errors \
             https://cfi-dev-th26.web.app/api/v1/health | tee /tmp/health.json
           # Whichever version the registry has live (T310), but one.

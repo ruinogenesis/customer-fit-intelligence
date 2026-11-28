@@ -1,15 +1,22 @@
-"""The automation rules' admin commands (T406): python -m cfi_api.rules.
+"""The automation rules' admin commands (T406, T501): python -m cfi_api.rules.
 
     python -m cfi_api.rules --project P seed
     python -m cfi_api.rules --project P list
+    python -m cfi_api.rules --project P set RULE STATUS
+    python -m cfi_api.rules --project P actions [--limit N]
 
 seed writes the design doc's six starter rules to rules/{rule_id}, each off
 (its kill switch on), with the half of its customers its first test will
-hold out: nothing evaluates a rule yet. Their condition, action and caps
-stay empty until the rules engine (T501) and the guardrails (T502) give
-them a form. A rule that is there already is left as it is, so seeding
-twice adds nothing and never undoes a change. It runs as you, with
-Application Default Credentials, as cfi_api.roles does.
+hold out. Their condition, action and caps start empty: a rule's logic
+(cfi_api.engine) has its own default numbers, which a condition overrides,
+and the guardrails (T502) give caps their form. A rule that is there already
+is left as it is, so seeding twice adds nothing and never undoes a change.
+
+set changes a rule's status: off, dry_run, test or live. Until the
+guardrails (T502) and the channels (T504) exist, the engine logs every
+decision as a dry run whatever the status. actions lists the engine's latest
+decisions (T501). It all runs as you, with Application Default Credentials,
+as cfi_api.roles does.
 
 The API never imports this module: GET /rules (cfi_api.automations) reads
 the rules through the store.
@@ -22,9 +29,10 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, Protocol
 
-from fitcore.documents import check
+from fitcore.documents import RULE_STATUSES, check
 
-OFF = "off"
+from cfi_api.engine import OFF
+
 FIRST_HOLDOUT = 0.5  # a 50/50 test, the first step after dry run
 
 
@@ -71,6 +79,12 @@ class Rules(Protocol):
 
     def add_rule(self, document: dict[str, Any]) -> None: ...
 
+    def set_rule_status(
+        self, rule_id: str, status: str, now: datetime
+    ) -> dict[str, Any]: ...
+
+    def list_actions(self, limit: int) -> list[dict[str, Any]]: ...
+
 
 def seed(store: Rules, now: datetime) -> list[str]:
     """Add the starter rules that are not there yet; the ids added, in order."""
@@ -91,6 +105,11 @@ def main(argv: Sequence[str] | None = None, *, store: Rules | None = None) -> in
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("seed", help="add the starter rules that are not there yet")
     commands.add_parser("list", help="every rule, by name")
+    status = commands.add_parser("set", help="change a rule's status")
+    status.add_argument("rule_id")
+    status.add_argument("status", choices=RULE_STATUSES)
+    actions = commands.add_parser("actions", help="the engine's latest decisions")
+    actions.add_argument("--limit", type=int, default=10)
     args = parser.parse_args(argv)
 
     if store is None:
@@ -104,16 +123,26 @@ def main(argv: Sequence[str] | None = None, *, store: Rules | None = None) -> in
         store = FirestoreStore(firestore.Client(project=args.project))
 
     try:
+        if args.command == "actions":
+            for action in store.list_actions(args.limit):
+                print(
+                    f"  {action['decided_at']:%Y-%m-%d %H:%M:%S}  {action['rule_id']:18}"
+                    f" {action['customer_id']:20} {action['arm']:9} {action['channel']}"
+                )
+            return 0
         if args.command == "seed":
             added = seed(store, datetime.now(UTC))
             if added:
                 print(f"Added {len(added)} starter rules: {', '.join(added)}.")
             else:
                 print("Every starter rule is there already; nothing added.")
+        elif args.command == "set":
+            store.set_rule_status(args.rule_id, args.status, datetime.now(UTC))
+            print(f"{args.rule_id} is now {args.status}.")
         for rule in store.list_rules():
             status, kind = rule["status"], rule["kind"]
             print(f"  {rule['rule_id']:18} {status:8} {kind:10} {rule['name']}")
-    except ValueError as err:
+    except (ValueError, KeyError) as err:
         print(f"Refused: {err}", file=sys.stderr)
         return 1
     return 0

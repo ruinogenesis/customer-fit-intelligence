@@ -31,6 +31,7 @@ from cfi_api.export import (
     LEFTOVERS_PER_REQUEST,
     MemoryPublisher,
     OutboxEntry,
+    attributes,
     export,
     message,
     outbox_document,
@@ -112,6 +113,14 @@ def test_a_message_is_a_row_of_raw_changes() -> None:
         "scores",
         "customers/cust_1/scores/ev_1",
     )
+
+
+def test_a_message_names_its_collection_as_an_attribute() -> None:
+    sent = message("customers/cust_1/scores/ev_1", {"at": T0}, "ev_1", T0)
+    assert attributes(sent) == {"collection": "scores"}
+    assert attributes(message("orders/ord_1", {}, "ev_1", T0)) == {
+        "collection": "orders"
+    }
 
 
 def test_timestamps_go_to_bigquery_in_utc() -> None:
@@ -375,6 +384,37 @@ def test_saved_documents_reach_the_topic(
     sent = next(row for row in got if row["collection"] == "orders")
     assert json.loads(sent["document"])["basket_value"] == order["basket_value"]
     assert not db.document(f"outbox/{event['event_id']}").get().exists
+
+
+@needs_emulators
+def test_each_message_reaches_the_topic_with_its_collection(
+    exporting: FlaskClient, topic: tuple[str, str]
+) -> None:
+    # The rules service's subscription takes score entries by it (T501).
+    tag = uuid.uuid4().hex[:8]
+    event = placed(f"ord_{tag}", f"cust_{tag}")
+    assert exporting.post(URL, json=event).status_code == 201
+    subscriber = SubscriberClient()
+    seen: dict[str, dict[str, str]] = {}
+    deadline = time.monotonic() + 30
+    while len(seen) < 4 and time.monotonic() < deadline:
+        try:
+            response = subscriber.pull(
+                subscription=topic[1], max_messages=100, timeout=5
+            )
+        except DeadlineExceeded:
+            continue
+        for received in response.received_messages:
+            row = json.loads(received.message.data)
+            if row["event_id"] == event["event_id"]:
+                seen[row["collection"]] = dict(received.message.attributes)
+        if response.received_messages:
+            subscriber.acknowledge(
+                subscription=topic[1],
+                ack_ids=[r.ack_id for r in response.received_messages],
+            )
+    assert seen == {name: {"collection": name} for name in seen}
+    assert sorted(seen) == ["customers", "events", "orders", "scores"]
 
 
 @needs_emulators
