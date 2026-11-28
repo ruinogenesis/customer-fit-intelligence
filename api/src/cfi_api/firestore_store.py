@@ -368,6 +368,13 @@ class FirestoreStore(FirestoreReader):
         )
         return [doc for doc in (s.to_dict() for s in query.stream()) if doc]
 
+    def quiet_customers(self, before: datetime) -> list[dict[str, Any]]:
+        # Firestore's own single-field index; a null never matches a range.
+        query = self._client.collection("customers").where(
+            filter=FieldFilter("latest_placed_at", "<=", before)
+        )
+        return [doc for doc in (s.to_dict() for s in query.stream()) if doc]
+
     def automation_settings(self) -> dict[str, Any] | None:
         return self._get("settings/automations")
 

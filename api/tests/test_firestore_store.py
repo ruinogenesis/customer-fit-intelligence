@@ -474,3 +474,30 @@ def test_the_guardrails_in_firestore() -> None:
         f"r-{tag}--ord_3",
     ]
     assert store.customer_actions(f"cust_{tag}", T0 + timedelta(seconds=1)) == []
+
+
+@needs_emulator
+def test_quiet_customers_in_firestore() -> None:
+    from cfi_api.firestore_store import FirestoreStore
+
+    client = firestore.Client(project="demo-cfi")
+    store = FirestoreStore(client)
+    tag = uuid.uuid4().hex[:8]
+    long_ago = datetime(1990, 1, 1, tzinfo=UTC)  # before any other test's orders
+    placed = {
+        "quiet": long_ago,
+        "edge": long_ago + timedelta(days=1),
+        "recent": long_ago + timedelta(days=2),
+        "never": None,
+    }
+    for name, at in placed.items():
+        client.document(f"customers/cust_{tag}_{name}").set(
+            {
+                "customer_id": f"cust_{tag}_{name}",
+                "latest_order_id": None if at is None else f"ord_{tag}_{name}",
+                "latest_placed_at": at,
+            }
+        )
+    found = store.quiet_customers(long_ago + timedelta(days=1))
+    mine = sorted(c["customer_id"] for c in found if tag in c["customer_id"])
+    assert mine == [f"cust_{tag}_edge", f"cust_{tag}_quiet"]

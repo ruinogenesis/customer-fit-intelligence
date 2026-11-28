@@ -36,12 +36,18 @@ whatever the rule's status: nothing is ever sent.
 A rule decides at most once per order. An order is scored again as it is
 delivered and rated, and Pub/Sub may send one scoring twice; action_id is
 the rule and the order, so neither logs a second decision.
+
+Some rules fire on what has not happened, which no scoring brings: the
+daily sweep (T505) asks those (SWEEPS) which customers they fire for, and
+puts each through the same guardrails. Win-back fires for a customer with
+no order for 14 days; its decision is about their latest order, so it
+decides once per quiet spell however many sweeps see them.
 """
 
 import hashlib
 import logging
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, time, timedelta
 from typing import Any, Protocol
 from zoneinfo import ZoneInfo
@@ -112,9 +118,12 @@ def fee_sensitivity(scoring: Scoring, condition: Mapping[str, Any]) -> Fire | No
 LOGIC: dict[str, Logic] = {"fee-sensitivity": fee_sensitivity}
 
 # What each rule's action is worth, in satang, before its action map: a
-# fee-free delivery is worth about a typical delivery fee. A rule not here
-# sends messages, which cost nothing.
-ACTIONS: dict[str, dict[str, int]] = {"fee-sensitivity": {"value": 4_000}}
+# fee-free delivery is worth about a typical delivery fee, and win-back's
+# voucher 50 baht. A rule not here sends messages, which cost nothing.
+ACTIONS: dict[str, dict[str, int]] = {
+    "fee-sensitivity": {"value": 4_000},
+    "win-back": {"value": 5_000},
+}
 
 
 def cost(rule: Mapping[str, Any]) -> int:
@@ -220,19 +229,21 @@ def action_id(rule_id: str, order_id: str) -> str:
 
 def action_document(
     rule: Mapping[str, Any],
-    scoring: Scoring,
+    customer_id: str,
+    order_id: str,
     fire: Fire,
     worth: int,
     now: datetime,
     send_at: datetime,
 ) -> dict[str, Any]:
     """The document for actions/{action_id}, checked; always a dry run until
-    the channels (T504)."""
+    the channels (T504). order_id is the order the decision is about: the
+    scored order, or the latest order before a customer went quiet."""
     document = {
-        "action_id": action_id(rule["rule_id"], scoring.entry["order_id"]),
+        "action_id": action_id(rule["rule_id"], order_id),
         "rule_id": rule["rule_id"],
-        "customer_id": scoring.customer_id,
-        "arm": arm(rule["rule_id"], scoring.customer_id, rule["holdout_share"]),
+        "customer_id": customer_id,
+        "arm": arm(rule["rule_id"], customer_id, rule["holdout_share"]),
         "channel": fire.channel,
         "dry_run": True,
         "decided_at": now,
@@ -264,14 +275,154 @@ class Automations(Protocol):
         self, customer_id: str, since: datetime
     ) -> list[dict[str, Any]]: ...
 
+    def quiet_customers(self, before: datetime) -> list[dict[str, Any]]: ...
+
     def add_action(self, document: dict[str, Any], *, day: str, budget: int) -> bool:
         """Add actions/{action_id} and count its spend on day; False if it is
         there already. Raises OverBudget past budget (cfi_api.store)."""
         ...
 
 
-def _held(rule: Mapping[str, Any], scoring: Scoring, why: str) -> None:
-    logger.info("%s held back for %s: %s", rule["rule_id"], scoring.customer_id, why)
+# --- The daily sweep (T505) ---
+
+
+@dataclass(frozen=True)
+class Candidate:
+    """A customer a sweeping rule fires for, and the order it is about."""
+
+    customer: Mapping[str, Any]  # customers/{customer_id}, as saved
+    order_id: str
+    fire: Fire
+
+
+# A sweeping rule's logic: it finds its own customers, from the store and
+# the rule's numbers, as of now.
+Sweep = Callable[[Automations, Mapping[str, Any], datetime], list[Candidate]]
+
+WIN_BACK = {"quiet_days": 14, "min_churn": 0.10}
+
+
+def win_back(
+    store: Automations, condition: Mapping[str, Any], now: datetime
+) -> list[Candidate]:
+    """No order for quiet_days, and the latest order's churn risk at least
+    min_churn: a voucher to come back, riskiest first, so the daily budget
+    goes to them first.
+
+    The order is the customer's latest, so the rule decides once per quiet
+    spell: after a new order and another quiet_days, it can decide again.
+    """
+    rule = numbers(condition, WIN_BACK)
+    before = now - timedelta(days=rule["quiet_days"])
+    found = [
+        customer
+        for customer in store.quiet_customers(before)
+        if customer["churn_risk"] is not None
+        and customer["churn_risk"] >= rule["min_churn"]
+    ]
+    found.sort(key=lambda customer: (-customer["churn_risk"], customer["customer_id"]))
+    return [
+        Candidate(customer, customer["latest_order_id"], Fire("voucher"))
+        for customer in found
+    ]
+
+
+# Each rule that sweeps, by rule_id; T506 adds Lovemark advocacy.
+SWEEPS: dict[str, Sweep] = {"win-back": win_back}
+
+
+@dataclass
+class _Seen:
+    """What one run has read about one customer, read once and only if a
+    marketing rule fires for them."""
+
+    consent: bool | None = None
+    recent: int | None = None  # their marketing decisions within the cap
+    known: set[str] = field(default_factory=set)  # those actions' ids
+
+
+class _Run:
+    """One decide() or sweep(): the guardrails' settings, the rules, the local
+    day and quiet hours, and what it has read about each customer."""
+
+    def __init__(self, store: Automations, now: datetime, guard: Guardrails) -> None:
+        self.store, self.now, self.guard = store, now, guard
+        self.rules = store.list_rules()
+        self.marketing = {r["rule_id"] for r in self.rules if r["kind"] == MARKETING}
+        self.day, self.quiet = guard.local_day(now), guard.quiet_until(now)
+        self.seen: dict[str, _Seen] = {}
+
+    @classmethod
+    def start(cls, store: Automations, now: datetime, who: str) -> "_Run | None":
+        """A run, or None when automations are paused (the global switch)."""
+        guard = Guardrails.from_document(store.automation_settings())
+        if not guard.enabled:
+            logger.info("Automations are paused: nothing decided for %s", who)
+            return None
+        return cls(store, now, guard)
+
+    def active(self, logic: Mapping[str, Any]) -> list[dict[str, Any]]:
+        """The rules that are not off (their own kill switch) and have logic."""
+        return [
+            rule
+            for rule in self.rules
+            if rule["status"] != OFF and rule["rule_id"] in logic
+        ]
+
+    def consider(
+        self,
+        rule: Mapping[str, Any],
+        customer_id: str,
+        order_id: str,
+        fire: Fire,
+        worth: int,
+        customer: Mapping[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
+        """Put a rule's decision to fire through the guardrails, and log it if
+        it passes: the action logged, or None. customer, when the caller has
+        read it already, saves reading it again for its consent."""
+        send_at = self.now
+        if rule["kind"] == MARKETING:
+            seen = self.seen.setdefault(customer_id, _Seen())
+            if seen.consent is None:
+                document = customer or self.store.customer_document(customer_id)
+                seen.consent = consents(document)
+            if not seen.consent:
+                _held(rule, customer_id, "no marketing consent")
+                return None
+            if seen.recent is None:
+                since = self.now - timedelta(days=self.guard.cap_days)
+                found = self.store.customer_actions(customer_id, since)
+                seen.recent = sum(a["rule_id"] in self.marketing for a in found)
+                seen.known = {a["action_id"] for a in found}
+            if action_id(rule["rule_id"], order_id) in seen.known:
+                return None  # decided on this order already: nothing to hold back
+            if seen.recent >= self.guard.cap_actions:
+                cap = f"{self.guard.cap_actions} in {self.guard.cap_days} days"
+                _held(rule, customer_id, f"frequency cap ({cap})")
+                return None
+            send_at = self.quiet or self.now
+        document = action_document(
+            rule, customer_id, order_id, fire, worth, self.now, send_at
+        )
+        try:
+            added = self.store.add_action(
+                document, day=self.day, budget=self.guard.daily_budget
+            )
+        except OverBudget:
+            _held(rule, customer_id, f"daily budget ({self.day})")
+            return None
+        if not added:
+            return None
+        if rule["kind"] == MARKETING:
+            seen = self.seen[customer_id]
+            seen.recent = (seen.recent or 0) + 1
+            seen.known.add(document["action_id"])
+        return document
+
+
+def _held(rule: Mapping[str, Any], customer_id: str, why: str) -> None:
+    logger.info("%s held back for %s: %s", rule["rule_id"], customer_id, why)
 
 
 def decide(store: Automations, scoring: Scoring, now: datetime) -> list[dict[str, Any]]:
@@ -282,59 +433,53 @@ def decide(store: Automations, scoring: Scoring, now: datetime) -> list[dict[str
     A rule whose condition or action the logic refuses is skipped and logged
     as an error, so one bad rule never stops the others.
     """
-    guard = Guardrails.from_document(store.automation_settings())
-    if not guard.enabled:
-        logger.info(
-            "Automations are paused: nothing decided for %s", scoring.customer_id
-        )
+    run = _Run.start(store, now, scoring.customer_id)
+    if run is None:
         return []
-    rules = store.list_rules()
-    marketing = {rule["rule_id"] for rule in rules if rule["kind"] == MARKETING}
-    day, quiet = guard.local_day(now), guard.quiet_until(now)
     decided = []
-    # Read once, and only when a marketing rule fires.
-    consent: bool | None = None
-    recent: int | None = None  # the customer's marketing decisions in the cap
-    known: set[str] = set()  # their actions in the cap's days, by action_id
-    for rule in rules:
-        logic = LOGIC.get(rule["rule_id"])
-        if rule["status"] == OFF or logic is None:
-            continue
+    for rule in run.active(LOGIC):
         try:
-            fire = logic(scoring, rule["condition"])
+            fire = LOGIC[rule["rule_id"]](scoring, rule["condition"])
             worth = cost(rule)
         except ValueError:
             logger.exception("Rule %s was skipped: its numbers", rule["rule_id"])
             continue
         if fire is None:
             continue
-        send_at = now
-        if rule["kind"] == MARKETING:
-            if consent is None:
-                consent = consents(store.customer_document(scoring.customer_id))
-            if not consent:
-                _held(rule, scoring, "no marketing consent")
-                continue
-            if recent is None:
-                since = now - timedelta(days=guard.cap_days)
-                found = store.customer_actions(scoring.customer_id, since)
-                recent = sum(action["rule_id"] in marketing for action in found)
-                known = {action["action_id"] for action in found}
-            if action_id(rule["rule_id"], scoring.entry["order_id"]) in known:
-                continue  # decided on this order already: nothing to hold back
-            if recent >= guard.cap_actions:
-                cap = f"{guard.cap_actions} in {guard.cap_days} days"
-                _held(rule, scoring, f"frequency cap ({cap})")
-                continue
-            send_at = quiet or now
-        document = action_document(rule, scoring, fire, worth, now, send_at)
+        action = run.consider(
+            rule, scoring.customer_id, scoring.entry["order_id"], fire, worth
+        )
+        if action is not None:
+            decided.append(action)
+    return decided
+
+
+def sweep(store: Automations, now: datetime) -> list[dict[str, Any]]:
+    """The daily sweep (T505): ask every rule that is on and sweeps which
+    customers it fires for, and log each decision that passes the
+    guardrails, as decide() does. The decisions logged now, in rule order.
+    """
+    run = _Run.start(store, now, "the daily sweep")
+    if run is None:
+        return []
+    decided = []
+    for rule in run.active(SWEEPS):
         try:
-            added = store.add_action(document, day=day, budget=guard.daily_budget)
-        except OverBudget:
-            _held(rule, scoring, f"daily budget ({day})")
+            found = SWEEPS[rule["rule_id"]](store, rule["condition"], now)
+            worth = cost(rule)
+        except ValueError:
+            logger.exception("Rule %s was skipped: its numbers", rule["rule_id"])
             continue
-        if added:
-            decided.append(document)
-            if rule["kind"] == MARKETING and recent is not None:
-                recent += 1
+        for candidate in found:
+            customer = candidate.customer
+            action = run.consider(
+                rule,
+                customer["customer_id"],
+                candidate.order_id,
+                candidate.fire,
+                worth,
+                customer,
+            )
+            if action is not None:
+                decided.append(action)
     return decided

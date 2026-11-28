@@ -2,7 +2,8 @@
 
 It runs as its own private Cloud Run service, cfi-rules, from the API's
 image (APP_MODULE in the Dockerfile). Cloud Run lets in only the push
-subscription's service account, so this app checks no tokens itself. The
+subscription's and the sweep's service accounts, so this app checks no
+tokens itself. The
 subscription takes only score entries (the messages' collection attribute,
 cfi_api.export) from the topic every saved document goes to.
 
@@ -14,6 +15,11 @@ raw.changes:
 - any other document: 204, nothing done.
 - anything that is not such a message: 204, logged as an error, and dropped,
   since sending it again could never make it one.
+
+POST /sweep runs the daily sweep (T505; cfi_api.engine.sweep): Cloud
+Scheduler calls it each morning as its own service account, which Cloud Run
+lets in too. 200 with {"decided": n}; if sweeping fails, 500, and Scheduler
+tries again: sweeping again logs nothing twice.
 
 Settings, as the API's (cfi_api.app): STORE ("memory" or "firestore") and
 PROJECT, from CFI_* environment variables or config.
@@ -29,7 +35,7 @@ from typing import Any
 
 from flask import Flask, current_app, request
 
-from cfi_api.engine import Automations, Scoring, decide
+from cfi_api.engine import Automations, Scoring, decide, sweep
 from cfi_api.runtime import make_store
 
 logger = logging.getLogger(__name__)
@@ -75,7 +81,19 @@ def push() -> tuple[str, int]:
         logger.error("Dropped a push that is not a change message: %s", err)
         return "", 204
     store: Automations = current_app.extensions["cfi_store"]
-    decided = decide(store, new, datetime.now(UTC))
+    _logged(decide(store, new, datetime.now(UTC)))
+    return "", 204
+
+
+def sweep_now() -> tuple[dict[str, int], int]:
+    store: Automations = current_app.extensions["cfi_store"]
+    decided = sweep(store, datetime.now(UTC))
+    _logged(decided)
+    logger.info("The daily sweep decided %d", len(decided))
+    return {"decided": len(decided)}, 200
+
+
+def _logged(decided: list[dict[str, Any]]) -> None:
     for action in decided:
         logger.info(
             "%s decided for %s (%s, %s)",
@@ -84,7 +102,6 @@ def push() -> tuple[str, int]:
             action["arm"],
             "dry run" if action["dry_run"] else action["channel"],
         )
-    return "", 204
 
 
 def create_rules_app(config: Mapping[str, Any] | None = None) -> Flask:
@@ -100,4 +117,5 @@ def create_rules_app(config: Mapping[str, Any] | None = None) -> Flask:
     app.config.update(config or {})
     app.extensions["cfi_store"] = make_store(app.config["STORE"], app.config["PROJECT"])
     app.add_url_rule("/push", "push", push, methods=["POST"])
+    app.add_url_rule("/sweep", "sweep", sweep_now, methods=["POST"])
     return app

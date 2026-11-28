@@ -1,6 +1,8 @@
 """T501: the rules service. Pub/Sub pushes each new score entry; the engine
 decides, and the service answers 204, or 500 so Pub/Sub sends it again.
 Anything that is not a change message is dropped, as no retry could fix it.
+T505: Cloud Scheduler calls the daily sweep; 200 with how many it decided,
+or 500 so Scheduler tries again.
 """
 
 import base64
@@ -190,9 +192,36 @@ def test_when_deciding_fails_pub_sub_is_asked_to_send_it_again(
     assert rules_app.test_client().post("/push", json=envelope(row)).status_code == 500
 
 
-def test_the_service_has_one_endpoint(rules_app: Flask) -> None:
+def test_the_daily_sweep_decides_and_says_how_many(
+    rules_app: Flask, store: MemoryStore, reference_model: str
+) -> None:
+    # Two customers who said yes, with no order since January (T505).
+    changes(reference_model, store)
+    store.set_rule_status("win-back", "dry_run", T0)
+    path = "rules/win-back"
+    store.documents[path] = {**store.documents[path], "condition": {"min_churn": 0.0}}
+    client = rules_app.test_client()
+    first = client.post("/sweep")
+    assert (first.status_code, first.get_json()) == (200, {"decided": 2})
+    assert {a["rule_id"] for a in store.list_actions(10)} == {"win-back"}
+    again = client.post("/sweep")  # as when Scheduler tries again
+    assert (again.status_code, again.get_json()) == (200, {"decided": 0})
+
+
+def test_when_sweeping_fails_scheduler_is_asked_to_try_again(
+    rules_app: Flask, store: MemoryStore
+) -> None:
+    def broken() -> list[dict[str, Any]]:
+        raise ConnectionError("Firestore is unreachable")
+
+    store.list_rules = broken  # type: ignore[method-assign]
+    assert rules_app.test_client().post("/sweep").status_code == 500
+
+
+def test_the_service_has_two_endpoints(rules_app: Flask) -> None:
     client = rules_app.test_client()
     assert client.get("/push").status_code == 405
+    assert client.get("/sweep").status_code == 405
     assert client.post("/api/v1/events", json={}).status_code == 404
 
 

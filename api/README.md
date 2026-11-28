@@ -147,6 +147,20 @@ Run it locally with the reference model, from the repo root:
   HH:MM-HH:MM --budget BAHT` changes them, and with no settings saved the
   defaults hold. The cap reads a customer's actions by time, through the
   composite index on `actions` (customer_id, decided_at) that CI deploys.
+- Daily sweep (T505): some rules fire on what has not happened, which no
+  scoring brings. Each day at 10:00 Bangkok time, the Cloud Scheduler job
+  `cfi-sweep` calls `POST /sweep` on `cfi-rules` as the service account
+  `cfi-sweep`; each rule that sweeps finds its customers, and each decision
+  passes the same guardrails. So far Win-back: a customer with no order for
+  14 days whose latest order's churn risk is at least 10%
+  (`{"quiet_days": 21, "min_churn": 0.2}` overrides either) gets a 50-baht
+  voucher, riskiest first, so the daily budget goes to them first. The
+  decision is about their latest order (`actions/win-back--{order}`), so it
+  is logged once per quiet spell however many sweeps see them, and again
+  only after a new order and another 14 quiet days. The sweep answers 200
+  with `{"decided": n}`, or 500, and Scheduler tries again: sweeping again
+  logs nothing twice. To sweep now: `gcloud scheduler jobs run cfi-sweep
+  --location asia-southeast3 --project cfi-dev-th26`.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
@@ -342,3 +356,18 @@ One-time setup of a project (dev: T204, T205 and T208):
                 cfi-rules-push@cfi-dev-th26.iam.gserviceaccount.com \
             --message-filter 'attributes.collection = "scores"' \
             --ack-deadline 60 --min-retry-delay 10s --max-retry-delay 600s
+18. Daily sweep (T505), after CI has deployed `cfi-rules` with `/sweep`:
+    enable the Cloud Scheduler API, create the service account `cfi-sweep`,
+    grant it `roles/run.invoker` on `cfi-rules`, then create the job. It
+    signs in to the service's own URL, and tries a failed sweep 3 more times:
+
+        URL=$(gcloud run services describe cfi-rules --project cfi-dev-th26 \
+            --region asia-southeast3 --format 'value(status.url)')
+        gcloud scheduler jobs create http cfi-sweep \
+            --location asia-southeast3 --project cfi-dev-th26 \
+            --schedule "0 10 * * *" --time-zone Asia/Bangkok \
+            --uri "$URL/sweep" --http-method POST \
+            --oidc-service-account-email \
+                cfi-sweep@cfi-dev-th26.iam.gserviceaccount.com \
+            --oidc-token-audience "$URL" \
+            --attempt-deadline 5m --max-retry-attempts 3 --min-backoff 5m
