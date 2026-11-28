@@ -16,7 +16,7 @@ later time: that is the order BigQuery's views go by.
 from datetime import UTC, datetime
 from typing import Any
 
-from fitcore.documents import customer_from_document, order_from_document
+from fitcore.documents import check, customer_from_document, order_from_document
 from fitcore.model import QUADRANTS
 from fitcore.scoring import Customer, Order
 from google.api_core.exceptions import Aborted, AlreadyExists
@@ -40,6 +40,7 @@ from cfi_api.store import (
     Page,
     TimeKey,
     Work,
+    by_name,
     customer_key,
     newest_first,
     order_key,
@@ -284,6 +285,21 @@ class FirestoreStore(FirestoreReader):
         found = self._client.document(f"models/{version}").get().to_dict()
         assert found is not None
         return entry_from_document(found)
+
+    # --- Automation rules (T406) ---
+
+    def list_rules(self) -> list[dict[str, Any]]:
+        found = (
+            snapshot.to_dict() for snapshot in self._client.collection("rules").stream()
+        )
+        return by_name([document for document in found if document])
+
+    def add_rule(self, document: dict[str, Any]) -> None:
+        check("rules", document)
+        try:
+            self._client.document(f"rules/{document['rule_id']}").create(document)
+        except AlreadyExists as err:
+            raise ValueError(f"{document['rule_id']} is there already") from err
 
 
 def gave_up(err: Exception) -> bool:

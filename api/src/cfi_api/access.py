@@ -104,6 +104,7 @@ ACCESS: dict[tuple[str, str], Rule] = {
     ("models.LiveModel", "GET"): Rule("viewer"),
     ("overview.Overview", "GET"): Rule("viewer"),
     ("overview.Trend", "GET"): Rule("viewer"),
+    ("automations.RuleList", "GET"): Rule("viewer"),
     ("models.Promote", "POST"): Rule("admin"),
 }
 

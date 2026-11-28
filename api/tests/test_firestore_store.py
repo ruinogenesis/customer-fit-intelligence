@@ -343,3 +343,29 @@ def test_an_event_reads_the_live_version_inside_its_transaction(
     answer = client.post("/api/v1/events", json=placed)
     assert answer.status_code == 201
     assert answer.get_json()["model_version"] == f"live-{tag}"
+
+
+# --- Automation rules in Firestore (T406) ---
+
+
+@needs_emulator
+def test_rules_are_added_once_and_listed_by_name_in_firestore() -> None:
+    from cfi_api.firestore_store import FirestoreStore
+    from cfi_api.rules import StarterRule, rule_document, seed
+
+    store = FirestoreStore(firestore.Client(project="demo-cfi"))
+    tag = uuid.uuid4().hex[:8]
+    later = rule_document(StarterRule(f"b-{tag}", f"B rule {tag}", "service"), T0)
+    sooner = rule_document(StarterRule(f"a-{tag}", f"a rule {tag}", "marketing"), T0)
+    store.add_rule(later)
+    store.add_rule(sooner)
+    with pytest.raises(ValueError, match="there already"):
+        store.add_rule(later)
+    with pytest.raises(DocumentError):
+        store.add_rule({**later, "rule_id": f"c-{tag}", "status": "on"})
+    mine = [rule for rule in store.list_rules() if rule["rule_id"].endswith(tag)]
+    assert mine == [sooner, later]  # by name, whatever its case
+    seed(store, T0)
+    before = store.list_rules()
+    assert seed(store, T0) == []
+    assert store.list_rules() == before

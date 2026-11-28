@@ -57,8 +57,9 @@ service cloud.firestore {
       allow read: if isAdmin();
     }
 
-    // Everything else stays locked, rules, actions and models included:
-    // the task that first writes a collection decides who may read it.
+    // Everything else stays locked. Staff read the rules and the models
+    // through the API (GET /rules, T406; GET /models, T310); for actions,
+    // the task that first writes them decides who may read them.
     match /{document=**} {
       allow read, write: if false;
     }

@@ -13,6 +13,7 @@ import type { CustomerFeed } from "../src/feed";
 import type { FeedCustomer } from "../src/matrix";
 import type { ModelVersion } from "../src/models";
 import type { Role } from "../src/roles";
+import type { Rule } from "../src/rules";
 
 /** Firebase Auth's stand-in: accounts by email, and a session to report. */
 export class FakeAuth implements AuthService {
@@ -81,13 +82,37 @@ export function registry(): ModelVersion[] {
   ];
 }
 
-/** The API's stand-in: the registry in memory, every call recorded. */
+/** The six starter rules as python -m cfi_api.rules seed writes them, by name. */
+export function starterRules(): Rule[] {
+  const rule = (rule_id: string, name: string, kind: Rule["kind"]): Rule => ({
+    rule_id,
+    name,
+    kind,
+    status: "off",
+    holdout_share: 0.5,
+    condition: {},
+    action: {},
+    caps: {},
+    updated_at: "2026-11-28T05:00:00+00:00",
+  });
+  return [
+    rule("brand-to-lovemark", "Brand → Lovemark", "marketing"),
+    rule("fad-protection", "Fad protection", "marketing"),
+    rule("fee-sensitivity", "Fee sensitivity", "marketing"),
+    rule("lovemark-advocacy", "Lovemark advocacy", "marketing"),
+    rule("service-recovery", "Service recovery", "service"),
+    rule("win-back", "Win-back", "marketing"),
+  ];
+}
+
+/** The API's stand-in: the registry and the rules in memory, every call recorded. */
 export class FakeApi implements Api {
   calls: string[] = [];
   /** The next call fails with this, once. */
   failNext: ApiError | null = null;
   models: ModelVersion[];
   cards: Record<string, string>;
+  rules: Rule[] = starterRules();
   /** Other GET answers by path; an ApiError there is thrown, as a refusal. */
   answers: Record<string, unknown> = {};
 
@@ -111,6 +136,7 @@ export class FakeApi implements Api {
   async get<T>(path: string): Promise<T> {
     this.record("GET", path);
     if (path === "/models") return { models: structuredClone(this.models) } as T;
+    if (path === "/rules") return { rules: structuredClone(this.rules) } as T;
     const answer = this.answers[path];
     if (answer instanceof ApiError) throw answer;
     if (answer === undefined) throw new ApiError(404, `No ${path} here.`);

@@ -12,7 +12,7 @@ The app reads the `role` claim on the person's ID token (T303: viewer,
 analyst or admin, granted with `python -m cfi_api.roles`) and shows every
 screen of the design doc. Each screen says whether this role may take its
 main action; an account with no role sees "No dashboard access". The
-screens fill in with T402 to T407.
+screens came with T402 to T407.
 
 Screens call the API as the person signed in (`src/api.ts`): same origin,
 `/api/v1/...`, with their ID token as `Authorization: Bearer`.
@@ -58,6 +58,15 @@ there than over every order; a row opens all eight. The span defaults to the
 last 28 Bangkok days, today included. The grouping, span and minimum orders
 are kept in the URL (`?by=courier&from=2026-01-01&to=2026-04-01&min_orders=10`),
 so a link opens the same list.
+
+## Automations (T406)
+
+Every automation rule, by name, from `GET /rules`: its kind (service or
+marketing), status (off, dry run, test or live, each explained under the
+table), holdout share and when it last changed (Bangkok time). Read-only
+until the rules engine (T501); then admins turn rules on or off and move
+them from test to live. Until rules are seeded (`python -m cfi_api.rules
+seed`, api/README.md) it says how to add them.
 
 ## Models (T407)
 
