@@ -392,6 +392,7 @@ def test_rule_status_and_actions_in_firestore() -> None:
     with pytest.raises(DocumentError):
         store.set_rule_status(f"r-{tag}", "on", T0)
 
+    newest = datetime.now(UTC) + timedelta(days=3650)
     action = {
         "action_id": f"r-{tag}--ord_1",
         "rule_id": f"r-{tag}",
@@ -399,7 +400,9 @@ def test_rule_status_and_actions_in_firestore() -> None:
         "arm": "treatment",
         "channel": "push",
         "dry_run": True,
-        "decided_at": datetime.now(UTC) + timedelta(days=3650),
+        "decided_at": newest,
+        "cost": 0,
+        "send_at": newest,
         "outcome": None,
     }
     assert store.add_action(action)
@@ -426,3 +429,48 @@ def test_rule_status_and_actions_in_firestore() -> None:
     assert len(decide(store, new, T0)) == 1
     assert decide(store, new, T0) == []
     store.set_rule_status("fee-sensitivity", "off", T0)
+
+
+@needs_emulator
+def test_the_guardrails_in_firestore() -> None:
+    from cfi_api.engine import Guardrails
+    from cfi_api.firestore_store import FirestoreStore
+    from cfi_api.store import OverBudget
+
+    store = FirestoreStore(firestore.Client(project="demo-cfi"))
+    tag = uuid.uuid4().hex[:8]
+    settings = Guardrails(cap_actions=3).document(T0)
+    store.set_automation_settings(settings)
+    assert store.automation_settings() == settings
+    store.set_automation_settings(Guardrails().document(T0))  # back to defaults
+
+    def action(n: int, arm: str, at: datetime) -> dict[str, Any]:
+        return {
+            "action_id": f"r-{tag}--ord_{n}",
+            "rule_id": f"r-{tag}",
+            "customer_id": f"cust_{tag}",
+            "arm": arm,
+            "channel": "voucher",
+            "dry_run": True,
+            "decided_at": at,
+            "cost": 4_000,
+            "send_at": at,
+            "outcome": None,
+        }
+
+    day = "2099-12-31"  # a day no other test spends on
+    assert store.add_action(action(1, "treatment", T0), day=day, budget=10_000)
+    assert store.add_action(action(2, "holdout", T0), day=day, budget=10_000)
+    assert store.add_action(action(3, "treatment", T0), day=day, budget=10_000)
+    assert store.spent_on(day) == 8_000
+    assert not store.add_action(action(1, "treatment", T0), day=day, budget=10_000)
+    with pytest.raises(OverBudget):
+        store.add_action(action(4, "holdout", T0), day=day, budget=10_000)
+    assert store.spent_on(day) == 8_000
+    found = store.customer_actions(f"cust_{tag}", T0)
+    assert sorted(a["action_id"] for a in found) == [
+        f"r-{tag}--ord_1",
+        f"r-{tag}--ord_2",
+        f"r-{tag}--ord_3",
+    ]
+    assert store.customer_actions(f"cust_{tag}", T0 + timedelta(seconds=1)) == []

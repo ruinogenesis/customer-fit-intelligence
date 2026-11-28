@@ -1,6 +1,6 @@
 """Firestore documents v1: the shape of everything the system keeps (T301).
 
-COLLECTIONS lists the nine collections, each with the schema its documents
+COLLECTIONS lists the eleven collections, each with the schema its documents
 must pass. check() validates one document before it is written: the API's
 stores call it on every write, so a document of the wrong shape fails the
 request instead of reaching Firestore. Reads are not checked.
@@ -13,8 +13,8 @@ Conventions, as for events (fitcore.schemas): ids are usable as document
 ids; timestamps carry a timezone (Firestore keeps them in UTC); money is
 whole satang. Scores are between 0 and 1.
 
-Fields that later tasks add are not here yet; each task adds its own:
-consent flags and the holdout bucket on customers (T610, T503).
+Each later task adds its own fields here: consent on customers (T610); the
+automation guardrails' settings and daily budgets (T502).
 
 customer_document and order_document (and their inverses) convert
 fitcore.scoring's Customer and Order, for the API and for Cloud Functions.
@@ -406,9 +406,18 @@ class RuleDocument(StrictSchema):
         RULE_STATUSES, "dry_run logs only; test and live act; off is the kill switch"
     )
     holdout_share = _unit("Share of customers held out: 0.5 in test, 0.1 when live")
-    condition = _map("When it fires; its form is set by T501")
-    action = _map("What it sends; its form is set by T501")
-    caps = _map("Its own limits; their form is set by T502")
+    condition = _map(
+        "The numbers its logic fires on, over the logic's own defaults "
+        "(cfi_api.engine, T501)"
+    )
+    action = _map(
+        "What it sends: value, a voucher's or credit's worth in satang, over the "
+        "logic's own default (T502)"
+    )
+    caps = _map(
+        "Not used: the guardrails are the same for every rule "
+        "(settings/automations, T502)"
+    )
     updated_at = _time("When it last changed")
 
 
@@ -422,9 +431,80 @@ class ActionDocument(StrictSchema):
     channel = _choice(CHANNELS, "Where it goes")
     dry_run = _flag("True if the rule was in dry_run, so nothing was sent")
     decided_at = _time("When the rule decided")
+    cost = _satang(
+        "What it spends from the daily budget if sent: a voucher's or credit's "
+        "worth; 0 for a message (T502)"
+    )
+    send_at = _time(
+        "When it may go out: at once, or when quiet hours end for a marketing "
+        "action (T502)"
+    )
     outcome = _choice(
         ACTION_RESULTS, "The furthest it got; null until known", allow_none=True
     )
+
+
+_CLOCK = r"^([01][0-9]|2[0-3]):[0-5][0-9]$"
+
+
+def _clock(description: str) -> fields.String:
+    return fields.String(
+        required=True,
+        validate=validate.Regexp(_CLOCK, error="Not an HH:MM time of day."),
+        metadata={"description": description},
+    )
+
+
+class FrequencyCapSchema(StrictSchema):
+    actions = fields.Integer(
+        required=True,
+        strict=True,
+        validate=validate.Range(min=1),
+        metadata={"description": "At most this many marketing decisions per customer"},
+    )
+    days = fields.Integer(
+        required=True,
+        strict=True,
+        validate=validate.Range(min=1),
+        metadata={"description": "over the last this many days, both arms counted"},
+    )
+
+
+class QuietHoursSchema(StrictSchema):
+    start = _clock("When they start, HH:MM local time")
+    end = _clock("When they end, HH:MM; before start means the next morning")
+    time_zone = fields.String(
+        required=True,
+        validate=validate.OneOf(["Asia/Bangkok"]),
+        metadata={"description": "The customers' time zone (one market, D7)"},
+    )
+
+
+class AutomationSettingsDocument(StrictSchema):
+    """settings/automations: the guardrails every rule shares (T502)."""
+
+    enabled = _flag("False is the global kill switch: no rule decides anything")
+    frequency_cap = _nested(FrequencyCapSchema, "Service rules are exempt")
+    quiet_hours = _nested(
+        QuietHoursSchema, "A marketing action decided then waits until they end"
+    )
+    daily_budget = _satang(
+        "Vouchers and credits the treatment arm may spend per local day; once "
+        "it is spent, no rule that spends decides again that day"
+    )
+    updated_at = _time("When it last changed")
+
+
+class BudgetDocument(StrictSchema):
+    """budget/{day}: what the rules spent on one local day (T502)."""
+
+    day = fields.String(
+        required=True,
+        validate=validate.Regexp(r"^\d{4}-\d{2}-\d{2}$"),
+        metadata={"description": "The local day, YYYY-MM-DD"},
+    )
+    spent = _satang("The treatment arm's vouchers and credits that day, so far")
+    updated_at = _time("When it last changed")
 
 
 class ModelDocument(StrictSchema):
@@ -508,7 +588,16 @@ COLLECTIONS: Mapping[str, Collection] = {
         "rules/{rule_id}", RuleDocument, "automation rule", "the API, for admins"
     ),
     "actions": Collection(
-        "actions/{action_id}", ActionDocument, "rule decision", "Cloud Functions"
+        "actions/{action_id}", ActionDocument, "rule decision", "the rules service"
+    ),
+    "settings": Collection(
+        "settings/automations",
+        AutomationSettingsDocument,
+        "group of settings (one: automations)",
+        "admins",
+    ),
+    "budget": Collection(
+        "budget/{day}", BudgetDocument, "local day of spending", "the rules service"
     ),
     "models": Collection(
         "models/{version}", ModelDocument, "model version", "the training pipeline"

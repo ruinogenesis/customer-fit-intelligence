@@ -12,6 +12,7 @@ import {
   baht,
   changeOf,
   consentLine,
+  count,
   customerPath,
   delivery,
   INPUT_NAMES,
@@ -268,7 +269,7 @@ function ProfileView({ profile, moreOrders }: { profile: Profile; moreOrders: ()
         <>
           <ScoreTabs score={score} setScore={setScore} />
           <p>
-            {scorings.length} scorings of {orderCount} orders
+            {count(scorings.length, "scoring")} of {count(orderCount, "order")}
             {profile.partial ? `, the latest ${scorings.length} only` : ""}. Each event about an
             order scores it again.
           </p>

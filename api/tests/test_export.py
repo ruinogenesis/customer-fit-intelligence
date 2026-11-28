@@ -47,8 +47,10 @@ RAW_SQL = Path(__file__).resolve().parents[2] / "bigquery/raw.sql"
 # must join one or the other.
 EXPORTED = frozenset({"events", "customers", "orders", "scores"})
 NOT_EXPORTED = {
-    "rules": "nothing writes it yet (T501); its task decides",
-    "actions": "nothing writes it yet; its task decides",
+    "rules": "admins' settings (T406); the dashboard reads them through the API",
+    "actions": "the uplift report (T507) decides how decisions reach BigQuery",
+    "settings": "admins' guardrail settings (T502), not customer data",
+    "budget": "a running total the guardrails keep (T502); actions hold the costs",
     "models": "nothing writes it yet (T310); its task decides",
     "users": "staff accounts (T303) stay out of analytics",
     "outbox": "the export's own queue",

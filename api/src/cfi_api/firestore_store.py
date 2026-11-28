@@ -47,6 +47,7 @@ from cfi_api.store import (
     order_key,
     promoted,
     score_key,
+    spend,
     with_status,
     writes,
 )
@@ -62,6 +63,8 @@ NAME = FieldPath.document_id()
 COMPOSITE_INDEXES = (
     ("customers", (("quadrant", "ASCENDING"), ("churn_risk", "DESCENDING"))),
     ("orders", (("customer_id", "ASCENDING"), ("placed_at", "DESCENDING"))),
+    # The frequency cap: one customer's actions since a time (T502).
+    ("actions", (("customer_id", "ASCENDING"), ("decided_at", "ASCENDING"))),
 )
 
 # Score history is queried on this field alone (list_scores); every other
@@ -320,15 +323,61 @@ class FirestoreStore(FirestoreReader):
         changed: dict[str, Any] = run(self._client.transaction())
         return changed
 
-    # --- The rules engine's decisions (T501) ---
+    # --- The rules engine's decisions (T501) and guardrails (T502) ---
 
-    def add_action(self, document: dict[str, Any]) -> bool:
+    def add_action(
+        self,
+        document: dict[str, Any],
+        *,
+        day: str | None = None,
+        budget: int | None = None,
+    ) -> bool:
         check("actions", document)
-        try:
-            self._client.document(f"actions/{document['action_id']}").create(document)
-        except AlreadyExists:
-            return False
-        return True
+        action = self._client.document(f"actions/{document['action_id']}")
+        if day is None or budget is None:
+            try:
+                action.create(document)
+            except AlreadyExists:
+                return False
+            return True
+        spending = self._client.document(f"budget/{day}")
+
+        @firestore.transactional
+        def run(transaction: firestore.Transaction) -> bool:
+            if action.get(transaction=transaction).exists:
+                return False
+            found = spending.get(transaction=transaction).to_dict()
+            day_after = spend(
+                document, day, 0 if found is None else found["spent"], budget
+            )
+            if day_after is not None:
+                transaction.set(spending, day_after)
+            transaction.create(action, document)
+            return True
+
+        added: bool = run(self._client.transaction(max_attempts=MAX_ATTEMPTS))
+        return added
+
+    def customer_actions(
+        self, customer_id: str, since: datetime
+    ) -> list[dict[str, Any]]:
+        query = (
+            self._client.collection("actions")
+            .where(filter=FieldFilter("customer_id", "==", customer_id))
+            .where(filter=FieldFilter("decided_at", ">=", since))
+        )
+        return [doc for doc in (s.to_dict() for s in query.stream()) if doc]
+
+    def automation_settings(self) -> dict[str, Any] | None:
+        return self._get("settings/automations")
+
+    def set_automation_settings(self, document: dict[str, Any]) -> None:
+        check("settings", document)
+        self._client.document("settings/automations").set(document)
+
+    def spent_on(self, day: str) -> int:
+        found = self._get(f"budget/{day}")
+        return 0 if found is None else int(found["spent"])
 
     def list_actions(self, limit: int) -> list[dict[str, Any]]:
         # Ties go by document id, descending too: Firestore's own order.
