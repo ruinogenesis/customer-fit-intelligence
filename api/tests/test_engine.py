@@ -95,23 +95,28 @@ def test_each_rule_splits_customers_its_own_way() -> None:
 # --- Fee sensitivity ---
 
 
+def fee(new: Scoring, condition: dict[str, Any]) -> Fire | None:
+    """fee_sensitivity on new, with a history it never reads."""
+    return fee_sensitivity(new, condition, engine.History(MemoryStore(), "cust_1"))
+
+
 def test_fee_sensitivity_fires_in_product_when_fees_pull_fit_down() -> None:
-    assert fee_sensitivity(scoring(fee=-0.06), {}) == Fire("voucher")
-    assert fee_sensitivity(scoring(fee=-0.05), {}) == Fire("voucher")
-    assert fee_sensitivity(scoring(fee=-0.049), {}) is None
-    assert fee_sensitivity(scoring(fee=0.2), {}) is None
-    assert fee_sensitivity(scoring(quadrant="brand", fee=-0.5), {}) is None
+    assert fee(scoring(fee=-0.06), {}) == Fire("voucher")
+    assert fee(scoring(fee=-0.05), {}) == Fire("voucher")
+    assert fee(scoring(fee=-0.049), {}) is None
+    assert fee(scoring(fee=0.2), {}) is None
+    assert fee(scoring(quadrant="brand", fee=-0.5), {}) is None
 
 
 def test_a_condition_overrides_the_default_numbers() -> None:
-    assert fee_sensitivity(scoring(fee=-0.03), {"min_fee_drag": 0.02}) is not None
+    assert fee(scoring(fee=-0.03), {"min_fee_drag": 0.02}) is not None
     lovemark = scoring(quadrant="lovemark", fee=-0.06)
-    assert fee_sensitivity(lovemark, {"quadrant": "lovemark"}) is not None
+    assert fee(lovemark, {"quadrant": "lovemark"}) is not None
 
 
 def test_a_condition_the_logic_does_not_know_is_refused() -> None:
     with pytest.raises(ValueError, match="unknown"):
-        fee_sensitivity(scoring(), {"min_fee": 0.02})
+        fee(scoring(), {"min_fee": 0.02})
 
 
 # --- Deciding ---
@@ -165,7 +170,7 @@ def test_a_rule_with_a_bad_condition_is_skipped_and_the_others_still_decide(
     store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
     path = "rules/fee-sensitivity"
     store.documents[path] = {**store.documents[path], "condition": {"min_fee": 1}}
-    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c, h: Fire("push"))
     with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
         decided = decide(store, scoring(), T0)
     assert [a["rule_id"] for a in decided] == ["win-back"]
@@ -230,7 +235,7 @@ def test_withdrawing_consent_stops_the_next_decisions() -> None:
 def test_a_service_rule_needs_no_consent(monkeypatch: pytest.MonkeyPatch) -> None:
     store = store_with(service_recovery="dry_run", fee_sensitivity="dry_run")
     consent(store, "cust_1", None)
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     assert [a["rule_id"] for a in decide(store, scoring(), T0)] == ["service-recovery"]
 
 
@@ -239,7 +244,7 @@ def test_consent_is_read_once_and_only_when_a_marketing_rule_fires(
 ) -> None:
     store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
     guard(store, cap_actions=10)
-    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c, h: Fire("push"))
     reads: list[str] = []
     read = store.customer_document
 
@@ -286,7 +291,7 @@ def test_the_global_kill_switch_stops_every_rule(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     store = store_with(fee_sensitivity="live", service_recovery="live")
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     guard(store, enabled=False)
     with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
         assert decide(store, scoring(), T0) == []
@@ -296,7 +301,7 @@ def test_the_global_kill_switch_stops_every_rule(
     decide(store, scoring(order_id="ord_2"), T0)
     assert reads == []  # paused, it reads no rule at all
     monkeypatch.undo()
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     guard(store, enabled=True)
     assert len(decide(store, scoring(), T0)) == 2
 
@@ -305,7 +310,7 @@ def test_a_rules_own_kill_switch_stops_only_that_rule(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     store = store_with(fee_sensitivity="off", service_recovery="live")
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     assert [a["rule_id"] for a in decide(store, scoring(), T0)] == ["service-recovery"]
 
 
@@ -313,7 +318,7 @@ def test_the_frequency_cap_holds_back_the_next_marketing_decision(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
-    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c, h: Fire("push"))
     assert len(decide(store, scoring(order_id="ord_1"), T0)) == 2  # both rules
     with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
         assert decide(store, scoring(order_id="ord_2"), T0 + timedelta(days=6)) == []
@@ -341,7 +346,7 @@ def test_the_cap_counts_both_arms_and_spares_service_rules(
 ) -> None:
     store = store_with(fee_sensitivity="dry_run", service_recovery="dry_run")
     guard(store, cap_actions=1)
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     held_out = customers_in("holdout", 1)[0]
     consent(store, held_out, True)
     first = decide(store, scoring(customer_id=held_out, order_id="ord_1"), T0)
@@ -381,7 +386,7 @@ def test_a_message_costs_nothing_so_the_budget_never_stops_it(
 ) -> None:
     store = store_with(brand_to_lovemark="dry_run")
     guard(store, daily_budget=0)
-    monkeypatch.setitem(engine.LOGIC, "brand-to-lovemark", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "brand-to-lovemark", lambda s, c, h: Fire("push"))
     decided = decide(store, scoring(), T0)
     assert [(a["rule_id"], a["cost"]) for a in decided] == [("brand-to-lovemark", 0)]
 
@@ -425,7 +430,7 @@ def test_service_actions_go_at_once_even_in_quiet_hours(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     store = store_with(service_recovery="dry_run")
-    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c, h: Fire("push"))
     assert [a["send_at"] for a in decide(store, scoring(), BANGKOK_EVENING)] == [
         BANGKOK_EVENING
     ]
@@ -583,3 +588,148 @@ def test_a_sweeping_rule_with_bad_numbers_is_skipped(
     with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
         assert engine.sweep(store, T0) == []
     assert "Rule win-back was skipped" in caplog.text
+
+
+# --- Rules that look back: Brand → Lovemark and Fad protection (T506) ---
+
+
+def rescored(store: MemoryStore, order_id: str, quadrant: str, at: datetime) -> Scoring:
+    """A new scoring of cust_1's order_id at time at, in quadrant, saved in
+    their score history."""
+    event_id = f"{order_id}-{at:%Y%m%d%H%M%S}"
+    entry = {
+        "event_id": event_id,
+        "order_id": order_id,
+        "at": at,
+        "quadrant": quadrant,
+        "contributions": {"fit": {"x3": 0.0}},
+    }
+    store.documents[f"customers/cust_1/scores/{event_id}"] = entry
+    return Scoring(customer_id="cust_1", event_id=event_id, entry=entry)
+
+
+def order(store: MemoryStore, quadrant: str) -> Scoring:
+    """cust_1's next order, ord_1, ord_2, ..., a day after the last, scored
+    once in quadrant: its scoring."""
+    n = 1 + sum(path.startswith("orders/") for path in store.documents)
+    order_id, placed_at = f"ord_{n}", T0 + timedelta(days=n)
+    store.documents[f"orders/{order_id}"] = {
+        "order_id": order_id,
+        "customer_id": "cust_1",
+        "placed_at": placed_at,
+    }
+    return rescored(store, order_id, quadrant, placed_at)
+
+
+def decided_on(store: MemoryStore, *quadrants: str) -> list[str]:
+    """The action ids decided as cust_1 places one order in each quadrant."""
+    found = []
+    for quadrant in quadrants:
+        new = order(store, quadrant)
+        found += [a["action_id"] for a in decide(store, new, new.entry["at"])]
+    return found
+
+
+def test_brand_to_lovemark_fires_after_three_brand_orders_in_a_row() -> None:
+    store = store_with(brand_to_lovemark="dry_run")
+    assert decided_on(store, "lovemark", "brand", "brand") == []
+    third = order(store, "brand")
+    decided = decide(store, third, third.entry["at"])
+    assert [(a["action_id"], a["channel"], a["cost"]) for a in decided] == [
+        ("brand-to-lovemark--ord_2", "in_app", 0)  # the streak's first order
+    ]
+
+
+def test_brand_to_lovemark_decides_once_per_streak() -> None:
+    store = store_with(brand_to_lovemark="dry_run")
+    first = ["brand"] * 5
+    again = ["lovemark", "brand", "brand", "brand"]
+    assert decided_on(store, *first, *again) == [
+        "brand-to-lovemark--ord_1",
+        "brand-to-lovemark--ord_7",
+    ]
+
+
+def test_brand_to_lovemark_counts_orders_as_they_were_placed() -> None:
+    store = store_with(brand_to_lovemark="dry_run")
+    assert decided_on(store, "brand", "lovemark", "brand", "brand") == []
+    # ord_1 is rated after ord_4 was placed: it is still the oldest order.
+    late = rescored(store, "ord_1", "brand", T0 + timedelta(days=5))
+    assert decide(store, late, late.entry["at"]) == []
+
+
+def test_brand_to_lovemarks_condition_sets_how_many_orders(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(brand_to_lovemark="dry_run")
+    path = "rules/brand-to-lovemark"
+    store.documents[path] = {**store.documents[path], "condition": {"orders": 2}}
+    assert decided_on(store, "lovemark", "brand", "brand") == [
+        "brand-to-lovemark--ord_2"
+    ]
+    for bad in ({"orders": 0}, {"orders": "3"}, {"orders": True}, {"days": 3}):
+        store.documents[path] = {**store.documents[path], "condition": bad}
+        with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
+            assert decided_on(store, "brand") == []
+    assert caplog.text.count("Rule brand-to-lovemark was skipped") == 4
+
+
+@pytest.mark.parametrize("before", ["lovemark", "brand"])
+def test_fad_protection_fires_when_the_newest_order_drops_into_fad(
+    before: str,
+) -> None:
+    store = store_with(fad_protection="dry_run")
+    assert decided_on(store, "product", before) == []
+    dropped = order(store, "fad")
+    decided = decide(store, dropped, dropped.entry["at"])
+    assert [(a["action_id"], a["channel"], a["cost"]) for a in decided] == [
+        ("fad-protection--ord_3", "in_app", 0)
+    ]
+    assert decide(store, dropped, dropped.entry["at"]) == []  # once per order
+
+
+def test_fad_protection_needs_respect_to_have_fallen() -> None:
+    store = store_with(fad_protection="dry_run")
+    # The first order has nothing to fall from; then Product (Respect low
+    # already) to Fad, and Fad to Fad.
+    assert decided_on(store, "fad", "product", "fad", "fad") == []
+
+
+def test_fad_protection_looks_only_at_the_newest_order() -> None:
+    store = store_with(fad_protection="dry_run")
+    assert decided_on(store, "lovemark", "lovemark") == []
+    # ord_2 is rated after ord_3 was placed, and drops into Fad: too late.
+    assert decided_on(store, "lovemark") == []
+    late = rescored(store, "ord_2", "fad", T0 + timedelta(days=4))
+    assert decide(store, late, late.entry["at"]) == []
+
+
+def test_fad_protection_takes_no_numbers(caplog: pytest.LogCaptureFixture) -> None:
+    store = store_with(fad_protection="dry_run")
+    path = "rules/fad-protection"
+    store.documents[path] = {**store.documents[path], "condition": {"drop": 0.1}}
+    with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
+        assert decided_on(store, "lovemark", "fad") == []
+    assert caplog.text.count("Rule fad-protection was skipped") == 2
+
+
+def test_history_is_read_only_when_a_rule_looks_back_and_once_per_scoring(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(
+        fee_sensitivity="dry_run", brand_to_lovemark="dry_run", fad_protection="dry_run"
+    )
+    calls: list[str] = []
+    for name in ("list_orders", "list_scores"):
+        read = getattr(store, name)
+        monkeypatch.setattr(
+            store,
+            name,
+            lambda *a, _read=read, _name=name, **k: (
+                calls.append(_name) or _read(*a, **k)
+            ),
+        )
+    assert decided_on(store, "lovemark", "lovemark") == []
+    assert calls == []  # neither Brand nor Fad: nothing to look back on
+    assert decided_on(store, "brand") == []
+    assert calls == ["list_orders", "list_scores"]  # one page each
