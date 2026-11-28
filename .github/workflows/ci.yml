@@ -195,6 +195,10 @@ jobs:
             --data "{\"message\": {\"data\": \"$data\"}}" \
             http://127.0.0.1:8081/push | tee /tmp/push.txt
           grep -qx 204 /tmp/push.txt
+          # The daily sweep (T505): an empty store decides nothing.
+          curl --silent --fail --request POST http://127.0.0.1:8081/sweep \
+            | tee /tmp/sweep.json
+          grep -q '"decided":0' /tmp/sweep.json
 
       - name: Show the servers' logs
         if: always()
@@ -279,7 +283,8 @@ jobs:
 
       - name: Deploy the same image as the rules service
         # cfi-rules (T501): private, so Cloud Run lets in only the push
-        # subscription's account, granted once by hand (api/README.md).
+        # subscription's and the daily sweep's (T505) accounts, granted once
+        # by hand (api/README.md).
         run: >-
           gcloud run deploy cfi-rules --image "$IMAGE" --quiet
           --project "$PROJECT" --region "$REGION"

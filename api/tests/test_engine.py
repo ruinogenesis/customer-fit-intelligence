@@ -379,11 +379,11 @@ def test_the_daily_budget_stops_both_arms_once_it_would_be_passed(
 def test_a_message_costs_nothing_so_the_budget_never_stops_it(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    store = store_with(win_back="dry_run")
+    store = store_with(brand_to_lovemark="dry_run")
     guard(store, daily_budget=0)
-    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    monkeypatch.setitem(engine.LOGIC, "brand-to-lovemark", lambda s, c: Fire("push"))
     decided = decide(store, scoring(), T0)
-    assert [(a["rule_id"], a["cost"]) for a in decided] == [("win-back", 0)]
+    assert [(a["rule_id"], a["cost"]) for a in decided] == [("brand-to-lovemark", 0)]
 
 
 def test_a_rules_action_map_sets_what_it_costs(
@@ -441,3 +441,145 @@ def test_quiet_hours_within_one_day_and_none_at_all() -> None:
         )
         is None
     )
+
+
+# --- The daily sweep (T505) ---
+
+
+def quiet(
+    store: MemoryStore,
+    customer_id: str = "cust_1",
+    days: float = 14.0,
+    churn: float | None = 0.10,
+    order_id: str | None = None,
+    marketing: bool | None = True,
+) -> None:
+    """customer_id's latest order: order_id (ord_ and their id, unless given),
+    placed days before T0, with its churn risk; and their consent, as
+    consent() takes it."""
+    consent(store, customer_id, marketing)
+    store.documents[f"customers/{customer_id}"].update(
+        latest_order_id=order_id or f"ord_{customer_id}",
+        latest_placed_at=T0 - timedelta(days=days),
+        churn_risk=churn,
+    )
+
+
+def test_win_back_fires_for_a_risky_customer_quiet_for_14_days() -> None:
+    store = MemoryStore()
+    quiet(store, "cust_quiet", days=14, churn=0.10)
+    quiet(store, "cust_riskier", days=30, churn=0.40)
+    quiet(store, "cust_recent", days=13.9, churn=0.90)
+    quiet(store, "cust_safe", days=30, churn=0.09)
+    quiet(store, "cust_unscored", days=30, churn=None)
+    consent(store, "cust_new", True)  # signed up, never ordered
+    found = engine.win_back(store, {}, T0)
+    assert [(c.customer["customer_id"], c.order_id, c.fire) for c in found] == [
+        ("cust_riskier", "ord_cust_riskier", Fire("voucher")),
+        ("cust_quiet", "ord_cust_quiet", Fire("voucher")),
+    ]  # riskiest first, so the daily budget goes to them first
+
+
+def test_win_backs_condition_sets_its_numbers() -> None:
+    store = MemoryStore()
+    quiet(store, days=20, churn=0.05)
+    assert engine.win_back(store, {}, T0) == []
+    assert len(engine.win_back(store, {"min_churn": 0.05}, T0)) == 1
+    assert engine.win_back(store, {"min_churn": 0.05, "quiet_days": 21}, T0) == []
+    with pytest.raises(ValueError, match=r"unknown \['days'\]"):
+        engine.win_back(store, {"days": 7}, T0)
+
+
+def test_the_sweep_logs_a_win_back_once_per_quiet_spell() -> None:
+    store = store_with(win_back="dry_run")
+    quiet(store)
+    decided = engine.sweep(store, T0)
+    assert decided == [
+        {
+            "action_id": "win-back--ord_cust_1",
+            "rule_id": "win-back",
+            "customer_id": "cust_1",
+            "arm": arm("win-back", "cust_1", 0.5),
+            "channel": "voucher",
+            "dry_run": True,
+            "decided_at": T0,
+            "cost": 5_000,
+            "send_at": T0,
+            "outcome": None,
+        }
+    ]
+    assert store.list_actions(10) == decided
+    # Every sweep sees them while they stay quiet; none decides again.
+    for day in (1, 8, 30):
+        assert engine.sweep(store, T0 + timedelta(days=day)) == []
+    # They order again 10 days after T0: 14 days after that, a new spell.
+    quiet(store, days=-10, order_id="ord_2")
+    assert engine.sweep(store, T0 + timedelta(days=23)) == []
+    again = engine.sweep(store, T0 + timedelta(days=24))
+    assert [a["action_id"] for a in again] == ["win-back--ord_2"]
+
+
+def test_the_sweep_takes_consent_from_the_customer_it_found(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    store = store_with(win_back="dry_run")
+    quiet(store, "cust_1")
+    quiet(store, "cust_2", marketing=False)
+    quiet(store, "cust_3", marketing=None)
+    monkeypatch.setattr(store, "customer_document", lambda c: pytest.fail(c))
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        decided = engine.sweep(store, T0)
+    assert [a["customer_id"] for a in decided] == ["cust_1"]
+    assert caplog.text.count("no marketing consent") == 2
+
+
+def test_the_sweep_goes_through_the_same_guardrails(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(win_back="dry_run", fee_sensitivity="dry_run")
+    quiet(store)
+    guard(store, enabled=False)
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert engine.sweep(store, T0) == []
+    assert "Automations are paused: nothing decided for the daily sweep" in caplog.text
+    guard(store, enabled=True)
+    # Two fee-sensitivity decisions this week: win-back waits.
+    decide(store, scoring(order_id="ord_a"), T0 - timedelta(days=2))
+    decide(store, scoring(order_id="ord_b"), T0 - timedelta(days=1))
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert engine.sweep(store, T0) == []
+    assert "win-back held back for cust_1: frequency cap (2 in 7 days)" in caplog.text
+    # A week on, the cap is clear, but the rule's own kill switch is on.
+    store.set_rule_status("win-back", "off", T0)
+    assert engine.sweep(store, T0 + timedelta(days=8)) == []
+    store.set_rule_status("win-back", "dry_run", T0)
+    assert len(engine.sweep(store, T0 + timedelta(days=8))) == 1
+
+
+def test_the_sweep_spends_the_daily_budget_on_the_riskiest_first(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(win_back="dry_run")
+    guard(store, daily_budget=10_000)  # 100 baht: two 50-baht vouchers
+    treated = customers_in("treatment", 3, "win-back")
+    for customer, churn in zip(treated, (0.2, 0.6, 0.4), strict=True):
+        quiet(store, customer, churn=churn)
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        decided = engine.sweep(store, T0)
+    assert [a["customer_id"] for a in decided] == [treated[1], treated[2]]
+    assert store.spent_on("2026-11-28") == 10_000
+    assert f"held back for {treated[0]}: daily budget (2026-11-28)" in caplog.text
+    tomorrow = engine.sweep(store, T0 + timedelta(days=1))
+    assert [a["customer_id"] for a in tomorrow] == [treated[0]]
+
+
+def test_a_sweeping_rule_with_bad_numbers_is_skipped(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    store = store_with(win_back="dry_run")
+    quiet(store)
+    path = "rules/win-back"
+    store.documents[path] = {**store.documents[path], "condition": {"days": 7}}
+    with caplog.at_level(logging.ERROR, logger="cfi_api.engine"):
+        assert engine.sweep(store, T0) == []
+    assert "Rule win-back was skipped" in caplog.text

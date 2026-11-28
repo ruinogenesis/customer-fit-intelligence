@@ -339,6 +339,11 @@ class Store(Reader, Browser, Protocol):
         """A customer's actions decided at since or later (T502)."""
         ...
 
+    def quiet_customers(self, before: datetime) -> list[dict[str, Any]]:
+        """The customers whose latest order was placed at before or earlier,
+        as customers/{customer_id}; none who never ordered (T505)."""
+        ...
+
     def automation_settings(self) -> dict[str, Any] | None:
         """settings/automations, or None if it was never set (T502)."""
         ...
@@ -707,6 +712,17 @@ class MemoryStore:
                 path.startswith("actions/")
                 and doc["customer_id"] == customer_id
                 and doc["decided_at"] >= since
+            )
+        )
+        return copy.deepcopy(found)
+
+    def quiet_customers(self, before: datetime) -> list[dict[str, Any]]:
+        found = self._found(
+            lambda path, doc: (
+                path.count("/") == 1
+                and path.startswith("customers/")
+                and doc.get("latest_placed_at") is not None
+                and doc["latest_placed_at"] <= before
             )
         )
         return copy.deepcopy(found)
