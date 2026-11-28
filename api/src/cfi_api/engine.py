@@ -35,7 +35,12 @@ whatever the rule's status: nothing is ever sent.
 
 A rule decides at most once per order. An order is scored again as it is
 delivered and rated, and Pub/Sub may send one scoring twice; action_id is
-the rule and the order, so neither logs a second decision.
+the rule and the order, so neither logs a second decision. A rule about a
+streak of orders (Brand → Lovemark) names the streak's first order, so it
+decides once per streak.
+
+Rules that look back read the customer's History: their orders, newest
+placed first, each with its latest scoring, read only as far as they ask.
 
 Some rules fire on what has not happened, which no scoring brings: the
 daily sweep (T505) asks those (SWEEPS) which customers they fire for, and
@@ -54,13 +59,15 @@ from zoneinfo import ZoneInfo
 
 from fitcore.documents import check
 
-from cfi_api.store import OverBudget
+from cfi_api.store import OverBudget, Page
 
 logger = logging.getLogger(__name__)
 
 OFF = "off"
 MARKETING = "marketing"
 TREATMENT, HOLDOUT = "treatment", "holdout"
+BRAND, FAD = "brand", "fad"
+HIGH_RESPECT = frozenset({"lovemark", "brand"})  # the quadrants above Respect's line
 
 
 @dataclass(frozen=True)
@@ -74,13 +81,16 @@ class Scoring:
 
 @dataclass(frozen=True)
 class Fire:
-    """A rule's decision to act, and the channel it would act through."""
+    """A rule's decision to act, the channel it would act through, and the
+    order the decision is about when that is not the scored one (None)."""
 
     channel: str
+    order_id: str | None = None
 
 
-# A rule's logic: the scoring and the rule's numbers in, a Fire or None out.
-Logic = Callable[[Scoring, Mapping[str, Any]], Fire | None]
+# A rule's logic: the scoring, the rule's numbers and the customer's history
+# in, a Fire or None out. The history is read only if the logic asks.
+Logic = Callable[[Scoring, Mapping[str, Any], "History"], Fire | None]
 
 
 def numbers(given: Mapping[str, Any], defaults: Mapping[str, Any]) -> dict[str, Any]:
@@ -98,7 +108,9 @@ def numbers(given: Mapping[str, Any], defaults: Mapping[str, Any]) -> dict[str, 
 FEE_SENSITIVITY = {"quadrant": "product", "min_fee_drag": 0.05}
 
 
-def fee_sensitivity(scoring: Scoring, condition: Mapping[str, Any]) -> Fire | None:
+def fee_sensitivity(
+    scoring: Scoring, condition: Mapping[str, Any], history: "History"
+) -> Fire | None:
     """In the Product quadrant, with fees pulling fit down: a fee-free window.
 
     Fires when the order's quadrant is the condition's (product) and the fee
@@ -114,8 +126,62 @@ def fee_sensitivity(scoring: Scoring, condition: Mapping[str, Any]) -> Fire | No
     return None
 
 
-# Each rule with logic, by rule_id; T506 adds the other starter rules.
-LOGIC: dict[str, Logic] = {"fee-sensitivity": fee_sensitivity}
+BRAND_TO_LOVEMARK = {"orders": 3}
+
+
+def brand_to_lovemark(
+    scoring: Scoring, condition: Mapping[str, Any], history: "History"
+) -> Fire | None:
+    """Respect high and Love low for the customer's latest orders (orders of
+    them, as placed): the scoring puts their newest order in the Brand
+    quadrant, and the orders before it are there too. A personal touch, in
+    the app.
+
+    The decision is about the streak's first order, so the rule decides once
+    per streak, however many more Brand orders follow; a customer who leaves
+    Brand and comes back starts a new one.
+    """
+    rule = numbers(condition, BRAND_TO_LOVEMARK)
+    orders = rule["orders"]
+    if not isinstance(orders, int) or isinstance(orders, bool) or orders < 1:
+        raise ValueError(f"orders must be a whole number, 1 or more; got {orders!r}")
+    if scoring.entry["quadrant"] != BRAND or not history.newest(scoring):
+        return None
+    streak = [scoring.entry, *history.streak(BRAND, start=1)]
+    if len(streak) < orders:
+        return None
+    return Fire("in_app", order_id=streak[-1]["order_id"])
+
+
+FAD_PROTECTION: dict[str, Any] = {}
+
+
+def fad_protection(
+    scoring: Scoring, condition: Mapping[str, Any], history: "History"
+) -> Fire | None:
+    """Love high and Respect falling: the scoring puts the customer's newest
+    order in the Fad quadrant, and the order before it had high Respect
+    (Lovemark or Brand). Steer them to reliable restaurants, in the app; no
+    discount.
+
+    Once per order: only the newest order counts, so a late event for an
+    older one changes nothing.
+    """
+    numbers(condition, FAD_PROTECTION)
+    if scoring.entry["quadrant"] != FAD or not history.newest(scoring):
+        return None
+    previous = history.order(1)
+    if previous is not None and previous["quadrant"] in HIGH_RESPECT:
+        return Fire("in_app")
+    return None
+
+
+# Each rule with logic, by rule_id; the daily sweep has its own (SWEEPS).
+LOGIC: dict[str, Logic] = {
+    "fee-sensitivity": fee_sensitivity,
+    "brand-to-lovemark": brand_to_lovemark,
+    "fad-protection": fad_protection,
+}
 
 # What each rule's action is worth, in satang, before its action map: a
 # fee-free delivery is worth about a typical delivery fee, and win-back's
@@ -277,10 +343,82 @@ class Automations(Protocol):
 
     def quiet_customers(self, before: datetime) -> list[dict[str, Any]]: ...
 
+    def list_orders(self, customer_id: str, *, limit: int, after: Any) -> Page: ...
+
+    def list_scores(self, customer_id: str, *, limit: int, after: Any) -> Page: ...
+
     def add_action(self, document: dict[str, Any], *, day: str, budget: int) -> bool:
         """Add actions/{action_id} and count its spend on day; False if it is
         there already. Raises OverBudget past budget (cfi_api.store)."""
         ...
+
+
+class History:
+    """A customer's orders, newest placed first, each as its latest score
+    entry: read from their orders and score history a page at a time, only
+    as far as a rule asks, and once per decide() whatever the rules ask.
+
+    Orders go by when they were placed, not by their latest scoring, so a
+    late rating of an older order does not make it the newest.
+    """
+
+    PAGE = 20
+    MOST = 50  # orders read at most; a longer streak counts from the 50th
+
+    def __init__(self, store: Automations, customer_id: str) -> None:
+        self._store, self._customer_id = store, customer_id
+        self._order_ids: list[str] = []
+        self._orders_after: Any = None
+        self._orders_done = False
+        self._latest: dict[str, Mapping[str, Any]] = {}
+        self._scores_after: Any = None
+        self._scores_done = False
+
+    def order_id(self, back: int) -> str | None:
+        """The order placed back orders before the newest (0: the newest), or
+        None if there is no such order."""
+        while len(self._order_ids) <= back and not self._orders_done:
+            page = self._store.list_orders(
+                self._customer_id, limit=self.PAGE, after=self._orders_after
+            )
+            self._order_ids += [order["order_id"] for order in page.documents]
+            self._orders_after = page.next
+            self._orders_done = page.next is None
+        if back >= min(len(self._order_ids), self.MOST):
+            return None
+        return self._order_ids[back]
+
+    def newest(self, scoring: Scoring) -> bool:
+        """True if scoring is of the customer's newest order, as placed."""
+        newest = self.order_id(0)
+        return newest is not None and newest == str(scoring.entry["order_id"])
+
+    def order(self, back: int) -> Mapping[str, Any] | None:
+        """The latest score entry of the order placed back orders before the
+        newest (0: the newest); None if there is no such order or no scoring
+        of it."""
+        order_id = self.order_id(back)
+        if order_id is None:
+            return None
+        while order_id not in self._latest and not self._scores_done:
+            page = self._store.list_scores(
+                self._customer_id, limit=self.PAGE, after=self._scores_after
+            )
+            for entry in page.documents:  # newest first: the first is the latest
+                self._latest.setdefault(entry["order_id"], entry)
+            self._scores_after = page.next
+            self._scores_done = page.next is None
+        return self._latest.get(order_id)
+
+    def streak(self, quadrant: str, start: int = 0) -> list[Mapping[str, Any]]:
+        """The orders from start orders before the newest back, while they
+        are in quadrant, newest first: empty if that one is not."""
+        found: list[Mapping[str, Any]] = []
+        while (entry := self.order(start + len(found))) is not None:
+            if entry["quadrant"] != quadrant:
+                break
+            found.append(entry)
+        return found
 
 
 # --- The daily sweep (T505) ---
@@ -437,18 +575,18 @@ def decide(store: Automations, scoring: Scoring, now: datetime) -> list[dict[str
     if run is None:
         return []
     decided = []
+    history = History(store, scoring.customer_id)
     for rule in run.active(LOGIC):
         try:
-            fire = LOGIC[rule["rule_id"]](scoring, rule["condition"])
+            fire = LOGIC[rule["rule_id"]](scoring, rule["condition"], history)
             worth = cost(rule)
         except ValueError:
             logger.exception("Rule %s was skipped: its numbers", rule["rule_id"])
             continue
         if fire is None:
             continue
-        action = run.consider(
-            rule, scoring.customer_id, scoring.entry["order_id"], fire, worth
-        )
+        order_id = fire.order_id or scoring.entry["order_id"]
+        action = run.consider(rule, scoring.customer_id, order_id, fire, worth)
         if action is not None:
             decided.append(action)
     return decided

@@ -501,3 +501,43 @@ def test_quiet_customers_in_firestore() -> None:
     found = store.quiet_customers(long_ago + timedelta(days=1))
     mine = sorted(c["customer_id"] for c in found if tag in c["customer_id"])
     assert mine == [f"cust_{tag}_edge", f"cust_{tag}_quiet"]
+
+
+@needs_emulator
+def test_a_rule_reads_the_customers_history_in_firestore() -> None:
+    from cfi_api.engine import Scoring, decide
+    from cfi_api.firestore_store import FirestoreStore
+    from cfi_api.rules import seed
+
+    client = firestore.Client(project="demo-cfi")
+    store = FirestoreStore(client)
+    tag = uuid.uuid4().hex[:8]
+    customer = f"cust_{tag}"
+    given = {"marketing": True, "at": T0, "source": "sign_up"}
+    client.document(f"customers/{customer}").set(
+        {"customer_id": customer, "consent": given}
+    )
+    scorings = []
+    for n in range(1, 4):  # three Brand orders in a row (T506)
+        order_id, at = f"ord_{tag}_{n}", T0 + timedelta(days=n)
+        client.document(f"orders/{order_id}").set(
+            {"order_id": order_id, "customer_id": customer, "placed_at": at}
+        )
+        event_id = str(uuid.uuid4())
+        entry = {
+            "event_id": event_id,
+            "order_id": order_id,
+            "at": at,
+            "quadrant": "brand",
+            "contributions": {"fit": {"x3": 0.0}},
+        }
+        client.document(f"customers/{customer}/scores/{event_id}").set(entry)
+        scorings.append(Scoring(customer, event_id, entry))
+    if not any(r["rule_id"] == "brand-to-lovemark" for r in store.list_rules()):
+        seed(store, T0)
+    store.set_rule_status("brand-to-lovemark", "dry_run", T0)
+    try:
+        decided = decide(store, scorings[-1], T0 + timedelta(days=3))
+    finally:
+        store.set_rule_status("brand-to-lovemark", "off", T0)
+    assert [a["action_id"] for a in decided] == [f"brand-to-lovemark--ord_{tag}_1"]

@@ -121,18 +121,27 @@ Run it locally with the reference model, from the repo root:
   subscription `raw-changes-rules` takes the score entries and sends each to
   the rules service, `cfi-rules`: the same image, running
   `cfi_api.rules_service`, private, so only the subscription's account
-  `cfi-rules-push` may call it. For each rule that is not off and has its
-  logic in `cfi_api.engine` (so far Fee sensitivity: an order in the
-  Product quadrant whose fees take at least 0.05 off fit), a rule that fires
-  is logged to `actions/{rule}--{order}` with the customer's arm: a stable
-  hash of rule and customer puts the rule's `holdout_share` in the holdout
-  (T503). A rule decides at most once per order, so a retry or a later
-  scoring of the same order logs nothing more. A condition overrides the
+  `cfi-rules-push` may call it. Each rule that is not off and has its
+  logic in `cfi_api.engine` is asked whether it fires:
+
+  - Fee sensitivity: an order in the Product quadrant whose fees take at
+    least 0.05 off fit (`min_fee_drag`): a fee-free delivery, 40 baht.
+  - Brand → Lovemark (T506): the customer's latest 3 orders (`orders`), as
+    placed, all in the Brand quadrant: a personal touch in the app. It is
+    about the streak's first order, so it decides once per streak.
+  - Fad protection (T506): the customer's newest order drops into the Fad
+    quadrant from one with high Respect (Lovemark or Brand): reliable
+    restaurants, in the app, with no discount.
+
+  A rule that fires is logged to `actions/{rule}--{order}` with the customer's
+  arm: a stable hash of rule and customer puts the rule's `holdout_share` in
+  the holdout (T503). A rule decides at most once per order, so a retry or a
+  later scoring of the same order logs nothing more. A condition overrides the
   logic's numbers (`{"min_fee_drag": 0.02}`), and an action map what a
-  decision is worth (`{"value": 2500}`, in satang; Fee sensitivity's
-  voucher is 40 baht). Until the channels (T504), every decision is a dry
-  run, whatever the rule's status: nothing is sent. Pub/Sub retries a push
-  the service answers with 500, for up to 7 days.
+  decision is worth (`{"value": 2500}`, in satang; Fee sensitivity's voucher
+  is 40 baht). Until the channels (T504), every decision is a dry run,
+  whatever the rule's status: nothing is sent. Pub/Sub retries a push the
+  service answers with 500, for up to 7 days.
 - Guardrails (T502): before a decision is logged it passes, in order, the
   global kill switch (`pause`, `resume`), the rule's own (status `off`),
   marketing consent (T610), the frequency cap (by default 2 marketing
