@@ -27,6 +27,9 @@ API answers the same from either.
 The model registry lives in the store too (T310, cfi_api.model_registry): a
 Reader finds the live version, inside an event's own unit of work, and a
 Store lists, adds and promotes versions.
+
+So do the automation rules (T406): a Browser lists them, by name, for
+GET /rules, and a Store adds one (python -m cfi_api.rules seed).
 """
 
 import copy
@@ -244,6 +247,10 @@ class Browser(Protocol):
         """Every customer by quadrant, their averages, and the at-risk count."""
         ...
 
+    def list_rules(self) -> list[dict[str, Any]]:
+        """Every automation rule, rules/{rule_id}, by name (T406)."""
+        ...
+
 
 class Overview(NamedTuple):
     """The Overview screen's numbers now (T402). The averages are over the
@@ -294,6 +301,11 @@ class Store(Reader, Browser, Protocol):
         the live version stays as it is. Raises UnknownVersion."""
         ...
 
+    def add_rule(self, document: dict[str, Any]) -> None:
+        """Add rules/{rule_id}, checked first. Raises ValueError if that rule
+        is there already (T406)."""
+        ...
+
 
 def promoted(
     entries: dict[str, ModelEntry], version: str, now: datetime
@@ -314,6 +326,10 @@ def promoted(
 
 def newest_first(entries: list[ModelEntry]) -> list[ModelEntry]:
     return sorted(entries, key=lambda e: (e.created_at, e.version), reverse=True)
+
+
+def by_name(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(rules, key=lambda rule: (rule["name"].casefold(), rule["rule_id"]))
 
 
 def _copied(record: EventRecord) -> EventRecord:
@@ -546,3 +562,17 @@ class MemoryStore:
                     model_document(entry)
                 )
             return entry_from_document(self.documents[f"models/{version}"])
+
+    # --- Automation rules (T406) ---
+
+    def list_rules(self) -> list[dict[str, Any]]:
+        found = self._found(lambda path, _: path.startswith("rules/"))
+        return by_name(copy.deepcopy(found))
+
+    def add_rule(self, document: dict[str, Any]) -> None:
+        check("rules", document)
+        path = f"rules/{document['rule_id']}"
+        with self._lock:
+            if path in self.documents:
+                raise ValueError(f"{document['rule_id']} is there already")
+            self.documents[path] = _as_firestore(document)

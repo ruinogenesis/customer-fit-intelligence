@@ -35,10 +35,11 @@ STAFF = frozenset({"viewer", "analyst", "admin"})
 READS = STAFF | {"guest", "guest with a role"}
 
 # Who may read each collection, a document or the whole listing. Every role
-# reads what the dashboard shows; nobody reads what nothing writes yet, or
-# the outbox, which only the API uses (T306). Guests (T411) read what every
-# role reads and no more, even with a role claim. Staff also read their own
-# users/{uid}, which a test below checks on its own; guests have none.
+# reads what the dashboard shows; nobody reads what the API serves itself
+# (rules, T406; models, T310), what nothing writes yet, or the outbox, which
+# only the API uses (T306). Guests (T411) read what every role reads and no
+# more, even with a role claim. Staff also read their own users/{uid}, which
+# a test below checks on its own; guests have none.
 READERS: dict[str, frozenset[str]] = {
     "customers": READS,
     "scores": READS,

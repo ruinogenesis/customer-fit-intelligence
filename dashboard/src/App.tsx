@@ -17,19 +17,22 @@ import { SignInError, type AuthService, type Session } from "./auth";
 import { firestoreFeed, type CustomerFeed } from "./feed";
 import { QUADRANT_MEANING, QUADRANT_NAMES, QUADRANTS } from "./overview";
 import { QuadrantMap } from "./parts";
-import { atLeast, SCREENS, whoMay, type Screen } from "./roles";
+import { SCREENS, type Screen } from "./roles";
 import { StaffContext, useStaff } from "./staff";
 import { chooseTheme, keptTheme, THEME_NAMES, THEMES, type Theme } from "./theme";
 
 type Router = ReturnType<typeof createBrowserRouter>;
 
-/** Screens built so far, each loaded when first opened (its own chunk, with
- * its own libraries); the rest show what they will hold (ScreenPage). */
+/** Every screen's page, each loaded when first opened (its own chunk, with its
+ * own libraries). */
 const PAGES: Record<string, ComponentType> = {
   overview: lazy(async () => ({ default: (await import("./OverviewPage")).OverviewPage })),
   matrix: lazy(async () => ({ default: (await import("./MatrixPage")).MatrixPage })),
   customers: lazy(async () => ({ default: (await import("./CustomersPage")).CustomersPage })),
   drivers: lazy(async () => ({ default: (await import("./DriversPage")).DriversPage })),
+  automations: lazy(async () => ({
+    default: (await import("./AutomationsPage")).AutomationsPage,
+  })),
   models: lazy(async () => ({ default: (await import("./ModelsPage")).ModelsPage })),
 };
 
@@ -46,7 +49,8 @@ function loaded(Page: ComponentType) {
 
 function page(screen: Screen) {
   const Page = PAGES[screen.path];
-  return Page === undefined ? <ScreenPage screen={screen} /> : loaded(Page);
+  if (Page === undefined) throw new Error(`The ${screen.title} screen has no page.`);
+  return loaded(Page);
 }
 
 export const routes: RouteObject[] = [
@@ -273,23 +277,6 @@ function ThemeSwitch() {
         ))}
       </select>
     </label>
-  );
-}
-
-function ScreenPage({ screen }: { screen: Screen }) {
-  const { role } = useStaff();
-  const allowed = atLeast(role, screen.actionRole);
-  return (
-    <section className="placeholder">
-      <h1>{screen.title}</h1>
-      <p className="lede">{screen.shows}.</p>
-      <p className={allowed ? "action" : "action read-only"}>
-        {allowed
-          ? `Main action: ${screen.action}.`
-          : `Read-only for you: only ${whoMay(screen.actionRole)} can ${screen.action.toLowerCase()}.`}
-      </p>
-      <p className="soon">This screen isn't built yet.</p>
-    </section>
   );
 }
 

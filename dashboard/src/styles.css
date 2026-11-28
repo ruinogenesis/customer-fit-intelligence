@@ -94,8 +94,7 @@ a {
 
 .updated,
 .note,
-.legend,
-.soon {
+.legend {
   color: var(--ink-muted);
   font-size: 13px;
 }
@@ -991,6 +990,23 @@ table.bars {
   font-weight: normal;
 }
 
+/* --- Automations (T406) --- */
+
+.automations table {
+  width: 100%;
+}
+
+.automations th,
+.automations td {
+  white-space: nowrap;
+}
+
+.statuses {
+  max-width: 68ch;
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
 /* --- Models (T407) --- */
 
 .models table {
@@ -1023,7 +1039,8 @@ table.bars {
   font-weight: 600;
 }
 
-.status.retired {
+.status.retired,
+.status.off {
   color: var(--ink-muted);
 }
 

@@ -99,6 +99,17 @@ Run it locally with the reference model, from the repo root:
   The files go to `gs://BUCKET/models/VERSION/` (`model.json` and
   `model_card.md`), and `models/VERSION` in Firestore keeps the model.json's
   SHA-256, which every instance checks before it uses the file.
+- Rules (T406): `GET /api/v1/rules` (every staff role) lists the
+  automation rules by name, each with its kind (service or marketing),
+  status (off, dry_run, test or live) and holdout share; the dashboard's
+  Automations screen shows them. Apps cannot read `rules/` in Firestore.
+  Until the rules engine (T501) nothing changes a rule: admins add the
+  design doc's six starter rules, each off, from the command line, which
+  runs as `cfi_api.roles` does. Seeding again adds only the ones missing
+  and never changes one that is there:
+
+      python -m cfi_api.rules --project cfi-dev-th26 seed
+      python -m cfi_api.rules --project cfi-dev-th26 list
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
@@ -267,3 +278,4 @@ One-time setup of a project (dev: T204, T205 and T208):
     access and public access prevention, grant `cfi-api`
     `roles/storage.objectViewer` on it, then register and promote the
     first version (above). Until a version is live, `/events` answers 503.
+16. Automation rules (T406): seed the starter rules (above).

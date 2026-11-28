@@ -70,22 +70,6 @@ test("signing in opens the overview, with every screen in the nav", async () => 
   expect(screen.getByRole("banner").textContent).toContain("ana@example.com analyst");
 });
 
-test("a screen not built yet says what it will hold and who may act there", () => {
-  signedInAs("viewer", "/automations");
-  expect(screen.getByText("Rules, their status, caps, and uplift vs holdout.")).toBeTruthy();
-  expect(
-    screen.getByText("Read-only for you: only admins can turn rules on or off, promote from test to live."),
-  ).toBeTruthy();
-});
-
-test("an admin may act on automations; an analyst may not", () => {
-  signedInAs("admin", "/automations");
-  expect(screen.getByText("Main action: Turn rules on or off, promote from test to live.")).toBeTruthy();
-  cleanup();
-  signedInAs("analyst", "/automations");
-  expect(screen.getByText(/Read-only for you: only admins/)).toBeTruthy();
-});
-
 test("the customers screen is its own page (T404)", async () => {
   signedInAs("viewer", "/customers");
   expect(await screen.findByRole("heading", { level: 1, name: "Customers" })).toBeTruthy();
@@ -94,6 +78,12 @@ test("the customers screen is its own page (T404)", async () => {
 test("the drivers screen is its own page (T405)", async () => {
   signedInAs("viewer", "/drivers");
   expect(await screen.findByRole("heading", { level: 1, name: "Drivers" })).toBeTruthy();
+});
+
+test("the automations screen is its own page (T406)", async () => {
+  signedInAs("viewer", "/automations");
+  expect(await screen.findByRole("heading", { level: 1, name: "Automations" })).toBeTruthy();
+  expect(await screen.findByRole("table")).toBeTruthy();
 });
 
 test("the models screen is its own page (T407)", async () => {
@@ -132,7 +122,7 @@ test("a guest sees every screen read-only, and can leave", async () => {
   expect(await screen.findByRole("heading", { level: 1, name: "Automations" })).toBeTruthy();
   expect(auth.signedIn).toEqual({ email: "", role: "viewer", guest: true });
   expect(screen.getByRole("banner").textContent).toContain("Guest viewer");
-  expect(screen.getByText(/Read-only for you: only admins/)).toBeTruthy();
+  expect(await screen.findByText(/^Only admins will be able to turn rules on or off/)).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "Exit guest view" }));
   expect(await screen.findByRole("button", { name: "View as guest" })).toBeTruthy();
   expect(auth.signedIn).toBeNull();
