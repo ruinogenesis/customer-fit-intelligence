@@ -110,6 +110,25 @@ Run it locally with the reference model, from the repo root:
 
       python -m cfi_api.rules --project cfi-dev-th26 seed
       python -m cfi_api.rules --project cfi-dev-th26 list
+      python -m cfi_api.rules --project cfi-dev-th26 set fee-sensitivity dry_run
+      python -m cfi_api.rules --project cfi-dev-th26 actions --limit 10
+
+- Rules engine (T501): every saved document goes to the topic `raw-changes`
+  with its collection as the attribute `collection` (T306). The push
+  subscription `raw-changes-rules` takes the score entries and sends each to
+  the rules service, `cfi-rules`: the same image, running
+  `cfi_api.rules_service`, private, so only the subscription's account
+  `cfi-rules-push` may call it. For each rule that is not off and has its
+  logic in `cfi_api.engine` (so far Fee sensitivity: an order in the
+  Product quadrant whose fees take at least 0.05 off fit), a rule that fires
+  is logged to `actions/{rule}--{order}` with the customer's arm: a stable
+  hash of rule and customer puts the rule's `holdout_share` in the holdout
+  (T503). A rule decides at most once per order, so a retry or a later
+  scoring of the same order logs nothing more. A condition overrides the
+  logic's numbers (`{"min_fee_drag": 0.02}`). Until the guardrails (T502)
+  and the channels (T504), every decision is a dry run, whatever the
+  rule's status: nothing is sent. Pub/Sub retries a push the service
+  answers with 500, for up to 7 days.
 - Fake orders: `python -m cfi_api.fake_orders` sends simulated customers'
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
@@ -202,9 +221,11 @@ Every merge to `main` deploys dev (T208). Once every check has passed, the
 `deploy` job in `.github/workflows/ci.yml` builds the image, pushes it to the
 Artifact Registry repo `cfi` tagged with the commit, deploys it to Cloud Run
 with every setting of the service, deploys the page to Firebase Hosting and
-`firestore.rules` to Firestore (T304), and checks that dev serves that
-commit, refuses `POST /score` without a token and refuses a Firestore read
-without one. To deploy again without a new commit, re-run the job on GitHub;
+`firestore.rules` to Firestore (T304), deploys the same image as the rules
+service `cfi-rules` (T501), and checks that dev serves that commit, refuses
+`POST /score` without a token, refuses a Firestore read without one, and
+that `cfi-rules` runs the commit and refuses a call without the push
+account's token. To deploy again without a new commit, re-run the job on GitHub;
 nobody deploys from a laptop (CONTRIBUTING.md).
 
 The job signs in with Workload Identity Federation, so no key is stored
@@ -212,7 +233,7 @@ anywhere: GitHub gives each run a short-lived token naming the repo and the
 branch, and Google trades it for the service account `cfi-deployer`. Only
 runs on `main` of this repo, matched by its numeric ID, can do that; pull
 requests cannot. `cfi-deployer` may deploy Cloud Run revisions that run as
-`cfi-api`, Hosting and the Firestore rules, but not change who may call the
+`cfi-api` or `cfi-rules`, Hosting and the Firestore rules, but not change who may call the
 service, and
 may push only to the repo `cfi`, which keeps the 5 newest images
 (`api/artifact-cleanup.json`).
@@ -279,3 +300,19 @@ One-time setup of a project (dev: T204, T205 and T208):
     `roles/storage.objectViewer` on it, then register and promote the
     first version (above). Until a version is live, `/events` answers 503.
 16. Automation rules (T406): seed the starter rules (above).
+17. Rules engine (T501). Before the first deploy of `cfi-rules`: create the
+    service account `cfi-rules`, grant it `roles/datastore.user`, and let
+    `cfi-deployer` act as it (`roles/iam.serviceAccountUser` on it). After
+    CI has deployed it: create the service account `cfi-rules-push`, grant
+    it `roles/run.invoker` on `cfi-rules`, then create the push
+    subscription on `raw-changes`, filtered to score entries:
+
+        gcloud pubsub subscriptions create raw-changes-rules \
+            --topic raw-changes --project cfi-dev-th26 \
+            --push-endpoint "$(gcloud run services describe cfi-rules \
+                --project cfi-dev-th26 --region asia-southeast3 \
+                --format 'value(status.url)')/push" \
+            --push-auth-service-account \
+                cfi-rules-push@cfi-dev-th26.iam.gserviceaccount.com \
+            --message-filter 'attributes.collection = "scores"' \
+            --ack-deadline 60 --min-retry-delay 10s --max-retry-delay 600s

@@ -11,6 +11,10 @@ Pub/Sub fails, the event is still answered and its entry stays: a later
 POST /events sends leftovers over a minute old, up to ten at a time. So a
 message can reach BigQuery twice; the views in bigquery/raw.sql keep one
 row per (event_id, path). Without TOPIC nothing is exported.
+
+Each message also carries its collection as the attribute "collection", so
+a subscription can take one collection only: the rules service's takes
+score entries (T501).
 """
 
 import json
@@ -63,6 +67,11 @@ def message(
         },
         sort_keys=True,
     )
+
+
+def attributes(message: str) -> dict[str, str]:
+    """A message's Pub/Sub attributes: the collection of its document."""
+    return {"collection": json.loads(message)["collection"]}
 
 
 def outbox_entry(
@@ -124,7 +133,10 @@ class PubSubPublisher:
         self._topic = self._client.topic_path(project, topic)
 
     def publish(self, messages: Sequence[str]) -> None:
-        futures = [self._client.publish(self._topic, m.encode()) for m in messages]
+        futures = [
+            self._client.publish(self._topic, m.encode(), **attributes(m))
+            for m in messages
+        ]
         for future in futures:
             future.result(timeout=PUBLISH_TIMEOUT)
 

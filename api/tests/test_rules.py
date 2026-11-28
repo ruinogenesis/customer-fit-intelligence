@@ -167,6 +167,40 @@ def test_the_command_line_seeds_and_lists(capsys: pytest.CaptureFixture[str]) ->
     assert capsys.readouterr().out.count(" off ") == 6
 
 
+def test_the_command_line_sets_a_status_and_lists_decisions(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store = MemoryStore()
+    rules.seed(store, T0)
+    assert rules.main(["set", "fee-sensitivity", "dry_run"], store=store) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("fee-sensitivity is now dry_run.\n")
+    assert "  fee-sensitivity    dry_run  marketing  Fee sensitivity\n" in out
+    assert store.documents["rules/fee-sensitivity"]["status"] == "dry_run"
+    assert rules.main(["set", "nothing", "off"], store=store) == 1
+    assert "Refused: 'nothing'" in capsys.readouterr().err
+    with pytest.raises(SystemExit):
+        rules.main(["set", "win-back", "on"], store=store)
+    capsys.readouterr()
+
+    action = {
+        "action_id": "fee-sensitivity--ord_1",
+        "rule_id": "fee-sensitivity",
+        "customer_id": "cust_1",
+        "arm": "holdout",
+        "channel": "voucher",
+        "dry_run": True,
+        "decided_at": T0,
+        "outcome": None,
+    }
+    assert store.add_action(action)
+    assert not store.add_action(action)
+    assert rules.main(["actions"], store=store) == 0
+    assert capsys.readouterr().out == (
+        "  2026-11-28 05:00:00  fee-sensitivity    cust_1               holdout   voucher\n"
+    )
+
+
 def test_the_command_line_needs_a_project(capsys: pytest.CaptureFixture[str]) -> None:
     assert rules.main(["list"]) == 2
     assert "--project" in capsys.readouterr().err

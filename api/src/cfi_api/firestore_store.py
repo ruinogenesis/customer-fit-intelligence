@@ -39,6 +39,7 @@ from cfi_api.store import (
     Overview,
     Page,
     TimeKey,
+    UnknownRule,
     Work,
     by_name,
     customer_key,
@@ -46,6 +47,7 @@ from cfi_api.store import (
     order_key,
     promoted,
     score_key,
+    with_status,
     writes,
 )
 
@@ -300,6 +302,42 @@ class FirestoreStore(FirestoreReader):
             self._client.document(f"rules/{document['rule_id']}").create(document)
         except AlreadyExists as err:
             raise ValueError(f"{document['rule_id']} is there already") from err
+
+    def set_rule_status(
+        self, rule_id: str, status: str, now: datetime
+    ) -> dict[str, Any]:
+        reference = self._client.document(f"rules/{rule_id}")
+
+        @firestore.transactional
+        def run(transaction: firestore.Transaction) -> dict[str, Any]:
+            found = reference.get(transaction=transaction).to_dict()
+            if found is None:
+                raise UnknownRule(rule_id)
+            changed = with_status(found, status, now)
+            transaction.set(reference, changed)
+            return changed
+
+        changed: dict[str, Any] = run(self._client.transaction())
+        return changed
+
+    # --- The rules engine's decisions (T501) ---
+
+    def add_action(self, document: dict[str, Any]) -> bool:
+        check("actions", document)
+        try:
+            self._client.document(f"actions/{document['action_id']}").create(document)
+        except AlreadyExists:
+            return False
+        return True
+
+    def list_actions(self, limit: int) -> list[dict[str, Any]]:
+        # Ties go by document id, descending too: Firestore's own order.
+        query = (
+            self._client.collection("actions")
+            .order_by("decided_at", direction=DESCENDING)
+            .limit(limit)
+        )
+        return [doc for doc in (s.to_dict() for s in query.stream()) if doc]
 
 
 def gave_up(err: Exception) -> bool:

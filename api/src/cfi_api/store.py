@@ -29,7 +29,8 @@ Reader finds the live version, inside an event's own unit of work, and a
 Store lists, adds and promotes versions.
 
 So do the automation rules (T406): a Browser lists them, by name, for
-GET /rules, and a Store adds one (python -m cfi_api.rules seed).
+GET /rules, and a Store adds one (python -m cfi_api.rules seed) and sets
+its status. The rules engine (T501) logs each decision as an action, once.
 """
 
 import copy
@@ -306,6 +307,22 @@ class Store(Reader, Browser, Protocol):
         is there already (T406)."""
         ...
 
+    def set_rule_status(
+        self, rule_id: str, status: str, now: datetime
+    ) -> dict[str, Any]:
+        """Set a rule's status and updated_at; the rule as it is now. Raises
+        UnknownRule, or ValueError for a status the schema refuses (T501)."""
+        ...
+
+    def add_action(self, document: dict[str, Any]) -> bool:
+        """Add actions/{action_id}, checked first; False if it is there
+        already, unchanged (T501)."""
+        ...
+
+    def list_actions(self, limit: int) -> list[dict[str, Any]]:
+        """The latest limit actions, newest first (T501)."""
+        ...
+
 
 def promoted(
     entries: dict[str, ModelEntry], version: str, now: datetime
@@ -330,6 +347,22 @@ def newest_first(entries: list[ModelEntry]) -> list[ModelEntry]:
 
 def by_name(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(rules, key=lambda rule: (rule["name"].casefold(), rule["rule_id"]))
+
+
+class UnknownRule(KeyError):
+    """No rule has this rule_id."""
+
+
+def with_status(rule: dict[str, Any], status: str, now: datetime) -> dict[str, Any]:
+    """rule with a new status and updated_at, checked."""
+    changed = {**rule, "status": status, "updated_at": now}
+    check("rules", changed)
+    return changed
+
+
+def newest_actions(actions: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    ranked = sorted(actions, key=lambda a: (a["decided_at"], a["action_id"]))
+    return ranked[::-1][:limit]
 
 
 def _copied(record: EventRecord) -> EventRecord:
@@ -576,3 +609,29 @@ class MemoryStore:
             if path in self.documents:
                 raise ValueError(f"{document['rule_id']} is there already")
             self.documents[path] = _as_firestore(document)
+
+    def set_rule_status(
+        self, rule_id: str, status: str, now: datetime
+    ) -> dict[str, Any]:
+        path = f"rules/{rule_id}"
+        with self._lock:
+            if path not in self.documents:
+                raise UnknownRule(rule_id)
+            changed = with_status(self.documents[path], status, now)
+            self.documents[path] = _as_firestore(changed)
+            return copy.deepcopy(self.documents[path])
+
+    # --- The rules engine's decisions (T501) ---
+
+    def add_action(self, document: dict[str, Any]) -> bool:
+        check("actions", document)
+        path = f"actions/{document['action_id']}"
+        with self._lock:
+            if path in self.documents:
+                return False
+            self.documents[path] = _as_firestore(document)
+            return True
+
+    def list_actions(self, limit: int) -> list[dict[str, Any]]:
+        found = self._found(lambda path, _: path.startswith("actions/"))
+        return newest_actions(copy.deepcopy(found), limit)
