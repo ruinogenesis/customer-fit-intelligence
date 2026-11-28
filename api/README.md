@@ -133,7 +133,15 @@ Run it locally with the reference model, from the repo root:
   orders (fitcore.sim_events) to a running API, to watch the matrix page
   move (dashboard/README.md). With `--plant`, most late and cold orders go to
   a few restaurants and most rude ones to a few couriers, for `/drivers` to
-  find.
+  find. With `--consent`, every customer answers the marketing consent
+  question at sign-up (60% say yes) and some withdraw it later (T610).
+- Marketing consent (T610): a `consent_changed` event (`marketing` true or
+  false; `source` `sign_up`, `settings` or `support`) sets the customer's
+  `consent` (`customers/{id}`, `GET /customers/{id}`). The latest answer
+  wins, so an older one arriving late changes nothing. A customer never
+  asked has `null`, which counts as no consent. The rules engine logs no
+  decision of a marketing rule for a customer without consent; service rules
+  need none.
 - Tests: `pytest api`
 
 What the API keeps in Firestore, document by document, is in

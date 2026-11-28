@@ -18,10 +18,13 @@ from fitcore.model import ModelParams
 from fitcore.schemas import load_event
 from fitcore.scoring import Customer, Order, apply_event, order_id_for
 from fitcore.sim_events import (
+    CONSENT_LEAD,
+    CONSENT_RATE,
     ISSUE_TYPES,
     PLANT_SHARE,
     PLANTED,
     RATING_RATE,
+    WITHDRAW_RATE,
     simulate_events,
     stars,
 )
@@ -231,3 +234,78 @@ def test_a_smaller_planted_run_is_part_of_a_bigger_one() -> None:
     small = simulate_events(5, SEED, 30.0, plant=True)
     big = {e["event_id"]: e for e in simulate_events(10, SEED, 60.0, plant=True)}
     assert all(big[event["event_id"]] == event for event in small)
+
+
+# --- Marketing consent (T610) ---
+
+
+def test_consent_adds_only_consent_events() -> None:
+    plain = simulate_events(CUSTOMERS, SEED, DAYS)
+    with_consent = simulate_events(CUSTOMERS, SEED, DAYS, consent=True)
+    assert simulate_events(CUSTOMERS, SEED, DAYS, consent=False) == plain
+    others = [e for e in with_consent if e["type"] != "consent_changed"]
+    assert others == plain
+    assert len(with_consent) > len(plain)
+    for event in with_consent:
+        load_event(event)
+    times = [when(event) for event in with_consent]
+    assert times == sorted(times)
+
+
+def test_every_customer_answers_at_sign_up_just_before_their_first_order() -> None:
+    run = simulate_events(CUSTOMERS, SEED, DAYS, consent=True)
+    first: dict[str, datetime] = {}
+    for event in run:
+        if event["type"] == "order_placed":
+            first.setdefault(event["customer_id"], when(event))
+    signed_up = {
+        e["customer_id"]: when(e)
+        for e in run
+        if e["type"] == "consent_changed" and e["payload"]["source"] == "sign_up"
+    }
+    assert signed_up == {c: at - CONSENT_LEAD for c, at in first.items()}
+
+
+def test_about_consent_rate_say_yes_and_some_of_them_withdraw() -> None:
+    run = simulate_events(400, SEED, 180.0, consent=True)
+    answers: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for event in run:
+        if event["type"] == "consent_changed":
+            answers[event["customer_id"]].append(event["payload"])
+    yes = [c for c, a in answers.items() if a[0]["marketing"]]
+    assert len(yes) / len(answers) == pytest.approx(CONSENT_RATE, abs=0.06)
+    withdrew = [c for c, a in answers.items() if len(a) == 2]
+    assert set(withdrew) <= set(yes)
+    assert all(
+        answers[c][1] == {"marketing": False, "source": "settings"} for c in withdrew
+    )
+    # Withdrawals land within DAYS of sign-up, so within the run for about half.
+    assert 0 < len(withdrew) / len(yes) <= WITHDRAW_RATE + 0.05
+
+
+def test_a_smaller_run_with_consent_is_part_of_a_bigger_one() -> None:
+    small = simulate_events(5, SEED, 30.0, consent=True)
+    big = {e["event_id"]: e for e in simulate_events(10, SEED, 60.0, consent=True)}
+    assert all(big[event["event_id"]] == event for event in small)
+
+
+def test_replayed_consent_ends_on_each_customers_last_answer() -> None:
+    params = ModelParams.from_json(MODEL.read_bytes())
+    customers: dict[str, Customer] = {}
+    orders: dict[str, Order] = {}
+    last: dict[str, bool] = {}
+    for raw in simulate_events(CUSTOMERS, SEED, DAYS, consent=True):
+        event = load_event(raw)
+        cid = event["customer_id"]
+        customer = customers.get(cid) or Customer.new(cid)
+        order_id = order_id_for(event, customer)
+        applied = apply_event(params, event, customer, orders.get(order_id or ""))
+        customers[cid] = applied.customer
+        if applied.order is not None:
+            orders[applied.order.order_id] = applied.order
+        if event["type"] == "consent_changed":
+            last[cid] = event["payload"]["marketing"]
+    assert last
+    for cid, marketing in last.items():
+        consent = customers[cid].consent
+        assert consent is not None and consent.marketing is marketing

@@ -26,6 +26,7 @@ from fitcore.scoring import (
     DRIVERS,
     PRIORS,
     Applied,
+    Consent,
     Customer,
     EventConflict,
     Explanation,
@@ -539,3 +540,43 @@ def test_scored_and_explained_go_together() -> None:
         Applied(customer, order=None, scored=scores)
     with pytest.raises(ValueError, match="together"):
         Applied(customer, None, None, explained=Explanation({}, ()))
+
+
+# --- Marketing consent (T610) ---
+
+
+def consented(marketing: bool, at: datetime, source: str = "sign_up") -> dict[str, Any]:
+    return event("consent_changed", {"marketing": marketing, "source": source}, at)
+
+
+def test_a_new_customer_has_never_been_asked() -> None:
+    assert Customer.new("cust_1").consent is None
+
+
+def test_consent_is_kept_and_changes_no_score() -> None:
+    replay = Replay()
+    replay.send(placed("ord_1", T0))
+    before = replay.customers["cust_1"]
+    applied = replay.send(consented(True, T0 + MINUTE))
+    assert (applied.order, applied.scored) == (None, None)
+    assert applied.customer.consent == Consent(True, T0 + MINUTE, "sign_up")
+    assert dataclasses.replace(applied.customer, consent=None) == before
+
+
+def test_the_latest_answer_wins_and_a_late_older_one_changes_nothing() -> None:
+    replay = Replay()
+    replay.send(consented(True, T0))
+    replay.send(consented(False, T0 + 60 * MINUTE, "settings"))
+    late = replay.send(
+        consented(True, T0 + 30 * MINUTE)
+    )  # arrives after, happened before
+    assert late.customer.consent == Consent(False, T0 + 60 * MINUTE, "settings")
+    again = replay.send(consented(True, T0 + 90 * MINUTE, "support"))
+    assert again.customer.consent == Consent(True, T0 + 90 * MINUTE, "support")
+
+
+def test_orders_after_consent_keep_it() -> None:
+    replay = Replay()
+    replay.send(consented(True, T0))
+    applied = replay.send(placed("ord_1", T0 + MINUTE))
+    assert applied.customer.consent == Consent(True, T0, "sign_up")

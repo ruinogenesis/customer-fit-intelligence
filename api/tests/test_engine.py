@@ -33,12 +33,25 @@ def scoring(
     return Scoring(customer_id=customer_id, event_id=event_id, entry=entry)
 
 
+def consent(store: MemoryStore, customer_id: str, marketing: bool | None) -> None:
+    """customer_id's stored consent: given, withdrawn, or None for never asked."""
+    answer = None
+    if marketing is not None:
+        answer = {"marketing": marketing, "at": T0, "source": "sign_up"}
+    store.documents[f"customers/{customer_id}"] = {
+        "customer_id": customer_id,
+        "consent": answer,
+    }
+
+
 def store_with(**statuses: str) -> MemoryStore:
-    """The starter rules, each off but those given (rule_id with _ for -)."""
+    """The starter rules, each off but those given (rule_id with _ for -), and
+    cust_1 with marketing consent."""
     store = MemoryStore()
     rules.seed(store, T0)
     for name, status in statuses.items():
         store.set_rule_status(name.replace("_", "-"), status, T0)
+    consent(store, "cust_1", True)
     return store
 
 
@@ -170,3 +183,65 @@ def test_a_rule_status_change_is_checked_and_kept() -> None:
     with pytest.raises(KeyError):
         store.set_rule_status("nothing", "off", T0)
     assert store.documents["rules/win-back"]["status"] == "test"
+
+
+# --- Marketing consent (T610) ---
+
+
+@pytest.mark.parametrize("marketing", [None, False], ids=["never asked", "said no"])
+def test_a_marketing_rule_holds_back_without_consent(
+    marketing: bool | None, caplog: pytest.LogCaptureFixture
+) -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    consent(store, "cust_1", marketing)
+    with caplog.at_level(logging.INFO, logger="cfi_api.engine"):
+        assert decide(store, scoring(), T0) == []
+    assert "fee-sensitivity held back for cust_1: no marketing consent" in caplog.text
+    assert store.list_actions(10) == []
+
+
+def test_a_customer_saved_before_t610_has_no_consent() -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    store.documents["customers/cust_1"] = {"customer_id": "cust_1"}  # no field
+    assert decide(store, scoring(), T0) == []
+    del store.documents["customers/cust_1"]  # no customer at all
+    assert decide(store, scoring(), T0) == []
+
+
+def test_withdrawing_consent_stops_the_next_decisions() -> None:
+    store = store_with(fee_sensitivity="dry_run")
+    assert len(decide(store, scoring(order_id="ord_1"), T0)) == 1
+    consent(store, "cust_1", False)
+    assert decide(store, scoring(order_id="ord_2"), T0) == []
+    consent(store, "cust_1", True)
+    assert len(decide(store, scoring(order_id="ord_3"), T0)) == 1
+
+
+def test_a_service_rule_needs_no_consent(monkeypatch: pytest.MonkeyPatch) -> None:
+    store = store_with(service_recovery="dry_run", fee_sensitivity="dry_run")
+    consent(store, "cust_1", None)
+    monkeypatch.setitem(engine.LOGIC, "service-recovery", lambda s, c: Fire("push"))
+    assert [a["rule_id"] for a in decide(store, scoring(), T0)] == ["service-recovery"]
+
+
+def test_consent_is_read_once_and_only_when_a_marketing_rule_fires(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = store_with(fee_sensitivity="dry_run", win_back="dry_run")
+    monkeypatch.setitem(engine.LOGIC, "win-back", lambda s, c: Fire("push"))
+    reads: list[str] = []
+    read = store.customer_document
+
+    def counted(customer_id: str) -> dict[str, Any] | None:
+        reads.append(customer_id)
+        return read(customer_id)
+
+    monkeypatch.setattr(store, "customer_document", counted)
+    assert len(decide(store, scoring(), T0)) == 2
+    assert reads == ["cust_1"]
+    reads.clear()
+    assert decide(store, scoring(quadrant="brand", order_id="ord_9"), T0) != []
+    monkeypatch.delitem(engine.LOGIC, "win-back")
+    reads.clear()
+    assert decide(store, scoring(quadrant="brand", order_id="ord_10"), T0) == []
+    assert reads == []

@@ -11,6 +11,7 @@ import { Bars } from "./Bars";
 import {
   baht,
   changeOf,
+  consentLine,
   customerPath,
   delivery,
   INPUT_NAMES,
@@ -258,6 +259,7 @@ function ProfileView({ profile, moreOrders }: { profile: Profile; moreOrders: ()
           {when(customer.latest_placed_at)}.
         </p>
       )}
+      <p className="consent">{consentLine(customer.consent)}</p>
 
       <h2>Scores over time</h2>
       {scorings.length === 0 ? (

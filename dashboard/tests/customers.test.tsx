@@ -11,6 +11,7 @@ import { HISTORY_PAGE, NEW_PAGE, ORDERS, REFRESH_MS } from "../src/CustomerPage"
 import {
   baht,
   changeOf,
+  consentLine,
   delivery,
   INPUTS,
   mergeScorings,
@@ -310,6 +311,37 @@ test("a link opens the profile", async () => {
 
 // --- The profile ---
 
+test("consent reads as given, declined, withdrawn or never asked (T610)", () => {
+  const at = "2026-11-28T06:00:00+00:00";
+  expect(consentLine({ marketing: true, at, source: "sign_up" })).toBe(
+    "Marketing consent: given at sign-up, 2026-11-28 13:00.",
+  );
+  expect(consentLine({ marketing: false, at, source: "sign_up" })).toBe(
+    "Marketing consent: declined at sign-up, 2026-11-28 13:00. No marketing rule acts for them.",
+  );
+  expect(consentLine({ marketing: false, at, source: "settings" })).toBe(
+    "Marketing consent: withdrawn in settings, 2026-11-28 13:00. No marketing rule acts for them.",
+  );
+  expect(consentLine({ marketing: true, at, source: "support" })).toBe(
+    "Marketing consent: given through support, 2026-11-28 13:00.",
+  );
+  const never = "Marketing consent: never asked, so no marketing rule acts for them.";
+  expect(consentLine(null)).toBe(never);
+  expect(consentLine(undefined)).toBe(never); // saved before T610
+});
+
+test("the profile shows the customer's consent", async () => {
+  const api = fakeApi();
+  api.answers[PROFILE] = {
+    ...state(LATEST),
+    consent: { marketing: false, at: "2026-03-02T01:00:00Z", source: "settings" },
+  };
+  await open(PROFILE, api);
+  expect(screen.getByText(/^Marketing consent/).textContent).toBe(
+    "Marketing consent: withdrawn in settings, 2026-03-02 08:00. No marketing rule acts for them.",
+  );
+});
+
 test("the profile shows the customer's scores now", async () => {
   await open(PROFILE);
   const tiles = [...document.querySelectorAll(".tile")].map((t) =>
@@ -325,6 +357,9 @@ test("the profile shows the customer's scores now", async () => {
     "Quadrant | Lovemark | model t112-sim",
   ]);
   expect(screen.getByText(/^Latest order/).textContent).toBe(`Latest order ${ORDER_2}, placed 2026-03-01 19:01.`);
+  expect(screen.getByText(/^Marketing consent/).textContent).toBe(
+    "Marketing consent: never asked, so no marketing rule acts for them.",
+  );
   expect(screen.getByText(/^3 scorings of 2 orders\./)).toBeTruthy();
 });
 

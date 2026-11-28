@@ -51,6 +51,10 @@ One per customer, written by the API: a customer's expectations and latest score
 | `churn_risk` | number | 0 to 1; or null | The latest order's churn risk; null before the first |
 | `quadrant` | string | one of `lovemark`, `brand`, `fad`, `product`; or null | The latest order's quadrant; null before the first |
 | `model_version` | string |  | The model behind the scores |
+| `consent` | map | or null | Their latest marketing consent (T610); null when never asked, which counts as no consent |
+| `consent.marketing` | boolean |  | True if given, false if withdrawn |
+| `consent.at` | timestamp |  | When the customer gave or withdrew it |
+| `consent.source` | string | one of `sign_up`, `settings`, `support` | Where they did |
 
 ## `customers/{customer_id}/scores/{event_id}`
 

@@ -7,6 +7,7 @@ import base64
 import json
 import logging
 import os
+import uuid
 from datetime import UTC, datetime
 from typing import Any
 
@@ -57,15 +58,30 @@ def rules_app(store: MemoryStore, monkeypatch: pytest.MonkeyPatch) -> Flask:
     return app
 
 
-def changes(reference_model: str, store: MemoryStore) -> list[dict[str, Any]]:
+def consent_event(customer_id: str, marketing: bool) -> dict[str, Any]:
+    """customer_id says yes or no to marketing at sign-up, before any order."""
+    return {
+        "event_id": str(uuid.uuid5(uuid.NAMESPACE_URL, f"{customer_id}/consent")),
+        "type": "consent_changed",
+        "customer_id": customer_id,
+        "occurred_at": "2025-12-31T00:00:00+00:00",
+        "schema_version": 1,
+        "payload": {"marketing": marketing, "source": "sign_up"},
+    }
+
+
+def changes(
+    reference_model: str, store: MemoryStore, consents: tuple[bool, bool] = (True, True)
+) -> list[dict[str, Any]]:
     """The rows two simulated customers' events send, posted through the API
-    into store."""
+    into store, each customer saying yes or no to marketing first (T610)."""
     app = create_app({"MODEL_PATH": reference_model, "MODEL_VERSION": "t112-sim"})
     app.extensions["cfi_store"] = store
     store.has_outbox = True
     publisher = app.extensions["cfi_publisher"] = MemoryPublisher()
     client = app.test_client()
-    for event in simulate_events(2, seed=501, days=14.0):
+    answers = [consent_event(f"sim501-{n:06d}", yes) for n, yes in enumerate(consents)]
+    for event in [*answers, *simulate_events(2, seed=501, days=14.0)]:
         assert client.post("/api/v1/events", json=event).status_code in (200, 201)
     return [json.loads(message) for message in publisher.sent]
 
@@ -87,6 +103,27 @@ def test_every_score_entry_pushed_is_decided_on_once_per_order(
     for row in rows:
         client.post("/push", json=envelope(row))
     assert len(store.list_actions(1000)) == len(actions)
+
+
+@pytest.mark.parametrize(
+    ("consents", "expected"),
+    [((False, True), {"sim501-000001"}), ((True, False), set())],
+    ids=["the one who fires said yes", "the one who fires said no"],
+)
+def test_only_customers_with_marketing_consent_get_decisions(
+    rules_app: Flask,
+    store: MemoryStore,
+    reference_model: str,
+    consents: tuple[bool, bool],
+    expected: set[str],
+) -> None:
+    # In these 14 days only sim501-000001's orders make the rule fire.
+    rows = changes(reference_model, store, consents=consents)
+    client = rules_app.test_client()
+    for row in rows:
+        assert client.post("/push", json=envelope(row)).status_code == 204
+    decided = {action["customer_id"] for action in store.list_actions(1000)}
+    assert decided == expected
 
 
 def test_other_documents_are_acknowledged_and_left_alone(

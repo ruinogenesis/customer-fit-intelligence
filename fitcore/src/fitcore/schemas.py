@@ -22,6 +22,8 @@ ISSUE_TYPES: tuple[str, ...] = ("missing", "wrong", "cold", "late")
 RATINGS: tuple[str, ...] = ("food", "courier", "accuracy", "overall")
 ARMS: tuple[str, ...] = ("treatment", "holdout")
 CHANNELS: tuple[str, ...] = ("push", "in_app", "email", "voucher")
+# Where a customer gave or withdrew marketing consent (T610).
+CONSENT_SOURCES: tuple[str, ...] = ("sign_up", "settings", "support")
 ACTION_RESULTS: tuple[str, ...] = (
     "delivered",
     "opened",
@@ -177,6 +179,13 @@ class SurveyResponsePayload(StrictSchema):
     value = _score(1, 7)
 
 
+class ConsentChangedPayload(StrictSchema):
+    """The customer gave (true) or withdrew (false) marketing consent (T610)."""
+
+    marketing = StrictBoolean(required=True)
+    source = _one_of(*CONSENT_SOURCES)
+
+
 class ActionSentPayload(StrictSchema):
     action_id = _id()
     rule_id = _id()
@@ -201,6 +210,7 @@ PAYLOAD_SCHEMAS = {
     "recommendation_clicked": RecommendationClickedPayload,
     "support_case": SupportCasePayload,
     "survey_response": SurveyResponsePayload,
+    "consent_changed": ConsentChangedPayload,
     "action_sent": ActionSentPayload,
     "action_outcome": ActionOutcomePayload,
 }
